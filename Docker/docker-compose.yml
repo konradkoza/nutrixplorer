@@ -1,7 +1,7 @@
 services:
   db:
-    image: postgres:16.2-alpine
-    container_name: ssbd02-db
+    image: postgres:16.4
+    container_name: nutrixplorer-db
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -10,8 +10,8 @@ services:
       - "5432:5432"
     networks:
       - my_network
-    volumes:
-      - ./initDb.sql:/docker-entrypoint-initdb.d/init.sql
+#    volumes:
+#      - ./initDb.sql:/docker-entrypoint-initdb.d/init.sql
 
 networks:
   my_network:

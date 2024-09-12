@@ -2,12 +2,11 @@ package p.lodz.it.nutrixplorer.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.util.UUID;
 
-@Entity
-public class User {
+@Table(name = "user")
+public class User extends AbstractEntity {
 
-    @Id
-    private UUID id;
 }
