@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:16.4
+    image: postgres:16.2
     container_name: nutrixplorer-db
     restart: always
     environment:
@@ -10,8 +10,8 @@ services:
       - "5432:5432"
     networks:
       - my_network
-#    volumes:
-#      - ./initDb.sql:/docker-entrypoint-initdb.d/init.sql
+    volumes:
+      - ./initDb.sql:/docker-entrypoint-initdb.d/init.sql
 
 networks:
   my_network:
