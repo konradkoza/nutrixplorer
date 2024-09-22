@@ -1,11 +1,14 @@
-package p.lodz.it.nutrixplorer.controllers;
+package p.lodz.it.nutrixplorer.mok.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import p.lodz.it.nutrixplorer.model.Administrator;
 import p.lodz.it.nutrixplorer.model.User;
-import p.lodz.it.nutrixplorer.repositories.UserRepository;
+import p.lodz.it.nutrixplorer.mok.repositories.AdministratorRepository;
+import p.lodz.it.nutrixplorer.mok.repositories.UserRepository;
+import p.lodz.it.nutrixplorer.mok.services.UserService;
 
 @RequiredArgsConstructor
 @Controller
@@ -14,24 +17,10 @@ import p.lodz.it.nutrixplorer.repositories.UserRepository;
 public class UserController {
 
     private final UserRepository repository;
-
+    private final UserService userService;
     @PostMapping
     public ResponseEntity<String> createUser() {
-        User user = new User();
-        user.setActive(true);
-        user.setEmail("email");
-        user.setFirstName("firstName");
-        user.setLastName("lastName");
-        user.setLogin("login");
-        user.setPassword("password");
-        user.setVerified(true);
-        user.setBlocked(false);
-        user.setLoginAttempts(0);
-        user.setLastFailedLoginIp("lastFailedLoginIp");
-        user.setLastSuccessfulLoginIp("lastSuccessfulLoginIp");
-
-
-        repository.save(user);
+        userService.addUser();
 
         return ResponseEntity.ok(repository.findAll().toString());
     }
