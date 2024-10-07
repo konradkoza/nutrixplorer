@@ -1,4 +1,6 @@
 package pl.lodz.p.it.nutrixplorer.mok.dto;
 
-public class AuthenticationDTO {
-}
+public record AuthenticationDTO(
+        String email,
+        String password
+) {}

@@ -1,9 +1,8 @@
-package pl.lodz.p.it.nutrixplorer.model;
+package pl.lodz.p.it.nutrixplorer.model.mok;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @MappedSuperclass

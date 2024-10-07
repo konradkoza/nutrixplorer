@@ -1,4 +1,4 @@
-package pl.lodz.p.it.nutrixplorer.model;
+package pl.lodz.p.it.nutrixplorer.model.mok;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,6 +21,6 @@ import java.io.Serializable;
 public abstract class AccessLevel extends AbstractEntity implements Serializable {
 
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false)
-    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+    @OneToOne(optional = false, cascade = CascadeType.PERSIST)
     private User user;
 }

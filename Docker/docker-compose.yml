@@ -11,7 +11,7 @@ services:
     networks:
       - my_network
     volumes:
-      - ./initDb.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./initDb.sql:/docker-entrypoint-initdb.d/init1.sql
 
 networks:
   my_network:

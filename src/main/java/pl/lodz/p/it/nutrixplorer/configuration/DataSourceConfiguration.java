@@ -63,5 +63,27 @@ public class DataSourceConfiguration {
         return new JdbcTemplate(dataSource);
     }
 
+//    @Bean
+//    public JdbcTemplate ffadminJdbcTemplate(@Qualifier("ffadminDatasource") DataSource dataSource) {
+//        return new JdbcTemplate(dataSource);
+//    }
+//
+//    @Bean
+//    public DataSource ffadminDatasource() {
+//        HikariConfig hikariConfig = new HikariConfig();
+//        hikariConfig.setJdbcUrl("jdbc:postgresql://localhost:5432/nutrixplorer");
+//        hikariConfig.setUsername("ffadmin");
+//        hikariConfig.setPassword("ffadminP@ssw0rd");
+//        hikariConfig.setDriverClassName("org.postgresql.Driver");
+//
+//        // Custom HikariCP settings
+//        hikariConfig.setMaximumPoolSize(20);
+//        hikariConfig.setMinimumIdle(10);
+//        hikariConfig.setConnectionTimeout(30000);
+//        hikariConfig.setIdleTimeout(600000);
+//        hikariConfig.setMaxLifetime(1800000);
+//        hikariConfig.setTransactionIsolation("TRANSACTION_READ_COMMITTED");
+//        return new HikariDataSource(hikariConfig);
+//    }
 
 }

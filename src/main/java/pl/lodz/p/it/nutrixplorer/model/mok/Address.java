@@ -1,10 +1,9 @@
-package pl.lodz.p.it.ssbd2024.model;
+package pl.lodz.p.it.nutrixplorer.model.mok;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,8 +44,8 @@ public class Address extends AbstractEntity {
     @Pattern(regexp = "\\d{2}-\\d{3}")
     private String zip;
 
-    @OneToMany(mappedBy = "address")
-    private List<Local> locals = new ArrayList<>();
+    @OneToOne(mappedBy = "address")
+    private Seller locals;
 
     public void setAddress(Address address) {
         this.number = address.getNumber();

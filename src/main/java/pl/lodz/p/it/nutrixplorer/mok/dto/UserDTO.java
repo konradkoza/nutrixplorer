@@ -1,4 +1,12 @@
 package pl.lodz.p.it.nutrixplorer.mok.dto;
 
-public class UserDTO {
+import jakarta.persistence.Column;
+import lombok.Setter;
+
+public record UserDTO(
+        String firstName,
+        String lastName,
+        String email,
+        String login
+) {
 }

@@ -8,5 +8,5 @@ import org.mapstruct.ReportingPolicy;
         unmappedSourcePolicy = ReportingPolicy.IGNORE,
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
-public interface MapstructConfig {
+public interface MapstructConfiguration {
 }

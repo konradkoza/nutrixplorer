@@ -1,10 +1,14 @@
-package pl.lodz.p.it.nutrixplorer.model;
+package pl.lodz.p.it.nutrixplorer.model.mok;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "USERS", schema = "PUBLIC")
@@ -13,6 +17,8 @@ import java.time.LocalDateTime;
         pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"),
         schema = "PUBLIC")
 @ToString
+@Getter
+@NoArgsConstructor
 public class User extends AbstractEntity {
 
     @Setter
@@ -25,9 +31,9 @@ public class User extends AbstractEntity {
     @Column(name = "email", table = "PERSONAL_DATA", nullable = false, unique = true, length = 50)
     private String email;
 
-    @Setter
-    @Column(name = "login", nullable = false, updatable = false, unique = true, length = 50)
-    private String login;
+////    @Setter
+//    @Column(name = "login", nullable = false, updatable = false, unique = true, length = 50)
+//    private String login;
 
     @Setter
     @Column(name = "password", length = 64)
@@ -66,5 +72,6 @@ public class User extends AbstractEntity {
     @Column(name = "active", nullable = false)
     private boolean active = true;
 
-
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private AccessLevel accessLevel;
 }

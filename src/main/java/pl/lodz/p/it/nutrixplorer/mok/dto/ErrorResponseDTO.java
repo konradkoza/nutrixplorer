@@ -1,4 +1,7 @@
 package pl.lodz.p.it.nutrixplorer.mok.dto;
 
-public record ErrorResponseDTO() {
+public record ErrorResponseDTO(
+        String message,
+        String errorCode
+) {
 }

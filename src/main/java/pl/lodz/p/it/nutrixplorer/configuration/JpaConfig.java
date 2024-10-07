@@ -30,7 +30,7 @@ public class JpaConfig {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(userDataSource);
         emf.setPersistenceUnitName("userPU");
-        emf.setPackagesToScan("p.lodz.it.nutrixplorer.model");
+        emf.setPackagesToScan("pl.lodz.p.it.nutrixplorer.model");
         emf.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         Properties properties = new Properties();
         properties.put(AvailableSettings.SHOW_SQL, "true");
@@ -53,7 +53,7 @@ public class JpaConfig {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(adminDatasource);
         emf.setPersistenceUnitName("adminPU");
-        emf.setPackagesToScan("p.lodz.it.nutrixplorer.model");
+        emf.setPackagesToScan("pl.lodz.p.it.nutrixplorer.model");
         emf.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         Properties properties = new Properties();
         properties.put(AvailableSettings.SHOW_SQL, "true");

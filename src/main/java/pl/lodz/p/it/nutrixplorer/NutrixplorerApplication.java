@@ -1,12 +1,13 @@
 package pl.lodz.p.it.nutrixplorer;
 
+import org.mapstruct.MapperConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories(
-		basePackages = "p.lodz.it.nutrixplorer.mok.repositories",  // Repository package for user
+		basePackages = "pl.lodz.p.it.nutrixplorer.mok.repositories",  // Repository package for user
 		entityManagerFactoryRef = "userEntityManagerFactory",
 		transactionManagerRef = "userTransactionManager"
 )
