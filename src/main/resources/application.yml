@@ -1,12 +1,20 @@
 spring:
   application:
     name: overexploration
+  flyway:
+    locations: classpath:db
+    user: nutriadmin
+    password: adminP@ssw0rd
+    url: jdbc:postgresql://localhost:5432/nutrixplorer
+    driver-class-name: org.postgresql.Driver
+
 logging:
   level:
     web: debug
     org:
       springframework:
         transaction: debug
+        transaction.interceptor: trace
         security: debug
         orm:
           jpa: debug
