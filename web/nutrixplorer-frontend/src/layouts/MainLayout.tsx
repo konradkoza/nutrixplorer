@@ -1,5 +1,7 @@
-import { Navbar } from "@/components/admin-panel/navbar";
+import { ContentLayout } from "@/components/admin-panel/content-layout";
+// import { Navbar } from "@/components/admin-panel/navbar";
 import { Sidebar } from "@/components/admin-panel/sidebar";
+import { Card } from "@/components/ui/card";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { useStore } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";
@@ -18,8 +20,12 @@ const MainLayout = () => {
                     !settings.disabled &&
                         (!getOpenState() ? "lg:ml-[90px]" : "lg:ml-72")
                 )}>
-                <Navbar title="NutriXplorer" />
-                <Outlet />
+                {/* <Navbar title="" /> */}
+                <ContentLayout>
+                    <Card className="p-4">Main Layout</Card>
+
+                    <Outlet />
+                </ContentLayout>
             </main>
         </>
     );
