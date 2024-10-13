@@ -29,8 +29,8 @@ export function Sidebar() {
                         className={cn(
                             "mb-1 transition-transform duration-300 ease-in-out",
                             !getOpenState()
-                                ? "hidden translate-x-1"
-                                : "translate-x-0"
+                                  ? "hidden translate-x-1"
+                                  : "translate-x-0"
                         )}
                         variant="link"
                         asChild>
