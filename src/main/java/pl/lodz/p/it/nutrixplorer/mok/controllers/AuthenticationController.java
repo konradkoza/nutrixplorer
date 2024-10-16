@@ -3,11 +3,12 @@ package pl.lodz.p.it.nutrixplorer.mok.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.lodz.p.it.nutrixplorer.exceptions.*;
-import pl.lodz.p.it.nutrixplorer.model.mok.User;
 import pl.lodz.p.it.nutrixplorer.mok.dto.*;
 import pl.lodz.p.it.nutrixplorer.mok.mappers.UserMapper;
 import pl.lodz.p.it.nutrixplorer.mok.services.AuthenticationService;
@@ -15,6 +16,7 @@ import pl.lodz.p.it.nutrixplorer.mok.services.AuthenticationService;
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/auth")
+@Transactional(propagation = Propagation.NEVER)
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
@@ -33,7 +35,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register-seller")
-    public ResponseEntity<UserDTO> registerSeller(@RequestBody RegisterSelletDTO registerSelletDTO) throws EmailAddressInUseException {
+    public ResponseEntity<UserDTO> registerSeller(@RequestBody RegisterSellerDTO registerSelletDTO) throws EmailAddressInUseException {
         return ResponseEntity.ok(
                 UserMapper.INSTANCE.userToUserDTO(
                         authenticationService.registerSeller(

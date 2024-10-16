@@ -9,4 +9,7 @@ public class UserExceptionMessages {
     public static final String UNVERIFIED_ACCOUNT = "Unverified account";
     public static final String ACCOUNT_BLOCKED = "Account blocked";
     public static final String EMAIL_IN_USE = "Email is already used";
+    public static final String USER_BLOCKED = "User is already blocked";
+    public static final String USER_UNBLOCKED = "User is already unblocked";
+    public static final String USER_VERIFIED = "User is already verified";
 }

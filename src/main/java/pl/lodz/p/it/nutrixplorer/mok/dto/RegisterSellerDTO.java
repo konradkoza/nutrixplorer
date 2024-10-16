@@ -1,6 +1,6 @@
 package pl.lodz.p.it.nutrixplorer.mok.dto;
 
-public record RegisterSelletDTO(
+public record RegisterSellerDTO(
         String password,
         String email,
         String firstName,

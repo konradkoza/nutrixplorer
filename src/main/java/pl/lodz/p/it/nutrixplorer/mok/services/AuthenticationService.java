@@ -34,7 +34,7 @@ public class AuthenticationService {
     private final SellerRepository sellerRepository;
     private final AdministratorRepository administratorRepository;
 
-
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public String login(String email, String password) throws NotFoundException, AuthenctiactionFailedException, UserBlockedException, UserNotVerifiedException {
         log.info("Logging in");
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
@@ -52,6 +52,7 @@ public class AuthenticationService {
         }
     }
 
+    @Transactional(propagation = Propagation.MANDATORY)
     public List<String> getUserRoles(User user) {
         List<String> roles = new ArrayList<>();
 
@@ -62,6 +63,7 @@ public class AuthenticationService {
         return roles;
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public User registerClient(String email, String password, String firstName, String lastName) throws EmailAddressInUseException {
         User user = createBasicUser(email, password, firstName, lastName);
         Client client = new Client();
@@ -73,6 +75,7 @@ public class AuthenticationService {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public User registerSeller(String email, String password, String firstName, String lastName) throws EmailAddressInUseException {
         User user = createBasicUser(email, password, firstName, lastName);
         Seller seller = new Seller();
