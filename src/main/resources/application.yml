@@ -1,25 +1,32 @@
 spring:
   application:
-    name: overexploration
+    name: nutrixplorer
   flyway:
     locations: classpath:db
     user: nutriadmin
     password: adminP@ssw0rd
     url: jdbc:postgresql://localhost:5432/nutrixplorer
     driver-class-name: org.postgresql.Driver
-
+    enabled: true
+    default-schema: public
+    baseline-on-migrate: true
 logging:
   level:
     web: debug
     org:
+
+    flywaydb:
+      core:
+        internal:
+          sqlscript: debug
       springframework:
         transaction: debug
         transaction.interceptor: trace
         security: debug
         orm:
           jpa: debug
-    sql: debug
 
+    sql: debug
 nutrixplorer:
   jwt:
     public-key-path: classpath:public.pem

@@ -6,12 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.lodz.p.it.nutrixplorer.exceptions.AuthenctiactionFailedException;
-import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
-import pl.lodz.p.it.nutrixplorer.exceptions.UserBlockedException;
-import pl.lodz.p.it.nutrixplorer.exceptions.UserNotVerifiedException;
-import pl.lodz.p.it.nutrixplorer.mok.dto.AuthTokenDTO;
-import pl.lodz.p.it.nutrixplorer.mok.dto.AuthenticationDTO;
+import pl.lodz.p.it.nutrixplorer.exceptions.*;
+import pl.lodz.p.it.nutrixplorer.model.mok.User;
+import pl.lodz.p.it.nutrixplorer.mok.dto.*;
+import pl.lodz.p.it.nutrixplorer.mok.mappers.UserMapper;
 import pl.lodz.p.it.nutrixplorer.mok.services.AuthenticationService;
 
 @RequiredArgsConstructor
@@ -26,12 +24,20 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register-client")
-    public ResponseEntity<String> registerClient() {
-        return ResponseEntity.ok("Registered");
+    public ResponseEntity<UserDTO> registerClient(@RequestBody RegisterClientDTO registerClientDTO) throws EmailAddressInUseException {
+        return ResponseEntity.ok(
+                UserMapper.INSTANCE.userToUserDTO(
+                        authenticationService.registerClient(
+                                registerClientDTO.email(), registerClientDTO.password(), registerClientDTO.firstName(), registerClientDTO.lastName()
+                        )));
     }
 
     @PostMapping("/register-seller")
-    public ResponseEntity<String> registerSeller() {
-        return ResponseEntity.ok("Registered");
+    public ResponseEntity<UserDTO> registerSeller(@RequestBody RegisterSelletDTO registerSelletDTO) throws EmailAddressInUseException {
+        return ResponseEntity.ok(
+                UserMapper.INSTANCE.userToUserDTO(
+                        authenticationService.registerSeller(
+                                registerSelletDTO.email(), registerSelletDTO.password(), registerSelletDTO.firstName(), registerSelletDTO.lastName()
+                        )));
     }
 }

@@ -72,6 +72,6 @@ public class User extends AbstractEntity {
     @Column(name = "active", nullable = false)
     private boolean active = true;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private AccessLevel accessLevel;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AccessLevel> accessLevels = new ArrayList<>();
 }

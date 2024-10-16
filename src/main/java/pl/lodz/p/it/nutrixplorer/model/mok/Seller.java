@@ -12,6 +12,6 @@ public class Seller extends AccessLevel{
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @Setter
-    @JoinColumn(name = "address_id", nullable = false, updatable = true)
+    @JoinColumn(name = "address_id", nullable = true, updatable = true)
     private Address address;
 }
