@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Setter
@@ -19,8 +20,11 @@ import java.io.Serializable;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "level")
 public abstract class AccessLevel extends AbstractEntity implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L; // TODO: check if this is needed
+
 
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false)
-    @OneToOne(optional = false, cascade = CascadeType.PERSIST)
+    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
     private User user;
 }

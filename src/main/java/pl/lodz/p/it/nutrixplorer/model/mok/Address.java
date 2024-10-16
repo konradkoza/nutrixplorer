@@ -45,7 +45,7 @@ public class Address extends AbstractEntity {
     private String zip;
 
     @OneToOne(mappedBy = "address")
-    private Seller locals;
+    private Seller seller;
 
     public void setAddress(Address address) {
         this.number = address.getNumber();

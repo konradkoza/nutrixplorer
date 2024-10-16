@@ -8,4 +8,5 @@ public class UserExceptionMessages {
     public static final String INVALID_CREDENTIALS = "Invalid credentials";
     public static final String UNVERIFIED_ACCOUNT = "Unverified account";
     public static final String ACCOUNT_BLOCKED = "Account blocked";
+    public static final String EMAIL_IN_USE = "Email is already used";
 }

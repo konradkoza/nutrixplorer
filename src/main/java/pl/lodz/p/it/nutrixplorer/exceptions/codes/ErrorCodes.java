@@ -8,4 +8,5 @@ public class ErrorCodes {
     public static final String INVALID_CREDENTIALS = "invalidCredentials";
     public static final String UNVERIFIED_ACCOUNT = "unverifiedAccount";
     public static final String ACCOUNT_BLOCKED = "blockedAccount";
+    public static final String EMAIL_IN_USE = "emailInUse";
 }
