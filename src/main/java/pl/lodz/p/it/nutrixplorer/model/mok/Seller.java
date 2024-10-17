@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Seller extends AccessLevel{
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL)
     @Setter
     @JoinColumn(name = "address_id", nullable = true, updatable = true)
     private Address address;

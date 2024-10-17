@@ -58,5 +58,7 @@ public class UserService {
     }
 
 
-
+    public User findById(UUID id) throws NotFoundException {
+        return repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+    }
 }

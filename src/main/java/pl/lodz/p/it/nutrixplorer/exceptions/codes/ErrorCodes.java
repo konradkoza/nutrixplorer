@@ -1,6 +1,8 @@
 package pl.lodz.p.it.nutrixplorer.exceptions.codes;
 
 public class ErrorCodes {
+
+
     private ErrorCodes() {
     }
 
@@ -12,4 +14,8 @@ public class ErrorCodes {
     public static final String USER_BLOCKED = "userBlocked";
     public static final String USER_UNBLOCKED = "userUnblocked";
     public static final String USER_VERIFIED = "userVerified";
+    public static final String ACCESS_LEVEL_ASSIGNED = "accessLevelAlreadyAssigned";
+    public static final String ACCESS_LEVEL_TAKEN = "accessLevelAlreadyTaken";
+    public static final String ACCESS_LEVEL_CANNOT_BE_REMOVED = "accessLevelCannotBeRemoved";
+    public static final String ADMINISTRATOR_OWN_ROLE_REMOVAL = "ownAdministratorRoleRemoval";
 }
