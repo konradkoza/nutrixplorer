@@ -13,6 +13,7 @@ import pl.lodz.p.it.nutrixplorer.model.mok.Administrator;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.AdministratorRepository;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.UserRepository;
+import pl.lodz.p.it.nutrixplorer.utils.SecurityContextUtil;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,6 +28,10 @@ public class UserService {
 
     public List<User> getUsers() {
         return repository.findAll();
+    }
+
+    public User getCurrentUser() throws NotFoundException {
+        return repository.findById(SecurityContextUtil.getCurrentUser()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
     }
 
     public void blockUser(UUID id) throws NotFoundException, BlockUserException {

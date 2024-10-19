@@ -14,6 +14,8 @@ import {
     TooltipContent,
     TooltipProvider,
 } from "@/components/ui/tooltip";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 interface MenuProps {
     isOpen: boolean | undefined;
@@ -21,7 +23,8 @@ interface MenuProps {
 
 export function Menu({ isOpen }: MenuProps) {
     const { pathname } = useLocation();
-    const menuList = getMenuList(pathname);
+    const { accessLevels } = useSelector((state: RootState) => state.authSlice);
+    const menuList = getMenuList(accessLevels);
 
     return (
         <ScrollArea className="[&>div>div[style]]:!block">

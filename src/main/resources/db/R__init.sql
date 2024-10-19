@@ -1,3 +1,4 @@
+-- ${flyway:timestamp}
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.users TO nutriuser;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.personal_data TO nutriuser;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.administrators TO nutriuser;

@@ -1,21 +1,14 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import App from "./App.tsx";
 import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import MainLayout from "./layouts/MainLayout.tsx";
-import { ThemeProvider } from "./components/providers/theme-provider.tsx";
-
-const router = createBrowserRouter([
-    {
-        path: "/",
-        Component: MainLayout,
-    },
-]);
+import { store } from "./redux/store.ts";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-            <RouterProvider router={router} />
-        </ThemeProvider>
+        <Provider store={store}>
+            <App />
+        </Provider>
     </StrictMode>
 );

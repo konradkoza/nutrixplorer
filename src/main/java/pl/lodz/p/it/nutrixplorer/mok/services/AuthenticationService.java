@@ -56,8 +56,8 @@ public class AuthenticationService {
     public List<String> getUserRoles(User user) {
         List<String> roles = new ArrayList<>();
 
-        clientRepository.findByUserId(user.getId()).ifPresent(owner -> roles.add("OWNER"));
-        sellerRepository.findByUserId(user.getId()).ifPresent(tenant -> roles.add("TENANT"));
+        clientRepository.findByUserId(user.getId()).ifPresent(owner -> roles.add("CLIENT"));
+        sellerRepository.findByUserId(user.getId()).ifPresent(tenant -> roles.add("SELLER"));
         administratorRepository.findByUserId(user.getId()).ifPresent(admin -> roles.add("ADMINISTRATOR"));
 
         return roles;

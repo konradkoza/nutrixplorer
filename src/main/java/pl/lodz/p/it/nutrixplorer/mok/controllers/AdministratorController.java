@@ -38,7 +38,7 @@ public class AdministratorController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(path = "/{id}/assign")
+    @PutMapping(path = "/{id}/unassign")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<Void> addAccessLevel(@PathVariable UUID id) throws AccessLevelAssignException, NotFoundException {
         administratorService.addAdministratorAccessLevel(id);
