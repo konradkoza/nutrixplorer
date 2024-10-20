@@ -1,6 +1,4 @@
-"use client";
-
-import { LayoutGrid, LogIn, LogOut, User, UserPlus } from "lucide-react";
+import { LogIn, LogOut, User, UserPlus } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -20,23 +18,24 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useLazyGetMeQuery } from "@/redux/services/meService";
+import { logout } from "@/redux/slices/authSlice";
 import { RootState } from "@/redux/store";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetMeQuery } from "@/redux/services/meService";
-import { logout } from "@/redux/slices/authSlice";
 
 export function UserNav() {
     const { token } = useSelector((state: RootState) => state.authSlice);
-    const { data: userData, isLoading } = useGetMeQuery();
+    const [getUserData, { data: userData, isLoading }] = useLazyGetMeQuery();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
     useEffect(() => {
         if (token) {
-            console.log("Request user data");
+            getUserData();
         }
-    }, [token]);
-    console.log(token ? "Logged in" : "Logged out");
+    }, [token, getUserData]);
+
     return (
         <DropdownMenu>
             <TooltipProvider disableHoverableContent>

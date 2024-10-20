@@ -14,7 +14,6 @@ import java.util.UUID;
 public class AbstractEntity {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", columnDefinition = "UUID", updatable = false)
     private UUID id;
 

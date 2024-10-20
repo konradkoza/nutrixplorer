@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories(
-		basePackages = "pl.lodz.p.it.nutrixplorer.mok.repositories",  // Repository package for user
+		basePackages = {"pl.lodz.p.it.nutrixplorer.mok.repositories", "pl.lodz.p.it.nutrixplorer.mow.repositories"},  // Repository package for user
 		entityManagerFactoryRef = "userEntityManagerFactory",
 		transactionManagerRef = "userTransactionManager"
 )

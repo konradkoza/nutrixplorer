@@ -1,36 +1,34 @@
-"use client";
 import { Menu } from "@/components/admin-panel/menu";
 import { SidebarToggle } from "@/components/admin-panel/sidebar-toggle";
 import { Button } from "@/components/ui/button";
-import { useSidebar } from "@/hooks/use-sidebar";
-import { useStore } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";
+import { toggleOpen } from "@/redux/slices/sideBarSlice";
+import { RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 // import { PanelsTopLeft } from "lucide-react";
 // import { Link } from "react-router-dom";
 export function Sidebar() {
-    const sidebar = useStore(useSidebar, (x) => x);
-    if (!sidebar) return null;
-    const { isOpen, toggleOpen, getOpenState, setIsHover, settings } = sidebar;
+    const isOpen = useSelector((state: RootState) => state.sideBarSlice.isOpen);
+    const dispatch = useDispatch();
+
+    const toggle = () => {
+        dispatch(toggleOpen());
+    };
+
     return (
         <aside
             className={cn(
                 "fixed left-0 top-0 z-20 h-screen -translate-x-full transition-[width] duration-300 ease-in-out lg:translate-x-0",
-                !getOpenState() ? "w-[90px]" : "w-72",
-                settings.disabled && "hidden"
+                !isOpen ? "w-[90px]" : "w-72"
             )}>
-            <div
-                onMouseEnter={() => setIsHover(true)}
-                onMouseLeave={() => setIsHover(false)}
-                className="relative flex h-full flex-col overflow-y-auto px-3 py-3 shadow-md dark:shadow-zinc-800">
+            <div className="relative flex h-full flex-col overflow-y-auto px-3 py-3 shadow-md dark:shadow-zinc-800">
                 <div className="flex items-start gap-5 pb-2">
-                    <SidebarToggle isOpen={isOpen} setIsOpen={toggleOpen} />
+                    <SidebarToggle isOpen={isOpen} setIsOpen={toggle} />
                     <Button
                         className={cn(
                             "mb-1 transition-transform duration-300 ease-in-out",
-                            !getOpenState()
-                                  ? "hidden translate-x-1"
-                                  : "translate-x-0"
+                            !isOpen ? "hidden translate-x-1" : "translate-x-0"
                         )}
                         variant="link"
                         asChild>
@@ -41,7 +39,7 @@ export function Sidebar() {
                             <h1
                                 className={cn(
                                     "place-self-center justify-self-center whitespace-nowrap text-lg font-bold transition-[transform,opacity,display] duration-300 ease-in-out",
-                                    !getOpenState()
+                                    !isOpen
                                         ? "hidden -translate-x-96 opacity-0"
                                         : "translate-x-0 opacity-100"
                                 )}>
@@ -51,7 +49,7 @@ export function Sidebar() {
                     </Button>
                 </div>
 
-                <Menu isOpen={getOpenState()} />
+                <Menu isOpen={isOpen} />
             </div>
         </aside>
     );

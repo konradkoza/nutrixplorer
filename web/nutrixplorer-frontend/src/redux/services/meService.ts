@@ -12,4 +12,4 @@ const MeService = api.injectEndpoints({
     }),
 });
 
-export const { useGetMeQuery } = MeService;
+export const { useGetMeQuery, useLazyGetMeQuery } = MeService;

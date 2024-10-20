@@ -4,12 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.lodz.p.it.nutrixplorer.exceptions.BlockUserException;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.BlockUserException;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
-import pl.lodz.p.it.nutrixplorer.exceptions.UserVerificationException;
-import pl.lodz.p.it.nutrixplorer.exceptions.codes.ErrorCodes;
-import pl.lodz.p.it.nutrixplorer.exceptions.messages.UserExceptionMessages;
-import pl.lodz.p.it.nutrixplorer.model.mok.Administrator;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.UserVerificationException;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.ErrorCodes;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.UserExceptionMessages;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.AdministratorRepository;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.UserRepository;
@@ -31,7 +30,8 @@ public class UserService {
     }
 
     public User getCurrentUser() throws NotFoundException {
-        return repository.findById(SecurityContextUtil.getCurrentUser()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+        String currentUser = SecurityContextUtil.getCurrentUser();
+        return repository.findById(UUID.fromString(currentUser)).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
     }
 
     public void blockUser(UUID id) throws NotFoundException, BlockUserException {

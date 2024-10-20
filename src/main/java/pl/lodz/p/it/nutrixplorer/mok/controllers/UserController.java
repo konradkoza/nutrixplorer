@@ -8,11 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import pl.lodz.p.it.nutrixplorer.exceptions.BlockUserException;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.BlockUserException;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.mok.dto.UserDTO;
 import pl.lodz.p.it.nutrixplorer.mok.mappers.UserMapper;
-import pl.lodz.p.it.nutrixplorer.mok.repositories.UserRepository;
 import pl.lodz.p.it.nutrixplorer.mok.services.UserService;
 
 import java.util.List;

@@ -2,6 +2,7 @@ package pl.lodz.p.it.nutrixplorer.mok.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ public class MeController {
     private final UserService userService;
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserDTO> getMe() throws NotFoundException {
         return ResponseEntity.ok(UserMapper.INSTANCE.userToUserDTO(userService.getCurrentUser()));
     }

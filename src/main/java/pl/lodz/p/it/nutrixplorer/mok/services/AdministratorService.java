@@ -1,14 +1,13 @@
 package pl.lodz.p.it.nutrixplorer.mok.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.lodz.p.it.nutrixplorer.exceptions.AccessLevelAssignException;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.AccessLevelAssignException;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
-import pl.lodz.p.it.nutrixplorer.exceptions.codes.ErrorCodes;
-import pl.lodz.p.it.nutrixplorer.exceptions.messages.UserExceptionMessages;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.ErrorCodes;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.UserExceptionMessages;
 import pl.lodz.p.it.nutrixplorer.model.mok.Administrator;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.AdministratorRepository;
