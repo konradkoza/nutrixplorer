@@ -41,4 +41,10 @@ public class ProductController {
     public ResponseEntity<byte[]> getProductImage(@PathVariable UUID id) throws NotFoundException {
         return ResponseEntity.ok(productService.getProductImage(id));
     }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<Product> getProduct(@PathVariable UUID id) throws NotFoundException {
+        return ResponseEntity.ok(productService.getProduct(id));
+    }
 }

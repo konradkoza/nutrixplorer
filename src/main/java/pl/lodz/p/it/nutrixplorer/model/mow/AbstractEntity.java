@@ -15,6 +15,7 @@ public class AbstractEntity {
 
     @Id
     @Column(name = "id", columnDefinition = "UUID", updatable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Version

@@ -2,12 +2,9 @@ package pl.lodz.p.it.nutrixplorer.configuration;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.cfg.AvailableSettings;
-import org.hibernate.dialect.PostgreSQLDialect;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.hibernate.tool.schema.Action;
-import org.hibernate.tool.schema.internal.script.MultiLineSqlScriptExtractor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -60,7 +57,7 @@ public class JpaConfig {
         properties.put(AvailableSettings.JAKARTA_TRANSACTION_TYPE, "RESOURCE_LOCAL");
         properties.put(AvailableSettings.HBM2DDL_AUTO, Action.CREATE_DROP);
 //        properties.put(AvailableSettings.JAKARTA_HBM2DDL_LOAD_SCRIPT_SOURCE, "init.sql");
-        properties.put(AvailableSettings.HBM2DDL_IMPORT_FILES_SQL_EXTRACTOR, MultiLineSqlScriptExtractor.class.getName());
+//        properties.put(AvailableSettings.HBM2DDL_IMPORT_FILES_SQL_EXTRACTOR, MultiLineSqlScriptExtractor.class.getName());
         emf.setJpaProperties(properties);
         emf.afterPropertiesSet();
         return emf;

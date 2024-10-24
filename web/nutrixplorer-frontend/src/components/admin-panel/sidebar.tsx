@@ -12,10 +12,6 @@ export function Sidebar() {
     const isOpen = useSelector((state: RootState) => state.sideBarSlice.isOpen);
     const dispatch = useDispatch();
 
-    const toggle = () => {
-        dispatch(toggleOpen());
-    };
-
     return (
         <aside
             className={cn(
@@ -24,7 +20,10 @@ export function Sidebar() {
             )}>
             <div className="relative flex h-full flex-col overflow-y-auto px-3 py-3 shadow-md dark:shadow-zinc-800">
                 <div className="flex items-start gap-5 pb-2">
-                    <SidebarToggle isOpen={isOpen} setIsOpen={toggle} />
+                    <SidebarToggle
+                        isOpen={isOpen}
+                        setIsOpen={() => dispatch(toggleOpen())}
+                    />
                     <Button
                         className={cn(
                             "mb-1 transition-transform duration-300 ease-in-out",
