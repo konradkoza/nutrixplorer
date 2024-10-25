@@ -1,5 +1,6 @@
 package pl.lodz.p.it.nutrixplorer.model.mow;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
@@ -24,6 +25,7 @@ public class Rating extends AbstractEntity {
 
     private String name;
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "ratings")
     private Set<Product> products;
 
