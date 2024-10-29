@@ -6,9 +6,8 @@ public record ProductSimpleDTO(
         UUID id,
         String productName,
         String productDescription,
-        String productQuantity,
-        UnitDTO unit
-
+        Integer productQuantity,
+        String unit
 ) {
 
 }

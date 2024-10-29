@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.model.mow.Product;
-import pl.lodz.p.it.nutrixplorer.mow.dto.ProductsListDTO;
+import pl.lodz.p.it.nutrixplorer.mow.dto.*;
 import pl.lodz.p.it.nutrixplorer.mow.mappers.ProductMapper;
 import pl.lodz.p.it.nutrixplorer.mow.services.ProductService;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -44,7 +45,26 @@ public class ProductController {
 
     @GetMapping("/{id}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<Product> getProduct(@PathVariable UUID id) throws NotFoundException {
-        return ResponseEntity.ok(productService.getProduct(id));
+    public ResponseEntity<ProductDetailsDTO> getProductDetails(@PathVariable UUID id) throws NotFoundException {
+        return ResponseEntity.ok(ProductMapper.INSTANCE.productToProductDetailsDTO(productService.getProduct(id)));
     }
+
+    @GetMapping("/{id}/producer")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<ProducerDTO> getProductProducerDetails(@PathVariable UUID id) throws NotFoundException {
+        return ResponseEntity.ok(ProductMapper.INSTANCE.producerToProducerDTO(productService.getProductProducer(id)));
+    }
+
+    @GetMapping("/{id}/composition")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<ProductCompositionDTO> getProductComposition(@PathVariable UUID id) throws NotFoundException {
+        return ResponseEntity.ok(ProductMapper.INSTANCE.compositionToCompositionDTO(productService.getProductComposition(id)));
+    }
+
+    @GetMapping("/{id}/rating")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<List<ProductRatingDTO>> getProductRating(@PathVariable UUID id) throws NotFoundException {
+        return ResponseEntity.ok(ProductMapper.INSTANCE.ratingsToRatingDTOs(productService.getProductRating(id)));
+    }
+
 }

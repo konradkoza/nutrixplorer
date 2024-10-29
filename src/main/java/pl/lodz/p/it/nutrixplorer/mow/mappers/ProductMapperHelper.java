@@ -1,18 +1,15 @@
 package pl.lodz.p.it.nutrixplorer.mow.mappers;
 
-import pl.lodz.p.it.nutrixplorer.model.mow.Addition;
-import pl.lodz.p.it.nutrixplorer.model.mow.Flavour;
-import pl.lodz.p.it.nutrixplorer.model.mow.Ingredient;
-import pl.lodz.p.it.nutrixplorer.model.mow.Unit;
+import pl.lodz.p.it.nutrixplorer.model.mow.*;
 
 public class ProductMapperHelper {
 
     String unitToString(Unit unit) {
-        return unit.getName();
+        return unit != null ? unit.getName() : null;
     }
 
     String flavourToString(Flavour flavour) {
-        return flavour.getName();
+        return flavour != null ? flavour.getName() : null;
     }
 
     String ingredientToString(Ingredient ingredient) {
@@ -21,5 +18,9 @@ public class ProductMapperHelper {
 
     String addtionToString(Addition addition) {
         return addition.getName();
+    }
+
+    String packageTypeToString(PackageType packageType) {
+        return packageType != null ? packageType.getName() : null;
     }
 }

@@ -1,5 +1,6 @@
 package pl.lodz.p.it.nutrixplorer.mow.dto;
 
+import java.util.List;
 import java.util.UUID;
 
 public record ProductDetailsDTO(
@@ -8,6 +9,14 @@ public record ProductDetailsDTO(
         String productDescription,
         Integer productQuantity,
         String unit,
-        String country
+        String country,
+        String ean,
+        String packageType,
+        List<ProductRatingDTO> ratings,
+        ProductCompositionDTO composition,
+        ProductLabelDTO label,
+        ProducerDTO producer,
+        List<ProductIndexDTO> productIndexes,
+        List<NutritionalIndexDTO> nutritionalIndexes
 ) {
 }

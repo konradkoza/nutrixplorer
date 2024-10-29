@@ -9,9 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.codes.ErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.messages.ErrorMessages;
+import pl.lodz.p.it.nutrixplorer.model.mow.Composition;
+import pl.lodz.p.it.nutrixplorer.model.mow.Producer;
 import pl.lodz.p.it.nutrixplorer.model.mow.Product;
+import pl.lodz.p.it.nutrixplorer.model.mow.Rating;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.ProductRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -33,5 +37,17 @@ public class ProductService {
 
     public Product getProduct(UUID id) throws NotFoundException {
         return productRepository.findById(id).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_NOT_FOUND, ErrorCodes.PRODUCT_NOT_FOUND));
+    }
+
+    public Producer getProductProducer(UUID id) throws NotFoundException {
+        return productRepository.findProducerByProductId(id).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_PRODUCER_NOT_FOUND, ErrorCodes.PRODUCT_PRODUCER_NOT_FOUND));
+    }
+
+    public Composition getProductComposition(UUID id) throws NotFoundException {
+        return productRepository.findCompositionByProductId(id).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_COMPOSITION_NOT_FOUND, ErrorCodes.PRODUCT_COMPOSITION_NOT_FOUND));
+    }
+
+    public List<Rating> getProductRating(UUID id) {
+        return productRepository.findRatingsByProductId(id);
     }
 }

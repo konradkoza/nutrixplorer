@@ -6,5 +6,7 @@ public class ErrorCodes {
     public static final String BASKET_NOT_FOUND = "basketNotFound";
     public static final String BASKET_ENTRY_NOT_FOUND = "basketEntryNotFound";
     public static final String USER_NOT_FOUND = "userNotFound";
+    public static final String PRODUCT_PRODUCER_NOT_FOUND = "productProducerNotFound";
+    public static final String PRODUCT_COMPOSITION_NOT_FOUND = "productCompositionNotFound";
 }
 

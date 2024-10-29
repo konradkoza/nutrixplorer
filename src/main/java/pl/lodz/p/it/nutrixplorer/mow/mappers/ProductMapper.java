@@ -2,13 +2,8 @@ package pl.lodz.p.it.nutrixplorer.mow.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import pl.lodz.p.it.nutrixplorer.model.mow.Composition;
-import pl.lodz.p.it.nutrixplorer.model.mow.Product;
-import pl.lodz.p.it.nutrixplorer.model.mow.Unit;
-import pl.lodz.p.it.nutrixplorer.mow.dto.ProductCompositionDTO;
-import pl.lodz.p.it.nutrixplorer.mow.dto.ProductDetailsDTO;
-import pl.lodz.p.it.nutrixplorer.mow.dto.ProductSimpleDTO;
-import pl.lodz.p.it.nutrixplorer.mow.dto.UnitDTO;
+import pl.lodz.p.it.nutrixplorer.model.mow.*;
+import pl.lodz.p.it.nutrixplorer.mow.dto.*;
 
 import java.util.List;
 
@@ -27,5 +22,19 @@ public interface ProductMapper {
 
     ProductDetailsDTO productToProductDetailsDTO(Product product);
 
+    ProducerDTO producerToProducerDTO(Producer producer);
 
+    ProductRatingDTO ratingToRatingDTO(Rating rating);
+
+    List<ProductRatingDTO> ratingsToRatingDTOs(List<Rating> ratings);
+
+    ProductLabelDTO labelToLabelDTO(Label label);
+
+    ProductIndexDTO productIndexToProductIndexDTO(ProductIndex productIndex);
+
+    List<ProductIndexDTO> productIndexesToProductIndexDTOs(List<ProductIndex> productIndexes);
+
+    NutritionalIndexDTO nutritionalIndexToNutritionalIndexDTO(NutritionalIndex nutritionalIndex);
+
+    List<NutritionalIndexDTO> nutritionalIndexesToNutritionalIndexDTOs(List<NutritionalIndex> nutritionalIndexes);
 }

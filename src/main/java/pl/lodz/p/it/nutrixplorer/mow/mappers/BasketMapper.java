@@ -10,7 +10,7 @@ import pl.lodz.p.it.nutrixplorer.mow.dto.BasketEntryDetailsDTO;
 
 import java.util.List;
 
-@Mapper
+@Mapper(uses = ProductMapperHelper.class)
 public interface BasketMapper {
     BasketMapper INSTANCE = Mappers.getMapper( BasketMapper.class );
 
