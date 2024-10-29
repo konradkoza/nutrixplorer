@@ -2,10 +2,8 @@ export type SimpleProduct = {
     id: string;
     productName: string;
     productDescription: string;
-    productQuantity: string;
-    unit: {
-        name: string;
-    };
+    productQuantity: number;
+    unit: string;
 };
 
 export type SimpleProductPage = {
@@ -17,8 +15,53 @@ export type ProductDetails = {
     id: string;
     productName: string;
     productDescription: string;
-    productQuantity: string;
-    unit: {
-        name: string;
-    };
+    productQuantity: number;
+    ean: string;
+    unit: string;
+    country: string;
+    packageType: string;
+    productIndexes: ProductIndex[];
+    nutritionalIndexes: NutritionalIndex[];
+    ratings: ProductRating[];
+    composition: ProductComposition;
+    producer: Producer;
+    label: ProductLabel;
+};
+
+export type Producer = {
+    name: string;
+    address: string;
+    countryCode: string;
+    contact: string;
+    nip: string;
+};
+
+export type ProductComposition = {
+    id: string;
+    ingredients: string[];
+    additions: string[];
+    flavour: string | null;
+};
+
+export type ProductRating = {
+    groupName: string;
+    name: string;
+};
+
+export type ProductLabel = {
+    storage: string;
+    durability: string;
+    instructionsAfterOpening: string;
+    preparation: string;
+    allergens: string;
+};
+
+export type ProductIndex = {
+    indexName: string;
+    indexValue: number;
+};
+
+export type NutritionalIndex = {
+    indexValue: number;
+    legend: string;
 };

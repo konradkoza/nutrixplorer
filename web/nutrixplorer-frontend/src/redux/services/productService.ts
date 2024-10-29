@@ -1,4 +1,10 @@
-import { SimpleProductPage } from "@/types/ProductTypes";
+import {
+    Producer,
+    ProductComposition,
+    ProductDetails,
+    ProductRating,
+    SimpleProductPage,
+} from "@/types/ProductTypes";
 import { api } from "./api";
 
 const ProductService = api.injectEndpoints({
@@ -19,7 +25,37 @@ const ProductService = api.injectEndpoints({
                 },
             }),
         }),
+        getProductDetails: builder.query<ProductDetails, string>({
+            query: (id) => ({
+                url: `/product/${id}`,
+                method: "GET",
+            }),
+        }),
+        getProductProducer: builder.query<Producer, string>({
+            query: (id) => ({
+                url: `/product/${id}/producer`,
+                method: "GET",
+            }),
+        }),
+        getProductComposition: builder.query<ProductComposition[], string>({
+            query: (id) => ({
+                url: `/product/${id}/composition`,
+                method: "GET",
+            }),
+        }),
+        getProductRating: builder.query<ProductRating[], string>({
+            query: (id) => ({
+                url: `/product/${id}/rating`,
+                method: "GET",
+            }),
+        }),
     }),
 });
 
-export const { useGetProductPageQuery } = ProductService;
+export const {
+    useGetProductPageQuery,
+    useGetProductCompositionQuery,
+    useGetProductDetailsQuery,
+    useGetProductProducerQuery,
+    useGetProductRatingQuery,
+} = ProductService;

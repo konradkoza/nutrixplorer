@@ -22,7 +22,9 @@ const BasketsListPage = () => {
             ) : (
                 <div className="container mt-10 flex w-full flex-col items-center gap-5 xl:flex-row xl:flex-wrap">
                     {baskets?.map((basket) => (
-                        <Card className="w-full sm:w-2/3 xl:w-[calc(50%-1rem)]">
+                        <Card
+                            className="w-full sm:w-2/3 xl:w-[calc(50%-1rem)]"
+                            key={basket.id}>
                             <CardHeader>
                                 <CardTitle>{basket.name}</CardTitle>
                                 <CardDescription>
@@ -46,10 +48,9 @@ const BasketsListPage = () => {
                                                             {entry.units +
                                                                 " " +
                                                                 entry.product
-                                                                    .unit.name}
+                                                                    .unit || ""}
                                                         </TableCell>
                                                     </TableRow>
-                                                    // <p>{entry.product.productName}, </p>
                                                 )
                                             )}
                                         </TableBody>

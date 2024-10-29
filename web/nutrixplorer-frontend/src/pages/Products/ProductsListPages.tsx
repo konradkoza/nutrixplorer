@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import Pagination from "./Pagination";
 import image from "@/assets/notFound.png";
 import Spinner from "@/components/common/Spinner";
+import { useNavigate } from "react-router-dom";
+
 const ProductsListPages = () => {
     const [pageNumber, setPageNumber] = useState(0);
     const [elements, setElements] = useState(10);
@@ -20,6 +22,7 @@ const ProductsListPages = () => {
     });
     const [images, setImages] = useState<string[]>([]);
     const [loadingImages, setLoadingImages] = useState<boolean>(false);
+    const navigate = useNavigate();
     useEffect(() => {
         setImages([]);
         const fetchImages = async () => {
@@ -34,6 +37,9 @@ const ProductsListPages = () => {
             }
         };
         fetchImages();
+        return () => {
+            setImages([]);
+        };
     }, [productPage]);
 
     return (
@@ -44,9 +50,12 @@ const ProductsListPages = () => {
                 <div className="container grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fit,minmax(20rem,1fr))]">
                     {productPage?.products.map((product, index) => (
                         <Card
+                            onClick={() => {
+                                navigate(product.id);
+                            }}
                             key={product.id}
                             className="min-w-52 flex-shrink-0 flex-grow-0 hover:bg-secondary/95">
-                            <div className="flex justify-center">
+                            <div className="flex justify-center bg-white">
                                 <CardImage
                                     src={images[index]}
                                     alt="Brak zdjęcia"
@@ -67,8 +76,10 @@ const ProductsListPages = () => {
                                 <p>{product.productDescription}</p>
                             </CardContent>
                             <CardFooter>
-                                {product.productQuantity}{" "}
-                                {product.unit ? product.unit.name : ""}
+                                {product.productQuantity
+                                    ? product.productQuantity.toString()
+                                    : ""}{" "}
+                                {product.unit || ""}
                             </CardFooter>
                         </Card>
                     ))}

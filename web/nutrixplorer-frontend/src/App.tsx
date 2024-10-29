@@ -7,6 +7,7 @@ import BasketsListPage from "./pages/Baskets/BasketsListPage";
 import { useDispatch } from "react-redux";
 import { getExpDate } from "./utils/loginUtils";
 import { login, logout } from "./redux/slices/authSlice";
+import ProductDetailsPage from "@/pages/Products/ProductDetailsPage.tsx";
 
 const router = createBrowserRouter([
     {
@@ -15,8 +16,19 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "products",
-                Component: ProductsListPages,
+
+                children: [
+                    {
+                        index: true,
+                        Component: ProductsListPages,
+                    },
+                    {
+                        path: ":id",
+                        Component: ProductDetailsPage,
+                    },
+                ],
             },
+
             {
                 path: "baskets",
                 Component: BasketsListPage,
