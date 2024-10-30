@@ -1,5 +1,5 @@
-import { Menu } from "@/components/admin-panel/menu";
-import { SidebarToggle } from "@/components/admin-panel/sidebar-toggle";
+import { Menu } from "@/components/layout-components/menu";
+import { SidebarToggle } from "@/components/layout-components/sidebar-toggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { toggleOpen } from "@/redux/slices/sideBarSlice";

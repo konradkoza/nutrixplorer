@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/admin-panel/navbar";
+import { Navbar } from "@/components/layout-components/navbar";
 
 interface ContentLayoutProps {
     children: React.ReactNode;

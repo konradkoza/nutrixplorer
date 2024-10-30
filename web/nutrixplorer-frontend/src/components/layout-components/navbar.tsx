@@ -1,5 +1,5 @@
-import { SheetMenu } from "@/components/admin-panel/sheet-menu";
-import { UserNav } from "@/components/admin-panel/user-nav";
+import { SheetMenu } from "@/components/layout-components/sheet-menu";
+import { UserNav } from "@/components/layout-components/user-nav";
 import { ModeToggle } from "@/components/mode-toggle";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";

@@ -1,5 +1,5 @@
-import { ContentLayout } from "@/components/admin-panel/content-layout";
-import { Sidebar } from "@/components/admin-panel/sidebar";
+import { ContentLayout } from "@/components/layout-components/content-layout";
+import { Sidebar } from "@/components/layout-components/sidebar";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
