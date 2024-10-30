@@ -23,4 +23,12 @@ public class ProductMapperHelper {
     String packageTypeToString(PackageType packageType) {
         return packageType != null ? packageType.getName() : null;
     }
+
+    String nutritionalValueNameToString(NutritionalValueName nutritionalValueName) {
+        return nutritionalValueName != null ? nutritionalValueName.getName() : null;
+    }
+
+    String nutritionalValueGroupNameToString(NutritionalValueGroup nutritionalValueGroup) {
+        return nutritionalValueGroup != null ? nutritionalValueGroup.getGroupName() : null;
+    }
 }

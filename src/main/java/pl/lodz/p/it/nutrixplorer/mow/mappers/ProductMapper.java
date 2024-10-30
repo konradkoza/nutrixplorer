@@ -37,4 +37,12 @@ public interface ProductMapper {
     NutritionalIndexDTO nutritionalIndexToNutritionalIndexDTO(NutritionalIndex nutritionalIndex);
 
     List<NutritionalIndexDTO> nutritionalIndexesToNutritionalIndexDTOs(List<NutritionalIndex> nutritionalIndexes);
+
+    NutritionalValueDTO nutritionalValueToNutritionalValueDTO(NutritionalValue nutritionalValue);
+
+    List<NutritionalValueDTO> nutritionalValuesToNutritionalValueDTOs(List<NutritionalValue> nutritionalValues);
+
+    PortionDTO portionToPortionDTO(Portion portion);
+
+    NutritionalValueNameDTO nutritionalValueNameToNutritionalValueNameDTO(NutritionalValueName nutritionalValueName);
 }

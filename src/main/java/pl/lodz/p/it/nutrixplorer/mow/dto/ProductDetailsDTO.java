@@ -16,7 +16,9 @@ public record ProductDetailsDTO(
         ProductCompositionDTO composition,
         ProductLabelDTO label,
         ProducerDTO producer,
+        PortionDTO portion,
         List<ProductIndexDTO> productIndexes,
-        List<NutritionalIndexDTO> nutritionalIndexes
+        List<NutritionalIndexDTO> nutritionalIndexes,
+        List<NutritionalValueDTO> nutritionalValues
 ) {
 }

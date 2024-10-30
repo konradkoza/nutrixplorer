@@ -13,6 +13,7 @@ import imageAlt from "@/assets/notFound.png";
 import { Badge } from "@/components/ui/badge";
 import LabeledText from "@/components/common/LabeledText.tsx";
 import ProductIndexes from "@/pages/Products/ProductIndexes.tsx";
+import NutritionTable from "./NutritionTable";
 
 const ProductDetailsPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -142,6 +143,14 @@ const ProductDetailsPage = () => {
                                     />
                                 </CardContent>
                             )}
+                            <CardContent>
+                                <NutritionTable
+                                    nutritions={
+                                        productDetails.nutritionalValues
+                                    }
+                                    portion={productDetails.portion}
+                                />
+                            </CardContent>
                         </Card>
                         <Card className="w-full p-5">
                             <CardHeader>
@@ -153,6 +162,15 @@ const ProductDetailsPage = () => {
                                     nutritionalIndexes={
                                         productDetails.nutritionalIndexes
                                     }
+                                    energy={
+                                        productDetails.nutritionalValues.find(
+                                            (element) =>
+                                                element.nutritionalValueName
+                                                    .group ===
+                                                "Wartość Energetyczna"
+                                        )?.quantity || 0
+                                    }
+                                    key={productDetails.id + "indexes"}
                                 />
                             </CardContent>
                         </Card>
@@ -181,7 +199,7 @@ const ProductDetailsPage = () => {
                             {productDetails.label.instructionsAfterOpening && (
                                 <CardContent>
                                     <LabeledText
-                                        label={"Instrukcje po otwarciu:"}
+                                        label={"Po otwarciu przechowywać:"}
                                         text={
                                             productDetails.label
                                                 .instructionsAfterOpening

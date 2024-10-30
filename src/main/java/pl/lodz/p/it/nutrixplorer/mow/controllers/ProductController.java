@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.model.mow.Product;
-import pl.lodz.p.it.nutrixplorer.mow.dto.*;
+import pl.lodz.p.it.nutrixplorer.mow.dto.NutritionalValueDTO;
+import pl.lodz.p.it.nutrixplorer.mow.dto.ProductDetailsDTO;
+import pl.lodz.p.it.nutrixplorer.mow.dto.ProductsListDTO;
 import pl.lodz.p.it.nutrixplorer.mow.mappers.ProductMapper;
 import pl.lodz.p.it.nutrixplorer.mow.services.ProductService;
 
@@ -49,22 +51,17 @@ public class ProductController {
         return ResponseEntity.ok(ProductMapper.INSTANCE.productToProductDetailsDTO(productService.getProduct(id)));
     }
 
-    @GetMapping("/{id}/producer")
+
+    @GetMapping("/{id}/simple-nutrition")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ProducerDTO> getProductProducerDetails(@PathVariable UUID id) throws NotFoundException {
-        return ResponseEntity.ok(ProductMapper.INSTANCE.producerToProducerDTO(productService.getProductProducer(id)));
+    public ResponseEntity<List<NutritionalValueDTO>> getProductNutritionTable(@PathVariable UUID id) throws NotFoundException {
+        return ResponseEntity.ok(ProductMapper.INSTANCE.nutritionalValuesToNutritionalValueDTOs(productService.getSimpleNutritionTable(id)));
     }
 
-    @GetMapping("/{id}/composition")
+    @GetMapping("/{id}/nutrition")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<ProductCompositionDTO> getProductComposition(@PathVariable UUID id) throws NotFoundException {
-        return ResponseEntity.ok(ProductMapper.INSTANCE.compositionToCompositionDTO(productService.getProductComposition(id)));
-    }
-
-    @GetMapping("/{id}/rating")
-    @PreAuthorize("permitAll()")
-    public ResponseEntity<List<ProductRatingDTO>> getProductRating(@PathVariable UUID id) throws NotFoundException {
-        return ResponseEntity.ok(ProductMapper.INSTANCE.ratingsToRatingDTOs(productService.getProductRating(id)));
+    public ResponseEntity<List<NutritionalValueDTO>> getProductNutritionDetailsTable(@PathVariable UUID id) throws NotFoundException {
+        return ResponseEntity.ok(ProductMapper.INSTANCE.nutritionalValuesToNutritionalValueDTOs(productService.getNutritionTable(id)));
     }
 
 }

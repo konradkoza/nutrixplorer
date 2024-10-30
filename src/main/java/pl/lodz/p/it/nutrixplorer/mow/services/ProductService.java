@@ -9,10 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.codes.ErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.messages.ErrorMessages;
-import pl.lodz.p.it.nutrixplorer.model.mow.Composition;
-import pl.lodz.p.it.nutrixplorer.model.mow.Producer;
-import pl.lodz.p.it.nutrixplorer.model.mow.Product;
-import pl.lodz.p.it.nutrixplorer.model.mow.Rating;
+import pl.lodz.p.it.nutrixplorer.model.mow.*;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.ProductRepository;
 
 import java.util.List;
@@ -24,7 +21,7 @@ import java.util.UUID;
 public class ProductService {
 
     private final ProductRepository productRepository;
-
+    private final List<String> simpleNutritionalValues = List.of("Wartość Energetyczna", "Total", "Kwasy nasycone", "Białko", "Sól", "Cukry", "Tłuszcz");
 
     public Page<Product> getAllProducts(int elements, int page) {
         PageRequest pageRequest = PageRequest.of(page, elements);
@@ -49,5 +46,18 @@ public class ProductService {
 
     public List<Rating> getProductRating(UUID id) {
         return productRepository.findRatingsByProductId(id);
+    }
+
+    public List<NutritionalValue> getSimpleNutritionTable(UUID id) throws NotFoundException {
+        Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_NOT_FOUND, ErrorCodes.PRODUCT_NOT_FOUND));
+        List<NutritionalValue> nutritionalValues = product.getNutritionalValues();
+
+        return nutritionalValues.stream()
+                .filter(nutritionalValue -> simpleNutritionalValues.contains(nutritionalValue.getNutritionalValueName().getName()))
+                .toList();
+    }
+
+    public List<NutritionalValue> getNutritionTable(UUID id) throws NotFoundException {
+        return productRepository.findNutritionalValuesByProductId(id);
     }
 }

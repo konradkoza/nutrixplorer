@@ -68,7 +68,9 @@ export function UserNav() {
                             </Button>
                         </DropdownMenuTrigger>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom">Profile</TooltipContent>
+                    <TooltipContent side="bottom">
+                        {token ? "Profile" : "Zaloguj się"}
+                    </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
             {token ? (

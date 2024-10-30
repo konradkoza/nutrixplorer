@@ -26,6 +26,8 @@ export type ProductDetails = {
     composition: ProductComposition;
     producer: Producer;
     label: ProductLabel;
+    nutritionalValues: NutritionalValue[];
+    portion: Portion;
 };
 
 export type Producer = {
@@ -64,4 +66,21 @@ export type ProductIndex = {
 export type NutritionalIndex = {
     indexValue: number;
     legend: string;
+};
+
+export type NutritionalValue = {
+    nutritionalValueName: NutritionalValueName;
+    quantity: number;
+    unit: string;
+    nrv: number;
+};
+
+export type Portion = {
+    portionQuantity: number;
+    unit: string;
+};
+
+export type NutritionalValueName = {
+    name: string;
+    group: string;
 };
