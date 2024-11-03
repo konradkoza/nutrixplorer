@@ -1,22 +1,23 @@
-import { useGetProductPageQuery } from "@/redux/services/productService";
-import { getProductImage } from "@/utils/productUtils";
 import { useEffect, useState } from "react";
-import Pagination from "./Pagination";
+import { useGetMyFavouriteProductsPageQuery } from "@/redux/services/favouriteProductsService.ts";
+import { getProductImage } from "@/utils/productUtils.ts";
 import image from "@/assets/notFound.png";
-import Spinner from "@/components/common/Spinner";
+import Spinner from "@/components/common/Spinner.tsx";
 import ProductsList from "@/pages/Products/ProductsList.tsx";
-import { useGetMyFavouriteProductsQuery } from "@/redux/services/favouriteProductsService.ts";
+import Pagination from "@/pages/Products/Pagination.tsx";
 
-const ProductsListPages = () => {
+const FavouritesPage = () => {
     const [pageNumber, setPageNumber] = useState(0);
     const [elements, setElements] = useState(10);
-    const { data: productPage, isLoading } = useGetProductPageQuery({
-        page: pageNumber,
-        elements: elements,
-    });
-    const { data: favouriteProducts } = useGetMyFavouriteProductsQuery();
+    const { data: productPage, isLoading } = useGetMyFavouriteProductsPageQuery(
+        {
+            page: pageNumber,
+            size: elements,
+        }
+    );
     const [images, setImages] = useState<string[]>([]);
     const [loadingImages, setLoadingImages] = useState<boolean>(false);
+
     useEffect(() => {
         setImages([]);
         const fetchImages = async () => {
@@ -54,7 +55,7 @@ const ProductsListPages = () => {
                         products={productPage.products}
                         setImageToDefault={setImageToDefault}
                         images={images}
-                        favouriteProducts={favouriteProducts}
+                        favouriteProducts={productPage.products}
                     />
                 )
             )}
@@ -71,8 +72,12 @@ const ProductsListPages = () => {
                         />
                     )}
             </div>
+            {!productPage ||
+                (productPage.products.length === 0 && (
+                    <div>Brak ulubionych produktów</div>
+                ))}
         </div>
     );
 };
 
-export default ProductsListPages;
+export default FavouritesPage;

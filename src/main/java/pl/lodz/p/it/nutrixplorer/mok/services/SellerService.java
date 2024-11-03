@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.AccessLevelAssignException;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
-import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.ErrorCodes;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.MokErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.UserExceptionMessages;
 import pl.lodz.p.it.nutrixplorer.model.mok.Seller;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
@@ -28,9 +28,9 @@ public class SellerService {
 
         Seller seller;
         if (sellerOptional.isPresent()) {
-            throw new AccessLevelAssignException(UserExceptionMessages.ACCESS_LEVEL_ASSIGNED, ErrorCodes.ACCESS_LEVEL_ASSIGNED);
+            throw new AccessLevelAssignException(UserExceptionMessages.ACCESS_LEVEL_ASSIGNED, MokErrorCodes.ACCESS_LEVEL_ASSIGNED);
         } else {
-            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
             seller = new Seller();
             seller.setUser(user);
         }
@@ -40,10 +40,10 @@ public class SellerService {
     public void removeSellerAccessLevel(UUID id) throws NotFoundException, AccessLevelAssignException {
         Optional<Seller> client = sellerRepository.findByUserId(id);
         if (client.isEmpty()){
-            throw new AccessLevelAssignException(UserExceptionMessages.ACCESS_LEVEL_TAKEN, ErrorCodes.ACCESS_LEVEL_TAKEN);
+            throw new AccessLevelAssignException(UserExceptionMessages.ACCESS_LEVEL_TAKEN, MokErrorCodes.ACCESS_LEVEL_TAKEN);
         }
         if(client.get().getUser().getAccessLevels().size() <= 1){
-            throw new AccessLevelAssignException(UserExceptionMessages.ACCESS_LEVEL_CANNOT_BE_REMOVED, ErrorCodes.ACCESS_LEVEL_CANNOT_BE_REMOVED);
+            throw new AccessLevelAssignException(UserExceptionMessages.ACCESS_LEVEL_CANNOT_BE_REMOVED, MokErrorCodes.ACCESS_LEVEL_CANNOT_BE_REMOVED);
         }
         sellerRepository.delete(client.get());
     }

@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import { getExpDate } from "./utils/loginUtils";
 import { login, logout } from "./redux/slices/authSlice";
 import ProductDetailsPage from "@/pages/Products/ProductDetailsPage.tsx";
+import FavouritesPage from "@/pages/Favourites/FavouritesPage.tsx";
+import BasketDetails from "@/pages/Baskets/BasketDetails.tsx";
 
 const router = createBrowserRouter([
     {
@@ -31,7 +33,20 @@ const router = createBrowserRouter([
 
             {
                 path: "baskets",
-                Component: BasketsListPage,
+                children: [
+                    {
+                        index: true,
+                        Component: BasketsListPage,
+                    },
+                    {
+                        path: ":id",
+                        Component: BasketDetails,
+                    },
+                ],
+            },
+            {
+                path: "favourites",
+                Component: FavouritesPage,
             },
         ],
     },

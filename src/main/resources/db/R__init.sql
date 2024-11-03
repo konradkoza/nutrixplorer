@@ -31,9 +31,12 @@ GRANT SELECT ON TABLE public.product_product_index TO nutriuser;
 GRANT SELECT ON TABLE public.product_rating TO nutriuser;
 GRANT SELECT ON TABLE public.rating TO nutriuser;
 GRANT SELECT ON TABLE public.unit TO nutriuser;
-GRANT SELECT ON TABLE public.basket TO nutriuser;
-GRANT SELECT ON TABLE public.basket_entry TO nutriuser;
-GRANT SELECT ON TABLE public.offer TO nutriuser;
+GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE public.basket TO nutriuser;
+GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE public.basket_entry TO nutriuser;
+GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE public.offer TO nutriuser;
+GRANT SELECT ON TABLE public.allergen TO nutriuser;
+GRANT SELECT ON TABLE public.label_allergen TO nutriuser;
+GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE public.user_favourite_products TO nutriuser;
 
 INSERT INTO public.users (active, blocked, login_attempts, verified, last_failed_login, last_successful_login, version,
                           id, password, last_failed_login_ip, last_successful_login_ip)
@@ -115,3 +118,15 @@ INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
 VALUES ('bf7332cb-65c0-4e4d-9e33-e3dcd15a5602', 0, 'ec7f84f9-767c-44d3-ae07-b021d1c47ea8', '927d0f18-7e48-4440-a4a7-ab7a3de8f5a1', 200);
 INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
 VALUES ('2841954d-1b14-46d3-84f1-18c394c3fd2b', 0, 'ec7f84f9-767c-44d3-ae07-b021d1c47ea8', '7bad072d-5d3e-4275-b56f-ca0e1b7e8bc7', 100);
+
+INSERT INTO public.user_favourite_products (client_id, product_id)
+VALUES ('6f15b280-581f-423e-a0ff-c02cce1c3350', 'f1a18267-d8ba-4215-9e87-bca3200d4ea5');
+
+INSERT INTO public.user_favourite_products (client_id, product_id)
+VALUES ('6f15b280-581f-423e-a0ff-c02cce1c3350', '7bad072d-5d3e-4275-b56f-ca0e1b7e8bc7');
+
+INSERT INTO public.user_favourite_products (client_id, product_id)
+VALUES ('6f15b280-581f-423e-a0ff-c02cce1c3350', '927d0f18-7e48-4440-a4a7-ab7a3de8f5a1');
+
+INSERT INTO public.user_favourite_products (client_id, product_id)
+VALUES ('6f15b280-581f-423e-a0ff-c02cce1c3350', '56428e7d-2876-4456-b5f7-9ff597c97a58');

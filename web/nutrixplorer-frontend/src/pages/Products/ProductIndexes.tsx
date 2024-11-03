@@ -33,7 +33,7 @@ const ProductIndexes = ({
                 <p>Indeks SUM: {returnIndexValue("S")}</p>
                 <p>Indeks FF: {returnIndexValue("T")}</p>
             </div>
-            <p>Dodatkowe informacje</p>
+            <p>Dodatkowe informacje: </p>
             {nutritionalIndexes.map(
                 (element) =>
                     element.legend && (

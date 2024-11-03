@@ -32,7 +32,7 @@ export function Sidebar() {
                         variant="link"
                         asChild>
                         <Link
-                            to="/dashboard"
+                            to="/"
                             className="flex items-center gap-2 self-center">
                             {/* <PanelsTopLeft className="mr-1 h-6 w-6" /> */}
                             <h1

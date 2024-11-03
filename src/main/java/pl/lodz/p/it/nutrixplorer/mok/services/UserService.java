@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.BlockUserException;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.UserVerificationException;
-import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.ErrorCodes;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.MokErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.UserExceptionMessages;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.AdministratorRepository;
@@ -31,13 +31,13 @@ public class UserService {
 
     public User getCurrentUser() throws NotFoundException {
         String currentUser = SecurityContextUtil.getCurrentUser();
-        return repository.findById(UUID.fromString(currentUser)).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+        return repository.findById(UUID.fromString(currentUser)).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
     }
 
     public void blockUser(UUID id) throws NotFoundException, BlockUserException {
-        User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+        User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
         if (user.isBlocked()) {
-            throw new BlockUserException(UserExceptionMessages.ACCOUNT_BLOCKED, ErrorCodes.ACCOUNT_BLOCKED);
+            throw new BlockUserException(UserExceptionMessages.ACCOUNT_BLOCKED, MokErrorCodes.ACCOUNT_BLOCKED);
         }
 
         user.setBlocked(true);
@@ -45,18 +45,18 @@ public class UserService {
     }
 
     public void unblockUser(UUID id) throws NotFoundException, BlockUserException {
-        User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+        User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
         if (!user.isBlocked()) {
-            throw new BlockUserException(UserExceptionMessages.USER_UNBLOCKED, ErrorCodes.USER_UNBLOCKED);
+            throw new BlockUserException(UserExceptionMessages.USER_UNBLOCKED, MokErrorCodes.USER_UNBLOCKED);
         }
         user.setBlocked(false);
         repository.save(user);
     }
 
     public void verifyUser(UUID id) throws UserVerificationException, NotFoundException {
-        User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+        User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
         if (user.isVerified()) {
-            throw new UserVerificationException(UserExceptionMessages.USER_VERIFIED, ErrorCodes.USER_VERIFIED);
+            throw new UserVerificationException(UserExceptionMessages.USER_VERIFIED, MokErrorCodes.USER_VERIFIED);
         }
         user.setVerified(true);
         repository.save(user);
@@ -64,6 +64,6 @@ public class UserService {
 
 
     public User findById(UUID id) throws NotFoundException {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+        return repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
     }
 }

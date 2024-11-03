@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import pl.lodz.p.it.nutrixplorer.model.mok.Client;
+import pl.lodz.p.it.nutrixplorer.model.mok.User;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -66,4 +69,7 @@ public class Product extends AbstractEntity {
 
     @ManyToMany
     private List<NutritionalValue> nutritionalValues;
+
+    @ManyToMany(mappedBy = "favouriteProducts")
+    private Set<Client> usersWhoFavourited = new HashSet<>();
 }

@@ -1,9 +1,11 @@
 package pl.lodz.p.it.nutrixplorer.exceptions.mok.codes;
 
-public class ErrorCodes {
+public class MokErrorCodes {
 
 
-    private ErrorCodes() {
+    public static final String CLIENT_NOT_FOUND = "clientNotFound";
+
+    private MokErrorCodes() {
     }
 
     public static final String USER_NOT_FOUND = "userNotFound";

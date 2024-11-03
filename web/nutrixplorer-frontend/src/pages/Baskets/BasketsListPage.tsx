@@ -10,10 +10,11 @@ import {
 } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { useGetMyBasketsQuery } from "@/redux/services/basketService";
+import { useNavigate } from "react-router-dom";
 
 const BasketsListPage = () => {
     const { data: baskets, isLoading } = useGetMyBasketsQuery();
-
+    const navigate = useNavigate();
     return (
         <div className="flex flex-col items-center">
             <h1>Twoje koszyki</h1>
@@ -57,7 +58,13 @@ const BasketsListPage = () => {
                                     </Table>
                                 </CardContent>
                                 <CardFooter>
-                                    <Button variant="default">Szczegóły</Button>
+                                    <Button
+                                        variant="default"
+                                        onClick={() =>
+                                            navigate(`${basket.id}`)
+                                        }>
+                                        Szczegóły
+                                    </Button>
                                 </CardFooter>
                             </CardHeader>
                         </Card>

@@ -1,5 +1,7 @@
 package pl.lodz.p.it.nutrixplorer.mow.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,4 +29,11 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @Query("SELECT p.nutritionalValues FROM Product p WHERE p.id = :id")
     List<NutritionalValue> findNutritionalValuesByProductId(@Param("id") UUID id);
+
+    @Query("SELECT p FROM Product p JOIN p.usersWhoFavourited u WHERE u.user.id = :userId")
+    Page<Product> findFavoriteProductsByUserId(@Param("userId") UUID userId, Pageable pageable);
+
+    @Query("SELECT p FROM Product p JOIN p.usersWhoFavourited u WHERE u.user.id = :userId")
+    List<Product> findFavoriteProductsByUserId(@Param("userId") UUID userId);
+
 }

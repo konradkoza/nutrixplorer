@@ -9,7 +9,7 @@ const BasketService = api.injectEndpoints({
                 method: "GET",
             }),
         }),
-        getBasketDetails: builder.query<string, Basket>({
+        getBasketDetails: builder.query<Basket, string>({
             query: (id) => ({
                 url: `/basket/${id}`,
                 method: "GET",

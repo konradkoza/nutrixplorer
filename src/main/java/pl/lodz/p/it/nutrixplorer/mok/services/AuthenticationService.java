@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
-import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.ErrorCodes;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.MokErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.UserExceptionMessages;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.*;
 import pl.lodz.p.it.nutrixplorer.model.mok.Client;
@@ -38,18 +38,18 @@ public class AuthenticationService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public String login(String email, String password) throws NotFoundException, AuthenctiactionFailedException, UserBlockedException, UserNotVerifiedException {
         log.info("Logging in");
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
 //        if (!user.isVerified()) {
 //            throw new UserNotVerifiedException(UserExceptionMessages.UNVERIFIED_ACCOUNT, ErrorCodes.ACCOUNT_BLOCKED);
 //        }
 
         if (user.isBlocked()) {
-            throw new UserBlockedException(UserExceptionMessages.ACCOUNT_BLOCKED, ErrorCodes.ACCOUNT_BLOCKED);
+            throw new UserBlockedException(UserExceptionMessages.ACCOUNT_BLOCKED, MokErrorCodes.ACCOUNT_BLOCKED);
         }
         if (passwordEncoder.matches(password, user.getPassword())) {
             return jwtService.generateToken(user.getId(), getUserRoles(user));
         } else {
-            throw new AuthenctiactionFailedException(UserExceptionMessages.INVALID_CREDENTIALS, ErrorCodes.INVALID_CREDENTIALS);
+            throw new AuthenctiactionFailedException(UserExceptionMessages.INVALID_CREDENTIALS, MokErrorCodes.INVALID_CREDENTIALS);
         }
     }
 
@@ -72,7 +72,7 @@ public class AuthenticationService {
         try {
             return clientRepository.saveAndFlush(client).getUser();
         } catch (ConstraintViolationException e) {
-            throw new EmailAddressInUseException(UserExceptionMessages.EMAIL_IN_USE, ErrorCodes.EMAIL_IN_USE);
+            throw new EmailAddressInUseException(UserExceptionMessages.EMAIL_IN_USE, MokErrorCodes.EMAIL_IN_USE);
         }
     }
 
@@ -84,7 +84,7 @@ public class AuthenticationService {
         try {
             return sellerRepository.saveAndFlush(seller).getUser();
         } catch (ConstraintViolationException e) {
-            throw new EmailAddressInUseException(UserExceptionMessages.EMAIL_IN_USE, ErrorCodes.EMAIL_IN_USE);
+            throw new EmailAddressInUseException(UserExceptionMessages.EMAIL_IN_USE, MokErrorCodes.EMAIL_IN_USE);
         }
     }
 

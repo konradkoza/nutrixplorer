@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
-import pl.lodz.p.it.nutrixplorer.exceptions.mow.codes.ErrorCodes;
+import pl.lodz.p.it.nutrixplorer.exceptions.mow.codes.MowErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.messages.ErrorMessages;
 import pl.lodz.p.it.nutrixplorer.model.mow.*;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.ProductRepository;
@@ -33,15 +33,15 @@ public class ProductService {
     }
 
     public Product getProduct(UUID id) throws NotFoundException {
-        return productRepository.findById(id).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_NOT_FOUND, ErrorCodes.PRODUCT_NOT_FOUND));
+        return productRepository.findById(id).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_NOT_FOUND, MowErrorCodes.PRODUCT_NOT_FOUND));
     }
 
     public Producer getProductProducer(UUID id) throws NotFoundException {
-        return productRepository.findProducerByProductId(id).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_PRODUCER_NOT_FOUND, ErrorCodes.PRODUCT_PRODUCER_NOT_FOUND));
+        return productRepository.findProducerByProductId(id).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_PRODUCER_NOT_FOUND, MowErrorCodes.PRODUCT_PRODUCER_NOT_FOUND));
     }
 
     public Composition getProductComposition(UUID id) throws NotFoundException {
-        return productRepository.findCompositionByProductId(id).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_COMPOSITION_NOT_FOUND, ErrorCodes.PRODUCT_COMPOSITION_NOT_FOUND));
+        return productRepository.findCompositionByProductId(id).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_COMPOSITION_NOT_FOUND, MowErrorCodes.PRODUCT_COMPOSITION_NOT_FOUND));
     }
 
     public List<Rating> getProductRating(UUID id) {
@@ -49,7 +49,7 @@ public class ProductService {
     }
 
     public List<NutritionalValue> getSimpleNutritionTable(UUID id) throws NotFoundException {
-        Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_NOT_FOUND, ErrorCodes.PRODUCT_NOT_FOUND));
+        Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_NOT_FOUND, MowErrorCodes.PRODUCT_NOT_FOUND));
         List<NutritionalValue> nutritionalValues = product.getNutritionalValues();
 
         return nutritionalValues.stream()

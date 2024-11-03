@@ -3,6 +3,8 @@ package pl.lodz.p.it.nutrixplorer.exceptions.mok.messages;
 public class UserExceptionMessages {
 
 
+    public static final String CLIENT_NOT_FOUND = "Client not found";
+
     private UserExceptionMessages() {
     }
 
