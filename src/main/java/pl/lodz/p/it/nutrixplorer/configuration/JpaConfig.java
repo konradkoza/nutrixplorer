@@ -40,7 +40,10 @@ public class JpaConfig {
     @Bean(name = "userTransactionManager")
     public PlatformTransactionManager userTransactionManager(
             @Qualifier("userEntityManagerFactory") EntityManagerFactory userEntityManagerFactory) {
-        return new JpaTransactionManager(userEntityManagerFactory);
+        JpaTransactionManager transactionManager = new JpaTransactionManager(userEntityManagerFactory);
+        transactionManager.addListener(new TransactionListener());
+
+        return transactionManager;
     }
 
 
@@ -55,7 +58,7 @@ public class JpaConfig {
         Properties properties = new Properties();
         properties.put(AvailableSettings.SHOW_SQL, "true");
         properties.put(AvailableSettings.JAKARTA_TRANSACTION_TYPE, "RESOURCE_LOCAL");
-        properties.put(AvailableSettings.HBM2DDL_AUTO, Action.CREATE_DROP);
+        properties.put(AvailableSettings.HBM2DDL_AUTO, Action.CREATE);
 //        properties.put(AvailableSettings.JAKARTA_HBM2DDL_LOAD_SCRIPT_SOURCE, "init.sql");
 //        properties.put(AvailableSettings.HBM2DDL_IMPORT_FILES_SQL_EXTRACTOR, MultiLineSqlScriptExtractor.class.getName());
         emf.setJpaProperties(properties);

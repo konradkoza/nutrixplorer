@@ -82,11 +82,6 @@ export function getMenuList(authorities: AccessLevel[]): Group[] {
                     label: "Okazje",
                     icon: Tag,
                 },
-                {
-                    href: "/products",
-                    label: "Produkty",
-                    icon: ShoppingBag,
-                },
             ],
         });
     }

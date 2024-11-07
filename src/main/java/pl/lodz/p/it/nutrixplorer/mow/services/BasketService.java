@@ -49,7 +49,7 @@ public class BasketService {
     }
 
     public void removeEntryFromBasket(UUID entryId) throws NotFoundException {
-        BasketEntry basketEntry = basketEntryRepository.findById(entryId).orElseThrow(() -> new NotFoundException(ErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND));
+        BasketEntry basketEntry = getBasketEntry(entryId);
         UUID userId = basketEntry.getBasket().getUser().getId();
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         if (!userId.equals(currentUserId)) {
@@ -83,13 +83,8 @@ public class BasketService {
         }
     }
 
-    public void updateEntry(UUID uuid, BigDecimal quantity) throws NotFoundException {
-        BasketEntry basketEntry = basketEntryRepository.findById(uuid).orElseThrow(() -> new NotFoundException(ErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND));
-        UUID userId = basketEntry.getBasket().getUser().getId();
-        UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
-        if (!userId.equals(currentUserId)) {
-            throw new NotFoundException(ErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND);
-        }
+    public void updateEntry(UUID id, BigDecimal quantity) throws NotFoundException {
+        BasketEntry basketEntry = getBasketEntry(id);
         basketEntry.setUnits(quantity);
         basketEntryRepository.saveAndFlush(basketEntry);
     }
@@ -100,5 +95,16 @@ public class BasketService {
 
     public List<String> getBasketAllergens(UUID basketId) {
         return basketRepository.findDistinctAllergensByBasketId(basketId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    protected BasketEntry getBasketEntry(UUID entryId) throws NotFoundException {
+        BasketEntry basketEntry = basketEntryRepository.findById(entryId).orElseThrow(() -> new NotFoundException(ErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND));
+        UUID userId = basketEntry.getBasket().getUser().getId();
+        UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
+        if (!userId.equals(currentUserId)) {
+            throw new NotFoundException(ErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND);
+        }
+        return basketEntry;
     }
 }

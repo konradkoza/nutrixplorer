@@ -4,6 +4,7 @@ public class MokErrorCodes {
 
 
     public static final String CLIENT_NOT_FOUND = "clientNotFound";
+    public static final String SELLER_NOT_FOUND = "sellerNotFound";
 
     private MokErrorCodes() {
     }

@@ -10,6 +10,7 @@ import { login, logout } from "./redux/slices/authSlice";
 import ProductDetailsPage from "@/pages/Products/ProductDetailsPage.tsx";
 import FavouritesPage from "@/pages/Favourites/FavouritesPage.tsx";
 import BasketDetails from "@/pages/Baskets/BasketDetails.tsx";
+import DealsPage from "./pages/Deals/DealsPage";
 
 const router = createBrowserRouter([
     {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
             {
                 path: "favourites",
                 Component: FavouritesPage,
+            },
+            {
+                path: "/deals",
+                Component: DealsPage,
             },
         ],
     },

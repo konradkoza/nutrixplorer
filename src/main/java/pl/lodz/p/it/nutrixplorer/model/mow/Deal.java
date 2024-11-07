@@ -9,16 +9,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import pl.lodz.p.it.nutrixplorer.model.mok.User;
+import pl.lodz.p.it.nutrixplorer.model.mok.Seller;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 @Entity
-public class Offer extends AbstractEntity{
+public class Deal extends AbstractEntity{
 
     @ManyToOne
     @NotNull
@@ -35,7 +36,15 @@ public class Offer extends AbstractEntity{
     @Column(name = "new_price", precision = 10, scale = 2)
     private BigDecimal newPrice;
 
+    @Column(name = "end_date")
+    private LocalDate endDate;
+
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    private boolean active;
+
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
-    private User user;
+    @JoinColumn(name = "seller_id", nullable = false, updatable = false)
+    private Seller seller;
 }

@@ -4,6 +4,7 @@ public class UserExceptionMessages {
 
 
     public static final String CLIENT_NOT_FOUND = "Client not found";
+    public static final String SELLER_NOT_FOUND = "Seller not found";
 
     private UserExceptionMessages() {
     }

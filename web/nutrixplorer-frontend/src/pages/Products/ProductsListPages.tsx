@@ -1,11 +1,14 @@
-import { useGetProductPageQuery } from "@/redux/services/productService";
-import { getProductImage } from "@/utils/productUtils";
-import { useEffect, useState } from "react";
-import Pagination from "./Pagination";
 import image from "@/assets/notFound.png";
 import Spinner from "@/components/common/Spinner";
 import ProductsList from "@/pages/Products/ProductsList.tsx";
 import { useGetMyFavouriteProductsQuery } from "@/redux/services/favouriteProductsService.ts";
+import { useGetProductPageQuery } from "@/redux/services/productService";
+import { RootState } from "@/redux/store";
+import { AccessLevel } from "@/types/UserTypes";
+import { getProductImage } from "@/utils/productUtils";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import Pagination from "./Pagination";
 
 const ProductsListPages = () => {
     const [pageNumber, setPageNumber] = useState(0);
@@ -14,9 +17,16 @@ const ProductsListPages = () => {
         page: pageNumber,
         elements: elements,
     });
-    const { data: favouriteProducts } = useGetMyFavouriteProductsQuery();
+    const { accessLevels } = useSelector((state: RootState) => state.authSlice);
+    const { data: favouriteProducts } = useGetMyFavouriteProductsQuery(
+        undefined,
+        {
+            skip: !accessLevels.includes(AccessLevel.CLIENT),
+        }
+    );
     const [images, setImages] = useState<string[]>([]);
     const [loadingImages, setLoadingImages] = useState<boolean>(false);
+
     useEffect(() => {
         setImages([]);
         const fetchImages = async () => {

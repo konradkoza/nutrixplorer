@@ -10,5 +10,6 @@ public class MowErrorCodes {
     public static final String PRODUCT_COMPOSITION_NOT_FOUND = "productCompositionNotFound";
     public static final String FAVOURITE_PRODUCT_NOT_FOUND = "favouriteProductNotFound";
     public static final String FAVOURITE_PRODUCT_ALREADY_EXISTS = "favouriteProductAlreadyExists";
+    public static final String DEAL_NOT_FOUND = "dealNotFound";
 }
 

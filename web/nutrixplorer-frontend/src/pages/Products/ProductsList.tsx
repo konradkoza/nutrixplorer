@@ -39,14 +39,11 @@ const ProductsList = ({
 
     const handleSetFavourite = (id: string) => {
         setFavourite(id);
-        console.log("clicked");
     };
 
     const handleDeleteFavourite = (id: string) => {
         deleteFavourite(id);
-        console.log("clicked");
     };
-
     return (
         <div className="container grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fit,minmax(20rem,1fr))]">
             {products.map((product, index) => (
@@ -56,29 +53,31 @@ const ProductsList = ({
                     }}
                     key={product.id}
                     className="relative min-w-52 flex-shrink-0 flex-grow-0 hover:bg-secondary/95">
-                    <div className="absolute right-0 m-1 flex flex-col">
-                        {!isFavourite(product.id) ? (
-                            <Button
-                                className="rounded-[0.5rem]"
-                                variant="ghost"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleSetFavourite(product.id);
-                                }}>
-                                <FaRegHeart />
-                            </Button>
-                        ) : (
-                            <Button
-                                variant="ghost"
-                                className="rounded-[0.5rem]"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDeleteFavourite(product.id);
-                                }}>
-                                <FaHeart />
-                            </Button>
-                        )}
-                    </div>
+                    {favouriteProducts !== undefined && (
+                        <div className="absolute right-0 m-1 flex flex-col">
+                            {!isFavourite(product.id) ? (
+                                <Button
+                                    className="rounded-[0.5rem]"
+                                    variant="ghost"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleSetFavourite(product.id);
+                                    }}>
+                                    <FaRegHeart />
+                                </Button>
+                            ) : (
+                                <Button
+                                    variant="ghost"
+                                    className="rounded-[0.5rem]"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDeleteFavourite(product.id);
+                                    }}>
+                                    <FaHeart />
+                                </Button>
+                            )}
+                        </div>
+                    )}
                     <div className="flex justify-center bg-white">
                         <CardImage
                             src={images[index]}
