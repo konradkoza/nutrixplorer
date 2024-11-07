@@ -1,3 +1,5 @@
+import { ProductIndex } from "@/types/ProductTypes";
+
 export const getProductImage = async (id: string) => {
     const res = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/product/${id}/image`
@@ -25,5 +27,19 @@ export const getEnergyIndex = (value: number) => {
     }
     if (value > 700) {
         return "F";
+    }
+};
+
+type IndexName = "V" | "M" | "O" | "P" | "F" | "S" | "T";
+
+export const returnIndexValue = (
+    indexName: IndexName,
+    indexes: ProductIndex[]
+) => {
+    const index = indexes.find((index) => index.indexName === indexName);
+    if (index) {
+        return index.indexValue;
+    } else {
+        return 0;
     }
 };

@@ -1,3 +1,4 @@
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
     Table,
     TableBody,
@@ -6,11 +7,10 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { NutritionalValue, Portion } from "@/types/ProductTypes";
+import { BasketNutritions } from "@/types/BasketTypes";
 
-type NutritionTableProps = {
-    nutritions: NutritionalValue[];
-    portion: Portion;
+type NutritionsTableProps = {
+    nutritions: BasketNutritions[];
 };
 
 type SimpleNutritionElements = {
@@ -46,33 +46,30 @@ const SimpleNutritionTable: SimpleNutritionElements[] = [
         displayName: "w tym cukry",
     },
     { name: "Białko", group: "Białko" },
-    { name: "Błonnik", group: "Błonnik" },
     { name: "Sól", group: "Sól" },
+    { name: "Błonnik", group: "Błonnik" },
 ];
 
-const NutritionTable = ({ nutritions, portion }: NutritionTableProps) => {
+const NutrtitionsTable = ({ nutritions }: NutritionsTableProps) => {
     return (
-        <>
-            <div>
+        <Card className="h-full">
+            <CardHeader>
+                <p className="text-2xl">Sumaryczne wartości odżywcze</p>
+            </CardHeader>
+            <CardContent>
                 <Table>
-                    <TableHeader className="w-full">
+                    <TableHeader>
                         <TableRow>
                             <TableHead className="">Wartość odżywcza</TableHead>
-                            <TableHead>100 {portion.unit}</TableHead>
-                            <TableHead>
-                                Porcja ({portion.portionQuantity} {portion.unit}
-                                )
-                            </TableHead>
+                            <TableHead>Sumaryczna wartość</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {SimpleNutritionTable.map((element) => {
                             const nutrition = nutritions.find(
                                 (nutrition) =>
-                                    nutrition.nutritionalValueName.name ===
-                                        element.name &&
-                                    nutrition.nutritionalValueName.group ===
-                                        element.group
+                                    nutrition.name === element.name &&
+                                    nutrition.groupName === element.group
                             );
                             return (
                                 <TableRow key={element.name + element.group}>
@@ -83,16 +80,9 @@ const NutritionTable = ({ nutritions, portion }: NutritionTableProps) => {
                                     </TableCell>
                                     <TableCell>
                                         {nutrition
-                                            ? nutrition.quantity.toFixed(2)
-                                            : 0}{" "}
-                                        {nutrition ? nutrition.unit : ""}
-                                    </TableCell>
-                                    <TableCell>
-                                        {nutrition
-                                            ? (
-                                                  (nutrition.quantity / 100) *
-                                                  portion.portionQuantity
-                                              ).toFixed(2)
+                                            ? Number(
+                                                  nutrition.quantity.toFixed(2)
+                                              )
                                             : 0}{" "}
                                         {nutrition ? nutrition.unit : ""}
                                     </TableCell>
@@ -103,34 +93,19 @@ const NutritionTable = ({ nutritions, portion }: NutritionTableProps) => {
                             .filter((nutr) => {
                                 return !SimpleNutritionTable.some(
                                     (simpleElement) => {
-                                        return (
-                                            nutr.nutritionalValueName.name ===
-                                            simpleElement.name
-                                        );
+                                        return nutr.name === simpleElement.name;
                                     }
                                 );
                             })
                             .map((nutrition) => (
                                 <TableRow
-                                    key={
-                                        nutrition.nutritionalValueName.name +
-                                        nutrition.nutritionalValueName.group
-                                    }>
-                                    <TableCell>
-                                        {nutrition.nutritionalValueName.name}
-                                    </TableCell>
+                                    key={nutrition.name + nutrition.groupName}>
+                                    <TableCell>{nutrition.name}</TableCell>
                                     <TableCell>
                                         {nutrition
-                                            ? nutrition.quantity.toFixed(2)
-                                            : 0}{" "}
-                                        {nutrition ? nutrition.unit : ""}
-                                    </TableCell>
-                                    <TableCell>
-                                        {nutrition
-                                            ? (
-                                                  (nutrition.quantity / 100) *
-                                                  portion.portionQuantity
-                                              ).toFixed(2)
+                                            ? Number(
+                                                  nutrition.quantity.toFixed(2)
+                                              )
                                             : 0}{" "}
                                         {nutrition ? nutrition.unit : ""}
                                     </TableCell>
@@ -138,9 +113,9 @@ const NutritionTable = ({ nutritions, portion }: NutritionTableProps) => {
                             ))}
                     </TableBody>
                 </Table>
-            </div>
-        </>
+            </CardContent>
+        </Card>
     );
 };
 
-export default NutritionTable;
+export default NutrtitionsTable;

@@ -9,9 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -46,6 +43,9 @@ public class Address extends AbstractEntity {
 
     @OneToOne(mappedBy = "address")
     private Seller seller;
+
+    @Column(name = "shop_name", nullable = false, length = 100)
+    private String shopName;
 
     public void setAddress(Address address) {
         this.number = address.getNumber();

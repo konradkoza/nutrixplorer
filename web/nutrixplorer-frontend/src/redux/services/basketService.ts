@@ -1,5 +1,10 @@
 import { api } from "./api";
-import { Basket, CreateEntry, EntryUpdate } from "@/types/BasketTypes";
+import {
+    Basket,
+    BasketNutritions,
+    CreateEntry,
+    EntryUpdate,
+} from "@/types/BasketTypes";
 
 const BasketService = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -51,6 +56,18 @@ const BasketService = api.injectEndpoints({
                 body: { quantity },
             }),
         }),
+        getBasketNutritions: builder.query<BasketNutritions[], string>({
+            query: (id) => ({
+                url: `/basket/${id}/nutritional-values`,
+                method: "GET",
+            }),
+        }),
+        getBasketAllergens: builder.query<string[], string>({
+            query: (id) => ({
+                url: `/basket/${id}/allergens`,
+                method: "GET",
+            }),
+        }),
     }),
 });
 
@@ -62,4 +79,6 @@ export const {
     useDeleteBasketMutation,
     useAddBasketEntryMutation,
     useUpdateBasketEntryMutation,
+    useGetBasketNutritionsQuery,
+    useGetBasketAllergensQuery,
 } = BasketService;

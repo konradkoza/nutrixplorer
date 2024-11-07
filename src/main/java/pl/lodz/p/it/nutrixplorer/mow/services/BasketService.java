@@ -13,6 +13,7 @@ import pl.lodz.p.it.nutrixplorer.mok.repositories.UserRepository;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.BasketEntryRepository;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.BasketRepository;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.ProductRepository;
+import pl.lodz.p.it.nutrixplorer.mow.repositories.dto.NutritionalValueSummaryDTO;
 import pl.lodz.p.it.nutrixplorer.utils.SecurityContextUtil;
 
 import java.math.BigDecimal;
@@ -93,5 +94,11 @@ public class BasketService {
         basketEntryRepository.saveAndFlush(basketEntry);
     }
 
+    public List<NutritionalValueSummaryDTO> getNutritionalValues(UUID basketId) {
+        return basketRepository.findSumOfNutritionalValuesByBasketId(basketId);
+    }
 
+    public List<String> getBasketAllergens(UUID basketId) {
+        return basketRepository.findDistinctAllergensByBasketId(basketId);
+    }
 }

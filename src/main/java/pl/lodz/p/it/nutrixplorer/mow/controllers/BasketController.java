@@ -11,11 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.model.mow.Basket;
-import pl.lodz.p.it.nutrixplorer.mow.dto.BasketDTO;
-import pl.lodz.p.it.nutrixplorer.mow.dto.BasketEntryDTO;
-import pl.lodz.p.it.nutrixplorer.mow.dto.CreateBasketDTO;
-import pl.lodz.p.it.nutrixplorer.mow.dto.UpdateEntryDTO;
+import pl.lodz.p.it.nutrixplorer.mow.dto.*;
 import pl.lodz.p.it.nutrixplorer.mow.mappers.BasketMapper;
+import pl.lodz.p.it.nutrixplorer.mow.repositories.dto.NutritionalValueSummaryDTO;
 import pl.lodz.p.it.nutrixplorer.mow.services.BasketService;
 
 import java.util.List;
@@ -29,7 +27,6 @@ import java.util.UUID;
 public class BasketController {
 
     private final BasketService basketService;
-
 
     @GetMapping("/user")
     @PreAuthorize("hasRole('CLIENT')")
@@ -78,5 +75,16 @@ public class BasketController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/{basketId}/nutritional-values")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<List<NutritionalValueSummaryDTO>> getSumOfNutritionalValues(@PathVariable UUID basketId) {
+        return ResponseEntity.ok(basketService.getNutritionalValues(basketId));
+    }
+
+    @GetMapping("/{basketId}/allergens")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<List<String>> getAllergensInBasket(@PathVariable UUID basketId) {
+        return ResponseEntity.ok(basketService.getBasketAllergens(basketId));
+    }
 
 }

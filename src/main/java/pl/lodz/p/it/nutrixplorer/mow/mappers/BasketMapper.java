@@ -1,6 +1,7 @@
 package pl.lodz.p.it.nutrixplorer.mow.mappers;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import pl.lodz.p.it.nutrixplorer.model.mow.Basket;
 import pl.lodz.p.it.nutrixplorer.model.mow.BasketEntry;
@@ -18,6 +19,7 @@ public interface BasketMapper {
 
     List<BasketEntry> basketEntryDTOsToBasketEntries(List<BasketEntryDTO> entriesDTO);
 
+    @Mapping(source = "product", target = "productIndexes")
     BasketEntryDetailsDTO basketEntryToBasketEntryDetailsDTO(BasketEntry entry);
 
     BasketDTO basketToBasketDTO(Basket basket);

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class NutritionalValuesDTO {
+public class NutritionalValueSummaryDTO {
     private String name;
     private String groupName;
     private Double quantity;

@@ -1,9 +1,10 @@
-import { SimpleProduct } from "./ProductTypes";
+import { ProductIndex, SimpleProduct } from "./ProductTypes";
 
 export type BasketEntry = {
     id: string;
     product: SimpleProduct;
     units: number;
+    productIndexes: ProductIndex[];
 };
 
 export type Basket = {
@@ -27,4 +28,11 @@ export type CreateBasket = {
 export type EntryUpdate = {
     entryId: string;
     quantity: number;
+};
+
+export type BasketNutritions = {
+    name: string;
+    groupName: string;
+    quantity: number;
+    unit: string;
 };
