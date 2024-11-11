@@ -10,7 +10,21 @@ export type Deal = {
     endDate: string;
     product: SimpleProduct;
     active: boolean;
-    sellerId: string;
+    seller: {
+        address: {
+            city: string;
+            street: string;
+            country: string;
+            shopName: string;
+            zip: string;
+            number: string;
+        };
+        user: {
+            email: string;
+            firstName: string;
+            lastName: string;
+        };
+    };
 };
 
 export type SimpleDeal = {
@@ -22,4 +36,13 @@ export type SimpleDeal = {
     startDate: string;
     endDate: string;
     product: SimpleProduct;
+    seller: {
+        shopName: string;
+        city: string;
+    };
+};
+
+export type DealPage = {
+    deals: SimpleDeal[];
+    numberOfPages: number;
 };

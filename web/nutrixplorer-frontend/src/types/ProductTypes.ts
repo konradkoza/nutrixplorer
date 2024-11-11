@@ -72,7 +72,6 @@ export type NutritionalValue = {
     nutritionalValueName: NutritionalValueName;
     quantity: number;
     unit: string;
-    nrv: number;
 };
 
 export type Portion = {

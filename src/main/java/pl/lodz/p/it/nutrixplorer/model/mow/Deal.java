@@ -28,6 +28,7 @@ public class Deal extends AbstractEntity{
 
     private String name;
 
+    @Column(name = "description", length = 2000)
     private String description;
 
     @Column(name = "old_price", precision = 10, scale = 2)

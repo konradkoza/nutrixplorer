@@ -1,7 +1,9 @@
 package pl.lodz.p.it.nutrixplorer.mow.mappers;
 
+import pl.lodz.p.it.nutrixplorer.model.mok.Seller;
 import pl.lodz.p.it.nutrixplorer.model.mow.*;
 import pl.lodz.p.it.nutrixplorer.mow.dto.ProductIndexDTO;
+import pl.lodz.p.it.nutrixplorer.mow.dto.SellerAddressDTO;
 
 import java.util.List;
 
@@ -42,5 +44,9 @@ public class ProductMapperHelper {
                         index.getIndexValue()
                 ))
                 .toList();
+    }
+
+    SellerAddressDTO sellerToSellerAddressDTO(Seller seller) {
+        return new SellerAddressDTO(seller.getAddress().getShopName(), seller.getAddress().getCity());
     }
 }

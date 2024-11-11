@@ -1,15 +1,15 @@
-import image from "@/assets/notFound.png";
-import Spinner from "@/components/common/Spinner";
-import { useGetAllDealsQuery } from "@/redux/services/DealService";
+import { useGetMyDealsQuery } from "@/redux/services/DealService";
 import { getProductImage } from "@/utils/productUtils";
 import { useEffect, useState } from "react";
+import image from "@/assets/notFound.png";
 import Pagination from "../Products/Pagination";
 import DealsList from "./DealsList";
+import Spinner from "@/components/common/Spinner";
 
-const DealsListPage = () => {
+const MyDealsListPage = () => {
     const [pageNumber, setPageNumber] = useState(0);
     const [elements, setElements] = useState(10);
-    const { data: dealsPage, isLoading } = useGetAllDealsQuery({
+    const { data: dealsPage, isLoading } = useGetMyDealsQuery({
         page: pageNumber,
         elements: elements,
     });
@@ -42,10 +42,11 @@ const DealsListPage = () => {
             return newImages;
         });
     };
+
     return (
         <div className="flex w-full justify-center">
             <div className="container flex flex-col gap-3">
-                <p className="font-semi-bold mt-5 text-3xl">Okazje</p>
+                <p className="font-semi-bold mt-5 text-3xl">Moje okazje</p>
                 {isLoading || loadingImages ? (
                     <Spinner />
                 ) : (
@@ -76,4 +77,4 @@ const DealsListPage = () => {
     );
 };
 
-export default DealsListPage;
+export default MyDealsListPage;

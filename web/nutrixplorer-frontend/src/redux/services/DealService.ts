@@ -1,18 +1,38 @@
-import { Deal, SimpleDeal } from "@/types/DealTypes";
+import { Deal, DealPage } from "@/types/DealTypes";
 import { api } from "./api";
 
 const DealService = api.injectEndpoints({
     endpoints: (builder) => ({
-        getAllDeals: builder.query<SimpleDeal[], void>({
-            query: () => ({
-                url: "/deal",
+        getAllDeals: builder.query<
+            DealPage,
+            {
+                elements: number;
+                page: number;
+            }
+        >({
+            query: ({ elements, page }) => ({
+                url: "/deal/all",
                 method: "GET",
+                params: {
+                    elements: elements,
+                    page: page,
+                },
             }),
         }),
-        getMyDeals: builder.query<SimpleDeal[], void>({
-            query: () => ({
-                url: "/deal/my",
+        getMyDeals: builder.query<
+            DealPage,
+            {
+                elements: number;
+                page: number;
+            }
+        >({
+            query: ({ elements, page }) => ({
+                url: "/deal/seller",
                 method: "GET",
+                params: {
+                    elements: elements,
+                    page: page,
+                },
             }),
         }),
         getDealDetails: builder.query<Deal, string>({
@@ -21,7 +41,27 @@ const DealService = api.injectEndpoints({
                 method: "GET",
             }),
         }),
+        getDealsForClient: builder.query<
+            DealPage,
+            {
+                elements: number;
+                page: number;
+            }
+        >({
+            query: ({ elements, page }) => ({
+                url: "/deal",
+                method: "GET",
+                params: {
+                    elements: elements,
+                    page: page,
+                },
+            }),
+        }),
     }),
 });
 
-export const { useGetAllDealsQuery, useGetMyDealsQuery } = DealService;
+export const {
+    useGetAllDealsQuery,
+    useGetMyDealsQuery,
+    useGetDealDetailsQuery,
+} = DealService;
