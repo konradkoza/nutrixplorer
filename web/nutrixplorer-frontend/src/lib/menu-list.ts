@@ -1,8 +1,9 @@
 import { AccessLevel } from "@/types/UserTypes";
 import {
-    ChartColumnStacked,
+    // ChartColumnStacked,
     Heart,
     LucideIcon,
+    ScaleIcon,
     ShoppingBag,
     ShoppingBasketIcon,
     Tag,
@@ -45,10 +46,15 @@ export function getMenuList(authorities: AccessLevel[]): Group[] {
         list.push({
             groupLabel: "Klient",
             menus: [
+                // {
+                //     href: "/categories",
+                //     label: "Kategorie",
+                //     icon: ChartColumnStacked,
+                // },
                 {
-                    href: "/categories",
-                    label: "Kategorie",
-                    icon: ChartColumnStacked,
+                    href: "/compare",
+                    label: "Porównaj",
+                    icon: ScaleIcon,
                 },
                 {
                     href: "/deals",

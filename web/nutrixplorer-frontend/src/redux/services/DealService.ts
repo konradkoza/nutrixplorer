@@ -1,7 +1,7 @@
 import { Deal, DealPage } from "@/types/DealTypes";
 import { api } from "./api";
 
-const DealService = api.injectEndpoints({
+const dealService = api.injectEndpoints({
     endpoints: (builder) => ({
         getAllDeals: builder.query<
             DealPage,
@@ -37,11 +37,11 @@ const DealService = api.injectEndpoints({
         }),
         getDealDetails: builder.query<Deal, string>({
             query: (id) => ({
-                url: `/deal/${id}`,
+                url: `/deal/current/${id}`,
                 method: "GET",
             }),
         }),
-        getDealsForClient: builder.query<
+        getCurrentDeals: builder.query<
             DealPage,
             {
                 elements: number;
@@ -49,7 +49,7 @@ const DealService = api.injectEndpoints({
             }
         >({
             query: ({ elements, page }) => ({
-                url: "/deal",
+                url: "/deal/current",
                 method: "GET",
                 params: {
                     elements: elements,
@@ -64,4 +64,5 @@ export const {
     useGetAllDealsQuery,
     useGetMyDealsQuery,
     useGetDealDetailsQuery,
-} = DealService;
+    useGetCurrentDealsQuery,
+} = dealService;

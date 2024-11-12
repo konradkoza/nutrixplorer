@@ -14,6 +14,11 @@ export type Basket = {
     basketEntries: BasketEntry[];
 };
 
+export type SimpleBasket = {
+    id: string;
+    name: string;
+};
+
 export type CreateEntry = {
     productId: string;
     quantity: number;

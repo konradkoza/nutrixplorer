@@ -14,6 +14,7 @@ type NutritionChartProps = {
     fat: number;
     protein: number;
     fibre: number;
+    // total: number;
 };
 
 const chartConfig = {
@@ -35,12 +36,7 @@ const chartConfig = {
     },
 } satisfies ChartConfig;
 
-const NutritionChart = ({
-    carbs,
-    fat,
-    protein,
-    fibre,
-}: NutritionChartProps) => {
+const NutritionChart = ({ carbs, fat, protein, fibre }: NutritionChartProps) => {
     const total = carbs * 4 + fat * 9 + protein * 4 + fibre * 2;
     const chartData = [
         {
@@ -73,9 +69,7 @@ const NutritionChart = ({
         <div className="w-full">
             <Card className="flex flex-col">
                 <CardHeader className="items-center pb-10">
-                    <CardTitle>
-                        Udział wartości odżywczych w wartości energetycznej
-                    </CardTitle>
+                    <CardTitle>Udział wartości odżywczych w wartości energetycznej</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 pb-0">
                     <ChartContainer
@@ -88,7 +82,7 @@ const NutritionChart = ({
                                     <ChartTooltipContent
                                         hideLabel
                                         formatter={(value, name) =>
-                                            `${chartConfig[name as keyof typeof chartConfig].label}: ${value} g`
+                                            `${chartConfig[name as keyof typeof chartConfig].label}: ${Number(value).toFixed(0)} g`
                                         }
                                     />
                                 }
@@ -98,9 +92,9 @@ const NutritionChart = ({
                                 dataKey="value"
                                 nameKey="nutrition"
                                 stroke="0"
-                                innerRadius={60}
+                                innerRadius={0}
                                 outerRadius={80}
-                                paddingAngle={5}>
+                                paddingAngle={0}>
                                 <LabelList
                                     offset={10}
                                     dataKey="nutrition"
@@ -110,25 +104,18 @@ const NutritionChart = ({
                                     position="outside"
                                     formatter={(value: string) => {
                                         const element = chartData.find(
-                                            (element) =>
-                                                element.nutrition === value
+                                            (element) => element.nutrition === value
                                         );
                                         let sum = chartData.reduce(
-                                            (acc, curr) =>
-                                                acc +
-                                                curr.value * curr.multiplier,
+                                            (acc, curr) => acc + curr.value * curr.multiplier,
                                             0
                                         );
-                                        return `${(((element!.value * element!.multiplier) / sum) * 100).toFixed(2)}%`;
+                                        return `${(((element!.value * element!.multiplier) / sum) * 100).toFixed(1)}%`;
                                     }}
                                 />
-                                <Label
+                                {/* <Label
                                     content={({ viewBox }) => {
-                                        if (
-                                            viewBox &&
-                                            "cx" in viewBox &&
-                                            "cy" in viewBox
-                                        ) {
+                                        if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                                             return (
                                                 <text
                                                     x={viewBox.cx}
@@ -139,16 +126,11 @@ const NutritionChart = ({
                                                         x={viewBox.cx}
                                                         y={viewBox.cy}
                                                         className="fill-foreground text-3xl font-bold">
-                                                        {Math.floor(
-                                                            total
-                                                        ).toString()}
+                                                        {Math.floor(total).toString()}
                                                     </tspan>
                                                     <tspan
                                                         x={viewBox.cx}
-                                                        y={
-                                                            (viewBox.cy || 0) +
-                                                            24
-                                                        }
+                                                        y={(viewBox.cy || 0) + 24}
                                                         className="fill-muted-foreground">
                                                         Kcal
                                                     </tspan>
@@ -156,12 +138,10 @@ const NutritionChart = ({
                                             );
                                         }
                                     }}
-                                />
+                                /> */}
                             </Pie>
                             <ChartLegend
-                                content={
-                                    <ChartLegendContent nameKey="nutrition" />
-                                }
+                                content={<ChartLegendContent nameKey="nutrition" />}
                                 className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
                             />
                         </PieChart>

@@ -1,6 +1,6 @@
 import image from "@/assets/notFound.png";
 import Spinner from "@/components/common/Spinner";
-import { useGetAllDealsQuery } from "@/redux/services/DealService";
+import { useGetCurrentDealsQuery } from "@/redux/services/dealService";
 import { getProductImage } from "@/utils/productUtils";
 import { useEffect, useState } from "react";
 import Pagination from "../Products/Pagination";
@@ -9,7 +9,7 @@ import DealsList from "./DealsList";
 const DealsListPage = () => {
     const [pageNumber, setPageNumber] = useState(0);
     const [elements, setElements] = useState(10);
-    const { data: dealsPage, isLoading } = useGetAllDealsQuery({
+    const { data: dealsPage, isLoading } = useGetCurrentDealsQuery({
         page: pageNumber,
         elements: elements,
     });

@@ -32,7 +32,7 @@ public class DealService {
         return dealRepository.findById(id).orElseThrow(() -> new NotFoundException(ErrorMessages.DEAL_NOT_FOUND, MowErrorCodes.DEAL_NOT_FOUND));
     }
 
-    public Page<Deal> getSellersDeals(UUID userId, int elements, int page) throws NotFoundException {
+    public Page<Deal> getSellersDeals(UUID userId, int elements, int page)  {
         return dealRepository.findSellerDealsByUserId(userId, PageRequest.of(page, elements));
     }
 
@@ -40,4 +40,7 @@ public class DealService {
         return dealRepository.findCurrentActiveDeals(PageRequest.of(page, elements));
     }
 
+    public Deal getCurrentDealById(UUID id) throws NotFoundException {
+        return dealRepository.findCurrentActiveDealById(id).orElseThrow(() -> new NotFoundException(ErrorMessages.DEAL_NOT_FOUND, MowErrorCodes.DEAL_NOT_FOUND));
+    }
 }

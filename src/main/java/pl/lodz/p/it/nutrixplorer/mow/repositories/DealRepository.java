@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import pl.lodz.p.it.nutrixplorer.model.mow.Deal;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -19,4 +20,7 @@ public interface DealRepository extends JpaRepository<Deal, UUID> {
 
     @Query("SELECT d FROM Deal d WHERE d.endDate >= CURRENT_DATE AND d.active = true")
     Page<Deal> findCurrentActiveDeals(Pageable of);
+
+    @Query("SELECT d FROM Deal d WHERE d.id = :id AND d.endDate >= CURRENT_DATE AND d.active = true")
+    Optional<Deal> findCurrentActiveDealById(UUID id);
 }

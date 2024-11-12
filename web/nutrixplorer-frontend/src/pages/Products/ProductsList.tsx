@@ -57,7 +57,7 @@ const ProductsList = ({
                         <div className="absolute right-0 m-1 flex flex-col">
                             {!isFavourite(product.id) ? (
                                 <Button
-                                    className="rounded-[0.5rem]"
+                                    className="rounded-[0.5rem] bg-secondary/20"
                                     variant="ghost"
                                     onClick={(e) => {
                                         e.stopPropagation();
@@ -68,7 +68,7 @@ const ProductsList = ({
                             ) : (
                                 <Button
                                     variant="ghost"
-                                    className="rounded-[0.5rem]"
+                                    className="rounded-[0.5rem] bg-secondary/20"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         handleDeleteFavourite(product.id);

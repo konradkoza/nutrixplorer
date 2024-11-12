@@ -1,7 +1,7 @@
 import imageAlt from "@/assets/notFound.png";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useGetDealDetailsQuery } from "@/redux/services/DealService";
+import { useGetDealDetailsQuery } from "@/redux/services/dealService";
 import { getProductImage } from "@/utils/productUtils";
 import {
     Tooltip,
@@ -82,17 +82,23 @@ const DealDetailsPage = () => {
                                                     %
                                                 </span>
                                             </p>
-                                            <div className="">
+                                            <div>
                                                 <TooltipProvider>
                                                     <Tooltip>
-                                                        <TooltipTrigger className="flex gap-1">
-                                                            <FaHourglassEnd
-                                                                size={20}
-                                                            />
-                                                            <span className="text-muted-foreground">
-                                                                {" "}
-                                                                {deal.endDate}
-                                                            </span>
+                                                        <TooltipTrigger
+                                                            asChild
+                                                            className="flex gap-1 hover:cursor-default">
+                                                            <div>
+                                                                <FaHourglassEnd
+                                                                    size={20}
+                                                                />
+                                                                <span className="text-muted-foreground">
+                                                                    {" "}
+                                                                    {
+                                                                        deal.endDate
+                                                                    }
+                                                                </span>
+                                                            </div>
                                                         </TooltipTrigger>
                                                         <TooltipContent side="bottom">
                                                             <p className="text-foreground">

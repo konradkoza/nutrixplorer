@@ -44,9 +44,7 @@ const BasketDetails = () => {
         <div className="flex w-full justify-center">
             <div className="container flex flex-col gap-3">
                 <p className="font-semi-bold mt-5 text-3xl">{basket?.name}</p>
-                <p className="text-md mb-5 text-muted-foreground">
-                    {basket?.description}
-                </p>
+                <p className="text-md mb-5 text-muted-foreground">{basket?.description}</p>
                 {/* {!isLoading && <p>data: {JSON.stringify(basket)}</p>} */}
                 <Card>
                     <CardHeader>
@@ -58,12 +56,8 @@ const BasketDetails = () => {
                                 <TableRow>
                                     <TableHead>Nazwa</TableHead>
                                     <TableHead>Opis</TableHead>
-                                    <TableHead align="center">
-                                        Indeks FF
-                                    </TableHead>
-                                    <TableHead align="center">
-                                        Indeks SUM
-                                    </TableHead>
+                                    <TableHead align="center">Indeks FF</TableHead>
+                                    <TableHead align="center">Indeks SUM</TableHead>
                                     <TableHead>Ilość w koszyku</TableHead>
                                     <TableHead align="right" />
                                 </TableRow>
@@ -71,23 +65,13 @@ const BasketDetails = () => {
                             <TableBody>
                                 {basket?.basketEntries.map((entry) => (
                                     <TableRow key={entry.id}>
-                                        <TableCell>
-                                            {entry.product.productName}
-                                        </TableCell>
-                                        <TableCell>
-                                            {entry.product.productDescription}
+                                        <TableCell>{entry.product.productName}</TableCell>
+                                        <TableCell>{entry.product.productDescription}</TableCell>
+                                        <TableCell align="center">
+                                            {returnIndexValue("T", entry.productIndexes)}
                                         </TableCell>
                                         <TableCell align="center">
-                                            {returnIndexValue(
-                                                "T",
-                                                entry.productIndexes
-                                            )}
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            {returnIndexValue(
-                                                "S",
-                                                entry.productIndexes
-                                            )}
+                                            {returnIndexValue("S", entry.productIndexes)}
                                         </TableCell>
                                         <TableCell>
                                             {entry.units} {entry.product.unit}
@@ -95,19 +79,13 @@ const BasketDetails = () => {
                                         <TableCell align="right">
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
-                                                    <Button
-                                                        variant="ghost"
-                                                        className="h-8 w-8 p-0">
-                                                        <span className="sr-only">
-                                                            Open menu
-                                                        </span>
+                                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                                        <span className="sr-only">Open menu</span>
                                                         <MoreHorizontal className="h-4 w-4" />
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
-                                                    <DropdownMenuLabel>
-                                                        Akcje
-                                                    </DropdownMenuLabel>
+                                                    <DropdownMenuLabel>Akcje</DropdownMenuLabel>
                                                     <DropdownMenuItem
                                                         onClick={() =>
                                                             navigate(
@@ -120,9 +98,7 @@ const BasketDetails = () => {
                                                     <DropdownMenuItem>
                                                         Usuń z koszyka
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem>
-                                                        Zmień ilość
-                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem>Zmień ilość</DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </TableCell>
@@ -141,27 +117,24 @@ const BasketDetails = () => {
                             carbs={
                                 nutritions?.find(
                                     (nutr) =>
-                                        nutr.groupName === "Węglowodany" &&
-                                        nutr.name === "Total"
+                                        nutr.groupName === "Węglowodany" && nutr.name === "Total"
                                 )?.quantity || 0
                             }
                             fat={
                                 nutritions?.find(
-                                    (nutr) =>
-                                        nutr.groupName === "Tłuszcz" &&
-                                        nutr.name === "Total"
+                                    (nutr) => nutr.groupName === "Tłuszcz" && nutr.name === "Total"
                                 )?.quantity || 0
                             }
                             protein={
-                                nutritions?.find(
-                                    (nutr) => nutr.name === "Białko"
-                                )?.quantity || 0
+                                nutritions?.find((nutr) => nutr.name === "Białko")?.quantity || 0
                             }
                             fibre={
-                                nutritions?.find(
-                                    (nutr) => nutr.name === "Błonnik"
-                                )?.quantity || 0
+                                nutritions?.find((nutr) => nutr.name === "Błonnik")?.quantity || 0
                             }
+                            // total={
+                            //     nutritions?.find((nutr) => nutr.name === "Wartość Energetyczna")
+                            //         ?.quantity || 0
+                            // }
                         />
                         <Card>
                             <CardHeader>

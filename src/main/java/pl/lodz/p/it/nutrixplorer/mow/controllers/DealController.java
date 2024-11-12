@@ -45,7 +45,7 @@ public class DealController {
     @RequestMapping("/seller")
     @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<DealPageDTO> getSellersDeals(@RequestParam(defaultValue = "10") int elements,
-                                                               @RequestParam(defaultValue = "0") int page) throws NotFoundException {
+                                                               @RequestParam(defaultValue = "0") int page) {
         UUID userId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         Page<Deal> deals = dealService.getSellersDeals(userId, elements, page);
         return ResponseEntity.ok(new DealPageDTO(
@@ -61,14 +61,23 @@ public class DealController {
         return ResponseEntity.ok(DealMapper.INSTANCE.dealToDealDetailsDTO(dealService.getDealById(id)));
     }
 
-    @RequestMapping("/")
+    @RequestMapping("/current")
+    @PreAuthorize("hasAnyRole('SELLER', 'CLIENT')")
     public ResponseEntity<DealPageDTO> getDeals(@RequestParam(defaultValue = "10") int elements,
                                                    @RequestParam(defaultValue = "0") int page) {
-        Page<Deal> deals = dealService.getAllDeals(elements, page);
+        Page<Deal> deals = dealService.getCurrentActiveDeals(elements, page);
         return ResponseEntity.ok(new DealPageDTO(
                         DealMapper.INSTANCE.dealsToDealSimpleDTOs(deals.getContent()),
                         deals.getTotalPages()
                 )
         );
     }
+
+    @RequestMapping("/current/{id}")
+    @PreAuthorize("hasAnyRole('SELLER', 'CLIENT')")
+    public ResponseEntity<DealDetailsDTO> getCurrentDealById(@PathVariable UUID id) throws NotFoundException {
+        return ResponseEntity.ok(DealMapper.INSTANCE.dealToDealDetailsDTO(dealService.getCurrentDealById(id)));
+    }
+
+
 }

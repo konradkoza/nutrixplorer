@@ -14,6 +14,7 @@ import DealDetailsPage from "./pages/Deals/DealsDetailsPage";
 import MyDealsListPage from "./pages/Deals/MyDealsListPage";
 import DealsListPage from "./pages/Deals/DealsListPage";
 import MyDealDetailsPage from "./pages/Deals/MyDealDetailsPage";
+import BasketComparisonPage from "./pages/Comparison/BasketComparisonPage";
 
 const router = createBrowserRouter([
     {
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
                         Component: MyDealDetailsPage,
                     },
                 ],
+            },
+            {
+                path: "/compare",
+                Component: BasketComparisonPage,
             },
         ],
     },

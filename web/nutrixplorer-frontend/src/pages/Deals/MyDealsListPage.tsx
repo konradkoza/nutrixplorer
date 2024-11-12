@@ -1,4 +1,4 @@
-import { useGetMyDealsQuery } from "@/redux/services/DealService";
+import { useGetMyDealsQuery } from "@/redux/services/dealService";
 import { getProductImage } from "@/utils/productUtils";
 import { useEffect, useState } from "react";
 import image from "@/assets/notFound.png";

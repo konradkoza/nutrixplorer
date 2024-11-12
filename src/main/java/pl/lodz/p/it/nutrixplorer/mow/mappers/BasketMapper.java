@@ -8,6 +8,7 @@ import pl.lodz.p.it.nutrixplorer.model.mow.BasketEntry;
 import pl.lodz.p.it.nutrixplorer.mow.dto.BasketDTO;
 import pl.lodz.p.it.nutrixplorer.mow.dto.BasketEntryDTO;
 import pl.lodz.p.it.nutrixplorer.mow.dto.BasketEntryDetailsDTO;
+import pl.lodz.p.it.nutrixplorer.mow.dto.BasketSimpleDTO;
 
 import java.util.List;
 
@@ -25,4 +26,8 @@ public interface BasketMapper {
     BasketDTO basketToBasketDTO(Basket basket);
 
     List<BasketDTO> basketsToBasketDTOs(List<Basket> baskets);
+
+    BasketSimpleDTO basketToBasketSimpleDTO(Basket basket);
+
+    List<BasketSimpleDTO> basketsToBasketSimpleDTOs(List<Basket> baskets);
 }

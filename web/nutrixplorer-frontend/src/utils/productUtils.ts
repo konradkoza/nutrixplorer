@@ -1,9 +1,7 @@
 import { ProductIndex } from "@/types/ProductTypes";
 
 export const getProductImage = async (id: string) => {
-    const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/product/${id}/image`
-    );
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/product/${id}/image`);
     const imageBlob = await res.blob();
     const imageObjectURL = URL.createObjectURL(imageBlob);
     return imageObjectURL;
@@ -30,12 +28,20 @@ export const getEnergyIndex = (value: number) => {
     }
 };
 
+export const productIndexesNames = [
+    { name: "E", displayName: "EN" },
+    { name: "V", displayName: "VIT" },
+    { name: "M", displayName: "MIN" },
+    { name: "O", displayName: "OM3" },
+    { name: "P", displayName: "PRT" },
+    { name: "F", displayName: "FIB" },
+    { name: "S", displayName: "SUM" },
+    { name: "T", displayName: "FF:" },
+];
+
 type IndexName = "V" | "M" | "O" | "P" | "F" | "S" | "T";
 
-export const returnIndexValue = (
-    indexName: IndexName,
-    indexes: ProductIndex[]
-) => {
+export const returnIndexValue = (indexName: IndexName, indexes: ProductIndex[]) => {
     const index = indexes.find((index) => index.indexName === indexName);
     if (index) {
         return index.indexValue;

@@ -4,6 +4,7 @@ import {
     BasketNutritions,
     CreateEntry,
     EntryUpdate,
+    SimpleBasket,
 } from "@/types/BasketTypes";
 
 const BasketService = api.injectEndpoints({
@@ -68,6 +69,12 @@ const BasketService = api.injectEndpoints({
                 method: "GET",
             }),
         }),
+        getUserBasketsList: builder.query<SimpleBasket[], void>({
+            query: () => ({
+                url: `/basket/user/list`,
+                method: "GET",
+            }),
+        }),
     }),
 });
 
@@ -81,4 +88,8 @@ export const {
     useUpdateBasketEntryMutation,
     useGetBasketNutritionsQuery,
     useGetBasketAllergensQuery,
+    useGetUserBasketsListQuery,
+    useLazyGetBasketAllergensQuery,
+    useLazyGetBasketNutritionsQuery,
+    useLazyGetBasketDetailsQuery,
 } = BasketService;

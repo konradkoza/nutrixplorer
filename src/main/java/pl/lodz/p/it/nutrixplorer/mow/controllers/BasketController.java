@@ -34,6 +34,12 @@ public class BasketController {
         return ResponseEntity.ok(BasketMapper.INSTANCE.basketsToBasketDTOs(basketService.getUserBaskets()));
     }
 
+    @GetMapping("/user/list")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<List<BasketSimpleDTO>> getUserBasketsList() throws NotFoundException {
+        return ResponseEntity.ok(BasketMapper.INSTANCE.basketsToBasketSimpleDTOs(basketService.getUserBaskets()));
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<BasketDTO> getBasket(@PathVariable UUID id) throws NotFoundException {
