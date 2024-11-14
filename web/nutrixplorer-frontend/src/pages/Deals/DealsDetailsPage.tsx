@@ -3,12 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetDealDetailsQuery } from "@/redux/services/dealService";
 import { getProductImage } from "@/utils/productUtils";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@radix-ui/react-tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { useEffect, useState } from "react";
 import { FaHourglassEnd } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
@@ -66,16 +61,15 @@ const DealDetailsPage = () => {
                                         <div className="flex items-center justify-between">
                                             <p className="text-xl text-primary">
                                                 <span className="font-bold">
-                                                    {deal.oldPrice} PLN{" "}
+                                                    {deal.newPrice} PLN{" "}
                                                 </span>
                                                 <span className="text-muted-foreground line-through">
-                                                    {deal.newPrice} PLN
+                                                    {deal.oldPrice} PLN
                                                 </span>
                                                 <span>
                                                     {" -"}
                                                     {Math.floor(
-                                                        ((deal.oldPrice -
-                                                            deal.newPrice) /
+                                                        ((deal.oldPrice - deal.newPrice) /
                                                             deal.oldPrice) *
                                                             100
                                                     )}
@@ -89,14 +83,10 @@ const DealDetailsPage = () => {
                                                             asChild
                                                             className="flex gap-1 hover:cursor-default">
                                                             <div>
-                                                                <FaHourglassEnd
-                                                                    size={20}
-                                                                />
+                                                                <FaHourglassEnd size={20} />
                                                                 <span className="text-muted-foreground">
                                                                     {" "}
-                                                                    {
-                                                                        deal.endDate
-                                                                    }
+                                                                    {deal.endDate}
                                                                 </span>
                                                             </div>
                                                         </TooltipTrigger>
@@ -111,11 +101,7 @@ const DealDetailsPage = () => {
                                         </div>
                                         <p>{deal.product.productName}</p>
                                         <Button
-                                            onClick={() =>
-                                                navigate(
-                                                    `/products/${deal.product.id}`
-                                                )
-                                            }
+                                            onClick={() => navigate(`/products/${deal.product.id}`)}
                                             className="mt-5"
                                             variant="outline">
                                             Szczegóły produktu
@@ -138,10 +124,8 @@ const DealDetailsPage = () => {
                             <CardContent>
                                 <p>{deal.seller.address.shopName} </p>
                                 <p>
-                                    {deal.seller.address.zip}{" "}
-                                    {deal.seller.address.city}, ul.{" "}
-                                    {deal.seller.address.street}{" "}
-                                    {deal.seller.address.number}
+                                    {deal.seller.address.zip} {deal.seller.address.city}, ul.{" "}
+                                    {deal.seller.address.street} {deal.seller.address.number}
                                 </p>
                                 <p>{deal.seller.user.email}</p>
                             </CardContent>

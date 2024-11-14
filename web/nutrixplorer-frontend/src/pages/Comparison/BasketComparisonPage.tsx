@@ -32,9 +32,8 @@ import {
 } from "@/redux/services/basketService";
 import { Basket, BasketNutritions } from "@/types/BasketTypes";
 import { DeepSet } from "@/utils/deepSet";
-import { productIndexesNames } from "@/utils/productUtils";
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import EnergyValueComparison from "./EnergyValueComparison";
 
 type NutritionSet = {

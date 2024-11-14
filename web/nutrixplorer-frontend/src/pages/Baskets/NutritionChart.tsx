@@ -14,7 +14,6 @@ type NutritionChartProps = {
     fat: number;
     protein: number;
     fibre: number;
-    // total: number;
 };
 
 const chartConfig = {
@@ -37,7 +36,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const NutritionChart = ({ carbs, fat, protein, fibre }: NutritionChartProps) => {
-    const total = carbs * 4 + fat * 9 + protein * 4 + fibre * 2;
+    // const total = carbs * 4 + fat * 9 + protein * 4 + fibre * 2;
     const chartData = [
         {
             nutrition: "carbs",

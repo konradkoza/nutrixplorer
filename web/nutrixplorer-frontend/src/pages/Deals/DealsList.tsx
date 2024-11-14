@@ -28,25 +28,19 @@ const DealsList = ({ images, deals, setImageToDefault }: DealsListProps) => {
                     onClick={() => navigate(`/deals/${deal.id}`)}>
                     <div className="flex h-full flex-col">
                         <CardHeader>
-                            <CardTitle className="text-xl">
-                                {deal.name}
-                            </CardTitle>
+                            <CardTitle className="text-xl">{deal.name}</CardTitle>
                         </CardHeader>
                         <CardContent className="flex h-full flex-col">
                             <div>
                                 <p className="text-xl text-primary">
-                                    <span className="font-bold">
-                                        {deal.oldPrice} PLN{" "}
-                                    </span>
+                                    <span className="font-bold">{deal.newPrice} PLN </span>
                                     <span className="text-muted-foreground line-through">
-                                        {deal.newPrice} PLN
+                                        {deal.oldPrice} PLN
                                     </span>
                                     <span>
                                         {" -"}
                                         {Math.floor(
-                                            ((deal.oldPrice - deal.newPrice) /
-                                                deal.oldPrice) *
-                                                100
+                                            ((deal.oldPrice - deal.newPrice) / deal.oldPrice) * 100
                                         )}
                                         %
                                     </span>
