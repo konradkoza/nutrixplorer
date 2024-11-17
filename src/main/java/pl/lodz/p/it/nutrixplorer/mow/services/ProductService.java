@@ -3,6 +3,7 @@ package pl.lodz.p.it.nutrixplorer.mow.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,11 @@ public class ProductService {
     public Page<Product> getAllProducts(int elements, int page) {
         PageRequest pageRequest = PageRequest.of(page, elements);
         return productRepository.findAll(pageRequest);
+    }
+
+    public Page<Product> getAllProductsFiltered(int elements, int page, Specification<Product> specification) {
+        PageRequest pageRequest = PageRequest.of(page, elements);
+        return productRepository.findAll(specification, pageRequest);
     }
 
     public byte[] getProductImage(UUID id) throws NotFoundException {

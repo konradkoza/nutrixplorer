@@ -6,6 +6,7 @@ import {
     SimpleProductPage,
 } from "@/types/ProductTypes";
 import { api } from "./api";
+import { FilteringFormType } from "@/pages/Products/FilteringComponent.tsx";
 
 const ProductService = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -22,6 +23,21 @@ const ProductService = api.injectEndpoints({
                 params: {
                     elements: elements,
                     page: page,
+                },
+            }),
+        }),
+        getProductFilteredPage: builder.query<
+            SimpleProductPage,
+            {
+                elements: number;
+                page: number;
+            } & FilteringFormType
+        >({
+            query: (data) => ({
+                url: "/product/filtered",
+                method: "GET",
+                params: {
+                    ...data,
                 },
             }),
         }),
@@ -54,6 +70,7 @@ const ProductService = api.injectEndpoints({
 
 export const {
     useGetProductPageQuery,
+    useGetProductFilteredPageQuery,
     useGetProductCompositionQuery,
     useGetProductDetailsQuery,
     useGetProductProducerQuery,

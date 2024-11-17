@@ -75,9 +75,9 @@ const BasketComparisonPage = () => {
     const [basketDetails, setBasketDetails] = useState<Basket[]>([]);
     const [basketNutritions, setBasketNutritions] = useState<BasketNutritions[][]>([]);
     const [basketAllergens, setBasketAllergens] = useState<string[][]>([]);
-    const [getBasketDetails, getBasketDetailsState] = useLazyGetBasketDetailsQuery();
-    const [getBasketNutritions, getBasketNutritionsState] = useLazyGetBasketNutritionsQuery();
-    const [getBasketALlergens, getBasketALlergensState] = useLazyGetBasketAllergensQuery();
+    const [getBasketDetails] = useLazyGetBasketDetailsQuery();
+    const [getBasketNutritions] = useLazyGetBasketNutritionsQuery();
+    const [getBasketALlergens] = useLazyGetBasketAllergensQuery();
     const [fetchingData, setFetchingData] = useState<boolean>(false);
     const [nutritionSet, setNutritionSet] = useState<DeepSet<NutritionSet>>(
         new DeepSet(defaultNutritionSet)
