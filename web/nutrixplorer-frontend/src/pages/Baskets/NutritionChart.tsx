@@ -7,7 +7,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Label, LabelList, Pie, PieChart } from "recharts";
+import { LabelList, Pie, PieChart } from "recharts";
 
 type NutritionChartProps = {
     carbs: number;

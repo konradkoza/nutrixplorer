@@ -74,16 +74,10 @@ const NutrtitionsTable = ({ nutritions }: NutritionsTableProps) => {
                             return (
                                 <TableRow key={element.name + element.group}>
                                     <TableCell>
-                                        {element.displayName
-                                            ? element.displayName
-                                            : element.name}
+                                        {element.displayName ? element.displayName : element.name}
                                     </TableCell>
                                     <TableCell>
-                                        {nutrition
-                                            ? Number(
-                                                  nutrition.quantity.toFixed(2)
-                                              )
-                                            : 0}{" "}
+                                        {nutrition ? Number(nutrition.quantity.toFixed(2)) : 0}{" "}
                                         {nutrition ? nutrition.unit : ""}
                                     </TableCell>
                                 </TableRow>
@@ -91,22 +85,15 @@ const NutrtitionsTable = ({ nutritions }: NutritionsTableProps) => {
                         })}
                         {nutritions
                             .filter((nutr) => {
-                                return !SimpleNutritionTable.some(
-                                    (simpleElement) => {
-                                        return nutr.name === simpleElement.name;
-                                    }
-                                );
+                                return !SimpleNutritionTable.some((simpleElement) => {
+                                    return nutr.name === simpleElement.name;
+                                });
                             })
                             .map((nutrition) => (
-                                <TableRow
-                                    key={nutrition.name + nutrition.groupName}>
+                                <TableRow key={nutrition.name + nutrition.groupName}>
                                     <TableCell>{nutrition.name}</TableCell>
                                     <TableCell>
-                                        {nutrition
-                                            ? Number(
-                                                  nutrition.quantity.toFixed(2)
-                                              )
-                                            : 0}{" "}
+                                        {nutrition ? Number(nutrition.quantity.toFixed(2)) : 0}{" "}
                                         {nutrition ? nutrition.unit : ""}
                                     </TableCell>
                                 </TableRow>

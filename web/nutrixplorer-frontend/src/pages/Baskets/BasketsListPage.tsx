@@ -22,55 +22,41 @@ const BasketsListPage = () => {
                 {isLoading ? (
                     <Spinner />
                 ) : (
-                    <div className="container mt-10 flex w-full flex-col items-center gap-5 xl:flex-row xl:flex-wrap">
+                    <div className="container mt-10 flex h-full w-full flex-col items-stretch gap-5 xl:flex-row xl:flex-wrap">
                         {baskets?.map((basket) => (
                             <Card
-                                className="w-full sm:w-2/3 xl:w-[calc(50%-1rem)]"
+                                className="flex w-full flex-col sm:w-2/3 xl:w-[calc(50%-1rem)]"
                                 key={basket.id}>
-                                <CardHeader>
+                                <CardHeader className="">
                                     <CardTitle>{basket.name}</CardTitle>
-                                    <CardDescription>
-                                        {basket.description}
-                                    </CardDescription>
-                                    <CardContent>
-                                        <Table>
-                                            <TableBody>
-                                                {basket.basketEntries.map(
-                                                    (entry) => (
-                                                        <TableRow
-                                                            key={entry.id}
-                                                            className="hover:bg-inherit">
-                                                            <TableCell>
-                                                                {
-                                                                    entry
-                                                                        .product
-                                                                        .productName
-                                                                }
-                                                            </TableCell>
-                                                            <TableCell className="text-nowrap">
-                                                                {entry.units +
-                                                                    " " +
-                                                                    entry
-                                                                        .product
-                                                                        .unit ||
-                                                                    ""}
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    )
-                                                )}
-                                            </TableBody>
-                                        </Table>
-                                    </CardContent>
-                                    <CardFooter>
-                                        <Button
-                                            variant="default"
-                                            onClick={() =>
-                                                navigate(`${basket.id}`)
-                                            }>
-                                            Szczegóły
-                                        </Button>
-                                    </CardFooter>
+                                    <CardDescription>{basket.description}</CardDescription>
                                 </CardHeader>
+                                <CardContent className="flex-grow">
+                                    <Table>
+                                        <TableBody>
+                                            {basket.basketEntries.map((entry) => (
+                                                <TableRow
+                                                    key={entry.id}
+                                                    className="hover:bg-inherit">
+                                                    <TableCell>
+                                                        {entry.product.productName}
+                                                    </TableCell>
+                                                    <TableCell className="text-nowrap">
+                                                        {entry.units + " " + entry.product.unit ||
+                                                            ""}
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </CardContent>
+                                <CardFooter className="">
+                                    <Button
+                                        variant="default"
+                                        onClick={() => navigate(`${basket.id}`)}>
+                                        Szczegóły
+                                    </Button>
+                                </CardFooter>
                             </Card>
                         ))}
                     </div>

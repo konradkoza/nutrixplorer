@@ -117,7 +117,7 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
     };
 
     return (
-        <div className="w-full">
+        <div className="container w-full">
             <Accordion type="single" collapsible className="mb-5 w-full bg-card/90 px-5">
                 <AccordionItem value="item-1">
                     <AccordionTrigger>Filtry</AccordionTrigger>
@@ -126,50 +126,25 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                             <form
                                 onSubmit={form.handleSubmit(onSubmit)}
                                 className="m-2 flex flex-col gap-5">
-                                <FormField
-                                    control={form.control}
-                                    name="productName"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Nazwa</FormLabel>
-                                            <FormControl>
-                                                <Input {...field} />
-                                            </FormControl>
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="description"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Opis</FormLabel>
-                                            <FormControl>
-                                                <Input {...field} />
-                                            </FormControl>
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="ean"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>EAN</FormLabel>
-                                            <FormControl>
-                                                <Input type="number" {...field} />
-                                            </FormControl>
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormLabel>Węglowodany</FormLabel>
-                                <div className="flex w-full gap-2">
+                                <div className="flex w-full flex-wrap gap-5">
                                     <FormField
                                         control={form.control}
-                                        name="minCarbs"
+                                        name="productName"
                                         render={({ field }) => (
-                                            <FormItem className="w-full">
-                                                <FormLabel>Od:</FormLabel>
+                                            <FormItem className="w-full flex-grow sm:w-1/4">
+                                                <FormLabel>Nazwa</FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="ean"
+                                        render={({ field }) => (
+                                            <FormItem className="w-full flex-grow sm:w-1/4">
+                                                <FormLabel>EAN</FormLabel>
                                                 <FormControl>
                                                     <Input type="number" {...field} />
                                                 </FormControl>
@@ -178,125 +153,165 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                     />
                                     <FormField
                                         control={form.control}
-                                        name="maxCarbs"
+                                        name="description"
                                         render={({ field }) => (
-                                            <FormItem className="w-full">
-                                                <FormLabel>Do:</FormLabel>
+                                            <FormItem className="w-full flex-grow sm:w-2/4">
+                                                <FormLabel>Opis</FormLabel>
                                                 <FormControl>
-                                                    <Input type="number" {...field} />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-                                <FormLabel>Tłuszcz</FormLabel>
-                                <div className="flex w-full gap-2">
-                                    <FormField
-                                        control={form.control}
-                                        name="minFat"
-                                        render={({ field }) => (
-                                            <FormItem className="w-full">
-                                                <FormLabel>Od:</FormLabel>
-                                                <FormControl>
-                                                    <Input type="number" {...field} />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="maxFat"
-                                        render={({ field }) => (
-                                            <FormItem className="w-full">
-                                                <FormLabel>Do:</FormLabel>
-                                                <FormControl>
-                                                    <Input type="number" {...field} />
+                                                    <Input {...field} />
                                                 </FormControl>
                                             </FormItem>
                                         )}
                                     />
                                 </div>
 
-                                <FormLabel>Białko</FormLabel>
-                                <div className="flex w-full gap-2">
-                                    <FormField
-                                        control={form.control}
-                                        name="minProtein"
-                                        render={({ field }) => (
-                                            <FormItem className="w-full">
-                                                <FormLabel>Od:</FormLabel>
-                                                <FormControl>
-                                                    <Input type="number" {...field} />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="maxProtein"
-                                        render={({ field }) => (
-                                            <FormItem className="w-full">
-                                                <FormLabel>Do:</FormLabel>
-                                                <FormControl>
-                                                    <Input type="number" {...field} />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-                                <FormLabel>Błonnik</FormLabel>
-                                <div className="flex w-full gap-2">
-                                    <FormField
-                                        control={form.control}
-                                        name="minFiber"
-                                        render={({ field }) => (
-                                            <FormItem className="w-full">
-                                                <FormLabel>Od:</FormLabel>
-                                                <FormControl>
-                                                    <Input type="number" {...field} />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="maxFiber"
-                                        render={({ field }) => (
-                                            <FormItem className="w-full">
-                                                <FormLabel>Do:</FormLabel>
-                                                <FormControl>
-                                                    <Input type="number" {...field} />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-                                <FormLabel>Wartość energetyczna</FormLabel>
-                                <div className="flex w-full gap-2">
-                                    <FormField
-                                        control={form.control}
-                                        name="minEnergy"
-                                        render={({ field }) => (
-                                            <FormItem className="w-full">
-                                                <FormLabel>Od:</FormLabel>
-                                                <FormControl>
-                                                    <Input type="number" {...field} />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="maxEnergy"
-                                        render={({ field }) => (
-                                            <FormItem className="w-full">
-                                                <FormLabel>Do:</FormLabel>
-                                                <FormControl>
-                                                    <Input type="number" {...field} />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
+                                <div className="flex w-full flex-wrap gap-5">
+                                    <div className="flex max-w-[480px] flex-grow flex-col gap-5">
+                                        <FormLabel>Węglowodany</FormLabel>
+                                        <div className="flex gap-2">
+                                            <FormField
+                                                control={form.control}
+                                                name="minCarbs"
+                                                render={({ field }) => (
+                                                    <FormItem className="w-full">
+                                                        <FormLabel>Od:</FormLabel>
+                                                        <FormControl>
+                                                            <Input type="number" {...field} />
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <FormField
+                                                control={form.control}
+                                                name="maxCarbs"
+                                                render={({ field }) => (
+                                                    <FormItem className="w-full">
+                                                        <FormLabel>Do:</FormLabel>
+                                                        <FormControl>
+                                                            <Input type="number" {...field} />
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="flex max-w-[480px] flex-grow flex-col gap-5">
+                                        <FormLabel>Tłuszcz</FormLabel>
+                                        <div className="flex gap-2">
+                                            <FormField
+                                                control={form.control}
+                                                name="minFat"
+                                                render={({ field }) => (
+                                                    <FormItem className="w-full">
+                                                        <FormLabel>Od:</FormLabel>
+                                                        <FormControl>
+                                                            <Input type="number" {...field} />
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <FormField
+                                                control={form.control}
+                                                name="maxFat"
+                                                render={({ field }) => (
+                                                    <FormItem className="w-full">
+                                                        <FormLabel>Do:</FormLabel>
+                                                        <FormControl>
+                                                            <Input type="number" {...field} />
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex max-w-[480px] flex-grow flex-col gap-5">
+                                        <FormLabel>Białko</FormLabel>
+                                        <div className="flex gap-2">
+                                            <FormField
+                                                control={form.control}
+                                                name="minProtein"
+                                                render={({ field }) => (
+                                                    <FormItem className="w-full">
+                                                        <FormLabel>Od:</FormLabel>
+                                                        <FormControl>
+                                                            <Input type="number" {...field} />
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <FormField
+                                                control={form.control}
+                                                name="maxProtein"
+                                                render={({ field }) => (
+                                                    <FormItem className="w-full">
+                                                        <FormLabel>Do:</FormLabel>
+                                                        <FormControl>
+                                                            <Input type="number" {...field} />
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="flex max-w-[480px] flex-grow flex-col gap-5">
+                                        <FormLabel>Błonnik</FormLabel>
+                                        <div className="flex gap-2">
+                                            <FormField
+                                                control={form.control}
+                                                name="minFiber"
+                                                render={({ field }) => (
+                                                    <FormItem className="w-full">
+                                                        <FormLabel>Od:</FormLabel>
+                                                        <FormControl>
+                                                            <Input type="number" {...field} />
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <FormField
+                                                control={form.control}
+                                                name="maxFiber"
+                                                render={({ field }) => (
+                                                    <FormItem className="w-full">
+                                                        <FormLabel>Do:</FormLabel>
+                                                        <FormControl>
+                                                            <Input type="number" {...field} />
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="flex max-w-[480px] flex-grow flex-col gap-5">
+                                        <FormLabel>Wartość energetyczna</FormLabel>
+                                        <div className="flex gap-2">
+                                            <FormField
+                                                control={form.control}
+                                                name="minEnergy"
+                                                render={({ field }) => (
+                                                    <FormItem className="w-full">
+                                                        <FormLabel>Od:</FormLabel>
+                                                        <FormControl>
+                                                            <Input type="number" {...field} />
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <FormField
+                                                control={form.control}
+                                                name="maxEnergy"
+                                                render={({ field }) => (
+                                                    <FormItem className="w-full">
+                                                        <FormLabel>Do:</FormLabel>
+                                                        <FormControl>
+                                                            <Input type="number" {...field} />
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                                 <FormLabel>Witaminy</FormLabel>
                                 <div className="flex flex-wrap gap-4">
@@ -368,8 +383,17 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                         />
                                     ))}
                                 </div>
-                                <Button type="submit">Szukaj</Button>
-                                <Button onClick={() => form.reset()}>Wyczyść</Button>
+                                <div className="flex w-full gap-5">
+                                    <Button className="flex-1" type="submit">
+                                        Szukaj
+                                    </Button>
+                                    <Button
+                                        className="flex-1"
+                                        variant="outline"
+                                        onClick={() => form.reset()}>
+                                        Wyczyść
+                                    </Button>
+                                </div>
                             </form>
                         </Form>
                     </AccordionContent>

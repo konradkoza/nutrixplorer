@@ -45,7 +45,6 @@ const BasketDetails = () => {
             <div className="container flex flex-col gap-3">
                 <p className="font-semi-bold mt-5 text-3xl">{basket?.name}</p>
                 <p className="text-md mb-5 text-muted-foreground">{basket?.description}</p>
-                {/* {!isLoading && <p>data: {JSON.stringify(basket)}</p>} */}
                 <Card>
                     <CardHeader>
                         <p className="text-2xl">Produkty w koszyku</p>
