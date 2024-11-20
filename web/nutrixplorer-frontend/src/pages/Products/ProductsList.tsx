@@ -1,35 +1,29 @@
-import { SimpleProduct } from "@/types/ProductTypes.ts";
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardImage,
-} from "@/components/ui/card.tsx";
-import { useNavigate } from "react-router-dom";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { Button } from "@/components/ui/button.tsx";
+import { Card, CardContent, CardFooter, CardHeader, CardImage } from "@/components/ui/card.tsx";
 import {
     useAddFavouriteMutation,
     useDeleteFavoriteMutation,
 } from "@/redux/services/favouriteProductsService.ts";
+import { SimpleProduct } from "@/types/ProductTypes.ts";
+import { ShoppingBasketIcon } from "lucide-react";
+import { useState } from "react";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import AddToBasketDialog from "./AddToBasketDialog";
+import image from "@/assets/notFound.png";
 
 type ProductsListProps = {
     products: SimpleProduct[];
-    images: string[];
-    setImageToDefault: (index: number) => void;
     favouriteProducts?: SimpleProduct[];
+    addToBasket?: boolean;
 };
 
-const ProductsList = ({
-    products,
-    images,
-    setImageToDefault,
-    favouriteProducts,
-}: ProductsListProps) => {
+const ProductsList = ({ products, favouriteProducts, addToBasket }: ProductsListProps) => {
     const navigate = useNavigate();
     const [setFavourite] = useAddFavouriteMutation();
     const [deleteFavourite] = useDeleteFavoriteMutation();
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [productId, setProductId] = useState<string>("");
     const isFavourite = (id: string): boolean => {
         return (
             favouriteProducts !== undefined &&
@@ -44,9 +38,20 @@ const ProductsList = ({
     const handleDeleteFavourite = (id: string) => {
         deleteFavourite(id);
     };
+
+    const handleOpenDialog = (productId: string) => {
+        setProductId(productId);
+        setDialogOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setProductId("");
+        setDialogOpen(false);
+    };
+
     return (
         <div className="container grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fit,minmax(20rem,1fr))]">
-            {products.map((product, index) => (
+            {products.map((product) => (
                 <Card
                     onClick={() => {
                         navigate(`/products/${product.id}`);
@@ -54,7 +59,7 @@ const ProductsList = ({
                     key={product.id}
                     className="relative min-w-52 flex-shrink-0 flex-grow-0 hover:bg-secondary/95">
                     {favouriteProducts !== undefined && (
-                        <div className="absolute right-0 m-1 flex flex-col">
+                        <div className="absolute right-0 m-1 flex h-auto flex-col space-y-1">
                             {!isFavourite(product.id) ? (
                                 <Button
                                     className="rounded-[0.5rem] bg-secondary/20"
@@ -76,14 +81,25 @@ const ProductsList = ({
                                     <FaHeart />
                                 </Button>
                             )}
+                            <Button
+                                variant="ghost"
+                                className="rounded-[0.5rem] bg-secondary/20"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleOpenDialog(product.id);
+                                }}>
+                                <ShoppingBasketIcon />
+                            </Button>
                         </div>
                     )}
                     <div className="flex justify-center bg-white">
                         <CardImage
-                            src={images[index]}
+                            src={`${import.meta.env.VITE_BACKEND_URL}/product/${product.id}/image`}
                             alt="Brak zdjęcia"
                             className="h-52 w-auto"
-                            onError={() => setImageToDefault(index)}
+                            onError={(event) => {
+                                event.currentTarget.src = image;
+                            }}
                         />
                     </div>
 
@@ -94,13 +110,18 @@ const ProductsList = ({
                         <p>{product.productDescription}</p>
                     </CardContent>
                     <CardFooter>
-                        {product.productQuantity
-                            ? product.productQuantity.toString()
-                            : ""}{" "}
+                        {product.productQuantity ? product.productQuantity.toString() : ""}{" "}
                         {product.unit || ""}
                     </CardFooter>
                 </Card>
             ))}
+            {addToBasket && (
+                <AddToBasketDialog
+                    open={dialogOpen}
+                    productId={productId}
+                    onClose={() => handleCloseDialog()}
+                />
+            )}
         </div>
     );
 };

@@ -49,7 +49,7 @@ public class BasketController {
     @PostMapping
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<BasketDTO> createBasket(@RequestBody CreateBasketDTO createBasketDTO) throws NotFoundException {
-        Basket basket = basketService.createBasket(BasketMapper.INSTANCE.basketEntryDTOsToBasketEntries(createBasketDTO.basketEntries()));
+        Basket basket = basketService.createBasket(BasketMapper.INSTANCE.basketEntryDTOsToBasketEntries(createBasketDTO.basketEntries()), createBasketDTO.name(), createBasketDTO.description());
         return ResponseEntity.status(HttpStatus.CREATED).body(BasketMapper.INSTANCE.basketToBasketDTO(basket));
     }
 

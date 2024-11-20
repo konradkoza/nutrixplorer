@@ -1,14 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
 import { useGetMeQuery } from "@/redux/services/meService";
 
 const AccountPage = () => {
     const { data: user } = useGetMeQuery();
-
+    const breadcrumbs = useBreadcrumbs([
+        { title: "NutriXplorer", path: "/" },
+        { title: "Konto", path: "/account" },
+    ]);
     return (
         <div className="flex w-full justify-center">
             <div className="container flex w-full flex-col gap-3">
+                {breadcrumbs}
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-3xl">Konto</CardTitle>

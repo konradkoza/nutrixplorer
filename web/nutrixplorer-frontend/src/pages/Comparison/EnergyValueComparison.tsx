@@ -42,8 +42,6 @@ const EnergyValueComparison = ({ energyValues }: EnergyValueComparisonProps) => 
         setTotalList(total);
         return () => {};
     }, []);
-    console.log(energyValues);
-    console.log((energyValues.at(0)!["carbs"] / totalList[0]) * 100);
     return (
         <>
             <Table>
@@ -52,16 +50,17 @@ const EnergyValueComparison = ({ energyValues }: EnergyValueComparisonProps) => 
                         <TableRow key={index}>
                             <TableHead className="w-2/12">{nutrition.groupName}</TableHead>
                             {energyValues.map((energyValue, index) => (
-                                <TableCell className="w-5/12" key={index}>
-                                    {(
-                                        ((energyValue[
-                                            nutrition.keyName as keyof typeof energyValue
-                                        ] *
-                                            nutrition.multiplier) /
-                                            totalList[index]) *
-                                        100
-                                    ).toFixed(1)}
-                                    %
+                                <TableCell className="w-5/12" key={index + "comparison"}>
+                                    {totalList[index] !== 0
+                                        ? (
+                                              ((energyValue[
+                                                  nutrition.keyName as keyof typeof energyValue
+                                              ] *
+                                                  nutrition.multiplier) /
+                                                  totalList[index]) *
+                                              100
+                                          ).toFixed(1) + "%"
+                                        : "-"}
                                 </TableCell>
                             ))}
                         </TableRow>

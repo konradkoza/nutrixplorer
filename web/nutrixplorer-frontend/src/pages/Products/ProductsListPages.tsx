@@ -1,15 +1,14 @@
-import image from "@/assets/notFound.png";
 import Spinner from "@/components/common/Spinner";
+import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
+import FilteringComponent, { FilteringFormType } from "@/pages/Products/FilteringComponent.tsx";
 import ProductsList from "@/pages/Products/ProductsList.tsx";
 import { useGetMyFavouriteProductsQuery } from "@/redux/services/favouriteProductsService.ts";
 import { useGetProductFilteredPageQuery } from "@/redux/services/productService";
 import { RootState } from "@/redux/store";
 import { AccessLevel } from "@/types/UserTypes";
-import { getProductImage } from "@/utils/productUtils";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import Pagination from "./Pagination";
-import FilteringComponent, { FilteringFormType } from "@/pages/Products/FilteringComponent.tsx";
 
 const ProductsListPages = () => {
     const [pageNumber, setPageNumber] = useState(0);
@@ -24,49 +23,27 @@ const ProductsListPages = () => {
     const { data: favouriteProducts } = useGetMyFavouriteProductsQuery(undefined, {
         skip: !accessLevels.includes(AccessLevel.CLIENT),
     });
-    const [images, setImages] = useState<string[]>([]);
-    const [loadingImages, setLoadingImages] = useState<boolean>(false);
 
-    useEffect(() => {
-        setImages([]);
-        const fetchImages = async () => {
-            if (productPage) {
-                setLoadingImages(true);
-                const imagePromises = productPage.products.map((product) =>
-                    getProductImage(product.id)
-                );
-                const imageUrls = await Promise.all(imagePromises);
-                setImages(imageUrls);
-                setLoadingImages(false);
-            }
-        };
-        fetchImages();
-        return () => {
-            setImages([]);
-        };
-    }, [productPage]);
-
-    const setImageToDefault = (index: number) => {
-        setImages((prev) => {
-            const newImages = [...prev];
-            newImages[index] = image;
-            return newImages;
-        });
-    };
+    const breadcrumbs = useBreadcrumbs([
+        { title: "NutriXplorer", path: "/" },
+        { title: "Produkty", path: "/products" },
+    ]);
 
     return (
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center gap-2">
+            <div className="container">{breadcrumbs}</div>
             <FilteringComponent setFilters={setFilters} />
-            {isLoading || loadingImages ? (
+            {isLoading ? (
                 <Spinner />
             ) : (
                 productPage && (
-                    <ProductsList
-                        products={productPage.products}
-                        setImageToDefault={setImageToDefault}
-                        images={images}
-                        favouriteProducts={favouriteProducts}
-                    />
+                    <>
+                        <ProductsList
+                            products={productPage.products}
+                            favouriteProducts={favouriteProducts}
+                            addToBasket={accessLevels.includes(AccessLevel.CLIENT)}
+                        />
+                    </>
                 )
             )}
             <div className="mt-5 flex w-full justify-center">

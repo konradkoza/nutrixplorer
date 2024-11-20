@@ -1,4 +1,7 @@
+import ConfirmationAlertDialog from "@/components/common/ConfirmationAlertDialog";
+import Spinner from "@/components/common/Spinner";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -15,145 +18,212 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
 import {
+    useDeleteBasketEntryMutation,
+    useDeleteBasketMutation,
     useGetBasketAllergensQuery,
     useGetBasketDetailsQuery,
     useGetBasketNutritionsQuery,
 } from "@/redux/services/basketService.ts";
-import { MoreHorizontal } from "lucide-react";
+import { returnIndexValue } from "@/utils/productUtils";
+import { MoreHorizontal, Trash2Icon } from "lucide-react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import NutritionChart from "./NutritionChart";
 import NutrtitionsTable from "./NutritionsTable";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { returnIndexValue } from "@/utils/productUtils";
 
 const BasketDetails = () => {
     const { id } = useParams<{ id: string }>();
-    const { data: basket } = useGetBasketDetailsQuery(id!, {
+    const { data: basket, isLoading: isLoadingDetails } = useGetBasketDetailsQuery(id!, {
         skip: !id,
     });
-    const { data: nutritions } = useGetBasketNutritionsQuery(id!, {
+    const { data: nutritions, isLoading: isLoadingNutritions } = useGetBasketNutritionsQuery(id!, {
         skip: !id,
     });
-    const { data: allergens } = useGetBasketAllergensQuery(id!, {
+    const { data: allergens, isLoading: isLoadingAllergens } = useGetBasketAllergensQuery(id!, {
         skip: !id,
     });
+    const [deleteEntry] = useDeleteBasketEntryMutation();
+    const [deleteBasket] = useDeleteBasketMutation();
     const navigate = useNavigate();
+    const breadcrumbs = useBreadcrumbs([
+        { title: "NutriXplorer", path: "/" },
+        { title: "Koszyki", path: "/baskets" },
+        { title: basket?.name || "Koszyk", path: `/baskets/${id}` },
+    ]);
+    const [open, setOpen] = useState(false);
+
+    const handleDeleteEntry = (id: string) => {
+        deleteEntry(id);
+    };
+
+    const hadleDeleteBasket = (id: string) => {
+        deleteBasket(id);
+        setOpen(!open);
+        navigate("/baskets");
+    };
 
     return (
         <div className="flex w-full justify-center">
-            <div className="container flex flex-col gap-3">
-                <p className="font-semi-bold mt-5 text-3xl">{basket?.name}</p>
-                <p className="text-md mb-5 text-muted-foreground">{basket?.description}</p>
-                <Card>
-                    <CardHeader>
-                        <p className="text-2xl">Produkty w koszyku</p>
-                    </CardHeader>
-                    <CardContent>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Nazwa</TableHead>
-                                    <TableHead>Opis</TableHead>
-                                    <TableHead align="center">Indeks FF</TableHead>
-                                    <TableHead align="center">Indeks SUM</TableHead>
-                                    <TableHead>Ilość w koszyku</TableHead>
-                                    <TableHead align="right" />
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {basket?.basketEntries.map((entry) => (
-                                    <TableRow key={entry.id}>
-                                        <TableCell>{entry.product.productName}</TableCell>
-                                        <TableCell>{entry.product.productDescription}</TableCell>
-                                        <TableCell align="center">
-                                            {returnIndexValue("T", entry.productIndexes)}
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            {returnIndexValue("S", entry.productIndexes)}
-                                        </TableCell>
-                                        <TableCell>
-                                            {entry.units} {entry.product.unit}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger asChild>
-                                                    <Button variant="ghost" className="h-8 w-8 p-0">
-                                                        <span className="sr-only">Open menu</span>
-                                                        <MoreHorizontal className="h-4 w-4" />
-                                                    </Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end">
-                                                    <DropdownMenuLabel>Akcje</DropdownMenuLabel>
-                                                    <DropdownMenuItem
-                                                        onClick={() =>
-                                                            navigate(
-                                                                `/products/${entry.product.id}`
-                                                            )
-                                                        }>
-                                                        Szczegóły produktu
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuSeparator />
-                                                    <DropdownMenuItem>
-                                                        Usuń z koszyka
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuItem>Zmień ilość</DropdownMenuItem>
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </CardContent>
-                </Card>
-                <div className="flex w-full flex-wrap gap-3">
-                    <div className="min-w-[400px] flex-1 basis-0">
-                        <NutrtitionsTable nutritions={nutritions || []} />
-                    </div>
-                    <div className="flex min-w-[400px] flex-1 basis-0 flex-col gap-3">
-                        <NutritionChart
-                            carbs={
-                                nutritions?.find(
-                                    (nutr) =>
-                                        nutr.groupName === "Węglowodany" && nutr.name === "Total"
-                                )?.quantity || 0
-                            }
-                            fat={
-                                nutritions?.find(
-                                    (nutr) => nutr.groupName === "Tłuszcz" && nutr.name === "Total"
-                                )?.quantity || 0
-                            }
-                            protein={
-                                nutritions?.find((nutr) => nutr.name === "Białko")?.quantity || 0
-                            }
-                            fibre={
-                                nutritions?.find((nutr) => nutr.name === "Błonnik")?.quantity || 0
-                            }
-                            // total={
-                            //     nutritions?.find((nutr) => nutr.name === "Wartość Energetyczna")
-                            //         ?.quantity || 0
-                            // }
-                        />
+            <div className="container flex flex-col gap-2">
+                <div className="flex w-full items-center justify-between">
+                    {breadcrumbs}
+                    {basket && (
+                        <ConfirmationAlertDialog
+                            open={open}
+                            setOpen={() => setOpen(!open)}
+                            onConfirm={() => hadleDeleteBasket(basket?.id)}
+                            content="Czy na pewno chcesz usunąć ten koszyk?"
+                            title="Czy jesteś pewny"
+                            confirmContent="Usuń">
+                            <Trash2Icon />
+                            <p>Usuń koszyk</p>
+                        </ConfirmationAlertDialog>
+                    )}
+                </div>
+
+                {isLoadingDetails ? (
+                    <Spinner />
+                ) : (
+                    <>
                         <Card>
                             <CardHeader>
-                                <p className="text-2xl">Alergeny</p>
+                                <CardTitle className="text-3xl">{basket?.name}</CardTitle>
+                                <CardDescription>{basket?.description}</CardDescription>
+                            </CardHeader>
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                                <p className="text-2xl">Produkty w koszyku</p>
                             </CardHeader>
                             <CardContent>
-                                <ul className="list-disc space-y-2 pl-5">
-                                    {allergens?.map((allergen) => (
-                                        <li
-                                            className="text-lg text-muted-foreground"
-                                            key={allergen}>
-                                            {allergen}
-                                        </li>
-                                    ))}
-                                </ul>
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Nazwa</TableHead>
+                                            <TableHead>Opis</TableHead>
+                                            <TableHead align="center">Indeks FF</TableHead>
+                                            <TableHead align="center">Indeks SUM</TableHead>
+                                            <TableHead>Ilość w koszyku</TableHead>
+                                            <TableHead align="right" />
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {basket?.basketEntries.map((entry) => (
+                                            <TableRow key={entry.id}>
+                                                <TableCell>{entry.product.productName}</TableCell>
+                                                <TableCell>
+                                                    {entry.product.productDescription}
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    {returnIndexValue("T", entry.productIndexes)}
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    {returnIndexValue("S", entry.productIndexes)}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {entry.units} {entry.product.unit}
+                                                </TableCell>
+                                                <TableCell align="right">
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button
+                                                                variant="ghost"
+                                                                className="h-8 w-8 p-0">
+                                                                <span className="sr-only">
+                                                                    Open menu
+                                                                </span>
+                                                                <MoreHorizontal className="h-4 w-4" />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            <DropdownMenuLabel>
+                                                                Akcje
+                                                            </DropdownMenuLabel>
+                                                            <DropdownMenuItem
+                                                                onClick={() =>
+                                                                    navigate(
+                                                                        `/products/${entry.product.id}`
+                                                                    )
+                                                                }>
+                                                                Szczegóły produktu
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuSeparator />
+                                                            <DropdownMenuItem
+                                                                onClick={() =>
+                                                                    handleDeleteEntry(entry.id)
+                                                                }>
+                                                                Usuń z koszyka
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem>
+                                                                Zmień ilość
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
                             </CardContent>
                         </Card>
+                    </>
+                )}
+                {isLoadingNutritions || isLoadingAllergens ? (
+                    <Spinner />
+                ) : (
+                    <div className="flex w-full flex-wrap gap-3">
+                        <div className="min-w-[400px] flex-1 basis-0">
+                            <NutrtitionsTable nutritions={nutritions || []} />
+                        </div>
+                        <div className="flex min-w-[400px] flex-1 basis-0 flex-col gap-3">
+                            <NutritionChart
+                                carbs={
+                                    nutritions?.find(
+                                        (nutr) =>
+                                            nutr.groupName === "Węglowodany" &&
+                                            nutr.name === "Total"
+                                    )?.quantity || 0
+                                }
+                                fat={
+                                    nutritions?.find(
+                                        (nutr) =>
+                                            nutr.groupName === "Tłuszcz" && nutr.name === "Total"
+                                    )?.quantity || 0
+                                }
+                                protein={
+                                    nutritions?.find((nutr) => nutr.name === "Białko")?.quantity ||
+                                    0
+                                }
+                                fibre={
+                                    nutritions?.find((nutr) => nutr.name === "Błonnik")?.quantity ||
+                                    0
+                                }
+                                // total={
+                                //     nutritions?.find((nutr) => nutr.name === "Wartość Energetyczna")
+                                //         ?.quantity || 0
+                                // }
+                            />
+                            <Card>
+                                <CardHeader>
+                                    <p className="text-2xl">Alergeny</p>
+                                </CardHeader>
+                                <CardContent>
+                                    <ul className="list-disc space-y-2 pl-5">
+                                        {allergens?.map((allergen) => (
+                                            <li
+                                                className="text-lg text-muted-foreground"
+                                                key={allergen}>
+                                                {allergen}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </CardContent>
+                            </Card>
+                        </div>
                     </div>
-                </div>
-                <div></div>
+                )}
             </div>
         </div>
     );

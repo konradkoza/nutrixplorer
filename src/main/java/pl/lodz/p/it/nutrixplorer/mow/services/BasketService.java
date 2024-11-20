@@ -29,22 +29,24 @@ public class BasketService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
-    public Basket createBasket(List<BasketEntry> entries) throws NotFoundException {
+    public Basket createBasket(List<BasketEntry> entries, String name, String description) throws NotFoundException {
         Basket basket = new Basket();
         basket.setBasketEntries(entries);
+        basket.setName(name);
+        basket.setDescription(description);
         UUID userId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         basket.setUser(userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorMessages.USER_NOT_FOUND, MowErrorCodes.USER_NOT_FOUND)));
         basketRepository.saveAndFlush(basket);
         return basket;
     }
 
-    public Basket addEntryToBasket(UUID basketId, UUID productId, BigDecimal quanity) throws NotFoundException {
+    public Basket addEntryToBasket(UUID basketId, UUID productId, BigDecimal quantity) throws NotFoundException {
         Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new NotFoundException(ErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
         BasketEntry entry = new BasketEntry();
         entry.setProduct(productRepository.findById(productId).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_NOT_FOUND, MowErrorCodes.PRODUCT_NOT_FOUND)));
-        entry.setUnits(quanity);
+        entry.setUnits(quantity);
         entry.setBasket(basket);
-        basketRepository.saveAndFlush(basket);
+        basketEntryRepository.saveAndFlush(entry);
         return basket;
     }
 

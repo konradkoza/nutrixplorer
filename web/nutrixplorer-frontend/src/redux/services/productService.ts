@@ -25,6 +25,7 @@ const ProductService = api.injectEndpoints({
                     page: page,
                 },
             }),
+            providesTags: ["Products"],
         }),
         getProductFilteredPage: builder.query<
             SimpleProductPage,
@@ -40,30 +41,35 @@ const ProductService = api.injectEndpoints({
                     ...data,
                 },
             }),
+            providesTags: ["Products"],
         }),
         getProductDetails: builder.query<ProductDetails, string>({
             query: (id) => ({
                 url: `/product/${id}`,
                 method: "GET",
             }),
+            providesTags: (_, __, arg) => [{ type: "Products", id: arg }],
         }),
         getProductProducer: builder.query<Producer, string>({
             query: (id) => ({
                 url: `/product/${id}/producer`,
                 method: "GET",
             }),
+            providesTags: (_, __, arg) => [{ type: "Products", id: arg }],
         }),
         getProductComposition: builder.query<ProductComposition[], string>({
             query: (id) => ({
                 url: `/product/${id}/composition`,
                 method: "GET",
             }),
+            providesTags: (_, __, arg) => [{ type: "Products", id: arg }],
         }),
         getProductRating: builder.query<ProductRating[], string>({
             query: (id) => ({
                 url: `/product/${id}/rating`,
                 method: "GET",
             }),
+            providesTags: (_, __, arg) => [{ type: "Products", id: arg }],
         }),
     }),
 });

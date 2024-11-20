@@ -24,7 +24,9 @@ public class Basket extends AbstractEntity{
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "description", length = 1000)
     private String description;
 }

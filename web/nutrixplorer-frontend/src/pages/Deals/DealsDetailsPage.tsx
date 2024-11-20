@@ -1,6 +1,7 @@
 import imageAlt from "@/assets/notFound.png";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
 import { useGetDealDetailsQuery } from "@/redux/services/dealService";
 import { getProductImage } from "@/utils/productUtils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
@@ -15,6 +16,11 @@ const DealDetailsPage = () => {
         skip: !id,
     });
     const navigate = useNavigate();
+    const breadcrumbs = useBreadcrumbs([
+        { title: "NutriXplorer", path: "/" },
+        { title: "Okazje", path: "/deals" },
+        { title: deal?.name || "Okazja", path: `/deals/${id}` },
+    ]);
     useEffect(() => {
         const fetchImage = async () => {
             const url = await getProductImage(deal?.product.id!);
@@ -38,9 +44,10 @@ const DealDetailsPage = () => {
     }
     return (
         <div className="flex w-full justify-center">
-            <div className="container flex flex-col gap-3">
+            <div className="container flex flex-col gap-2">
                 {deal && (
-                    <div className="container flex flex-col gap-2">
+                    <div className="flex flex-col gap-2">
+                        {breadcrumbs}
                         <div className="flex w-full flex-col gap-2 sm:flex-row">
                             <Card className="flex items-center justify-center bg-white p-5 sm:w-1/3">
                                 <img

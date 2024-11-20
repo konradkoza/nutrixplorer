@@ -1,5 +1,19 @@
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { NutritionalIndex, ProductIndex } from "@/types/ProductTypes.ts";
-import { getEnergyIndex, returnIndexValue } from "@/utils/productUtils";
+import {
+    getEnergyIndex,
+    IndexName,
+    productIndexesNames,
+    returnIndexValue,
+} from "@/utils/productUtils";
 
 type ProductIndexesProps = {
     indexes: ProductIndex[];
@@ -7,30 +21,44 @@ type ProductIndexesProps = {
     energy: number;
 };
 
-const ProductIndexes = ({
-    indexes,
-    nutritionalIndexes,
-    energy,
-}: ProductIndexesProps) => {
+const ProductIndexes = ({ indexes, nutritionalIndexes, energy }: ProductIndexesProps) => {
     return (
         <div>
-            <div className="mb-5">
-                <p>Indeks EN: {getEnergyIndex(energy)}</p>
-                <p>Indeks VIT: {returnIndexValue("V", indexes)}</p>
-                <p>Indeks MIN: {returnIndexValue("M", indexes)}</p>
-                <p>Indeks OM3: {returnIndexValue("O", indexes)}</p>
-                <p>Indeks PRT: {returnIndexValue("P", indexes)}</p>
-                <p>Indeks FIB: {returnIndexValue("F", indexes)}</p>
-                <p>Indeks SUM: {returnIndexValue("S", indexes)}</p>
-                <p>Indeks FF: {returnIndexValue("T", indexes)}</p>
-            </div>
-            <p>Dodatkowe informacje: </p>
-            {nutritionalIndexes.map(
-                (element) =>
-                    element.legend && (
-                        <p key={element.legend}>{element.legend}</p>
-                    )
-            )}
+            <Table className="text-md">
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Indeks</TableHead>
+                        <TableHead>Wartość</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {productIndexesNames.map((index) => (
+                        <TableRow key={index.name}>
+                            <TableCell>{index.displayName}</TableCell>
+                            <TableCell>
+                                {index.name === "E"
+                                    ? getEnergyIndex(energy)
+                                    : returnIndexValue(index.name as IndexName, indexes)}
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TableHead>Wartości odżywcze</TableHead>
+                        <TableHead></TableHead>
+                    </TableRow>
+                    {nutritionalIndexes.map(
+                        (element) =>
+                            element.legend && (
+                                <TableRow className="w-full" key={element.legend}>
+                                    <TableCell>{element.legend}</TableCell>
+                                    <TableCell></TableCell>
+                                </TableRow>
+                            )
+                    )}
+                </TableFooter>
+            </Table>
         </div>
     );
 };

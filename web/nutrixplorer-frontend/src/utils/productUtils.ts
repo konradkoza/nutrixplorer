@@ -36,10 +36,10 @@ export const productIndexesNames = [
     { name: "P", displayName: "PRT" },
     { name: "F", displayName: "FIB" },
     { name: "S", displayName: "SUM" },
-    { name: "T", displayName: "FF:" },
+    { name: "T", displayName: "FF" },
 ];
 
-type IndexName = "V" | "M" | "O" | "P" | "F" | "S" | "T";
+export type IndexName = "V" | "M" | "O" | "P" | "F" | "S" | "T";
 
 export const returnIndexValue = (indexName: IndexName, indexes: ProductIndex[]) => {
     const index = indexes.find((index) => index.indexName === indexName);

@@ -1,10 +1,11 @@
+import image from "@/assets/notFound.png";
+import Spinner from "@/components/common/Spinner";
+import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
 import { useGetMyDealsQuery } from "@/redux/services/dealService";
 import { getProductImage } from "@/utils/productUtils";
 import { useEffect, useState } from "react";
-import image from "@/assets/notFound.png";
 import Pagination from "../Products/Pagination";
-import DealsList from "./DealsList";
-import Spinner from "@/components/common/Spinner";
+import MyDealsList from "./MyDealsList";
 
 const MyDealsListPage = () => {
     const [pageNumber, setPageNumber] = useState(0);
@@ -15,7 +16,10 @@ const MyDealsListPage = () => {
     });
     const [images, setImages] = useState<string[]>([]);
     const [loadingImages, setLoadingImages] = useState<boolean>(false);
-
+    const breadcrumbs = useBreadcrumbs([
+        { title: "NutriXplorer", path: "/" },
+        { title: "Moje okazje", path: "/my-deals" },
+    ]);
     useEffect(() => {
         setImages([]);
         const fetchImages = async () => {
@@ -45,13 +49,13 @@ const MyDealsListPage = () => {
 
     return (
         <div className="flex w-full justify-center">
-            <div className="container flex flex-col gap-3">
-                <p className="font-semi-bold mt-5 text-3xl">Moje okazje</p>
+            <div className="container flex flex-col gap-2">
+                {breadcrumbs}
                 {isLoading || loadingImages ? (
                     <Spinner />
                 ) : (
                     dealsPage !== undefined && (
-                        <DealsList
+                        <MyDealsList
                             deals={dealsPage.deals}
                             images={images}
                             setImageToDefault={setImageToDefault}
@@ -60,17 +64,15 @@ const MyDealsListPage = () => {
                 )}
 
                 <div className="mt-5 flex w-full justify-center">
-                    {dealsPage &&
-                        (dealsPage?.numberOfPages > 1 ||
-                            dealsPage.deals.length > 10) && (
-                            <Pagination
-                                pageNumber={pageNumber}
-                                pageSize={elements}
-                                setNumberOfElements={setElements}
-                                setPageNumber={setPageNumber}
-                                totalPages={dealsPage?.numberOfPages || 0}
-                            />
-                        )}
+                    {dealsPage && (dealsPage?.numberOfPages > 1 || dealsPage.deals.length > 10) && (
+                        <Pagination
+                            pageNumber={pageNumber}
+                            pageSize={elements}
+                            setNumberOfElements={setElements}
+                            setPageNumber={setPageNumber}
+                            totalPages={dealsPage?.numberOfPages || 0}
+                        />
+                    )}
                 </div>
             </div>
         </div>

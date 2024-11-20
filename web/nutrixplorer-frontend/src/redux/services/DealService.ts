@@ -18,6 +18,7 @@ const dealService = api.injectEndpoints({
                     page: page,
                 },
             }),
+            providesTags: ["Deals"],
         }),
         getMyDeals: builder.query<
             DealPage,
@@ -34,12 +35,14 @@ const dealService = api.injectEndpoints({
                     page: page,
                 },
             }),
+            providesTags: ["Deals"],
         }),
         getDealDetails: builder.query<Deal, string>({
             query: (id) => ({
                 url: `/deal/current/${id}`,
                 method: "GET",
             }),
+            providesTags: (_, __, arg) => [{ type: "Deals", id: arg }],
         }),
         getCurrentDeals: builder.query<
             DealPage,
@@ -56,6 +59,7 @@ const dealService = api.injectEndpoints({
                     page: page,
                 },
             }),
+            providesTags: ["Deals"],
         }),
     }),
 });

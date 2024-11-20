@@ -8,6 +8,7 @@ const MeService = api.injectEndpoints({
                 url: "/me",
                 method: "GET",
             }),
+            providesTags: ["UserData"],
         }),
     }),
 });

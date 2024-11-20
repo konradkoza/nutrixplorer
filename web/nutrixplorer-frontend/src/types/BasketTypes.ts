@@ -27,7 +27,7 @@ export type CreateEntry = {
 export type CreateBasket = {
     name: string;
     description: string;
-    basketEntries: CreateEntry[];
+    // basketEntries?: CreateEntry[];
 };
 
 export type EntryUpdate = {

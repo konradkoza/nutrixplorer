@@ -35,6 +35,7 @@ import { DeepSet } from "@/utils/deepSet";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import EnergyValueComparison from "./EnergyValueComparison";
+import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
 
 type NutritionSet = {
     name: string;
@@ -82,6 +83,10 @@ const BasketComparisonPage = () => {
     const [nutritionSet, setNutritionSet] = useState<DeepSet<NutritionSet>>(
         new DeepSet(defaultNutritionSet)
     );
+    const breadcrumbs = useBreadcrumbs([
+        { title: "NutriXplorer", path: "/" },
+        { title: "Porównaj", path: "/compare" },
+    ]);
 
     const fetchBasketsData = async () => {
         setFetchingData(true);
@@ -117,6 +122,7 @@ const BasketComparisonPage = () => {
     return (
         <div className="flex w-full justify-center">
             <div className="container flex w-full flex-col gap-3">
+                {breadcrumbs}
                 <Card className="w-full">
                     <CardHeader>
                         <CardTitle className="text-3xl">Porównanie koszyków</CardTitle>
@@ -136,7 +142,9 @@ const BasketComparisonPage = () => {
                                     <SelectLabel>Koszyki</SelectLabel>
                                     {!isLoading &&
                                         basketOptions?.map((basket) => (
-                                            <SelectItem key={basket.id} value={basket.id}>
+                                            <SelectItem
+                                                key={basket.id + "select1"}
+                                                value={basket.id}>
                                                 {basket.name}
                                             </SelectItem>
                                         ))}
@@ -156,7 +164,9 @@ const BasketComparisonPage = () => {
                                     <SelectLabel>Koszyki</SelectLabel>
                                     {!isLoading &&
                                         basketOptions?.map((basket) => (
-                                            <SelectItem key={basket.id} value={basket.id}>
+                                            <SelectItem
+                                                key={basket.id + "select1"}
+                                                value={basket.id}>
                                                 {basket.name}
                                             </SelectItem>
                                         ))}
@@ -198,7 +208,7 @@ const BasketComparisonPage = () => {
                                         <TableRow>
                                             <TableHead>Liczba elementów</TableHead>
                                             {basketDetails.map((basket) => (
-                                                <TableCell key={basket.id}>
+                                                <TableCell key={basket.id + "elements"}>
                                                     {basket.basketEntries.length}
                                                 </TableCell>
                                             ))}
@@ -206,7 +216,7 @@ const BasketComparisonPage = () => {
                                         <TableRow>
                                             <TableHead>Alergeny</TableHead>
                                             {basketAllergens.map((allergenList, index) => (
-                                                <TableCell key={index}>
+                                                <TableCell key={index + "allergens"}>
                                                     {allergenList.map((allergen) => (
                                                         <p key={allergen}>{allergen}</p>
                                                     ))}
@@ -217,7 +227,7 @@ const BasketComparisonPage = () => {
                                             <TableHead>Produkty w koszyku</TableHead>
                                             {basketDetails.map((basket, index) => {
                                                 return (
-                                                    <TableCell key={index}>
+                                                    <TableCell key={index + "products"}>
                                                         {basket.basketEntries.map((entry) => (
                                                             <p>
                                                                 {entry.product.productName} -{" "}
@@ -243,7 +253,9 @@ const BasketComparisonPage = () => {
                                                     );
                                                 }, 0);
 
-                                                return <TableCell key={index}>{sum}</TableCell>;
+                                                return (
+                                                    <TableCell key={index + "ff"}>{sum}</TableCell>
+                                                );
                                             })}
                                         </TableRow>
                                         <TableRow>
@@ -261,7 +273,9 @@ const BasketComparisonPage = () => {
                                                     );
                                                 }, 0);
 
-                                                return <TableCell key={index}>{sum}</TableCell>;
+                                                return (
+                                                    <TableCell key={index + "sum"}>{sum}</TableCell>
+                                                );
                                             })}
                                         </TableRow>
                                     </TableBody>
@@ -278,7 +292,7 @@ const BasketComparisonPage = () => {
                                             <Table>
                                                 <TableBody>
                                                     {Array.from(nutritionSet).map((set) => (
-                                                        <TableRow key={set.name}>
+                                                        <TableRow key={set.name + set.groupName}>
                                                             <TableHead className="w-2/12">
                                                                 {set.name === "Total"
                                                                     ? set.groupName
