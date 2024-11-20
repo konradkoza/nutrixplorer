@@ -75,8 +75,12 @@ const ProductDetailsPage = () => {
                                 </Card>
                                 <div className="pt-2">
                                     {productDetails.ratings.map((rating) => (
-                                        <Badge key={rating.name} className="mx-1" variant="default">
-                                            {rating.name}
+                                        <Badge
+                                            key={rating.name}
+                                            className="mx-1 bg-primary/75 text-sm"
+                                            variant="default">
+                                            {rating.name.charAt(0).toUpperCase() +
+                                                rating.name.slice(1)}
                                         </Badge>
                                     ))}
                                 </div>

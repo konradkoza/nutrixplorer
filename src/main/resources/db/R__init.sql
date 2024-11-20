@@ -75,8 +75,8 @@ INSERT INTO public.sellers (id, address_id)
 VALUES ('f5fcf708-a416-45fa-b96b-0bd9eac29fac', '878f9027-1779-480d-8e6c-a9616c26b575');
 
 
-INSERT INTO public.basket (id, version, user_id, name, description)
-      VALUES ('0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', 0, 'e646e3dc-9170-4abb-b0b7-82b507324271', 'Basket', 'Description of example basket');
+INSERT INTO public.basket (id, version, client_id, name, description)
+      VALUES ('0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', 0, '6f15b280-581f-423e-a0ff-c02cce1c3350', 'Basket', 'Description of example basket');
 INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
       VALUES ('55301f31-13ab-41ed-a289-b044a837c00c', 0, '0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', 'd75cda81-ea16-4652-825c-a65f891bd657', 450);
 INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
@@ -91,8 +91,8 @@ INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
 VALUES ('9c85ce5b-1e88-4a2e-9cc4-819f774f4c84', 0, '0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', '7bad072d-5d3e-4275-b56f-ca0e1b7e8bc7', 100);
 
 
-INSERT INTO public.basket (id, version, user_id, name, description)
-VALUES ('1226916e-d737-43e1-a9b1-27f590b0ac40', 0, 'e646e3dc-9170-4abb-b0b7-82b507324271', 'Basket numer 2', 'Description of example basket number 2');
+INSERT INTO public.basket (id, version, client_id, name, description)
+VALUES ('1226916e-d737-43e1-a9b1-27f590b0ac40', 0, '6f15b280-581f-423e-a0ff-c02cce1c3350', 'Basket numer 2', 'Description of example basket number 2');
 INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
 VALUES ('4e973c7f-47df-4cf1-8505-ed5db01a97b4', 0, '1226916e-d737-43e1-a9b1-27f590b0ac40', 'd75cda81-ea16-4652-825c-a65f891bd657', 450);
 INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
@@ -106,8 +106,8 @@ VALUES ('b262858a-0258-4b42-a8a1-88875c4d8e44', 0, '1226916e-d737-43e1-a9b1-27f5
 INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
 VALUES ('c8a569a2-064b-4153-bf42-6f9321f6aefa', 0, '1226916e-d737-43e1-a9b1-27f590b0ac40', '7bad072d-5d3e-4275-b56f-ca0e1b7e8bc7', 100);
 
-INSERT INTO public.basket (id, version, user_id, name, description)
-VALUES ('ec7f84f9-767c-44d3-ae07-b021d1c47ea8', 0, 'e646e3dc-9170-4abb-b0b7-82b507324271', 'Basket numer 2', 'Description of example basket number 2');
+INSERT INTO public.basket (id, version, client_id, name, description)
+VALUES ('ec7f84f9-767c-44d3-ae07-b021d1c47ea8', 0, '6f15b280-581f-423e-a0ff-c02cce1c3350', 'Basket numer 2', 'Description of example basket number 2');
 INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
 VALUES ('ac43c184-92dc-4734-89f1-e720aa57b18c', 0, 'ec7f84f9-767c-44d3-ae07-b021d1c47ea8', 'd75cda81-ea16-4652-825c-a65f891bd657', 450);
 INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
@@ -121,8 +121,8 @@ VALUES ('bf7332cb-65c0-4e4d-9e33-e3dcd15a5602', 0, 'ec7f84f9-767c-44d3-ae07-b021
 INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
 VALUES ('2841954d-1b14-46d3-84f1-18c394c3fd2b', 0, 'ec7f84f9-767c-44d3-ae07-b021d1c47ea8', '7bad072d-5d3e-4275-b56f-ca0e1b7e8bc7', 100);
 
-INSERT INTO public.basket (id, version, user_id, name, description)
-VALUES ('fd38e719-6934-45db-8cb0-53150f70999f', 0, 'e646e3dc-9170-4abb-b0b7-82b507324271', 'Inny koszyk', 'Koszyk różniący się od poprzednich');
+INSERT INTO public.basket (id, version, client_id, name, description)
+VALUES ('fd38e719-6934-45db-8cb0-53150f70999f', 0, '6f15b280-581f-423e-a0ff-c02cce1c3350', 'Inny koszyk', 'Koszyk różniący się od poprzednich');
 INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
 VALUES ('bf0149b9-8cb9-44b7-a20f-2dd33a570005', 0, 'fd38e719-6934-45db-8cb0-53150f70999f', 'd75cda81-ea16-4652-825c-a65f891bd657', 30);
 INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)

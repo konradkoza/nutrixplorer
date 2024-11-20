@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import pl.lodz.p.it.nutrixplorer.model.mok.User;
+import pl.lodz.p.it.nutrixplorer.model.mok.Client;
 
 import java.util.List;
 
@@ -21,8 +21,8 @@ public class Basket extends AbstractEntity{
     private List<BasketEntry> basketEntries;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
-    private User user;
+    @JoinColumn(name = "client_id", nullable = false, updatable = false)
+    private Client client;
 
     @Column(name = "name")
     private String name;

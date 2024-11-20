@@ -229,7 +229,7 @@ const BasketComparisonPage = () => {
                                                 return (
                                                     <TableCell key={index + "products"}>
                                                         {basket.basketEntries.map((entry) => (
-                                                            <p>
+                                                            <p key={entry.id}>
                                                                 {entry.product.productName} -{" "}
                                                                 {entry.units} {entry.product.unit}
                                                             </p>
@@ -311,7 +311,10 @@ const BasketComparisonPage = () => {
                                                                     return (
                                                                         <TableCell
                                                                             className="w-5/12"
-                                                                            key={index}>
+                                                                            key={
+                                                                                index +
+                                                                                "nutritionalValues"
+                                                                            }>
                                                                             {Number(
                                                                                 nutritionValue?.quantity.toFixed(
                                                                                     3

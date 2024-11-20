@@ -13,6 +13,7 @@ import java.util.UUID;
 @Repository
 public interface BasketRepository extends JpaRepository<Basket, UUID> {
 
+    @Query("SELECT b FROM Basket b WHERE b.client.user.id = :userId")
     List<Basket> findAllByUserId(UUID userId);
 
 //    @Query("SELECT new pl.lodz.p.it.nutrixplorer.mow.repositories.dto.NutritionalValuesDTO(nv.nutritionalValueName.name, nv.nutritionalValueName.group.groupName, SUM(nv.quantity))  FROM Basket b " +
