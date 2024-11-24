@@ -49,4 +49,8 @@ public class ProductMapperHelper {
     SellerAddressDTO sellerToSellerAddressDTO(Seller seller) {
         return new SellerAddressDTO(seller.getAddress().getShopName(), seller.getAddress().getCity());
     }
+
+    String allergenToString(Allergen allergen) {
+        return allergen.getName();
+    }
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import pl.lodz.p.it.nutrixplorer.model.mok.Client;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -29,4 +30,7 @@ public class Basket extends AbstractEntity{
 
     @Column(name = "description", length = 1000)
     private String description;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 }

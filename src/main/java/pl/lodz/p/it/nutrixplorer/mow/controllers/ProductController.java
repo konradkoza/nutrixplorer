@@ -77,4 +77,16 @@ public class ProductController {
         return ResponseEntity.ok(ProductMapper.INSTANCE.nutritionalValuesToNutritionalValueDTOs(productService.getNutritionTable(id)));
     }
 
+    @GetMapping("/package-types")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<List<String>> getPackageTypes() {
+        return ResponseEntity.ok(ProductMapper.INSTANCE.packageTypesToStrings(productService.getPackageTypes()));
+    }
+
+    @GetMapping("/allergens")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<List<String>> getAllAllergens() {
+        return ResponseEntity.ok(ProductMapper.INSTANCE.allergensToStrings(productService.getAllAllergens()));
+    }
+
 }

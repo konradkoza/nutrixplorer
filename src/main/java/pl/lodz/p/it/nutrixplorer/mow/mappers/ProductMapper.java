@@ -45,4 +45,8 @@ public interface ProductMapper {
     PortionDTO portionToPortionDTO(Portion portion);
 
     NutritionalValueNameDTO nutritionalValueNameToNutritionalValueNameDTO(NutritionalValueName nutritionalValueName);
+
+    List<String> packageTypesToStrings(List<PackageType> packageTypes);
+
+    List<String> allergensToStrings(List<Allergen> allAllergens);
 }

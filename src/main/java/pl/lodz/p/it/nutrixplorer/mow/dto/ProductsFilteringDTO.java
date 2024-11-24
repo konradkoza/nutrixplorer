@@ -18,6 +18,12 @@ public record ProductsFilteringDTO(
         Integer minEnergy,
         Integer maxEnergy,
         List<String> vitamins,
-        List<String> minerals
+        List<String> minerals,
+        List<String> allergens,
+        Integer minIndexT,
+        Integer maxIndexT,
+        Integer minIndexS,
+        Integer maxIndexS,
+        String packageType
 ) {
 }

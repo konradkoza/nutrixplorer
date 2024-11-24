@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,6 +25,9 @@ public class BasketEntry extends AbstractEntity{
 
     @Column(name = "quantity", precision = 10, scale = 2)
     private BigDecimal units;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "basket_id", nullable = false, updatable = false)

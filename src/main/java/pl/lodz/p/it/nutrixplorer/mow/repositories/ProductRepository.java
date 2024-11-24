@@ -37,4 +37,9 @@ public interface ProductRepository extends JpaRepository<Product, UUID> , JpaSpe
     @Query("SELECT p FROM Product p JOIN p.usersWhoFavourited u WHERE u.user.id = :userId")
     List<Product> findFavoriteProductsByUserId(@Param("userId") UUID userId);
 
+    @Query("SELECT DISTINCT p.packageType FROM Product p")
+    List<PackageType> findDistinctPackageTypes();
+
+    @Query("SELECT DISTINCT p.label.allergenList FROM Product p")
+    List<Allergen> findAllAllergens();
 }

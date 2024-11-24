@@ -5,10 +5,7 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
-import pl.lodz.p.it.nutrixplorer.model.mow.NutritionalValue;
-import pl.lodz.p.it.nutrixplorer.model.mow.NutritionalValueGroup;
-import pl.lodz.p.it.nutrixplorer.model.mow.NutritionalValueName;
-import pl.lodz.p.it.nutrixplorer.model.mow.Product;
+import pl.lodz.p.it.nutrixplorer.model.mow.*;
 import pl.lodz.p.it.nutrixplorer.mow.dto.ProductsFilteringDTO;
 import pl.lodz.p.it.nutrixplorer.mow.filtering.ProductSpecificationBuilder;
 import pl.lodz.p.it.nutrixplorer.mow.filtering.SearchOperation;
@@ -76,6 +73,25 @@ public class SpecificationUtil {
         if (filteringDTO.maxFiber() != null) {
             specification = specification.and(maxSpecification("Błonnik", "Błonnik", Double.valueOf(filteringDTO.maxFiber())));
         }
+        if (filteringDTO.packageType() != null) {
+            specification = specification.and(packageSpecification(filteringDTO.packageType()));
+        }
+        if (filteringDTO.minIndexT() != null) {
+            specification = specification.and(minIndexSpecification("T", filteringDTO.minIndexT()));
+        }
+        if (filteringDTO.maxIndexT() != null) {
+            specification = specification.and(maxIndexSpecification("T", filteringDTO.maxIndexT()));
+        }
+        if (filteringDTO.minIndexS() != null) {
+            specification = specification.and(minIndexSpecification("S", filteringDTO.minIndexS()));
+        }
+        if (filteringDTO.maxIndexS() != null) {
+            specification = specification.and(maxIndexSpecification("S", filteringDTO.maxIndexS()));
+        }
+        if (filteringDTO.allergens() != null && !filteringDTO.allergens().isEmpty()) {
+            specification = specification.and(hasNoAllergens(filteringDTO.allergens()));
+        }
+
         return specification;
     }
 
@@ -87,7 +103,9 @@ public class SpecificationUtil {
 
             Join<NutritionalValueName, NutritionalValueGroup> groupJoin = nameJoin.join("group", JoinType.INNER);
 
-            query.distinct(true); // Avoid duplicate products in result set
+            if (query != null) {
+                query.distinct(true); // Avoid duplicate products in result set
+            }
 
             Predicate groupPredicate = criteriaBuilder.equal(groupJoin.get("groupName"), groupName);
             Predicate[] valuePredicates = values.stream()
@@ -98,8 +116,61 @@ public class SpecificationUtil {
         };
     }
 
+    public static Specification<Product> hasNoAllergens(List<String> allergens) {
+        return (root, query, criteriaBuilder) -> {
+            Join<Product, Label> labelJoin = root.join("label", JoinType.INNER);
 
-     static Specification<Product> minSpecification(String nutritionalValueName, String groupName, Double quantity) {
+            Join<Label, Allergen> nameJoin = labelJoin.join("allergenList", JoinType.INNER);
+
+            if (query != null) {
+                query.distinct(true); // Avoid duplicate products in result set
+            }
+
+            Predicate[] valuePredicates = allergens.stream()
+                    .map(value -> criteriaBuilder.notEqual(nameJoin.get("name"), value))
+                    .toArray(Predicate[]::new);
+
+            return criteriaBuilder.and(valuePredicates);
+        };
+    }
+
+    static Specification<Product> packageSpecification(String name) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(
+                root.join("packageType").get("name"),
+                name
+        );
+    }
+
+    static Specification<Product> minIndexSpecification(String indexName, Integer value) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate greaterThanPredicate = criteriaBuilder.greaterThanOrEqualTo(
+                    root.join("productIndexes").get("indexValue"),
+                    value
+            );
+            Predicate namePredicate = criteriaBuilder.equal(
+                    root.join("productIndexes").get("indexName"),
+                    indexName
+            );
+            return criteriaBuilder.and(greaterThanPredicate, namePredicate);
+        };
+    }
+
+    static Specification<Product> maxIndexSpecification(String indexName, Integer value) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate lessThanPredicate = criteriaBuilder.lessThanOrEqualTo(
+                    root.join("productIndexes").get("indexValue"),
+                    value
+            );
+            Predicate namePredicate = criteriaBuilder.equal(
+                    root.join("productIndexes").get("indexName"),
+                    indexName
+            );
+            return criteriaBuilder.and(lessThanPredicate, namePredicate);
+        };
+    }
+
+
+    static Specification<Product> minSpecification(String nutritionalValueName, String groupName, Double quantity) {
         return (root, query, criteriaBuilder) -> {
             Predicate greaterThanPredicate = criteriaBuilder.greaterThanOrEqualTo(
                     root.join("nutritionalValues").get("quantity"),

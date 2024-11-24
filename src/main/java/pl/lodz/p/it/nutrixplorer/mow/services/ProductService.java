@@ -66,4 +66,12 @@ public class ProductService {
     public List<NutritionalValue> getNutritionTable(UUID id) throws NotFoundException {
         return productRepository.findNutritionalValuesByProductId(id);
     }
+
+    public List<PackageType> getPackageTypes() {
+        return productRepository.findDistinctPackageTypes();
+    }
+
+    public List<Allergen> getAllAllergens() {
+        return productRepository.findAllAllergens();
+    }
 }

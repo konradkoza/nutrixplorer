@@ -75,62 +75,46 @@ INSERT INTO public.sellers (id, address_id)
 VALUES ('f5fcf708-a416-45fa-b96b-0bd9eac29fac', '878f9027-1779-480d-8e6c-a9616c26b575');
 
 
-INSERT INTO public.basket (id, version, client_id, name, description)
-      VALUES ('0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', 0, '6f15b280-581f-423e-a0ff-c02cce1c3350', 'Basket', 'Description of example basket');
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-      VALUES ('55301f31-13ab-41ed-a289-b044a837c00c', 0, '0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', 'd75cda81-ea16-4652-825c-a65f891bd657', 450);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('5f8fe998-065e-4723-a428-8896be754893', 0, '0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', '38607015-fe46-4a66-93f9-b8cb9fe6154e', 400);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('bba0dcd6-4daf-4cad-9f27-890daa208eba', 0, '0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', '562dc9a9-ca76-4d04-91d8-be69782d0338', 450);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('fa05287e-4f5d-4b69-b2ed-077b8d7020fd', 0, '0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', '56cb13e0-de6c-4b21-8674-bed8bde850af', 350);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('5455ef3a-4b25-4657-b874-cf6d90d94b75', 0, '0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', '927d0f18-7e48-4440-a4a7-ab7a3de8f5a1', 200);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('9c85ce5b-1e88-4a2e-9cc4-819f774f4c84', 0, '0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', '7bad072d-5d3e-4275-b56f-ca0e1b7e8bc7', 100);
+INSERT INTO public.basket (id, version, client_id, name, description, created_at)
+VALUES ('0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', 0, '6f15b280-581f-423e-a0ff-c02cce1c3350', 'Basket', 'Description of example basket', now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('55301f31-13ab-41ed-a289-b044a837c00c', 0, '0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', 'd75cda81-ea16-4652-825c-a65f891bd657', 450, now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('5f8fe998-065e-4723-a428-8896be754893', 0, '0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', '38607015-fe46-4a66-93f9-b8cb9fe6154e', 400, now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('bba0dcd6-4daf-4cad-9f27-890daa208eba', 0, '0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', '562dc9a9-ca76-4d04-91d8-be69782d0338', 450, now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('fa05287e-4f5d-4b69-b2ed-077b8d7020fd', 0, '0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', '56cb13e0-de6c-4b21-8674-bed8bde850af', 350, now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('5455ef3a-4b25-4657-b874-cf6d90d94b75', 0, '0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', '927d0f18-7e48-4440-a4a7-ab7a3de8f5a1', 200, now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('9c85ce5b-1e88-4a2e-9cc4-819f774f4c84', 0, '0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', '7bad072d-5d3e-4275-b56f-ca0e1b7e8bc7', 100, now());
 
+INSERT INTO public.basket (id, version, client_id, name, description, created_at)
+VALUES ('1226916e-d737-43e1-a9b1-27f590b0ac40', 0, '6f15b280-581f-423e-a0ff-c02cce1c3350', 'Basket numer 2', 'Description of example basket number 2', now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('4e973c7f-47df-4cf1-8505-ed5db01a97b4', 0, '1226916e-d737-43e1-a9b1-27f590b0ac40', 'd75cda81-ea16-4652-825c-a65f891bd657', 450, now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('27fa48a2-a615-4395-8e3a-4681716978b3', 0, '1226916e-d737-43e1-a9b1-27f590b0ac40', '38607015-fe46-4a66-93f9-b8cb9fe6154e', 400, now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('e3a46e4d-90c7-4102-a58e-3cfaba4ff0fa', 0, '1226916e-d737-43e1-a9b1-27f590b0ac40', '562dc9a9-ca76-4d04-91d8-be69782d0338', 400, now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('249238b1-7687-474f-8106-6f5c393a620c', 0, '1226916e-d737-43e1-a9b1-27f590b0ac40', '94123876-5a5a-4f29-84de-b546b47d2b27', 350, now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('b262858a-0258-4b42-a8a1-88875c4d8e44', 0, '1226916e-d737-43e1-a9b1-27f590b0ac40', '927d0f18-7e48-4440-a4a7-ab7a3de8f5a1', 200, now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('c8a569a2-064b-4153-bf42-6f9321f6aefa', 0, '1226916e-d737-43e1-a9b1-27f590b0ac40', '7bad072d-5d3e-4275-b56f-ca0e1b7e8bc7', 100, now());
 
-INSERT INTO public.basket (id, version, client_id, name, description)
-VALUES ('1226916e-d737-43e1-a9b1-27f590b0ac40', 0, '6f15b280-581f-423e-a0ff-c02cce1c3350', 'Basket numer 2', 'Description of example basket number 2');
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('4e973c7f-47df-4cf1-8505-ed5db01a97b4', 0, '1226916e-d737-43e1-a9b1-27f590b0ac40', 'd75cda81-ea16-4652-825c-a65f891bd657', 450);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('27fa48a2-a615-4395-8e3a-4681716978b3', 0, '1226916e-d737-43e1-a9b1-27f590b0ac40', '38607015-fe46-4a66-93f9-b8cb9fe6154e', 400);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('e3a46e4d-90c7-4102-a58e-3cfaba4ff0fa', 0, '1226916e-d737-43e1-a9b1-27f590b0ac40', '562dc9a9-ca76-4d04-91d8-be69782d0338', 400);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('249238b1-7687-474f-8106-6f5c393a620c', 0, '1226916e-d737-43e1-a9b1-27f590b0ac40', '94123876-5a5a-4f29-84de-b546b47d2b27', 350);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('b262858a-0258-4b42-a8a1-88875c4d8e44', 0, '1226916e-d737-43e1-a9b1-27f590b0ac40', '927d0f18-7e48-4440-a4a7-ab7a3de8f5a1', 200);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('c8a569a2-064b-4153-bf42-6f9321f6aefa', 0, '1226916e-d737-43e1-a9b1-27f590b0ac40', '7bad072d-5d3e-4275-b56f-ca0e1b7e8bc7', 100);
-
-INSERT INTO public.basket (id, version, client_id, name, description)
-VALUES ('ec7f84f9-767c-44d3-ae07-b021d1c47ea8', 0, '6f15b280-581f-423e-a0ff-c02cce1c3350', 'Basket numer 2', 'Description of example basket number 2');
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('ac43c184-92dc-4734-89f1-e720aa57b18c', 0, 'ec7f84f9-767c-44d3-ae07-b021d1c47ea8', 'd75cda81-ea16-4652-825c-a65f891bd657', 450);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('15b94603-019a-4f1e-ad07-6cea641af04c', 0, 'ec7f84f9-767c-44d3-ae07-b021d1c47ea8', '38607015-fe46-4a66-93f9-b8cb9fe6154e', 400);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('19e6d986-5756-48ba-8bfd-54c9b99dfed7', 0, 'ec7f84f9-767c-44d3-ae07-b021d1c47ea8', '562dc9a9-ca76-4d04-91d8-be69782d0338', 400);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('012b3e6c-176e-40f2-bc5b-7693d80638df', 0, 'ec7f84f9-767c-44d3-ae07-b021d1c47ea8', '94123876-5a5a-4f29-84de-b546b47d2b27', 350);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('bf7332cb-65c0-4e4d-9e33-e3dcd15a5602', 0, 'ec7f84f9-767c-44d3-ae07-b021d1c47ea8', '927d0f18-7e48-4440-a4a7-ab7a3de8f5a1', 200);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('2841954d-1b14-46d3-84f1-18c394c3fd2b', 0, 'ec7f84f9-767c-44d3-ae07-b021d1c47ea8', '7bad072d-5d3e-4275-b56f-ca0e1b7e8bc7', 100);
-
-INSERT INTO public.basket (id, version, client_id, name, description)
-VALUES ('fd38e719-6934-45db-8cb0-53150f70999f', 0, '6f15b280-581f-423e-a0ff-c02cce1c3350', 'Inny koszyk', 'Koszyk różniący się od poprzednich');
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('bf0149b9-8cb9-44b7-a20f-2dd33a570005', 0, 'fd38e719-6934-45db-8cb0-53150f70999f', 'd75cda81-ea16-4652-825c-a65f891bd657', 30);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('9a2bb015-0a00-4f5b-8899-9672d7c14d17', 0, 'fd38e719-6934-45db-8cb0-53150f70999f', 'fddd91e1-6b8e-4792-95f1-dad1269a06de', 30);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('3cb0cb66-c468-40c4-8074-149efcd25309', 0, 'fd38e719-6934-45db-8cb0-53150f70999f', 'eaf088b0-8eb2-43bf-8116-53b6c04950bd', 200);
-INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
-VALUES ('4733f3ce-3755-4a72-9079-b4a3ad7a255a', 0, 'fd38e719-6934-45db-8cb0-53150f70999f', '577bdd50-ce35-4723-b093-c27488bd55bf', 100);
+INSERT INTO public.basket (id, version, client_id, name, description, created_at)
+VALUES ('fd38e719-6934-45db-8cb0-53150f70999f', 0, '6f15b280-581f-423e-a0ff-c02cce1c3350', 'Inny koszyk', 'Koszyk różniący się od poprzednich', now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('bf0149b9-8cb9-44b7-a20f-2dd33a570005', 0, 'fd38e719-6934-45db-8cb0-53150f70999f', 'd75cda81-ea16-4652-825c-a65f891bd657', 30, now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('9a2bb015-0a00-4f5b-8899-9672d7c14d17', 0, 'fd38e719-6934-45db-8cb0-53150f70999f', 'fddd91e1-6b8e-4792-95f1-dad1269a06de', 30, now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('3cb0cb66-c468-40c4-8074-149efcd25309', 0, 'fd38e719-6934-45db-8cb0-53150f70999f', 'eaf088b0-8eb2-43bf-8116-53b6c04950bd', 200, now());
+INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity, created_at)
+VALUES ('4733f3ce-3755-4a72-9079-b4a3ad7a255a', 0, 'fd38e719-6934-45db-8cb0-53150f70999f', '577bdd50-ce35-4723-b093-c27488bd55bf', 100, now());
 
 INSERT INTO public.user_favourite_products (client_id, product_id)
 VALUES ('6f15b280-581f-423e-a0ff-c02cce1c3350', 'd75cda81-ea16-4652-825c-a65f891bd657');
