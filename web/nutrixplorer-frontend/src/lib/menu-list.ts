@@ -6,7 +6,6 @@ import {
     ScaleIcon,
     ShoppingBag,
     ShoppingBasketIcon,
-    Tag,
     Users,
 } from "lucide-react";
 
@@ -56,11 +55,11 @@ export function getMenuList(authorities: AccessLevel[]): Group[] {
                     label: "Porównaj",
                     icon: ScaleIcon,
                 },
-                {
-                    href: "/deals",
-                    label: "Okazje",
-                    icon: Tag,
-                },
+                // {
+                //     href: "/deals",
+                //     label: "Okazje",
+                //     icon: Tag,
+                // },
                 {
                     href: "/favourites",
                     label: "Ulubione",
@@ -74,23 +73,23 @@ export function getMenuList(authorities: AccessLevel[]): Group[] {
             ],
         });
     }
-    if (authorities.includes(AccessLevel.SELLER)) {
-        list.push({
-            groupLabel: "Sprzedawca",
-            menus: [
-                {
-                    href: "/my-deals",
-                    label: "Moje okazje",
-                    icon: Users,
-                },
-                {
-                    href: "/deals",
-                    label: "Okazje",
-                    icon: Tag,
-                },
-            ],
-        });
-    }
+    // if (authorities.includes(AccessLevel.SELLER)) {
+    //     list.push({
+    //         groupLabel: "Sprzedawca",
+    //         menus: [
+    //             {
+    //                 href: "/my-deals",
+    //                 label: "Moje okazje",
+    //                 icon: Users,
+    //             },
+    //             {
+    //                 href: "/deals",
+    //                 label: "Okazje",
+    //                 icon: Tag,
+    //             },
+    //         ],
+    //     });
+    // }
     if (authorities.includes(AccessLevel.ADMINISTRATOR)) {
         list.push({
             groupLabel: "Administrator",

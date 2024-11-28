@@ -3,13 +3,7 @@ import { MenuIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Menu } from "@/components/layout-components/menu";
-import {
-    Sheet,
-    SheetHeader,
-    SheetContent,
-    SheetTrigger,
-    SheetTitle,
-} from "@/components/ui/sheet";
+import { Sheet, SheetHeader, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 
 export function SheetMenu() {
     return (
@@ -19,18 +13,13 @@ export function SheetMenu() {
                     <MenuIcon size={20} />
                 </Button>
             </SheetTrigger>
-            <SheetContent
-                className="flex h-full flex-col px-3 sm:w-72"
-                side="left">
+            <SheetContent className="flex h-full flex-col px-3 sm:w-72" side="left">
                 <SheetHeader>
                     <Button
                         className="flex items-center justify-center pb-2 pt-1"
                         variant="link"
                         asChild>
-                        <Link
-                            to="/dashboard"
-                            className="flex items-center gap-2">
-                            {/* <PanelsTopLeft className="mr-1 h-6 w-6" /> */}
+                        <Link to="/" className="flex items-center gap-2">
                             <SheetTitle className="text-lg font-bold text-primary">
                                 NutriXplorer
                             </SheetTitle>

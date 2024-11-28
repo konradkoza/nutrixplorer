@@ -1,5 +1,6 @@
+import image from "@/assets/notFound.png";
 import { Button } from "@/components/ui/button.tsx";
-import { Card, CardContent, CardFooter, CardHeader, CardImage } from "@/components/ui/card.tsx";
+import { Card, CardContent, CardFooter, CardImage } from "@/components/ui/card.tsx";
 import {
     useAddFavouriteMutation,
     useDeleteFavoriteMutation,
@@ -10,7 +11,6 @@ import { useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AddToBasketDialog from "./AddToBasketDialog";
-import image from "@/assets/notFound.png";
 
 type ProductsListProps = {
     products: SimpleProduct[];
@@ -24,6 +24,7 @@ const ProductsList = ({ products, favouriteProducts, addToBasket }: ProductsList
     const [deleteFavourite] = useDeleteFavoriteMutation();
     const [dialogOpen, setDialogOpen] = useState(false);
     const [productId, setProductId] = useState<string>("");
+    const [unit, setUnit] = useState<string>("");
     const isFavourite = (id: string): boolean => {
         return (
             favouriteProducts !== undefined &&
@@ -39,13 +40,15 @@ const ProductsList = ({ products, favouriteProducts, addToBasket }: ProductsList
         deleteFavourite(id);
     };
 
-    const handleOpenDialog = (productId: string) => {
+    const handleOpenDialog = (productId: string, unit: string) => {
         setProductId(productId);
+        setUnit(unit);
         setDialogOpen(true);
     };
 
     const handleCloseDialog = () => {
         setProductId("");
+        setUnit("");
         setDialogOpen(false);
     };
 
@@ -57,7 +60,7 @@ const ProductsList = ({ products, favouriteProducts, addToBasket }: ProductsList
                         navigate(`/products/${product.id}`);
                     }}
                     key={product.id}
-                    className="relative min-w-52 flex-shrink-0 flex-grow-0 hover:bg-secondary/95">
+                    className="relative flex min-w-52 flex-shrink-0 flex-grow-0 flex-col hover:bg-secondary/95">
                     {favouriteProducts !== undefined && (
                         <div className="absolute right-0 m-1 flex h-auto flex-col space-y-1">
                             {!isFavourite(product.id) ? (
@@ -86,30 +89,27 @@ const ProductsList = ({ products, favouriteProducts, addToBasket }: ProductsList
                                 className="rounded-[0.5rem] bg-secondary/20"
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    handleOpenDialog(product.id);
+                                    handleOpenDialog(product.id, product.unit);
                                 }}>
                                 <ShoppingBasketIcon />
                             </Button>
                         </div>
                     )}
-                    <div className="flex justify-center bg-white">
+                    <div className="flex justify-center rounded-t-lg bg-white">
                         <CardImage
                             src={`${import.meta.env.VITE_BACKEND_URL}/product/${product.id}/image`}
                             alt="Brak zdjęcia"
-                            className="h-52 w-auto"
+                            className="h-52 w-auto rounded-t-lg"
                             onError={(event) => {
                                 event.currentTarget.src = image;
                             }}
                         />
                     </div>
-
-                    <CardHeader>
-                        <h2>{product.productName}</h2>
-                    </CardHeader>
-                    <CardContent className="max-h-full">
+                    <CardContent className="h-full">
+                        <h2 className="mt-2 font-semibold">{product.productName}</h2>
                         <p>{product.productDescription}</p>
                     </CardContent>
-                    <CardFooter>
+                    <CardFooter className="">
                         {product.productQuantity ? product.productQuantity.toString() : ""}{" "}
                         {product.unit || ""}
                     </CardFooter>
@@ -120,6 +120,7 @@ const ProductsList = ({ products, favouriteProducts, addToBasket }: ProductsList
                     open={dialogOpen}
                     productId={productId}
                     onClose={() => handleCloseDialog()}
+                    unit={unit}
                 />
             )}
         </div>

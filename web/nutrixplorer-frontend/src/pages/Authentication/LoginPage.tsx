@@ -1,17 +1,12 @@
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     Form,
     FormControl,
     FormField,
     FormItem,
     FormLabel,
+    FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useLoginMutation } from "@/redux/services/authService";
@@ -19,7 +14,7 @@ import { login } from "@/redux/slices/authSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 const LoginSchema = z.object({
@@ -73,11 +68,9 @@ const LoginPage = () => {
                                     <FormItem>
                                         <FormLabel>Email</FormLabel>
                                         <FormControl>
-                                            <Input
-                                                placeholder="example@mail.com"
-                                                {...field}
-                                            />
+                                            <Input placeholder="example@mail.com" {...field} />
                                         </FormControl>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -86,20 +79,23 @@ const LoginPage = () => {
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel>Hasło</FormLabel>
                                         <FormControl>
-                                            <Input
-                                                placeholder=""
-                                                type="password"
-                                                {...field}
-                                            />
+                                            <Input placeholder="" type="password" {...field} />
                                         </FormControl>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
                             <Button type="submit">Login</Button>
                         </form>
                     </Form>
+                    <div className="mt-4 text-center text-sm">
+                        {"Nie masz konta? "}
+                        <Link className="underline" to="/register">
+                            Utwórz konto
+                        </Link>
+                    </div>
                 </CardContent>
             </Card>
         </div>

@@ -2,10 +2,7 @@ package pl.lodz.p.it.nutrixplorer.model.mow;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,6 +13,7 @@ import java.time.LocalDateTime;
 @ToString
 @Entity
 @Table(name = "basket_entry")
+@AllArgsConstructor
 public class BasketEntry extends AbstractEntity{
 
     @ManyToOne
@@ -32,4 +30,19 @@ public class BasketEntry extends AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "basket_id", nullable = false, updatable = false)
     private Basket basket;
+
+    @PrePersist
+    public void onPrePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+//    @PreUpdate
+//    public void onPreUpdate() {
+//        this.basket.onPreUpdate();
+//    }
+//
+//    @PreRemove
+//    public void onPreRemove() {
+//        this.basket.onPreUpdate();
+//    }
 }

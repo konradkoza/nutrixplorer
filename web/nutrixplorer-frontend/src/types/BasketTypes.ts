@@ -11,6 +11,7 @@ export type Basket = {
     id: string;
     name: string;
     description: string;
+    createdAt: Date;
     basketEntries: BasketEntry[];
 };
 
@@ -27,7 +28,6 @@ export type CreateEntry = {
 export type CreateBasket = {
     name: string;
     description: string;
-    // basketEntries?: CreateEntry[];
 };
 
 export type EntryUpdate = {

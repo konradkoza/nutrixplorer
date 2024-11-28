@@ -1,7 +1,7 @@
+import { UnitInput } from "@/components/common/UnitInput";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
     Select,
     SelectContent,
@@ -21,6 +21,7 @@ type AddToBasketDialogProps = {
     open: boolean;
     onClose: () => void;
     productId: string;
+    unit: string;
 };
 
 type AddToBasketForm = {
@@ -28,7 +29,7 @@ type AddToBasketForm = {
     basketId: string;
 };
 
-const AddToBasketDialog = ({ open, onClose, productId }: AddToBasketDialogProps) => {
+const AddToBasketDialog = ({ open, onClose, productId, unit }: AddToBasketDialogProps) => {
     const { data: basketList, isLoading } = useGetUserBasketsListQuery();
     const [addEntry] = useAddBasketEntryMutation();
     const form = useForm<AddToBasketForm>({
@@ -41,6 +42,7 @@ const AddToBasketDialog = ({ open, onClose, productId }: AddToBasketDialogProps)
     const handleAddToBasket = (data: AddToBasketForm) => {
         addEntry({ basketId: data.basketId, entry: { productId, quantity: data.quantity } });
         onClose();
+        form.reset();
     };
 
     return (
@@ -86,7 +88,12 @@ const AddToBasketDialog = ({ open, onClose, productId }: AddToBasketDialogProps)
                                     <FormItem className="w-[180px]">
                                         <FormLabel>Ilość</FormLabel>
                                         <FormControl>
-                                            <Input type="number" {...field} />
+                                            <UnitInput
+                                                className=""
+                                                unit={unit}
+                                                type="number"
+                                                {...field}
+                                            />
                                         </FormControl>
                                     </FormItem>
                                 )}

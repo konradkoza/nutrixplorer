@@ -27,11 +27,15 @@ import {
     useGetBasketNutritionsQuery,
 } from "@/redux/services/basketService.ts";
 import { returnIndexValue } from "@/utils/productUtils";
-import { MoreHorizontal, Trash2Icon } from "lucide-react";
+import { CopyIcon, MoreHorizontal, PencilIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import NutritionChart from "./NutritionChart";
 import NutrtitionsTable from "./NutritionsTable";
+import UpdateQuantityDialog from "./UpdateQuantityDialog";
+import { format } from "date-fns";
+import CloneBasketDialog from "./CloneBasketDialog";
+import EditBasketDialog from "./EditBasketDialog";
 
 const BasketDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -53,7 +57,12 @@ const BasketDetails = () => {
         { title: basket?.name || "Koszyk", path: `/baskets/${id}` },
     ]);
     const [open, setOpen] = useState(false);
-
+    const [quantityDialogOpen, setQuantityDialogOpen] = useState(false);
+    const [cloneDialogOpen, setCloneDialogOpen] = useState(false);
+    const [editDialogOpen, setEditDialogOpen] = useState(false);
+    const [entryId, setEntryId] = useState<string | null>(null);
+    const [currentQuantity, setCurrentQuantity] = useState<number>(0);
+    const [unit, setUnit] = useState<string>("");
     const handleDeleteEntry = (id: string) => {
         deleteEntry(id);
     };
@@ -64,111 +73,177 @@ const BasketDetails = () => {
         navigate("/baskets");
     };
 
+    const handleUpdateQuantity = (id: string, quantity: number, unit: string) => {
+        setEntryId(id);
+        setCurrentQuantity(quantity);
+        setQuantityDialogOpen(true);
+        setUnit(unit);
+    };
+
     return (
         <div className="flex w-full justify-center">
+            <UpdateQuantityDialog
+                open={quantityDialogOpen}
+                onClose={() => setQuantityDialogOpen(false)}
+                currentQuantity={currentQuantity}
+                entryId={entryId || ""}
+                unit={unit}
+            />
+
             <div className="container flex flex-col gap-2">
                 <div className="flex w-full items-center justify-between">
                     {breadcrumbs}
                     {basket && (
-                        <ConfirmationAlertDialog
-                            open={open}
-                            setOpen={() => setOpen(!open)}
-                            onConfirm={() => hadleDeleteBasket(basket?.id)}
-                            content="Czy na pewno chcesz usunąć ten koszyk?"
-                            title="Czy jesteś pewny"
-                            confirmContent="Usuń">
-                            <Trash2Icon />
-                            <p>Usuń koszyk</p>
-                        </ConfirmationAlertDialog>
+                        <div className="flex">
+                            <Button
+                                onClick={() => setEditDialogOpen(true)}
+                                variant="ghost"
+                                className="gap-2">
+                                <CopyIcon /> Duplikuj koszyk
+                            </Button>
+                            <ConfirmationAlertDialog
+                                open={open}
+                                setOpen={() => setOpen(!open)}
+                                onConfirm={() => hadleDeleteBasket(basket?.id)}
+                                content="Czy na pewno chcesz usunąć ten koszyk?"
+                                title="Czy jesteś pewny"
+                                confirmContent="Usuń">
+                                <Trash2Icon />
+                                <p>Usuń koszyk</p>
+                            </ConfirmationAlertDialog>
+                            <Button
+                                variant="ghost"
+                                className="gap-2"
+                                onClick={() => setEditDialogOpen(true)}>
+                                <PencilIcon />
+                                Edytuj koszyk
+                            </Button>
+                        </div>
                     )}
                 </div>
 
                 {isLoadingDetails ? (
                     <Spinner />
                 ) : (
-                    <>
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-3xl">{basket?.name}</CardTitle>
-                                <CardDescription>{basket?.description}</CardDescription>
-                            </CardHeader>
-                        </Card>
-                        <Card>
-                            <CardHeader>
-                                <p className="text-2xl">Produkty w koszyku</p>
-                            </CardHeader>
-                            <CardContent>
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>Nazwa</TableHead>
-                                            <TableHead>Opis</TableHead>
-                                            <TableHead align="center">Indeks FF</TableHead>
-                                            <TableHead align="center">Indeks SUM</TableHead>
-                                            <TableHead>Ilość w koszyku</TableHead>
-                                            <TableHead align="right" />
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {basket?.basketEntries.map((entry) => (
-                                            <TableRow key={entry.id}>
-                                                <TableCell>{entry.product.productName}</TableCell>
-                                                <TableCell>
-                                                    {entry.product.productDescription}
-                                                </TableCell>
-                                                <TableCell align="center">
-                                                    {returnIndexValue("T", entry.productIndexes)}
-                                                </TableCell>
-                                                <TableCell align="center">
-                                                    {returnIndexValue("S", entry.productIndexes)}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {entry.units} {entry.product.unit}
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                    <DropdownMenu>
-                                                        <DropdownMenuTrigger asChild>
-                                                            <Button
-                                                                variant="ghost"
-                                                                className="h-8 w-8 p-0">
-                                                                <span className="sr-only">
-                                                                    Open menu
-                                                                </span>
-                                                                <MoreHorizontal className="h-4 w-4" />
-                                                            </Button>
-                                                        </DropdownMenuTrigger>
-                                                        <DropdownMenuContent align="end">
-                                                            <DropdownMenuLabel>
-                                                                Akcje
-                                                            </DropdownMenuLabel>
-                                                            <DropdownMenuItem
-                                                                onClick={() =>
-                                                                    navigate(
-                                                                        `/products/${entry.product.id}`
-                                                                    )
-                                                                }>
-                                                                Szczegóły produktu
-                                                            </DropdownMenuItem>
-                                                            <DropdownMenuSeparator />
-                                                            <DropdownMenuItem
-                                                                onClick={() =>
-                                                                    handleDeleteEntry(entry.id)
-                                                                }>
-                                                                Usuń z koszyka
-                                                            </DropdownMenuItem>
-                                                            <DropdownMenuItem>
-                                                                Zmień ilość
-                                                            </DropdownMenuItem>
-                                                        </DropdownMenuContent>
-                                                    </DropdownMenu>
-                                                </TableCell>
+                    basket && (
+                        <>
+                            <Card>
+                                <div className="flex justify-between">
+                                    <CardHeader>
+                                        <CardTitle className="text-3xl">{basket?.name}</CardTitle>
+                                        <CardDescription>{basket?.description}</CardDescription>
+                                    </CardHeader>
+                                    <div className="flex flex-col justify-center pr-6 text-sm text-muted-foreground">
+                                        <p>{"Data utworzenia: "}</p>
+                                        <p>{format(basket.createdAt, "dd.MM.yyyy H:m")} </p>
+                                    </div>
+                                </div>
+                            </Card>
+                            <Card>
+                                <CardHeader>
+                                    <p className="text-2xl">Produkty w koszyku</p>
+                                </CardHeader>
+                                <CardContent>
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Nazwa</TableHead>
+                                                <TableHead>Opis</TableHead>
+                                                <TableHead align="center">Indeks FF</TableHead>
+                                                <TableHead align="center">Indeks SUM</TableHead>
+                                                <TableHead>Ilość w koszyku</TableHead>
+                                                <TableHead align="right" />
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </CardContent>
-                        </Card>
-                    </>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {basket?.basketEntries.map((entry) => (
+                                                <TableRow key={entry.id}>
+                                                    <TableCell>
+                                                        {entry.product.productName}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {entry.product.productDescription}
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                        {returnIndexValue(
+                                                            "T",
+                                                            entry.productIndexes
+                                                        )}
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                        {returnIndexValue(
+                                                            "S",
+                                                            entry.productIndexes
+                                                        )}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {entry.units} {entry.product.unit}
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    className="h-8 w-8 p-0">
+                                                                    <span className="sr-only">
+                                                                        Open menu
+                                                                    </span>
+                                                                    <MoreHorizontal className="h-4 w-4" />
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="end">
+                                                                <DropdownMenuLabel>
+                                                                    Akcje
+                                                                </DropdownMenuLabel>
+                                                                <DropdownMenuItem
+                                                                    onClick={() =>
+                                                                        navigate(
+                                                                            `/products/${entry.product.id}`
+                                                                        )
+                                                                    }>
+                                                                    Szczegóły produktu
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuSeparator />
+                                                                <DropdownMenuItem
+                                                                    onClick={() =>
+                                                                        handleDeleteEntry(entry.id)
+                                                                    }>
+                                                                    Usuń z koszyka
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem
+                                                                    onClick={() => {
+                                                                        handleUpdateQuantity(
+                                                                            entry.id,
+                                                                            entry.units,
+                                                                            entry.product.unit
+                                                                        );
+                                                                    }}>
+                                                                    Zmień ilość
+                                                                </DropdownMenuItem>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </CardContent>
+                            </Card>
+                            <CloneBasketDialog
+                                basketId={basket?.id}
+                                currentName={basket.name}
+                                onClose={() => setCloneDialogOpen(false)}
+                                open={cloneDialogOpen}
+                            />
+                            <EditBasketDialog
+                                basketId={basket.id}
+                                currentName={basket.name}
+                                currentDescription={basket.description}
+                                onClose={() => setEditDialogOpen(false)}
+                                open={editDialogOpen}
+                            />
+                        </>
+                    )
                 )}
                 {isLoadingNutritions || isLoadingAllergens ? (
                     <Spinner />

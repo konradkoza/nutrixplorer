@@ -73,7 +73,7 @@ const NutritionChart = ({ carbs, fat, protein, fibre }: NutritionChartProps) => 
                 <CardContent className="flex-1 pb-0">
                     <ChartContainer
                         config={chartConfig}
-                        className="mx-auto aspect-square max-h-[260px] [&_.recharts-text]:fill-foreground">
+                        className="mx-auto aspect-square max-h-[450px] [&_.recharts-text]:fill-foreground">
                         <PieChart>
                             <ChartTooltip
                                 cursor={false}
@@ -92,14 +92,14 @@ const NutritionChart = ({ carbs, fat, protein, fibre }: NutritionChartProps) => 
                                 nameKey="nutrition"
                                 stroke="0"
                                 innerRadius={0}
-                                outerRadius={80}
+                                outerRadius={160}
                                 paddingAngle={0}>
                                 <LabelList
-                                    offset={10}
+                                    offset={14}
                                     dataKey="nutrition"
                                     className="fill-foreground"
                                     stroke="none"
-                                    fontSize={12}
+                                    fontSize={16}
                                     position="outside"
                                     formatter={(value: string) => {
                                         const element = chartData.find(

@@ -19,7 +19,7 @@ type ConfirmationAlertDialogProps = {
     title: string;
     content: string;
     confirmContent?: string;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 };
 
 const ConfirmationAlertDialog: FC<ConfirmationAlertDialogProps> = ({

@@ -71,6 +71,18 @@ const ProductService = api.injectEndpoints({
             }),
             providesTags: (_, __, arg) => [{ type: "Products", id: arg }],
         }),
+        getPackageTypes: builder.query<string[], void>({
+            query: () => ({
+                url: "/product/package-types",
+                method: "GET",
+            }),
+        }),
+        getAllergens: builder.query<string[], void>({
+            query: () => ({
+                url: "/product/allergens",
+                method: "GET",
+            }),
+        }),
     }),
 });
 
@@ -81,4 +93,6 @@ export const {
     useGetProductDetailsQuery,
     useGetProductProducerQuery,
     useGetProductRatingQuery,
+    useGetPackageTypesQuery,
+    useGetAllergensQuery,
 } = ProductService;

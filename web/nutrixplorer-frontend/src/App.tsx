@@ -4,6 +4,7 @@ import { ThemeProvider } from "./components/providers/theme-provider";
 import { login, logout } from "./redux/slices/authSlice";
 import { protectedRoutes, publicRoutes } from "./routes";
 import { getExpDate } from "./utils/loginUtils";
+import { Toaster } from "sonner";
 
 const router = createBrowserRouter([...publicRoutes, ...protectedRoutes]);
 
@@ -21,6 +22,16 @@ function App() {
 
     return (
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+            <Toaster
+                toastOptions={{
+                    classNames: {
+                        error: "bg-red-600 dark:bg-red-800 text-white",
+                        success: "bg-green-600 dark:bg-green-800 text-white",
+                        warning: "bg-yellow-600 dark:bg-yellow-800 text-white",
+                        info: "bg-blue-600 dark:bg-blue-800 text-white",
+                    },
+                }}
+            />
             <RouterProvider router={router} />
         </ThemeProvider>
     );

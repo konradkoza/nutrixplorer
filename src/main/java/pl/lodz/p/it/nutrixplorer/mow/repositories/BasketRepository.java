@@ -8,6 +8,7 @@ import pl.lodz.p.it.nutrixplorer.model.mow.Basket;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.dto.NutritionalValueSummaryDTO;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -24,7 +25,11 @@ public interface BasketRepository extends JpaRepository<Basket, UUID> {
 //    List<NutritionalValuesDTO> findSumOfNutritionalValuesByBasketId(UUID basketId);
 
 
-    @Query("SELECT new pl.lodz.p.it.nutrixplorer.mow.repositories.dto.NutritionalValueSummaryDTO(nv.nutritionalValueName.name,nv.nutritionalValueName.group.groupName, SUM( cast(be.units * nv.quantity / 100 as double)), nv.unit.name) " +
+    @Query("SELECT new pl.lodz.p.it.nutrixplorer.mow.repositories.dto.NutritionalValueSummaryDTO(nv.nutritionalValueName.name,nv.nutritionalValueName.group.groupName, " +
+            """
+                    cast(CASE WHEN ((nv.unit.name LIKE 'l')) THEN SUM(cast(be.units * 1000 * nv.quantity / 100 as double)) ELSE SUM(be.units * nv.quantity / 100) END as double)
+                     , nv.unit.name )
+                    """ +
             "FROM Basket b " +
             "JOIN b.basketEntries be " +
             "JOIN be.product p " +
@@ -39,4 +44,7 @@ public interface BasketRepository extends JpaRepository<Basket, UUID> {
             "JOIN p.label.allergenList a " +
             "WHERE b.id = :basketId")
     List<String> findDistinctAllergensByBasketId(@Param("basketId") UUID basketId);
+
+    @Query("SELECT b FROM Basket b WHERE b.client.user.id = :userId AND b.id = :basketId")
+    Optional<Basket> findByIdAndClient(UUID userId, UUID basketId);
 }

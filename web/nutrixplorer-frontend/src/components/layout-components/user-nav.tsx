@@ -12,12 +12,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useLazyGetMeQuery } from "@/redux/services/meService";
 import { logout } from "@/redux/slices/authSlice";
 import { RootState } from "@/redux/store";
@@ -42,26 +37,16 @@ export function UserNav() {
                 <Tooltip delayDuration={100}>
                     <TooltipTrigger asChild>
                         <DropdownMenuTrigger asChild>
-                            <Button
-                                variant="outline"
-                                className="relative h-8 w-8 rounded-full">
+                            <Button variant="outline" className="relative h-8 w-8 rounded-full">
                                 <Avatar
                                     className={
-                                        !token
-                                            ? "flex h-8 w-8 items-center justify-start pl-1"
-                                            : ""
+                                        !token ? "flex h-8 w-8 items-center justify-start pl-1" : ""
                                     }>
-                                    {!token && (
-                                        <LogIn size={20} strokeWidth={1.5} />
-                                    )}
-                                    <AvatarImage
-                                        src="#"
-                                        asChild
-                                        alt="Avatar"></AvatarImage>
+                                    {!token && <LogIn size={20} strokeWidth={1.5} />}
+                                    <AvatarImage src="#" asChild alt="Avatar"></AvatarImage>
                                     {userData && !isLoading && token && (
                                         <AvatarFallback className="bg-transparent">
-                                            {userData?.firstName[0] +
-                                                userData?.lastName[0]}
+                                            {userData?.firstName[0] + userData?.lastName[0]}
                                         </AvatarFallback>
                                     )}
                                 </Avatar>
@@ -93,9 +78,7 @@ export function UserNav() {
                             Dashboard
                         </Link>
                     </DropdownMenuItem> */}
-                        <DropdownMenuItem
-                            className="hover:cursor-pointer"
-                            asChild>
+                        <DropdownMenuItem className="hover:cursor-pointer" asChild>
                             <Link to="/account" className="flex items-center">
                                 <User className="mr-3 h-4 w-4 text-muted-foreground" />
                                 Konto
@@ -125,7 +108,9 @@ export function UserNav() {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                         className="hover:cursor-pointer"
-                        onClick={() => {}}>
+                        onClick={() => {
+                            navigate("/register");
+                        }}>
                         <UserPlus className="mr-3 h-4 w-4 text-muted-foreground" />
                         Utwórz konto
                     </DropdownMenuItem>

@@ -63,6 +63,22 @@ const BasketService = api.injectEndpoints({
             }),
             invalidatesTags: ["Baskets"],
         }),
+        updateBasket: builder.mutation<Basket, { basketId: string; basket: CreateBasket }>({
+            query: ({ basketId, basket }) => ({
+                url: `/basket/${basketId}`,
+                method: "PATCH",
+                body: basket,
+            }),
+            invalidatesTags: ["Baskets"],
+        }),
+        cloneBasket: builder.mutation<Basket, { basketId: string; basket: CreateBasket }>({
+            query: (data) => ({
+                url: `/basket/${data.basketId}/clone`,
+                method: "POST",
+                body: data.basket,
+            }),
+            invalidatesTags: ["Baskets"],
+        }),
         getBasketNutritions: builder.query<BasketNutritions[], string>({
             query: (id) => ({
                 url: `/basket/${id}/nutritional-values`,
@@ -95,6 +111,8 @@ export const {
     useDeleteBasketMutation,
     useAddBasketEntryMutation,
     useUpdateBasketEntryMutation,
+    useCloneBasketMutation,
+    useUpdateBasketMutation,
     useGetBasketNutritionsQuery,
     useGetBasketAllergensQuery,
     useGetUserBasketsListQuery,

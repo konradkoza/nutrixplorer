@@ -76,8 +76,15 @@ public class BasketController {
 
     @PatchMapping("/entry/{entryId}")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<Void> updateBasket(@RequestBody UpdateEntryDTO entryDTO, @PathVariable UUID entryId) throws NotFoundException {
+    public ResponseEntity<Void> updateBasketEntry(@RequestBody UpdateEntryDTO entryDTO, @PathVariable UUID entryId) throws NotFoundException {
         basketService.updateEntry(entryId, entryDTO.quantity());
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{basketId}")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<Void> updateBasket(@RequestBody UpdateBasketDTO updateBasketDTO, @PathVariable UUID basketId) throws NotFoundException {
+        basketService.updateBasket(basketId, updateBasketDTO.name(), updateBasketDTO.description());
         return ResponseEntity.ok().build();
     }
 
@@ -91,6 +98,13 @@ public class BasketController {
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<List<String>> getAllergensInBasket(@PathVariable UUID basketId) {
         return ResponseEntity.ok(basketService.getBasketAllergens(basketId));
+    }
+
+    @PostMapping("/{basketId}/clone")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<BasketDTO> cloneBasket(@PathVariable UUID basketId,@RequestBody CreateBasketDTO basketDTO) throws NotFoundException {
+        Basket basket = basketService.cloneBasket(basketId, basketDTO.name(), basketDTO.description());
+        return ResponseEntity.status(HttpStatus.CREATED).body(BasketMapper.INSTANCE.basketToBasketDTO(basket));
     }
 
 }

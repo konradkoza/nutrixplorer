@@ -2,6 +2,7 @@ package pl.lodz.p.it.nutrixplorer.mow.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
@@ -22,7 +23,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
 public class BasketService {
     private final BasketRepository basketRepository;
     private final BasketEntryRepository basketEntryRepository;
@@ -108,5 +109,30 @@ public class BasketService {
             throw new NotFoundException(ErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND);
         }
         return basketEntry;
+    }
+
+    public void updateBasket(UUID basketId, String name, String description) throws NotFoundException {
+        UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
+        Basket basket = basketRepository.findByIdAndClient(currentUserId, basketId).orElseThrow(() -> new NotFoundException(ErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
+
+        basket.setName(name);
+        basket.setDescription(description);
+        basketRepository.save(basket);
+
+    }
+
+    public Basket cloneBasket(UUID basketId, String name, String description) throws NotFoundException {
+        UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
+        Basket basket = basketRepository.findByIdAndClient(currentUserId, basketId).orElseThrow(() -> new NotFoundException(ErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
+        Basket newBasket = new Basket();
+        newBasket.setClient(basket.getClient());
+        newBasket.setName(name);
+        newBasket.setDescription(description);
+        List<BasketEntry> newEntries = basket.getBasketEntries().stream().map(
+                (entry) -> new BasketEntry(entry.getProduct(), entry.getUnits(), null, newBasket)
+        ).toList();
+        newBasket.setBasketEntries(newEntries);
+
+        return basketRepository.save(newBasket);
     }
 }
