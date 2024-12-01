@@ -1,10 +1,10 @@
-import { ProductIndex, SimpleProduct } from "./ProductTypes";
+import { NutritionalValue, ProductIndex } from "./ProductTypes";
 
 export type BasketEntry = {
     id: string;
-    product: SimpleProduct;
     units: number;
     productIndexes: ProductIndex[];
+    product: BasketEntryProduct;
 };
 
 export type Basket = {
@@ -13,6 +13,26 @@ export type Basket = {
     description: string;
     createdAt: Date;
     basketEntries: BasketEntry[];
+};
+
+export type BasketEntryProduct = {
+    id: string;
+    productName: string;
+    productDescription: string;
+    productQuantity: number;
+    unit: string;
+    nutritionalValues: NutritionalValue[];
+    allergenList: string[];
+};
+
+export type BasketWithNutritions = {
+    basket: Basket;
+    nutritions: BasketNutritions[];
+};
+
+export type BasketsPage = {
+    baskets: Basket[];
+    numberOfPages: number;
 };
 
 export type SimpleBasket = {

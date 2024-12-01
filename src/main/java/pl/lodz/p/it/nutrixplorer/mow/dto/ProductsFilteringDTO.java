@@ -21,9 +21,13 @@ public record ProductsFilteringDTO(
         List<String> minerals,
         List<String> allergens,
         Integer minIndexT,
-        Integer maxIndexT,
         Integer minIndexS,
-        Integer maxIndexS,
+        Integer minIndexE,
+        Integer minIndexV,
+        Integer minIndexM,
+        Integer minIndexO,
+        Integer minIndexP,
+        Integer minIndexF,
         String packageType
 ) {
 }

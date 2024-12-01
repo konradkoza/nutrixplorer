@@ -11,5 +11,6 @@ public class MowErrorCodes {
     public static final String FAVOURITE_PRODUCT_NOT_FOUND = "favouriteProductNotFound";
     public static final String FAVOURITE_PRODUCT_ALREADY_EXISTS = "favouriteProductAlreadyExists";
     public static final String DEAL_NOT_FOUND = "dealNotFound";
+    public static final String BASKET_NAME_NOT_UNIQUE = "basketNameNotUnique";
 }
 

@@ -3,12 +3,11 @@ package pl.lodz.p.it.nutrixplorer.mow.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import pl.lodz.p.it.nutrixplorer.model.mow.Allergen;
 import pl.lodz.p.it.nutrixplorer.model.mow.Basket;
 import pl.lodz.p.it.nutrixplorer.model.mow.BasketEntry;
-import pl.lodz.p.it.nutrixplorer.mow.dto.BasketDTO;
-import pl.lodz.p.it.nutrixplorer.mow.dto.BasketEntryDTO;
-import pl.lodz.p.it.nutrixplorer.mow.dto.BasketEntryDetailsDTO;
-import pl.lodz.p.it.nutrixplorer.mow.dto.BasketSimpleDTO;
+import pl.lodz.p.it.nutrixplorer.model.mow.Product;
+import pl.lodz.p.it.nutrixplorer.mow.dto.*;
 
 import java.util.List;
 
@@ -30,4 +29,9 @@ public interface BasketMapper {
     BasketSimpleDTO basketToBasketSimpleDTO(Basket basket);
 
     List<BasketSimpleDTO> basketsToBasketSimpleDTOs(List<Basket> baskets);
+
+    List<String> allergenListToStringList(List<Allergen> allergens);
+
+    @Mapping(source = "product", target = "allergenList")
+    BasketEntryProductDTO productToBasketEntryProductDTO(Product product);
 }

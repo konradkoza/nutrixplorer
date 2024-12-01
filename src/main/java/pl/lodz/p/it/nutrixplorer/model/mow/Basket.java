@@ -15,6 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Entity
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"client_id", "name"})
+        }
+)
 public class Basket extends AbstractEntity{
 
 

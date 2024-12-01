@@ -74,4 +74,8 @@ public class ProductService {
     public List<Allergen> getAllAllergens() {
         return productRepository.findAllAllergens();
     }
+
+    public List<String> getCountries() {
+        return productRepository.findAllCountries();
+    }
 }

@@ -2,6 +2,8 @@ package pl.lodz.p.it.nutrixplorer.mow.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,11 +12,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
+import pl.lodz.p.it.nutrixplorer.exceptions.mow.BasketNameNotUniqueException;
 import pl.lodz.p.it.nutrixplorer.model.mow.Basket;
 import pl.lodz.p.it.nutrixplorer.mow.dto.*;
 import pl.lodz.p.it.nutrixplorer.mow.mappers.BasketMapper;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.dto.NutritionalValueSummaryDTO;
 import pl.lodz.p.it.nutrixplorer.mow.services.BasketService;
+import pl.lodz.p.it.nutrixplorer.utils.BasketSpecificationUtil;
 
 import java.util.List;
 import java.util.UUID;
@@ -48,7 +52,7 @@ public class BasketController {
 
     @PostMapping
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<BasketDTO> createBasket(@RequestBody CreateBasketDTO createBasketDTO) throws NotFoundException {
+    public ResponseEntity<BasketDTO> createBasket(@RequestBody CreateBasketDTO createBasketDTO) throws NotFoundException, BasketNameNotUniqueException {
         Basket basket = basketService.createBasket(BasketMapper.INSTANCE.basketEntryDTOsToBasketEntries(createBasketDTO.basketEntries()), createBasketDTO.name(), createBasketDTO.description());
         return ResponseEntity.status(HttpStatus.CREATED).body(BasketMapper.INSTANCE.basketToBasketDTO(basket));
     }
@@ -107,4 +111,12 @@ public class BasketController {
         return ResponseEntity.status(HttpStatus.CREATED).body(BasketMapper.INSTANCE.basketToBasketDTO(basket));
     }
 
+    @GetMapping("/filtered")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<BasketsPageDTO> getFilteredBaskets(@RequestParam(defaultValue = "10") int elements,
+                                                              @RequestParam(defaultValue = "0") int page, BasketFilteringDTO filters) {
+        Specification<Basket> specification = BasketSpecificationUtil.createSpecification(filters);
+        Page<Basket> baskets = basketService.getFilteredBaskets(elements, page, specification);
+        return ResponseEntity.ok(new BasketsPageDTO(BasketMapper.INSTANCE.basketsToBasketDTOs(baskets.getContent()), baskets.getTotalPages()));
+    }
 }

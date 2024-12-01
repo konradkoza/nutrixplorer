@@ -1,6 +1,7 @@
 package pl.lodz.p.it.nutrixplorer.mow.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -12,10 +13,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface BasketRepository extends JpaRepository<Basket, UUID> {
+public interface BasketRepository extends JpaRepository<Basket, UUID>, JpaSpecificationExecutor<Basket> {
 
     @Query("SELECT b FROM Basket b WHERE b.client.user.id = :userId")
     List<Basket> findAllByUserId(UUID userId);
+
 
 //    @Query("SELECT new pl.lodz.p.it.nutrixplorer.mow.repositories.dto.NutritionalValuesDTO(nv.nutritionalValueName.name, nv.nutritionalValueName.group.groupName, SUM(nv.quantity))  FROM Basket b " +
 //            "JOIN b.basketEntries p " +
@@ -26,8 +28,8 @@ public interface BasketRepository extends JpaRepository<Basket, UUID> {
 
 
     @Query("SELECT new pl.lodz.p.it.nutrixplorer.mow.repositories.dto.NutritionalValueSummaryDTO(nv.nutritionalValueName.name,nv.nutritionalValueName.group.groupName, " +
-            """
-                    cast(CASE WHEN ((nv.unit.name LIKE 'l')) THEN SUM(cast(be.units * 1000 * nv.quantity / 100 as double)) ELSE SUM(be.units * nv.quantity / 100) END as double)
+            """     
+                    SUM(cast(CASE WHEN ((p.unit.name = 'l')) THEN be.units * 1000 * nv.quantity / 100 ELSE be.units * nv.quantity / 100 END as double))
                      , nv.unit.name )
                     """ +
             "FROM Basket b " +

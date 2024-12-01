@@ -11,4 +11,5 @@ public class ErrorMessages {
     public static final String FAVOURITE_PRODUCT_NOT_FOUND = "Favourite product not found";
     public static final String FAVOURITE_PRODUCT_ALREADY_EXISTS = "Product already in favourites";
     public static final String DEAL_NOT_FOUND = "Deal not found";
+    public static final String BASKET_NAME_NOT_UNIQUE = "Basket name not unique";
 }

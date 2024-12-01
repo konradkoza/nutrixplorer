@@ -36,6 +36,9 @@ import UpdateQuantityDialog from "./UpdateQuantityDialog";
 import { format } from "date-fns";
 import CloneBasketDialog from "./CloneBasketDialog";
 import EditBasketDialog from "./EditBasketDialog";
+import GradientBar from "./GradientBar";
+import GradientBarSmall from "./GradientBarSmall";
+import RwsCard from "./RwsCard";
 
 const BasketDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -96,7 +99,7 @@ const BasketDetails = () => {
                     {basket && (
                         <div className="flex">
                             <Button
-                                onClick={() => setEditDialogOpen(true)}
+                                onClick={() => setCloneDialogOpen(true)}
                                 variant="ghost"
                                 className="gap-2">
                                 <CopyIcon /> Duplikuj koszyk
@@ -151,6 +154,7 @@ const BasketDetails = () => {
                                                 <TableHead>Opis</TableHead>
                                                 <TableHead align="center">Indeks FF</TableHead>
                                                 <TableHead align="center">Indeks SUM</TableHead>
+                                                <TableHead>Ilość na opakowanie</TableHead>
                                                 <TableHead>Ilość w koszyku</TableHead>
                                                 <TableHead align="right" />
                                             </TableRow>
@@ -175,6 +179,10 @@ const BasketDetails = () => {
                                                             "S",
                                                             entry.productIndexes
                                                         )}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {entry.product.productQuantity}{" "}
+                                                        {entry.product.unit}
                                                     </TableCell>
                                                     <TableCell>
                                                         {entry.units} {entry.product.unit}
@@ -252,7 +260,7 @@ const BasketDetails = () => {
                         <div className="min-w-[400px] flex-1 basis-0">
                             <NutrtitionsTable nutritions={nutritions || []} />
                         </div>
-                        <div className="flex min-w-[400px] flex-1 basis-0 flex-col gap-3">
+                        <div className="flex min-w-[500px] flex-1 basis-0 flex-col gap-3">
                             <NutritionChart
                                 carbs={
                                     nutritions?.find(
@@ -297,6 +305,7 @@ const BasketDetails = () => {
                                 </CardContent>
                             </Card>
                         </div>
+                        <RwsCard nutritions={nutritions!} />
                     </div>
                 )}
             </div>

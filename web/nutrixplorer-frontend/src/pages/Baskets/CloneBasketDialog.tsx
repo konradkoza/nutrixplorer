@@ -38,7 +38,7 @@ const CloneBasketDialog = ({ currentName, basketId, open, onClose }: AddBasketDi
     return (
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className="w-96">
-                <DialogTitle>Zmień ilość produktu w koszyku</DialogTitle>
+                <DialogTitle>Duplikuj koszyk</DialogTitle>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleChangeQuantity)}>
                         <FormField

@@ -53,4 +53,11 @@ public class ProductMapperHelper {
     String allergenToString(Allergen allergen) {
         return allergen.getName();
     }
+
+
+    List<Allergen> productToAllergenList(Product product) {
+        return product.getLabel().getAllergenList();
+    }
+
+
 }

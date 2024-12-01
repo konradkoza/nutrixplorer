@@ -1,26 +1,31 @@
 import ConfirmationAlertDialog from "@/components/common/ConfirmationAlertDialog";
 import Spinner from "@/components/common/Spinner";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
-import { useDeleteBasketMutation, useGetMyBasketsQuery } from "@/redux/services/basketService";
-import { format } from "date-fns";
-import { ArrowRightIcon, CopyIcon, Trash2Icon } from "lucide-react";
+import {
+    useDeleteBasketMutation,
+    useGetFilteredBasketsQuery,
+} from "@/redux/services/basketService";
+import { ArrowDownNarrowWideIcon, ArrowUpNarrowWideIcon } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Pagination from "../Products/Pagination";
 import AddBasketDialog from "./AddBasketDialog";
+import BasketCard from "./BasketCard";
+import BasketFilters, { BasketFiltersFormType } from "./BasketsFilters";
 import CloneBasketDialog from "./CloneBasketDialog";
 
 const BasketsListPage = () => {
-    const { data: baskets, isLoading } = useGetMyBasketsQuery();
+    const [pageNumber, setPageNumber] = useState(0);
+    const [elements, setElements] = useState(10);
+    const [filters, setFilters] = useState<BasketFiltersFormType>({} as BasketFiltersFormType);
+    const [sorting, setSorting] = useState<"asc" | "desc">("desc");
+    const { data: basketsPage, isLoading: isBasketsPageLoading } = useGetFilteredBasketsQuery({
+        page: pageNumber,
+        elements: elements,
+        sorting: sorting,
+        ...(filters || ({} as BasketFiltersFormType)),
+    });
     const navigate = useNavigate();
     const breadcrumbs = useBreadcrumbs([
         { title: "NutriXplorer", path: "/" },
@@ -32,10 +37,22 @@ const BasketsListPage = () => {
     const [deleteBasket] = useDeleteBasketMutation();
     const [confirmationOpen, setConfirmationOpen] = useState(false);
     const [basketToDelete, setBasketToDelete] = useState("");
+
     const hadleDeleteBasket = (id: string) => {
         deleteBasket(id);
         setConfirmationOpen(!confirmationOpen);
         navigate("/baskets");
+    };
+
+    const handleCloneBasket = (basketId: string, basketName: string) => {
+        setBasketId(basketId);
+        setCurrentName(basketName);
+        setCloneDialogOpen(true);
+    };
+
+    const handleDeleteBasket = (basketId: string) => {
+        setBasketToDelete(basketId);
+        setConfirmationOpen(true);
     };
 
     return (
@@ -45,85 +62,48 @@ const BasketsListPage = () => {
                     {breadcrumbs}
                     <AddBasketDialog />
                 </div>
-                {isLoading ? (
+                {isBasketsPageLoading ? (
                     <Spinner />
                 ) : (
-                    <div className="container flex h-full w-full flex-col items-stretch gap-5 xl:flex-row xl:flex-wrap">
-                        {baskets && baskets?.length > 0 ? (
-                            baskets?.map((basket) => (
-                                <Card
-                                    className="flex w-full flex-col md:w-full xl:w-[calc(50%-1rem)]"
-                                    key={basket.id}>
-                                    <div className="flex justify-between">
-                                        <CardHeader>
-                                            <CardTitle>{basket.name}</CardTitle>
-                                            <CardDescription>{basket.description}</CardDescription>
-                                        </CardHeader>
-                                        <div className="flex flex-col justify-center pr-6 text-sm text-muted-foreground">
-                                            <p>{"Data utworzenia: "}</p>
-                                            <p>{format(basket.createdAt, "dd.MM.yyyy H:mm")} </p>
-                                        </div>
-                                    </div>
-
-                                    <CardContent className="flex-grow">
-                                        {basket.basketEntries.length > 0 ? (
-                                            <Table>
-                                                <TableBody>
-                                                    {basket.basketEntries.map((entry) => (
-                                                        <TableRow
-                                                            key={entry.id}
-                                                            className="hover:bg-inherit">
-                                                            <TableCell>
-                                                                {entry.product.productName}
-                                                            </TableCell>
-                                                            <TableCell className="text-nowrap">
-                                                                {entry.units +
-                                                                    " " +
-                                                                    entry.product.unit || ""}
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
-                                        ) : (
-                                            <p>Brak produktów w koszyku .</p>
-                                        )}
-                                    </CardContent>
-                                    <CardFooter className="flex">
-                                        <Button
-                                            onClick={() => {
-                                                setBasketId(basket.id);
-                                                setCurrentName(basket.name);
-                                                setCloneDialogOpen(true);
-                                            }}
-                                            variant="ghost"
-                                            className="gap-2">
-                                            <CopyIcon />
-                                            <p className="hidden md:block">Duplikuj koszyk</p>
-                                        </Button>
-                                        <Button
-                                            className="gap-2"
-                                            variant="ghost"
-                                            onClick={() => {
-                                                setBasketToDelete(basket.id);
-                                                setConfirmationOpen(true);
-                                            }}>
-                                            <Trash2Icon />
-                                            <p className="hidden md:block">Usuń koszyk</p>
-                                        </Button>
-                                        <Button
-                                            className="gap-2"
-                                            variant="ghost"
-                                            onClick={() => navigate(`${basket.id}`)}>
-                                            <p className="hidden md:block">Szczegóły</p>
-                                            <ArrowRightIcon />
-                                        </Button>
-                                    </CardFooter>
-                                </Card>
+                    <div className="container flex h-full w-full flex-col items-stretch gap-5 md:flex-row md:flex-wrap xl:flex-row xl:flex-wrap">
+                        <BasketFilters setFilters={setFilters} />
+                        <div className="flex w-full justify-end">
+                            <Button
+                                variant="ghost"
+                                onClick={() => setSorting(sorting === "asc" ? "desc" : "asc")}>
+                                {sorting === "asc" ? (
+                                    <ArrowUpNarrowWideIcon />
+                                ) : (
+                                    <ArrowDownNarrowWideIcon />
+                                )}
+                            </Button>
+                        </div>
+                        {basketsPage && basketsPage.baskets?.length > 0 ? (
+                            basketsPage.baskets?.map((basket) => (
+                                <BasketCard
+                                    key={basket.id}
+                                    basket={basket}
+                                    filters={filters}
+                                    handleCloneBasket={handleCloneBasket}
+                                    handleDeleteBasket={handleDeleteBasket}
+                                />
                             ))
                         ) : (
                             <p className="w-full text-center">Brak koszyków.</p>
                         )}
+                        <div className="mt-5 flex w-full justify-center">
+                            {basketsPage &&
+                                (basketsPage?.numberOfPages > 1 ||
+                                    basketsPage.baskets.length > 10) && (
+                                    <Pagination
+                                        pageNumber={pageNumber}
+                                        pageSize={elements}
+                                        setNumberOfElements={setElements}
+                                        setPageNumber={setPageNumber}
+                                        totalPages={basketsPage?.numberOfPages || 0}
+                                    />
+                                )}
+                        </div>
                     </div>
                 )}
                 <CloneBasketDialog

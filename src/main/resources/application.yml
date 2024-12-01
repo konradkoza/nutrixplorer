@@ -10,15 +10,21 @@ spring:
     enabled: true
     default-schema: public
     baseline-on-migrate: true
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+
 logging:
   level:
     web: debug
     org:
-
-    flywaydb:
-      core:
-        internal:
-          sqlscript: debug
+    hibernate:
+      type:
+        descriptor:
+          sql:
+            BasicBinder: trace
       springframework:
         transaction: debug
         transaction.interceptor: trace
@@ -27,6 +33,7 @@ logging:
           jpa: debug
 
     sql: debug
+
 nutrixplorer:
   jwt:
     public-key-path: classpath:public.pem

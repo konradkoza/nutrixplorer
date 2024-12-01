@@ -42,4 +42,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> , JpaSpe
 
     @Query("SELECT DISTINCT p.label.allergenList FROM Product p")
     List<Allergen> findAllAllergens();
+
+    @Query("SELECT DISTINCT p.country FROM Product p")
+    List<String> findAllCountries();
 }

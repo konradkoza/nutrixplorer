@@ -77,7 +77,7 @@ const ProductDetailsPage = () => {
                                     {productDetails.ratings.map((rating) => (
                                         <Badge
                                             key={rating.name}
-                                            className="mx-1 bg-primary/75 text-sm"
+                                            className="mx-1 mt-1 bg-primary/75 text-sm"
                                             variant="default">
                                             {rating.name.charAt(0).toUpperCase() +
                                                 rating.name.slice(1)}

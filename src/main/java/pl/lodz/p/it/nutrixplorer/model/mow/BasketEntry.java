@@ -36,13 +36,4 @@ public class BasketEntry extends AbstractEntity{
         this.createdAt = LocalDateTime.now();
     }
 
-//    @PreUpdate
-//    public void onPreUpdate() {
-//        this.basket.onPreUpdate();
-//    }
-//
-//    @PreRemove
-//    public void onPreRemove() {
-//        this.basket.onPreUpdate();
-//    }
 }

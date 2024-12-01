@@ -6,8 +6,8 @@ import java.util.UUID;
 
 public record BasketEntryDetailsDTO(
         UUID id,
-        ProductSimpleDTO product,
         BigDecimal units,
-        List<ProductIndexDTO> productIndexes
+        List<ProductIndexDTO> productIndexes,
+        BasketEntryProductDTO product
 ) {
 }

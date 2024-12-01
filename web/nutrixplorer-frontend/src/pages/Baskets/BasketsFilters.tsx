@@ -8,23 +8,10 @@ import { Button } from "@/components/ui/button.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input.tsx";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import { useGetAllCountriesQuery, useGetPackageTypesQuery } from "@/redux/services/productService";
+import { useGetAllergensQuery } from "@/redux/services/productService";
 import { useForm } from "react-hook-form";
 
-export type FilteringFormType = {
-    productName: string | undefined;
-    description: string | undefined;
-    ean: string | undefined;
-    country: string | undefined;
+export type BasketFiltersFormType = {
     minCarbs: string | undefined;
     maxCarbs: string | undefined;
     minFat: string | undefined;
@@ -37,15 +24,7 @@ export type FilteringFormType = {
     maxEnergy: string | undefined;
     vitamins: Vitamin[];
     minerals: Mineral[];
-    minIndexE: string | undefined;
-    minIndexV: string | undefined;
-    minIndexM: string | undefined;
-    minIndexO: string | undefined;
-    minIndexP: string | undefined;
-    minIndexF: string | undefined;
-    minIndexS: string | undefined;
-    minIndexT: string | undefined;
-    packageType: string | undefined;
+    allergens: string[];
 };
 
 const minMaxFields = [
@@ -54,21 +33,23 @@ const minMaxFields = [
     { min: "minProtein", max: "maxProtein", label: "Białko" },
     { min: "minFiber", max: "maxFiber", label: "Błonnik" },
     { min: "minEnergy", max: "maxEnergy", label: "Wartość energetyczna" },
-] satisfies { min: keyof FilteringFormType; max: keyof FilteringFormType; label: string }[];
+] satisfies { min: keyof BasketFiltersFormType; max: keyof BasketFiltersFormType; label: string }[];
 
-const indexFields = [
-    { min: "minIndexE", label: "EN" },
-    { min: "minIndexV", label: "VIT" },
-    { min: "minIndexM", label: "MIN" },
-    { min: "minIndexO", label: "OM3" },
-    { min: "minIndexP", label: "PRT" },
-    { min: "minIndexF", label: "FIB" },
-    { min: "minIndexS", label: "SUM" },
-    { min: "minIndexT", label: "FF" },
-] satisfies { min: keyof FilteringFormType; label: string }[];
-
-type Vitamin = "B7" | "K" | "B2" | "B6" | "C" | "B1" | "B5" | "D" | "B9" | "E" | "A" | "B12" | "B3";
-type Mineral =
+export type Vitamin =
+    | "B7"
+    | "K"
+    | "B2"
+    | "B6"
+    | "C"
+    | "B1"
+    | "B5"
+    | "D"
+    | "B9"
+    | "E"
+    | "A"
+    | "B12"
+    | "B3";
+export type Mineral =
     | "Magnez"
     | "Fluorek"
     | "Mangan"
@@ -115,19 +96,14 @@ const mineralsNames: Mineral[] = [
     "Cynk",
 ];
 
-type FilteringComponentProps = {
-    setFilters: (data: FilteringFormType) => void;
+type BasketFiltersProps = {
+    setFilters: (data: any) => void;
 };
 
-const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
-    const { data: packageTypes, isLoading: isPackageTypesLoading } = useGetPackageTypesQuery();
-    const { data: countries, isLoading: isCountriesLoading } = useGetAllCountriesQuery();
-    const form = useForm<FilteringFormType>({
+const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
+    const { data: allergens, isLoading: isAllergensLoading } = useGetAllergensQuery();
+    const form = useForm<BasketFiltersFormType>({
         values: {
-            productName: "",
-            description: "",
-            ean: "",
-            country: "",
             minCarbs: "",
             maxCarbs: "",
             minFat: "",
@@ -140,34 +116,26 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
             maxEnergy: "",
             vitamins: [],
             minerals: [],
-            minIndexE: "",
-            minIndexV: "",
-            minIndexM: "",
-            minIndexO: "",
-            minIndexP: "",
-            minIndexF: "",
-            minIndexS: "",
-            minIndexT: "",
-            packageType: "",
+            allergens: [],
         },
         resetOptions: {
             keepDefaultValues: true,
         },
     });
 
-    const onSubmit = (data: FilteringFormType) => {
+    const onSubmit = (data: BasketFiltersFormType) => {
         const filteredData = Object.entries(data).reduce((acc, [key, value]) => {
             if (value !== "" && value !== undefined) {
                 (acc as any)[key] = value;
             }
             return acc;
-        }, {} as FilteringFormType);
+        }, {} as BasketFiltersFormType);
         setFilters(filteredData);
     };
 
     return (
         <div className="container w-full">
-            <Accordion type="single" collapsible className="mb-5 w-full bg-muted/90 px-5">
+            <Accordion type="single" collapsible className="w-full bg-muted/90 px-5">
                 <AccordionItem value="item-1">
                     <AccordionTrigger>Filtry</AccordionTrigger>
                     <AccordionContent>
@@ -175,45 +143,6 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                             <form
                                 onSubmit={form.handleSubmit(onSubmit)}
                                 className="m-2 flex flex-col gap-5">
-                                <div className="flex w-full flex-wrap gap-5">
-                                    <FormField
-                                        control={form.control}
-                                        name="productName"
-                                        render={({ field }) => (
-                                            <FormItem className="w-full flex-grow sm:w-1/4">
-                                                <FormLabel>Nazwa</FormLabel>
-                                                <FormControl>
-                                                    <Input {...field} />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="ean"
-                                        render={({ field }) => (
-                                            <FormItem className="w-full flex-grow sm:w-1/4">
-                                                <FormLabel>EAN</FormLabel>
-                                                <FormControl>
-                                                    <Input type="number" {...field} />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="description"
-                                        render={({ field }) => (
-                                            <FormItem className="w-full flex-grow sm:w-2/4">
-                                                <FormLabel>Opis</FormLabel>
-                                                <FormControl>
-                                                    <Input {...field} />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-
                                 <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] flex-wrap gap-5">
                                     {minMaxFields.map(({ min, max, label }) => (
                                         <div
@@ -249,88 +178,7 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                         </div>
                                     ))}
                                 </div>
-                                <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(5rem,1fr))] flex-wrap gap-5">
-                                    {indexFields.map(({ min, label }) => (
-                                        <div key={label} className="flex gap-2">
-                                            <FormField
-                                                control={form.control}
-                                                name={min}
-                                                render={({ field }) => (
-                                                    <FormItem className="w-full">
-                                                        <FormLabel>
-                                                            Mininalny indeks {label}
-                                                        </FormLabel>
-                                                        <FormControl>
-                                                            <Input type="number" {...field} />
-                                                        </FormControl>
-                                                    </FormItem>
-                                                )}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="flex w-full gap-5 xl:w-1/2">
-                                    <FormField
-                                        control={form.control}
-                                        name="packageType"
-                                        render={({ field }) => (
-                                            <FormItem className="w-full">
-                                                <FormLabel>Opakowanie</FormLabel>
-                                                <Select
-                                                    onValueChange={field.onChange}
-                                                    defaultValue={field.value}>
-                                                    <SelectTrigger className="w-full flex-grow">
-                                                        <SelectValue placeholder="Wybierz opakowanie" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectGroup>
-                                                            <SelectLabel>
-                                                                Typ opakowania
-                                                            </SelectLabel>
-                                                            {!isPackageTypesLoading &&
-                                                                packageTypes?.map((packageType) => (
-                                                                    <SelectItem
-                                                                        key={packageType}
-                                                                        value={packageType}>
-                                                                        {packageType}
-                                                                    </SelectItem>
-                                                                ))}
-                                                        </SelectGroup>
-                                                    </SelectContent>
-                                                </Select>
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="country"
-                                        render={({ field }) => (
-                                            <FormItem className="w-full">
-                                                <FormLabel>Kraj</FormLabel>
-                                                <Select
-                                                    onValueChange={field.onChange}
-                                                    defaultValue={field.value}>
-                                                    <SelectTrigger className="">
-                                                        <SelectValue placeholder="Wybierz kraj" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectGroup>
-                                                            <SelectLabel>Kraj</SelectLabel>
-                                                            {!isCountriesLoading &&
-                                                                countries?.map((country) => (
-                                                                    <SelectItem
-                                                                        key={country}
-                                                                        value={country}>
-                                                                        {country}
-                                                                    </SelectItem>
-                                                                ))}
-                                                        </SelectGroup>
-                                                    </SelectContent>
-                                                </Select>
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
+
                                 <FormLabel>Witaminy</FormLabel>
                                 <div className="flex flex-wrap gap-4">
                                     {vitaminsNames.map((vitamin) => (
@@ -345,6 +193,7 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                                         <Checkbox
                                                             checked={field.value.includes(vitamin)}
                                                             onCheckedChange={(checked) => {
+                                                                console.log(field.value);
                                                                 return checked
                                                                     ? field.onChange([
                                                                           ...field.value,
@@ -379,6 +228,7 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                                         <Checkbox
                                                             checked={field.value.includes(mineral)}
                                                             onCheckedChange={(checked) => {
+                                                                console.log(field.value);
                                                                 return checked
                                                                     ? field.onChange([
                                                                           ...field.value,
@@ -398,6 +248,46 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                             )}
                                         />
                                     ))}
+                                </div>
+                                <FormLabel>Alergeny</FormLabel>
+                                <div className="flex flex-wrap gap-4">
+                                    {!isAllergensLoading &&
+                                        allergens?.map((allergen) => (
+                                            <FormField
+                                                control={form.control}
+                                                name="allergens"
+                                                key={allergen}
+                                                render={({ field }) => (
+                                                    <FormItem className="flex items-center space-x-2 space-y-0">
+                                                        <FormLabel>{allergen}</FormLabel>
+                                                        <FormControl>
+                                                            <Checkbox
+                                                                className="border-red-700 data-[state=checked]:bg-red-700"
+                                                                checked={field.value.includes(
+                                                                    allergen
+                                                                )}
+                                                                onCheckedChange={(checked) => {
+                                                                    console.log(field.value);
+                                                                    return checked
+                                                                        ? field.onChange([
+                                                                              ...field.value,
+                                                                              allergen,
+                                                                          ])
+                                                                        : field.onChange(
+                                                                              field.value?.filter(
+                                                                                  (value) =>
+                                                                                      value !==
+                                                                                      allergen
+                                                                              )
+                                                                          );
+                                                                }}
+                                                                {...field}
+                                                            />
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        ))}
                                 </div>
                                 <div className="flex w-full gap-5">
                                     <Button className="flex-1" type="submit">
@@ -419,4 +309,4 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
     );
 };
 
-export default FilteringComponent;
+export default BasketFilters;

@@ -83,6 +83,22 @@ const ProductService = api.injectEndpoints({
                 method: "GET",
             }),
         }),
+        getAllCountries: builder.query<string[], void>({
+            query: () => ({
+                url: "/product/countries",
+                method: "GET",
+            }),
+            transformResponse(baseQueryReturnValue: string[]) {
+                const countries = new Set<string>();
+                baseQueryReturnValue.forEach((country) => {
+                    if (country === null) return;
+                    country.split(",").forEach((c) => {
+                        countries.add(c.trim());
+                    });
+                });
+                return Array.from(countries);
+            },
+        }),
     }),
 });
 
@@ -95,4 +111,5 @@ export const {
     useGetProductRatingQuery,
     useGetPackageTypesQuery,
     useGetAllergensQuery,
+    useGetAllCountriesQuery,
 } = ProductService;

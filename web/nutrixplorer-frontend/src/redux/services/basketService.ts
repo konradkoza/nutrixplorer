@@ -1,7 +1,9 @@
+import { BasketFiltersFormType } from "@/pages/Baskets/BasketsFilters";
 import { api } from "./api";
 import {
     Basket,
     BasketNutritions,
+    BasketsPage,
     CreateBasket,
     CreateEntry,
     EntryUpdate,
@@ -100,6 +102,23 @@ const BasketService = api.injectEndpoints({
             }),
             providesTags: ["Baskets"],
         }),
+        getFilteredBaskets: builder.query<
+            BasketsPage,
+            {
+                elements: number;
+                page: number;
+                sorting: string;
+            } & BasketFiltersFormType
+        >({
+            query: (data) => ({
+                url: `/basket/filtered`,
+                method: "GET",
+                params: {
+                    ...data,
+                },
+            }),
+            providesTags: ["Baskets"],
+        }),
     }),
 });
 
@@ -114,9 +133,11 @@ export const {
     useCloneBasketMutation,
     useUpdateBasketMutation,
     useGetBasketNutritionsQuery,
+    useLazyGetFilteredBasketsQuery,
     useGetBasketAllergensQuery,
     useGetUserBasketsListQuery,
     useLazyGetBasketAllergensQuery,
     useLazyGetBasketNutritionsQuery,
     useLazyGetBasketDetailsQuery,
+    useGetFilteredBasketsQuery,
 } = BasketService;

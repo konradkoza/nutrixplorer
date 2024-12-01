@@ -21,7 +21,7 @@ import pl.lodz.p.it.nutrixplorer.mow.dto.ProductsFilteringDTO;
 import pl.lodz.p.it.nutrixplorer.mow.dto.ProductsListDTO;
 import pl.lodz.p.it.nutrixplorer.mow.mappers.ProductMapper;
 import pl.lodz.p.it.nutrixplorer.mow.services.ProductService;
-import pl.lodz.p.it.nutrixplorer.utils.SpecificationUtil;
+import pl.lodz.p.it.nutrixplorer.utils.ProductSpecificationUtil;
 
 import java.util.List;
 import java.util.UUID;
@@ -47,7 +47,7 @@ public class ProductController {
     public ResponseEntity<ProductsListDTO> getFilteredProducts(@RequestParam(defaultValue = "10") int elements,
                                                                @RequestParam(defaultValue = "0") int page,
                                                                ProductsFilteringDTO filters) {
-        Specification<Product> specification = SpecificationUtil.createSpecification(filters);
+        Specification<Product> specification = ProductSpecificationUtil.createSpecification(filters);
         Page<Product> products = productService.getAllProductsFiltered(elements, page, specification);
         return ResponseEntity.ok(new ProductsListDTO(ProductMapper.INSTANCE.productsToProductSimpleDTOs(products.getContent()), products.getTotalPages()));
     }
@@ -87,6 +87,12 @@ public class ProductController {
     @PreAuthorize("permitAll()")
     public ResponseEntity<List<String>> getAllAllergens() {
         return ResponseEntity.ok(ProductMapper.INSTANCE.allergensToStrings(productService.getAllAllergens()));
+    }
+
+    @GetMapping("/countries")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<List<String>> getCountries() {
+        return ResponseEntity.ok(productService.getCountries());
     }
 
 }

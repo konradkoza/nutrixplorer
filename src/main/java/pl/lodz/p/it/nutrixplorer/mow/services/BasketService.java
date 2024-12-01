@@ -1,11 +1,15 @@
 package pl.lodz.p.it.nutrixplorer.mow.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
+import pl.lodz.p.it.nutrixplorer.exceptions.mow.BasketNameNotUniqueException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.codes.MowErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.messages.ErrorMessages;
 import pl.lodz.p.it.nutrixplorer.model.mow.Basket;
@@ -30,14 +34,19 @@ public class BasketService {
     private final ProductRepository productRepository;
     private final ClientRepository clientRepository;
 
-    public Basket createBasket(List<BasketEntry> entries, String name, String description) throws NotFoundException {
+    @Transactional(rollbackFor = {BasketNameNotUniqueException.class})
+    public Basket createBasket(List<BasketEntry> entries, String name, String description) throws NotFoundException, BasketNameNotUniqueException {
         Basket basket = new Basket();
         basket.setBasketEntries(entries);
         basket.setName(name);
         basket.setDescription(description);
         UUID userId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         basket.setClient(clientRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(ErrorMessages.USER_NOT_FOUND, MowErrorCodes.USER_NOT_FOUND)));
-        basketRepository.saveAndFlush(basket);
+        try {
+            basketRepository.saveAndFlush(basket);
+        } catch (Exception e) {
+            throw new BasketNameNotUniqueException(ErrorMessages.BASKET_NAME_NOT_UNIQUE, MowErrorCodes.BASKET_NAME_NOT_UNIQUE, e);
+        }
         return basket;
     }
 
@@ -134,5 +143,12 @@ public class BasketService {
         newBasket.setBasketEntries(newEntries);
 
         return basketRepository.save(newBasket);
+    }
+
+    public Page<Basket> getFilteredBaskets(int elements, int page, Specification<Basket> specification) {
+        PageRequest pageRequest = PageRequest.of(page, elements);
+        UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
+        specification = specification.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("client").get("user").get("id"), currentUserId));
+        return basketRepository.findAll(specification, pageRequest);
     }
 }
