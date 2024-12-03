@@ -102,7 +102,8 @@ public class BasketService {
     }
 
     public List<NutritionalValueSummaryDTO> getNutritionalValues(UUID basketId) {
-        return basketRepository.findSumOfNutritionalValuesByBasketId(basketId);
+        UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
+        return basketRepository.findSumOfNutritionalValuesByBasketIdAndUserId(basketId, currentUserId);
     }
 
     public List<String> getBasketAllergens(UUID basketId) {

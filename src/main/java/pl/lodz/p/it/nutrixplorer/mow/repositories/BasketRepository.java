@@ -37,8 +37,9 @@ public interface BasketRepository extends JpaRepository<Basket, UUID>, JpaSpecif
             "JOIN be.product p " +
             "JOIN p.nutritionalValues nv " +
             "WHERE b.id = :basketId " +
+            "AND b.client.user.id = :userId " +
             "GROUP BY nv.nutritionalValueName.group.groupName, nv.nutritionalValueName.name, nv.unit.name")
-    List<NutritionalValueSummaryDTO> findSumOfNutritionalValuesByBasketId(@Param("basketId") UUID basketId);
+    List<NutritionalValueSummaryDTO> findSumOfNutritionalValuesByBasketIdAndUserId(@Param("basketId") UUID basketId, @Param("userId") UUID userId);
 
     @Query("SELECT DISTINCT a.name FROM Basket b " +
             "JOIN b.basketEntries be " +

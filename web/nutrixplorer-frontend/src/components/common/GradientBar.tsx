@@ -18,6 +18,7 @@ const variants = {
     greenToGreen: "from-green-300 to-green-700",
     blueToGreen: "from-blue-300 to-green-600",
     greenToLightGreen: "from-green-700 via-green-500 to-green-300",
+    greenToYellow: "from-green-700 via-yellow-500 to-yellow-300",
 };
 
 const GradientBar = ({
@@ -35,10 +36,11 @@ const GradientBar = ({
     return (
         <TooltipProvider>
             <Tooltip>
+                <p className="mt-3 justify-self-start font-bold">{label}</p>
                 <TooltipTrigger className={cn(width || "w-full", height || "")}>
-                    <div className={cn(`my-5 space-y-2`)}>
+                    <div className={cn(`my-3 space-y-2`)}>
                         {/* Bar Container */}
-                        <p className="justify-self-start font-bold">{label}</p>
+
                         <div
                             className={cn(
                                 "relative w-full overflow-hidden rounded bg-white",

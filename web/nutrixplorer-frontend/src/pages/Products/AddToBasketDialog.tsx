@@ -100,7 +100,7 @@ const AddToBasketDialog = ({ open, onClose, productId, unit }: AddToBasketDialog
                             />
                         </div>
                         <DialogFooter className="mt-5 gap-5">
-                            <Button onClick={onClose} variant="outline">
+                            <Button onClick={onClose} type="button" variant="outline">
                                 Cancel
                             </Button>
                             <Button type="submit">Add</Button>

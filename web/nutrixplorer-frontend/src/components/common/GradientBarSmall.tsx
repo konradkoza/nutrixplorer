@@ -13,6 +13,7 @@ const variants = {
     greenToGreen: "from-green-300 to-green-700",
     blueToGreen: "from-blue-300 to-green-600",
     greenToLightGreen: "from-green-700 via-green-500 to-green-300",
+    greenToYellow: "from-green-700 via-yellow-500 to-yellow-300",
 };
 
 export type GradientBarVariants = keyof typeof variants;

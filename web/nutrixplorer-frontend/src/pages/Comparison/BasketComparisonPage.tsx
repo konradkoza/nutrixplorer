@@ -1,3 +1,4 @@
+import Indicator from "@/components/common/Indicator";
 import Spinner from "@/components/common/Spinner";
 import {
     Accordion,
@@ -24,6 +25,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
 import {
     useGetUserBasketsListQuery,
     useLazyGetBasketAllergensQuery,
@@ -34,8 +36,13 @@ import { Basket, BasketNutritions } from "@/types/BasketTypes";
 import { DeepSet } from "@/utils/deepSet";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import EnergyValueComparison from "./EnergyValueComparison";
-import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
+import { simpleNutritionTable } from "../Baskets/NutritionsTable";
+import ComparisonCarbsChart from "./ComparisonCarbsChart";
+import ComparisonFatChart from "./ComparisonFatChart";
+import ComparisonNutritionChart from "./ComparisonNutritionChart";
+import ComparisonRadarChart from "./ComparisonRadarChart";
+import ProductsStackedBarChart from "./ProductsStackedBarChart";
+import { calculateMax } from "@/utils/maxValue";
 
 type NutritionSet = {
     name: string;
@@ -186,8 +193,8 @@ const BasketComparisonPage = () => {
                     </CardContent>
                     {fetchingData && <Spinner />}
                     {showComparison && !fetchingData && (
-                        <div className="flex justify-center">
-                            <CardContent className="w-3/4">
+                        <div className="flex flex-col justify-center">
+                            <CardContent className="w-full">
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
@@ -216,10 +223,18 @@ const BasketComparisonPage = () => {
                                         <TableRow>
                                             <TableHead>Alergeny</TableHead>
                                             {basketAllergens.map((allergenList, index) => (
-                                                <TableCell key={index + "allergens"}>
-                                                    {allergenList.map((allergen) => (
-                                                        <p key={allergen}>{allergen}</p>
-                                                    ))}
+                                                <TableCell
+                                                    className={
+                                                        allergenList.length > 0
+                                                            ? "text-red-500"
+                                                            : "text-green-500"
+                                                    }
+                                                    key={index + "allergens"}>
+                                                    {allergenList.length > 0
+                                                        ? allergenList.map((allergen) => (
+                                                              <p key={allergen}>{allergen}</p>
+                                                          ))
+                                                        : "Brak alergenów"}
                                                 </TableCell>
                                             ))}
                                         </TableRow>
@@ -281,59 +296,7 @@ const BasketComparisonPage = () => {
                                     </TableBody>
                                 </Table>
 
-                                <Accordion
-                                    type="single"
-                                    collapsible
-                                    defaultValue="item-1"
-                                    className="w-full">
-                                    <AccordionItem value="item-1">
-                                        <AccordionTrigger>Wartości odżywcze</AccordionTrigger>
-                                        <AccordionContent>
-                                            <Table>
-                                                <TableBody>
-                                                    {Array.from(nutritionSet).map((set) => (
-                                                        <TableRow key={set.name + set.groupName}>
-                                                            <TableHead className="w-2/12">
-                                                                {set.name === "Total"
-                                                                    ? set.groupName
-                                                                    : set.name}
-                                                            </TableHead>
-                                                            {basketNutritions.map(
-                                                                (basketNutrition, index) => {
-                                                                    const nutritionValue =
-                                                                        basketNutrition.find(
-                                                                            (element) =>
-                                                                                element.name ===
-                                                                                    set.name &&
-                                                                                element.groupName ===
-                                                                                    set.groupName
-                                                                        );
-                                                                    return (
-                                                                        <TableCell
-                                                                            className="w-5/12"
-                                                                            key={
-                                                                                index +
-                                                                                "nutritionalValues"
-                                                                            }>
-                                                                            {Number(
-                                                                                nutritionValue?.quantity.toFixed(
-                                                                                    3
-                                                                                )
-                                                                            ) || 0}{" "}
-                                                                            {nutritionValue?.unit ||
-                                                                                ""}
-                                                                        </TableCell>
-                                                                    );
-                                                                }
-                                                            )}
-                                                        </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                </Accordion>
-                                <Accordion
+                                {/* <Accordion
                                     type="single"
                                     collapsible
                                     defaultValue="item-1"
@@ -373,6 +336,205 @@ const BasketComparisonPage = () => {
                                                     };
                                                 })}
                                             />
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                </Accordion> */}
+                            </CardContent>
+                            <div>
+                                <p className="text-center text-xl">
+                                    Porównanie wartości odżywczych
+                                </p>
+                                <div className="flex w-full flex-wrap">
+                                    <div className="flex flex-1 flex-col">
+                                        <ComparisonRadarChart nutritions={basketNutritions} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-center text-xl">Podział tłuszczy</p>
+                                <div className="flex w-full flex-wrap">
+                                    {basketNutritions.map((nutritions, index) => (
+                                        <div
+                                            key={index + "nutritionChart"}
+                                            className="flex flex-1 flex-col">
+                                            <p className="w-full p-2 text-center">
+                                                Koszyk {index + 1}
+                                            </p>
+                                            <ComparisonFatChart nutritions={nutritions} />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-center text-xl">Podział węglowodanów</p>
+                                <div className="flex w-full flex-wrap">
+                                    {basketNutritions.map((nutritions, index) => (
+                                        <div
+                                            key={index + "nutritionChart"}
+                                            className="flex flex-1 flex-col">
+                                            <p className="w-full p-2 text-center">
+                                                Koszyk {index + 1}
+                                            </p>
+                                            <ComparisonCarbsChart nutritions={nutritions} />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-center text-xl">
+                                    Udział wartości odżywczych w wartości energetycznej
+                                </p>
+                                <div className="flex w-full flex-wrap">
+                                    {basketNutritions.map((nutritions, index) => (
+                                        <div
+                                            key={index + "nutritionChart"}
+                                            className="flex flex-1 flex-col">
+                                            <p className="w-full p-2 text-center">
+                                                Koszyk {index + 1}
+                                            </p>
+                                            <ComparisonNutritionChart
+                                                carbs={
+                                                    nutritions?.find(
+                                                        (nutr) =>
+                                                            nutr.groupName === "Węglowodany" &&
+                                                            nutr.name === "Total"
+                                                    )?.quantity || 0
+                                                }
+                                                fat={
+                                                    nutritions?.find(
+                                                        (nutr) =>
+                                                            nutr.groupName === "Tłuszcz" &&
+                                                            nutr.name === "Total"
+                                                    )?.quantity || 0
+                                                }
+                                                protein={
+                                                    nutritions?.find(
+                                                        (nutr) => nutr.name === "Białko"
+                                                    )?.quantity || 0
+                                                }
+                                                fibre={
+                                                    nutritions?.find(
+                                                        (nutr) => nutr.name === "Błonnik"
+                                                    )?.quantity || 0
+                                                }
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="">
+                                <p className="text-center text-xl">
+                                    Wartość odżywcza poszczególnych produktów
+                                </p>
+                                <div className="flex flex-1 flex-wrap">
+                                    {basketDetails.map((basket, index) => (
+                                        <div
+                                            key={basket.id + "nutritionChart"}
+                                            className="flex flex-1 flex-col">
+                                            <p className="w-full p-2 text-center">
+                                                Koszyk {index + 1}
+                                            </p>
+                                            <ProductsStackedBarChart
+                                                key={basket.id + "stackedBarChart"}
+                                                basketEntries={basket.basketEntries}
+                                                maxNutritionalValue={(() => {
+                                                    return calculateMax(
+                                                        basketDetails.map(
+                                                            (basket) => basket.basketEntries
+                                                        )
+                                                    );
+                                                })()}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <CardContent>
+                                <Accordion
+                                    type="single"
+                                    collapsible
+                                    defaultValue="item-1"
+                                    className="w-full">
+                                    <AccordionItem value="item-1">
+                                        <AccordionTrigger>Wartości odżywcze</AccordionTrigger>
+                                        <AccordionContent>
+                                            <Table>
+                                                <TableBody>
+                                                    {Array.from(nutritionSet).map((set) => (
+                                                        <TableRow key={set.name + set.groupName}>
+                                                            <TableHead className="w-2/12">
+                                                                {set.name === "Total"
+                                                                    ? set.groupName
+                                                                    : set.name}
+                                                            </TableHead>
+                                                            {basketNutritions.map(
+                                                                (basketNutrition, index) => {
+                                                                    const nutritionValue =
+                                                                        basketNutrition.find(
+                                                                            (element) =>
+                                                                                element.name ===
+                                                                                    set.name &&
+                                                                                element.groupName ===
+                                                                                    set.groupName
+                                                                        );
+                                                                    return (
+                                                                        <TableCell
+                                                                            className="w-5/12"
+                                                                            key={
+                                                                                index +
+                                                                                "nutritionalValues"
+                                                                            }>
+                                                                            <div className="flex items-center gap-1">
+                                                                                {nutritionValue?.name !==
+                                                                                    "Wartość Energetyczna" && (
+                                                                                    <Indicator
+                                                                                        variant={(() => {
+                                                                                            const nutr =
+                                                                                                simpleNutritionTable.find(
+                                                                                                    (
+                                                                                                        n
+                                                                                                    ) =>
+                                                                                                        n.name ===
+                                                                                                            nutritionValue?.name &&
+                                                                                                        n.group ===
+                                                                                                            nutritionValue.groupName
+                                                                                                );
+                                                                                            if (
+                                                                                                (nutritionValue
+                                                                                                    ? Number(
+                                                                                                          nutritionValue.quantity
+                                                                                                      )
+                                                                                                    : 0) >
+                                                                                                0
+                                                                                            ) {
+                                                                                                return (
+                                                                                                    nutr?.variantConsists ||
+                                                                                                    "green"
+                                                                                                );
+                                                                                            }
+                                                                                            return (
+                                                                                                nutr?.variantNotConsists ||
+                                                                                                "red"
+                                                                                            );
+                                                                                        })()}
+                                                                                    />
+                                                                                )}
+                                                                                {Number(
+                                                                                    nutritionValue?.quantity.toFixed(
+                                                                                        3
+                                                                                    )
+                                                                                ) || 0}{" "}
+                                                                                {nutritionValue?.unit ||
+                                                                                    ""}
+                                                                            </div>
+                                                                        </TableCell>
+                                                                    );
+                                                                }
+                                                            )}
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
                                         </AccordionContent>
                                     </AccordionItem>
                                 </Accordion>

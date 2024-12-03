@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BasketNutritions } from "@/types/BasketTypes";
-import GradientBar from "./GradientBar";
+import GradientBar from "../../components/common/GradientBar";
 import { rws, rwsM, rwsV } from "@/utils/rws";
-import { GradientBarVariants } from "./GradientBarSmall";
+import { GradientBarVariants } from "../../components/common/GradientBarSmall";
 import {
     Accordion,
     AccordionContent,
@@ -30,7 +30,7 @@ const RwsCard = ({ nutritions }: RwsCardProps) => {
                                     rws.value && (
                                         <div
                                             key={rws.group + rws.name + "rws"}
-                                            className="items-center space-x-4">
+                                            className="items-center">
                                             <GradientBar
                                                 value={
                                                     nutritions.find(
@@ -66,7 +66,7 @@ const RwsCard = ({ nutritions }: RwsCardProps) => {
                                     )?.quantity && (
                                         <div
                                             key={rws.group + rws.name + "rws"}
-                                            className="items-center space-x-4">
+                                            className="items-center">
                                             <GradientBar
                                                 value={
                                                     nutritions.find(
@@ -98,7 +98,7 @@ const RwsCard = ({ nutritions }: RwsCardProps) => {
                                     )?.quantity && (
                                         <div
                                             key={rws.group + rws.name + "rws"}
-                                            className="items-center space-x-4">
+                                            className="items-center">
                                             <GradientBar
                                                 value={
                                                     nutritions.find(

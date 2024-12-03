@@ -16,7 +16,7 @@ import { DeepSet } from "@/utils/deepSet";
 import { format } from "date-fns";
 import { ArrowRightIcon, CopyIcon, Trash2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import GradientBarSmall, { GradientBarVariants } from "./GradientBarSmall";
+import GradientBarSmall, { GradientBarVariants } from "../../components/common/GradientBarSmall";
 import { rws, rwsM } from "@/utils/rws";
 
 type BasketCardProps = {

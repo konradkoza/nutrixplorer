@@ -27,18 +27,19 @@ import {
     useGetBasketNutritionsQuery,
 } from "@/redux/services/basketService.ts";
 import { returnIndexValue } from "@/utils/productUtils";
+import { format } from "date-fns";
 import { CopyIcon, MoreHorizontal, PencilIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import NutritionChart from "./NutritionChart";
-import NutrtitionsTable from "./NutritionsTable";
-import UpdateQuantityDialog from "./UpdateQuantityDialog";
-import { format } from "date-fns";
+import CarbsChart from "./CarbsChart";
 import CloneBasketDialog from "./CloneBasketDialog";
 import EditBasketDialog from "./EditBasketDialog";
-import GradientBar from "./GradientBar";
-import GradientBarSmall from "./GradientBarSmall";
+import FatChart from "./FatChart";
+import NutritionChart from "./NutritionChart";
+import NutrtitionsTable from "./NutritionsTable";
+import ProductsNutritionsChart from "./ProductsNutritionsChart";
 import RwsCard from "./RwsCard";
+import UpdateQuantityDialog from "./UpdateQuantityDialog";
 
 const BasketDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -257,6 +258,16 @@ const BasketDetails = () => {
                     <Spinner />
                 ) : (
                     <div className="flex w-full flex-wrap gap-3">
+                        <div className="flex w-full min-w-[500px] gap-3">
+                            {basket?.basketEntries && (
+                                <ProductsNutritionsChart basketEntries={basket.basketEntries} />
+                            )}
+                        </div>
+                        <div className="flex w-full min-w-[500px] flex-wrap gap-3">
+                            <CarbsChart nutritions={nutritions || []} />
+                            <FatChart nutritions={nutritions || []} />
+                        </div>
+                        <RwsCard nutritions={nutritions!} />
                         <div className="min-w-[400px] flex-1 basis-0">
                             <NutrtitionsTable nutritions={nutritions || []} />
                         </div>
@@ -302,10 +313,14 @@ const BasketDetails = () => {
                                             </li>
                                         ))}
                                     </ul>
+                                    {allergens?.length === 0 && (
+                                        <p className="text-lg text-muted-foreground">
+                                            Produkty w koszyku nie zawierają alergenów.
+                                        </p>
+                                    )}
                                 </CardContent>
                             </Card>
                         </div>
-                        <RwsCard nutritions={nutritions!} />
                     </div>
                 )}
             </div>

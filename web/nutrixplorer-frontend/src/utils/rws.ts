@@ -3,14 +3,14 @@ export const rws = [
         name: "Wartość Energetyczna",
         group: "Wartość Energetyczna",
         value: 2000,
-        variant: "greenToRed",
+        variant: "greenToYellow",
     },
     {
         name: "Total",
         group: "Tłuszcz",
         displayName: "Tłuszcz",
         value: 70,
-        variant: "greenToRed",
+        variant: "greenToYellow",
     },
     {
         name: "Kwasy nasycone",
@@ -24,7 +24,7 @@ export const rws = [
         group: "Węglowodany",
         displayName: "Węglowodany",
         value: 260,
-        variant: "greenToLightGreen",
+        variant: "greenToYellow",
     },
     {
         name: "Cukry",

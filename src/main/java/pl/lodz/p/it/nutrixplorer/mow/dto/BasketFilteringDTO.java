@@ -16,7 +16,8 @@ public record BasketFilteringDTO(
         List<String> vitamins,
         List<String> minerals,
         List<String> allergens,
-        String sort
+        String sort,
+        String name
 
 ) {
 

@@ -15,6 +15,12 @@ public class BasketSpecificationUtil {
 
     public static Specification<Basket> createSpecification(BasketFilteringDTO filteringDTO) {
         Specification<Basket> specification = Specification.where(null);
+        if (filteringDTO == null) {
+            return null;
+        }
+        if (filteringDTO.name() != null) {
+            specification = specification.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("name"), "%" + filteringDTO.name() + "%"));
+        }
         if (filteringDTO.vitamins() != null && !filteringDTO.vitamins().isEmpty()) {
             specification = specification.and(hasAllNutritionalValues2(filteringDTO.vitamins(), "Witaminy", "Witamina "));
         }
