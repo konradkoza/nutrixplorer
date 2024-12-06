@@ -43,6 +43,7 @@ import ComparisonNutritionChart from "./ComparisonNutritionChart";
 import ComparisonRadarChart from "./ComparisonRadarChart";
 import ProductsStackedBarChart from "./ProductsStackedBarChart";
 import { calculateMax } from "@/utils/maxValue";
+import IndexComparisonChart from "./IndexComparisonChart";
 
 type NutritionSet = {
     name: string;
@@ -211,89 +212,6 @@ const BasketComparisonPage = () => {
                                             </TableHead>
                                         </TableRow>
                                     </TableHeader>
-                                    <TableBody>
-                                        <TableRow>
-                                            <TableHead>Liczba elementów</TableHead>
-                                            {basketDetails.map((basket) => (
-                                                <TableCell key={basket.id + "elements"}>
-                                                    {basket.basketEntries.length}
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableHead>Alergeny</TableHead>
-                                            {basketAllergens.map((allergenList, index) => (
-                                                <TableCell
-                                                    className={
-                                                        allergenList.length > 0
-                                                            ? "text-red-500"
-                                                            : "text-green-500"
-                                                    }
-                                                    key={index + "allergens"}>
-                                                    {allergenList.length > 0
-                                                        ? allergenList.map((allergen) => (
-                                                              <p key={allergen}>{allergen}</p>
-                                                          ))
-                                                        : "Brak alergenów"}
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableHead>Produkty w koszyku</TableHead>
-                                            {basketDetails.map((basket, index) => {
-                                                return (
-                                                    <TableCell key={index + "products"}>
-                                                        {basket.basketEntries.map((entry) => (
-                                                            <p key={entry.id}>
-                                                                {entry.product.productName} -{" "}
-                                                                {entry.units} {entry.product.unit}
-                                                            </p>
-                                                        ))}
-                                                    </TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableHead>Sumaryczny indeks FF</TableHead>
-                                            {basketDetails.map((basket, index) => {
-                                                const indexes = basket.basketEntries.map(
-                                                    (entry) => entry.productIndexes
-                                                );
-                                                const sum = indexes.reduce((acc, curr) => {
-                                                    return (
-                                                        acc +
-                                                        (curr.find(
-                                                            (element) => element.indexName === "T"
-                                                        )?.indexValue || 0)
-                                                    );
-                                                }, 0);
-
-                                                return (
-                                                    <TableCell key={index + "ff"}>{sum}</TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableHead>Sumaryczny indeks SUM</TableHead>
-                                            {basketDetails.map((basket, index) => {
-                                                const indexes = basket.basketEntries.map(
-                                                    (entry) => entry.productIndexes
-                                                );
-                                                const sum = indexes.reduce((acc, curr) => {
-                                                    return (
-                                                        acc +
-                                                        (curr.find(
-                                                            (element) => element.indexName === "S"
-                                                        )?.indexValue || 0)
-                                                    );
-                                                }, 0);
-
-                                                return (
-                                                    <TableCell key={index + "sum"}>{sum}</TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-                                    </TableBody>
                                 </Table>
 
                                 {/* <Accordion
@@ -347,6 +265,14 @@ const BasketComparisonPage = () => {
                                 <div className="flex w-full flex-wrap">
                                     <div className="flex flex-1 flex-col">
                                         <ComparisonRadarChart nutritions={basketNutritions} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-center text-xl">Porównanie indeksów</p>
+                                <div className="flex w-full flex-wrap">
+                                    <div className="flex flex-1 flex-col">
+                                        <IndexComparisonChart baskets={basketDetails} />
                                     </div>
                                 </div>
                             </div>
@@ -450,6 +376,91 @@ const BasketComparisonPage = () => {
                                 </div>
                             </div>
                             <CardContent>
+                                <Table>
+                                    <TableBody>
+                                        <TableRow>
+                                            <TableHead>Liczba elementów</TableHead>
+                                            {basketDetails.map((basket) => (
+                                                <TableCell key={basket.id + "elements"}>
+                                                    {basket.basketEntries.length}
+                                                </TableCell>
+                                            ))}
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableHead>Alergeny</TableHead>
+                                            {basketAllergens.map((allergenList, index) => (
+                                                <TableCell
+                                                    className={
+                                                        allergenList.length > 0
+                                                            ? "text-red-500"
+                                                            : "text-green-500"
+                                                    }
+                                                    key={index + "allergens"}>
+                                                    {allergenList.length > 0
+                                                        ? allergenList.map((allergen) => (
+                                                              <p key={allergen}>{allergen}</p>
+                                                          ))
+                                                        : "Brak alergenów"}
+                                                </TableCell>
+                                            ))}
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableHead>Produkty w koszyku</TableHead>
+                                            {basketDetails.map((basket, index) => {
+                                                return (
+                                                    <TableCell key={index + "products"}>
+                                                        {basket.basketEntries.map((entry) => (
+                                                            <p key={entry.id}>
+                                                                {entry.product.productName} -{" "}
+                                                                {entry.units} {entry.product.unit}
+                                                            </p>
+                                                        ))}
+                                                    </TableCell>
+                                                );
+                                            })}
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableHead>Sumaryczny indeks FF</TableHead>
+                                            {basketDetails.map((basket, index) => {
+                                                const indexes = basket.basketEntries.map(
+                                                    (entry) => entry.productIndexes
+                                                );
+                                                const sum = indexes.reduce((acc, curr) => {
+                                                    return (
+                                                        acc +
+                                                        (curr.find(
+                                                            (element) => element.indexName === "T"
+                                                        )?.indexValue || 0)
+                                                    );
+                                                }, 0);
+
+                                                return (
+                                                    <TableCell key={index + "ff"}>{sum}</TableCell>
+                                                );
+                                            })}
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableHead>Sumaryczny indeks SUM</TableHead>
+                                            {basketDetails.map((basket, index) => {
+                                                const indexes = basket.basketEntries.map(
+                                                    (entry) => entry.productIndexes
+                                                );
+                                                const sum = indexes.reduce((acc, curr) => {
+                                                    return (
+                                                        acc +
+                                                        (curr.find(
+                                                            (element) => element.indexName === "S"
+                                                        )?.indexValue || 0)
+                                                    );
+                                                }, 0);
+
+                                                return (
+                                                    <TableCell key={index + "sum"}>{sum}</TableCell>
+                                                );
+                                            })}
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
                                 <Accordion
                                     type="single"
                                     collapsible

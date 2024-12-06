@@ -14,6 +14,8 @@ import AddBasketDialog from "./AddBasketDialog";
 import BasketCard from "./BasketCard";
 import BasketFilters, { BasketFiltersFormType } from "./BasketsFilters";
 import CloneBasketDialog from "./CloneBasketDialog";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 const BasketsListPage = () => {
     const [pageNumber, setPageNumber] = useState(0);
@@ -37,6 +39,7 @@ const BasketsListPage = () => {
     const [deleteBasket] = useDeleteBasketMutation();
     const [confirmationOpen, setConfirmationOpen] = useState(false);
     const [basketToDelete, setBasketToDelete] = useState("");
+    const [showProducts, setShowProducts] = useState(false);
 
     const hadleDeleteBasket = (id: string) => {
         deleteBasket(id);
@@ -67,7 +70,7 @@ const BasketsListPage = () => {
                 ) : (
                     <div className="container flex h-full w-full flex-col items-stretch gap-5 md:flex-row md:flex-wrap xl:flex-row xl:flex-wrap">
                         <BasketFilters setFilters={setFilters} />
-                        <div className="flex w-full justify-end">
+                        <div className="flex w-full justify-between">
                             <Button
                                 variant="ghost"
                                 onClick={() => setSorting(sorting === "asc" ? "desc" : "asc")}>
@@ -77,20 +80,31 @@ const BasketsListPage = () => {
                                     <ArrowDownNarrowWideIcon />
                                 )}
                             </Button>
-                        </div>
-                        {basketsPage && basketsPage.baskets?.length > 0 ? (
-                            basketsPage.baskets?.map((basket) => (
-                                <BasketCard
-                                    key={basket.id}
-                                    basket={basket}
-                                    filters={filters}
-                                    handleCloneBasket={handleCloneBasket}
-                                    handleDeleteBasket={handleDeleteBasket}
+                            <div className="flex items-center space-x-2">
+                                <Switch
+                                    id="products-list"
+                                    checked={showProducts}
+                                    onCheckedChange={setShowProducts}
                                 />
-                            ))
-                        ) : (
-                            <p className="w-full text-center">Brak koszyków.</p>
-                        )}
+                                <Label htmlFor="products-list">Pokaż produkty</Label>
+                            </div>
+                        </div>
+                        <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fit,minmax(25rem,1fr))]">
+                            {basketsPage && basketsPage.baskets?.length > 0 ? (
+                                basketsPage.baskets?.map((basket) => (
+                                    <BasketCard
+                                        key={basket.id}
+                                        basket={basket}
+                                        filters={filters}
+                                        handleCloneBasket={handleCloneBasket}
+                                        handleDeleteBasket={handleDeleteBasket}
+                                        showProducts={showProducts}
+                                    />
+                                ))
+                            ) : (
+                                <p className="w-full text-center">Brak koszyków.</p>
+                            )}
+                        </div>
                         <div className="mt-5 flex w-full justify-center">
                             {basketsPage &&
                                 (basketsPage?.numberOfPages > 1 ||

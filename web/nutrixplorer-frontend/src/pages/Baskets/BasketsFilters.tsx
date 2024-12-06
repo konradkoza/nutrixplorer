@@ -180,7 +180,7 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                 </div>
 
                                 <FormLabel>Witaminy</FormLabel>
-                                <div className="flex flex-wrap gap-4">
+                                <div className="flex flex-wrap gap-8">
                                     {vitaminsNames.map((vitamin) => (
                                         <FormField
                                             key={vitamin}
@@ -215,7 +215,7 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                     ))}
                                 </div>
                                 <FormLabel>Minerały</FormLabel>
-                                <div className="flex flex-wrap gap-4">
+                                <div className="flex flex-wrap gap-8">
                                     {mineralsNames.map((mineral) => (
                                         <FormField
                                             control={form.control}
@@ -250,7 +250,7 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                     ))}
                                 </div>
                                 <FormLabel>Alergeny</FormLabel>
-                                <div className="flex flex-wrap gap-4">
+                                <div className="flex flex-wrap gap-8">
                                     {!isAllergensLoading &&
                                         allergens?.map((allergen) => (
                                             <FormField

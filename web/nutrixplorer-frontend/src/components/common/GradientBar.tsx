@@ -31,7 +31,7 @@ const GradientBar = ({
     variant,
     label,
 }: GradientBarProps) => {
-    const percentage = Math.min(100, (value / max) * 100);
+    const percentage = Math.min(100, (value / (2 * max)) * 100);
 
     return (
         <TooltipProvider>
@@ -50,7 +50,7 @@ const GradientBar = ({
                             <div
                                 className="absolute h-full bg-gray-300"
                                 style={{
-                                    width: `${100 - percentage}%`,
+                                    width: `${150 - percentage}%`,
                                     right: 0,
                                     borderRadius: percentage === 100 ? "0" : "0px 5px 5px 0px", // Rounded corners only on the right if not full
                                 }}></div>
@@ -64,13 +64,19 @@ const GradientBar = ({
                                 style={{
                                     clipPath: `inset(0 ${100 - percentage}% 0 0)`, // Clip gradient to filled portion
                                 }}></div>
+                            <div
+                                className={cn(
+                                    "absolute right-1/2 w-1 bg-red-700",
+                                    barHeight || "h-8"
+                                )}
+                            />
                         </div>
 
                         {/* Scale */}
                         <div className="flex justify-between text-sm text-popover-foreground">
-                            {Array.from({ length: 6 }, (_, i) => (
+                            {Array.from({ length: 7 }, (_, i) => (
                                 <span key={i}>
-                                    {Math.round((max / 5) * i)} {unit || ""}
+                                    {Math.round(((2 * max) / 6) * i)} {unit || ""}
                                 </span>
                             ))}
                         </div>
@@ -78,7 +84,7 @@ const GradientBar = ({
                 </TooltipTrigger>
                 <TooltipContent side="top">
                     <p className="text-sm font-bold text-popover-foreground">
-                        {value.toFixed(2)} {unit || ""}
+                        {value.toFixed(2)} {unit || ""} ({((value / max) * 100).toFixed(2)}%RWS)
                     </p>
                 </TooltipContent>
             </Tooltip>

@@ -24,6 +24,7 @@ type BasketCardProps = {
     filters: BasketFiltersFormType;
     handleCloneBasket: (id: string, name: string) => void;
     handleDeleteBasket: (basketId: string) => void;
+    showProducts?: boolean;
 };
 
 const filterToNutritionalValue = {
@@ -50,6 +51,7 @@ const BasketCard = ({
     filters,
     handleCloneBasket,
     handleDeleteBasket,
+    showProducts = false,
 }: BasketCardProps) => {
     const navigate = useNavigate();
     const { data: nutritions, isLoading: isLoadingNutritions } = useGetBasketNutritionsQuery(
@@ -108,9 +110,7 @@ const BasketCard = ({
     });
 
     return (
-        <Card
-            className="flex w-full min-w-[450px] flex-col md:w-[calc(50%-1rem)] xl:w-[calc(50%-1rem)]"
-            key={basket.id}>
+        <Card className="flex w-full flex-col" key={basket.id}>
             <div className="flex justify-between">
                 <CardHeader>
                     <CardTitle>{basket.name}</CardTitle>
@@ -264,19 +264,7 @@ const BasketCard = ({
                     </div>
                 )}
                 {basket.basketEntries.length > 0 ? (
-                    !isFiltered() && (
-                        // <Table>
-                        //     <TableBody>
-                        //         {basket.basketEntries.map((entry) => (
-                        //             <TableRow key={entry.id} className="hover:bg-inherit">
-                        //                 <TableCell>{entry.product.productName}</TableCell>
-                        //                 <TableCell className="text-nowrap">
-                        //                     {entry.units + " " + entry.product.unit || ""}
-                        //                 </TableCell>
-                        //             </TableRow>
-                        //         ))}
-                        //     </TableBody>
-                        // </Table>
+                    !isFiltered() && !showProducts ? (
                         <Table>
                             <TableBody>
                                 {rws.map((rw) => {
@@ -314,6 +302,19 @@ const BasketCard = ({
                                         </TableRow>
                                     );
                                 })}
+                            </TableBody>
+                        </Table>
+                    ) : (
+                        <Table>
+                            <TableBody>
+                                {basket.basketEntries.map((entry) => (
+                                    <TableRow key={entry.id} className="hover:bg-inherit">
+                                        <TableCell>{entry.product.productName}</TableCell>
+                                        <TableCell className="text-nowrap">
+                                            {entry.units + " " + entry.product.unit || ""}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                             </TableBody>
                         </Table>
                     )
