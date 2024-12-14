@@ -1,3 +1,4 @@
+import { AutoComplete } from "@/components/common/Autocomplete";
 import Indicator from "@/components/common/Indicator";
 import Spinner from "@/components/common/Spinner";
 import {
@@ -9,15 +10,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import {
     Table,
     TableBody,
     TableCell,
@@ -27,23 +19,24 @@ import {
 } from "@/components/ui/table";
 import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
 import {
-    useGetUserBasketsListQuery,
+    useGetFilteredBasketsListQuery,
     useLazyGetBasketAllergensQuery,
     useLazyGetBasketDetailsQuery,
     useLazyGetBasketNutritionsQuery,
 } from "@/redux/services/basketService";
 import { Basket, BasketNutritions } from "@/types/BasketTypes";
 import { DeepSet } from "@/utils/deepSet";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { calculateMax } from "@/utils/maxValue";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { useDebounce } from "use-debounce";
 import { simpleNutritionTable } from "../Baskets/NutritionsTable";
 import ComparisonCarbsChart from "./ComparisonCarbsChart";
 import ComparisonFatChart from "./ComparisonFatChart";
 import ComparisonNutritionChart from "./ComparisonNutritionChart";
 import ComparisonRadarChart from "./ComparisonRadarChart";
-import ProductsStackedBarChart from "./ProductsStackedBarChart";
-import { calculateMax } from "@/utils/maxValue";
 import IndexComparisonChart from "./IndexComparisonChart";
+import ProductsStackedBarChart from "./ProductsStackedBarChart";
 
 type NutritionSet = {
     name: string;
@@ -77,9 +70,17 @@ const defaultNutritionSet: NutritionSet[] = [
 ];
 
 const BasketComparisonPage = () => {
-    const { data: basketOptions, isLoading } = useGetUserBasketsListQuery();
-    const [basket1, setBasket1] = useState<string | null>(null);
-    const [basket2, setBasket2] = useState<string | null>(null);
+    // get baskets1 and basket2 from url params
+    const [urlParams] = useSearchParams();
+    const [searchValue1, setSearchValue1] = useState<string>("");
+    const [value1] = useDebounce(searchValue1, 100);
+    const [searchValue2, setSearchValue2] = useState<string>("");
+    const [value2] = useDebounce(searchValue2, 100);
+    const { data: basketList1, isLoading: isLoading1 } = useGetFilteredBasketsListQuery(value1);
+    const { data: basketList2, isLoading: isLoading2 } = useGetFilteredBasketsListQuery(value2);
+    // const { data: basketOptions, isLoading } = useGetUserBasketsListQuery();
+    const [basket1, setBasket1] = useState<string | null>(urlParams.get("compare1") || null);
+    const [basket2, setBasket2] = useState<string | null>(urlParams.get("compare2") || null);
     const [showComparison, setShowComparison] = useState<boolean>(false);
     const [basketDetails, setBasketDetails] = useState<Basket[]>([]);
     const [basketNutritions, setBasketNutritions] = useState<BasketNutritions[][]>([]);
@@ -95,6 +96,13 @@ const BasketComparisonPage = () => {
         { title: "NutriXplorer", path: "/" },
         { title: "Porównaj", path: "/compare" },
     ]);
+
+    useEffect(() => {
+        if (basket1 !== null && basket2 !== null) {
+            fetchBasketsData();
+            setShowComparison(true);
+        }
+    }, [basket1, basket2]);
 
     const fetchBasketsData = async () => {
         setFetchingData(true);
@@ -137,7 +145,7 @@ const BasketComparisonPage = () => {
                         <p>Wybierz koszyki do porównania</p>
                     </CardHeader>
                     <CardContent className="flex justify-evenly">
-                        <Select
+                        {/* <Select
                             defaultValue={basket1 || ""}
                             onValueChange={(val) => {
                                 setBasket1(val);
@@ -149,7 +157,7 @@ const BasketComparisonPage = () => {
                                 <SelectGroup>
                                     <SelectLabel>Koszyki</SelectLabel>
                                     {!isLoading &&
-                                        basketOptions?.map((basket) => (
+                                        basketList?.map((basket) => (
                                             <SelectItem
                                                 key={basket.id + "select1"}
                                                 value={basket.id}>
@@ -158,8 +166,27 @@ const BasketComparisonPage = () => {
                                         ))}
                                 </SelectGroup>
                             </SelectContent>
-                        </Select>
-                        <Select
+                        </Select> */}
+                        <AutoComplete
+                            selectedValue={basket1 || ""}
+                            onSelectedValueChange={setBasket1}
+                            searchValue={searchValue1}
+                            onSearchValueChange={setSearchValue1}
+                            items={
+                                basketList1
+                                    ? basketList1.map((basket) => {
+                                          return {
+                                              value: basket.id,
+                                              label: basket.name,
+                                          };
+                                      })
+                                    : []
+                            }
+                            isLoading={isLoading1}
+                            emptyMessage="Nie znaleziono koszyków"
+                            placeholder="Wyszukaj..."
+                        />
+                        {/* <Select
                             defaultValue={basket2 || ""}
                             onValueChange={(val) => {
                                 setBasket2(val);
@@ -171,7 +198,7 @@ const BasketComparisonPage = () => {
                                 <SelectGroup>
                                     <SelectLabel>Koszyki</SelectLabel>
                                     {!isLoading &&
-                                        basketOptions?.map((basket) => (
+                                        basketList?.map((basket) => (
                                             <SelectItem
                                                 key={basket.id + "select1"}
                                                 value={basket.id}>
@@ -180,7 +207,26 @@ const BasketComparisonPage = () => {
                                         ))}
                                 </SelectGroup>
                             </SelectContent>
-                        </Select>
+                        </Select> */}
+                        <AutoComplete
+                            selectedValue={basket2 || ""}
+                            onSelectedValueChange={setBasket2}
+                            searchValue={searchValue2}
+                            onSearchValueChange={setSearchValue2}
+                            items={
+                                basketList2
+                                    ? basketList2.map((basket) => {
+                                          return {
+                                              value: basket.id,
+                                              label: basket.name,
+                                          };
+                                      })
+                                    : []
+                            }
+                            isLoading={isLoading2}
+                            emptyMessage="Nie znaleziono koszyków"
+                            placeholder="Wyszukaj..."
+                        />
                     </CardContent>
                     <CardContent className="flex justify-center">
                         <Button
@@ -202,12 +248,16 @@ const BasketComparisonPage = () => {
                                             <TableHead className="w-2/12"></TableHead>
                                             <TableHead className="w-5/12">
                                                 <Button asChild variant="link">
-                                                    <Link to={`/baskets/${basket1}`}>Koszyk 1</Link>
+                                                    <Link to={`/baskets/${basket1}`}>
+                                                        Koszyk 1 ({basketDetails[0].name})
+                                                    </Link>
                                                 </Button>
                                             </TableHead>
                                             <TableHead className="w-5/12">
                                                 <Button asChild variant="link">
-                                                    <Link to={`/baskets/${basket2}`}>Koszyk 2</Link>
+                                                    <Link to={`/baskets/${basket2}`}>
+                                                        Koszyk 2 ({basketDetails[1].name})
+                                                    </Link>
                                                 </Button>
                                             </TableHead>
                                         </TableRow>

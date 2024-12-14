@@ -14,10 +14,14 @@ import { Button } from "@/components/ui/button";
 import { useGetBasketNutritionsQuery } from "@/redux/services/basketService";
 import { DeepSet } from "@/utils/deepSet";
 import { format } from "date-fns";
-import { ArrowRightIcon, CopyIcon, Trash2Icon } from "lucide-react";
+import { ArrowRightIcon, CopyIcon, ScaleIcon, Trash2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import GradientBarSmall, { GradientBarVariants } from "../../components/common/GradientBarSmall";
 import { rws, rwsM } from "@/utils/rws";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { add, remove } from "@/redux/slices/comparisonSlice";
+import { cn } from "@/lib/utils";
 
 type BasketCardProps = {
     basket: Basket;
@@ -65,6 +69,9 @@ const BasketCard = ({
             filteredMinerals.size > 0 || filteredVitamins.size > 0 || filteredNutritions.size > 0
         );
     };
+    const { baskets } = useSelector((state: RootState) => state.comparisonSlice);
+    const dispatch = useDispatch();
+
     basket.basketEntries.forEach((entry) => {
         entry.product.nutritionalValues.forEach((nutrition) => {
             if (
@@ -91,24 +98,59 @@ const BasketCard = ({
             }
             Object.keys(filters).forEach((key) => {
                 if (key === "minerals" || key === "vitamins" || key === "allergens") return;
-                if (filters[key as keyof BasketFiltersFormType]) {
-                    if (
+                // if (
+                //     filterToNutritionalValue[key as keyof typeof filterToNutritionalValue].group ===
+                //         nutrition.nutritionalValueName.group &&
+                //     filterToNutritionalValue[key as keyof typeof filterToNutritionalValue].name ===
+                //         nutrition.nutritionalValueName.name
+                // ) {
+                //     filteredNutritions.add({
+                //         group: nutrition.nutritionalValueName.group,
+                //         name: nutrition.nutritionalValueName.name,
+                //         unit: nutrition.unit,
+                //     });
+                // }
+                filteredNutritions.add({
+                    group: filterToNutritionalValue[key as keyof typeof filterToNutritionalValue]
+                        .group,
+                    name: filterToNutritionalValue[key as keyof typeof filterToNutritionalValue]
+                        .name,
+                    unit:
                         filterToNutritionalValue[key as keyof typeof filterToNutritionalValue]
-                            .group === nutrition.nutritionalValueName.group &&
-                        filterToNutritionalValue[key as keyof typeof filterToNutritionalValue]
-                            .name === nutrition.nutritionalValueName.name
-                    ) {
-                        filteredNutritions.add({
-                            group: nutrition.nutritionalValueName.group,
-                            name: nutrition.nutritionalValueName.name,
-                            unit: nutrition.unit,
-                        });
-                    }
-                }
+                            .name === "Wartość Energetyczna"
+                            ? "kcal"
+                            : "g",
+                });
             });
         });
     });
 
+    const addToComparison = (basket: Basket): void => {
+        console.log(basket);
+        if (baskets.some((bsk) => bsk.id === basket.id)) {
+            // TODO: show toast
+            dispatch(
+                remove({
+                    id: basket.id,
+                    name: basket.name,
+                })
+            );
+            return;
+        } else if (baskets.length >= 2) {
+            // TODO: show toast
+            console.log("Too many items in comparison");
+            return;
+        } else {
+            dispatch(
+                add({
+                    id: basket.id,
+                    name: basket.name,
+                })
+            );
+        }
+    };
+    console.log(filters);
+    console.log(filteredNutritions);
     return (
         <Card className="flex w-full flex-col" key={basket.id}>
             <div className="flex justify-between">
@@ -123,7 +165,7 @@ const BasketCard = ({
             </div>
 
             <CardContent className="flex-grow">
-                {nutritions && !isLoadingNutritions && isFiltered() && (
+                {nutritions && !isLoadingNutritions && isFiltered() && !showProducts && (
                     <div>
                         {filteredMinerals.size > 0 && (
                             <div>
@@ -222,40 +264,54 @@ const BasketCard = ({
                                             :{" "}
                                         </p>
                                         <p className="place-self-center">
-                                            {nutritions
-                                                .find(
-                                                    (n) =>
-                                                        n.name === nutrition.name &&
-                                                        n.groupName === nutrition.group
-                                                )
-                                                ?.quantity.toFixed(2)}{" "}
+                                            {nutritions.find(
+                                                (n) =>
+                                                    n.name === nutrition.name &&
+                                                    n.groupName === nutrition.group
+                                            )
+                                                ? nutritions
+                                                      .find(
+                                                          (n) =>
+                                                              n.name === nutrition.name &&
+                                                              n.groupName === nutrition.group
+                                                      )!
+                                                      .quantity.toFixed(2)
+                                                : "0.00"}{" "}
                                             {nutrition.unit}
                                         </p>
                                         <div className="flex items-center justify-end">
-                                            <GradientBarSmall
-                                                max={
-                                                    rws.find(
-                                                        (n) =>
-                                                            n.name === nutrition.name &&
-                                                            n.group === nutrition.group
-                                                    )?.value || 0
-                                                }
-                                                value={
-                                                    nutritions.find(
-                                                        (n) =>
-                                                            n.name === nutrition.name &&
-                                                            n.groupName === nutrition.group
-                                                    )?.quantity || 0
-                                                }
-                                                variant={
-                                                    rws.find(
-                                                        (n) =>
-                                                            n.name === nutrition.name &&
-                                                            n.group === nutrition.group
-                                                    )?.variant as GradientBarVariants
-                                                }
-                                                className="h-4 w-24"
-                                            />
+                                            {rws.find(
+                                                (n) =>
+                                                    n.name === nutrition.name &&
+                                                    n.group === nutrition.group
+                                            )?.variant ? (
+                                                <GradientBarSmall
+                                                    max={
+                                                        rws.find(
+                                                            (n) =>
+                                                                n.name === nutrition.name &&
+                                                                n.group === nutrition.group
+                                                        )?.value || 0
+                                                    }
+                                                    value={
+                                                        nutritions.find(
+                                                            (n) =>
+                                                                n.name === nutrition.name &&
+                                                                n.groupName === nutrition.group
+                                                        )?.quantity || 0
+                                                    }
+                                                    variant={
+                                                        rws.find(
+                                                            (n) =>
+                                                                n.name === nutrition.name &&
+                                                                n.group === nutrition.group
+                                                        )?.variant as GradientBarVariants
+                                                    }
+                                                    className="h-4 w-24"
+                                                />
+                                            ) : (
+                                                <div className="w-24 text-center">-</div>
+                                            )}
                                         </div>
                                     </div>
                                 ))}
@@ -264,46 +320,53 @@ const BasketCard = ({
                     </div>
                 )}
                 {basket.basketEntries.length > 0 ? (
-                    !isFiltered() && !showProducts ? (
-                        <Table>
-                            <TableBody>
-                                {rws.map((rw) => {
-                                    const nutr = nutritions?.find(
-                                        (n) => n.name === rw.name && n.groupName === rw.group
-                                    ) || {
-                                        name: rw.name,
-                                        groupName: rw.group,
-                                        quantity: 0,
-                                        unit: "",
-                                    };
+                    !showProducts ? (
+                        !isFiltered() && (
+                            <Table>
+                                <TableBody>
+                                    {rws.map((rw) => {
+                                        const nutr = nutritions?.find(
+                                            (n) => n.name === rw.name && n.groupName === rw.group
+                                        ) || {
+                                            name: rw.name,
+                                            groupName: rw.group,
+                                            quantity: 0,
+                                            unit: rw.name === "Wartość Energetyczna" ? "kcal" : "g",
+                                        };
 
-                                    return (
-                                        <TableRow
-                                            key={nutr.name + nutr.groupName + "table"}
-                                            className="hover:bg-inherit">
-                                            <TableCell>
-                                                {nutr.name === "Total" ? nutr.groupName : nutr.name}
-                                            </TableCell>
-                                            <TableCell className="text-nowrap">
-                                                {nutr.quantity.toFixed(2) + " " + nutr.unit || ""}
-                                            </TableCell>
-                                            <TableCell align="center">
-                                                {rw.value ? (
-                                                    <GradientBarSmall
-                                                        max={rw.value}
-                                                        value={nutr.quantity}
-                                                        variant={rw.variant as GradientBarVariants}
-                                                        className="h-4 w-24"
-                                                    />
-                                                ) : (
-                                                    "-"
-                                                )}
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            </TableBody>
-                        </Table>
+                                        return (
+                                            <TableRow
+                                                key={nutr.name + nutr.groupName + "table"}
+                                                className="hover:bg-inherit">
+                                                <TableCell>
+                                                    {nutr.name === "Total"
+                                                        ? nutr.groupName
+                                                        : nutr.name}
+                                                </TableCell>
+                                                <TableCell className="text-nowrap">
+                                                    {nutr.quantity.toFixed(2) + " " + nutr.unit ||
+                                                        ""}
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    {rw.value ? (
+                                                        <GradientBarSmall
+                                                            max={rw.value}
+                                                            value={nutr.quantity}
+                                                            variant={
+                                                                rw.variant as GradientBarVariants
+                                                            }
+                                                            className="h-4 w-24"
+                                                        />
+                                                    ) : (
+                                                        "-"
+                                                    )}
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
+                        )
                     ) : (
                         <Table>
                             <TableBody>
@@ -336,6 +399,16 @@ const BasketCard = ({
                     onClick={() => handleDeleteBasket(basket.id)}>
                     <Trash2Icon />
                     <p className="hidden">Usuń koszyk</p>
+                </Button>
+                <Button
+                    className={cn(
+                        "gap-2",
+                        baskets.some((bsk) => bsk.id === basket.id) && "bg-red-200 hover:bg-red-300"
+                    )}
+                    variant="ghost"
+                    onClick={() => addToComparison(basket)}>
+                    <ScaleIcon />
+                    <p className="hidden">Dodaj do porównania</p>
                 </Button>
                 <Button className="gap-2" variant="ghost" onClick={() => navigate(`${basket.id}`)}>
                     <p className="block">Szczegóły</p>

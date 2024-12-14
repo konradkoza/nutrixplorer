@@ -12,7 +12,7 @@ import Pagination from "./Pagination";
 
 const ProductsListPages = () => {
     const [pageNumber, setPageNumber] = useState(0);
-    const [elements, setElements] = useState(10);
+    const [elements, setElements] = useState(8);
     const [filters, setFilters] = useState<FilteringFormType>();
     const { data: productPage, isLoading } = useGetProductFilteredPageQuery({
         page: pageNumber,
@@ -54,6 +54,7 @@ const ProductsListPages = () => {
                             setNumberOfElements={setElements}
                             setPageNumber={setPageNumber}
                             totalPages={productPage?.numberOfPages || 0}
+                            elements={[8, 16, 24]}
                         />
                     )}
             </div>

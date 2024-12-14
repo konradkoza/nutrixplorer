@@ -1,26 +1,28 @@
 import ConfirmationAlertDialog from "@/components/common/ConfirmationAlertDialog";
 import Spinner from "@/components/common/Spinner";
-import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
 import {
     useDeleteBasketMutation,
     useGetFilteredBasketsQuery,
 } from "@/redux/services/basketService";
-import { ArrowDownNarrowWideIcon, ArrowUpNarrowWideIcon } from "lucide-react";
+import { RootState } from "@/redux/store";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../Products/Pagination";
 import AddBasketDialog from "./AddBasketDialog";
 import BasketCard from "./BasketCard";
 import BasketFilters, { BasketFiltersFormType } from "./BasketsFilters";
 import CloneBasketDialog from "./CloneBasketDialog";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import ComparisonInfo from "./ComparisonInfo";
 
 const BasketsListPage = () => {
     const [pageNumber, setPageNumber] = useState(0);
-    const [elements, setElements] = useState(10);
+    const [elements, setElements] = useState(9);
     const [filters, setFilters] = useState<BasketFiltersFormType>({} as BasketFiltersFormType);
+    // @ts-ignore
     const [sorting, setSorting] = useState<"asc" | "desc">("desc");
     const { data: basketsPage, isLoading: isBasketsPageLoading } = useGetFilteredBasketsQuery({
         page: pageNumber,
@@ -40,7 +42,7 @@ const BasketsListPage = () => {
     const [confirmationOpen, setConfirmationOpen] = useState(false);
     const [basketToDelete, setBasketToDelete] = useState("");
     const [showProducts, setShowProducts] = useState(false);
-
+    const { baskets } = useSelector((state: RootState) => state.comparisonSlice);
     const hadleDeleteBasket = (id: string) => {
         deleteBasket(id);
         setConfirmationOpen(!confirmationOpen);
@@ -60,7 +62,17 @@ const BasketsListPage = () => {
 
     return (
         <>
-            <div className="flex flex-col items-center gap-2">
+            <div className="relative flex flex-col items-center gap-2">
+                {baskets.length > 0 && (
+                    <ComparisonInfo
+                        baskets={baskets.map((basket) => {
+                            return {
+                                id: basket.id,
+                                name: basket.name,
+                            };
+                        })}
+                    />
+                )}
                 <div className="container flex items-center justify-between">
                     {breadcrumbs}
                     <AddBasketDialog />
@@ -70,8 +82,8 @@ const BasketsListPage = () => {
                 ) : (
                     <div className="container flex h-full w-full flex-col items-stretch gap-5 md:flex-row md:flex-wrap xl:flex-row xl:flex-wrap">
                         <BasketFilters setFilters={setFilters} />
-                        <div className="flex w-full justify-between">
-                            <Button
+                        <div className="flex w-full justify-end">
+                            {/* <Button
                                 variant="ghost"
                                 onClick={() => setSorting(sorting === "asc" ? "desc" : "asc")}>
                                 {sorting === "asc" ? (
@@ -79,14 +91,16 @@ const BasketsListPage = () => {
                                 ) : (
                                     <ArrowDownNarrowWideIcon />
                                 )}
-                            </Button>
+                            </Button> */}
                             <div className="flex items-center space-x-2">
                                 <Switch
                                     id="products-list"
                                     checked={showProducts}
                                     onCheckedChange={setShowProducts}
                                 />
-                                <Label htmlFor="products-list">Pokaż produkty</Label>
+                                <Label htmlFor="products-list" aria-disabled>
+                                    Pokaż produkty
+                                </Label>
                             </div>
                         </div>
                         <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fit,minmax(25rem,1fr))]">
@@ -115,6 +129,7 @@ const BasketsListPage = () => {
                                         setNumberOfElements={setElements}
                                         setPageNumber={setPageNumber}
                                         totalPages={basketsPage?.numberOfPages || 0}
+                                        elements={[9, 15, 21]}
                                     />
                                 )}
                         </div>
@@ -133,6 +148,7 @@ const BasketsListPage = () => {
                     content="Czy na pewno chcesz usunąć ten koszyk?"
                     title="Czy jesteś pewny"
                     confirmContent="Usuń"
+                    trigger={false}
                 />
             </div>
         </>

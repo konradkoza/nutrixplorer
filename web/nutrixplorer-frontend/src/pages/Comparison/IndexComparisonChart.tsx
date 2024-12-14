@@ -54,7 +54,6 @@ const IndexComparisonChart = ({ baskets }: IndexComparisonChartProps) => {
                 );
             }, 0),
     }));
-    console.log(chartData);
     return (
         <ChartContainer config={chartConfig}>
             <BarChart accessibilityLayer data={chartData}>

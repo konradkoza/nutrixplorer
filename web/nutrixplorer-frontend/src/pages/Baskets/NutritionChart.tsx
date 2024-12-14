@@ -109,7 +109,12 @@ const NutritionChart = ({ carbs, fat, protein, fibre }: NutritionChartProps) => 
                                             (acc, curr) => acc + curr.value * curr.multiplier,
                                             0
                                         );
-                                        return `${(((element!.value * element!.multiplier) / sum) * 100).toFixed(1)}%`;
+                                        const percentage =
+                                            ((element!.value * element!.multiplier) / sum) * 100;
+                                        if (percentage < 0.05) {
+                                            return "";
+                                        }
+                                        return `${percentage.toFixed(1)}%`;
                                     }}
                                 />
                                 {/* <Label

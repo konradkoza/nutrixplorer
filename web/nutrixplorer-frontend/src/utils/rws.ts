@@ -35,7 +35,7 @@ export const rws = [
     },
     { name: "Białko", group: "Białko", value: 50, variant: "greenToLightGreen" },
     { name: "Sól", group: "Sól", value: 6, variant: "greenToRed" },
-    { name: "Błonnik", group: "Błonnik", variant: "blueToGreen" },
+    { name: "Błonnik", group: "Błonnik" },
 ];
 
 export const rwsV = [

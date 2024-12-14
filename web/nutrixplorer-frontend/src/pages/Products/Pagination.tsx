@@ -8,12 +8,7 @@ import {
 import { cn } from "@/lib/utils";
 import { t } from "i18next";
 import { FC } from "react";
-import {
-    FaAngleDoubleLeft,
-    FaAngleDoubleRight,
-    FaAngleLeft,
-    FaAngleRight,
-} from "react-icons/fa";
+import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { RiExpandUpDownLine } from "react-icons/ri";
 
 interface PaginationProps {
@@ -24,6 +19,7 @@ interface PaginationProps {
     setNumberOfElements: (numberOfElements: number) => void;
     className?: string;
     children?: React.ReactNode;
+    elements?: number[];
 }
 
 const PageChangerComponent: FC<PaginationProps> = ({
@@ -34,6 +30,7 @@ const PageChangerComponent: FC<PaginationProps> = ({
     setNumberOfElements,
     className,
     children,
+    elements = [10, 20, 30],
 }) => {
     const handleElementChange = (numberOfElements: number) => {
         setNumberOfElements(numberOfElements);
@@ -42,9 +39,7 @@ const PageChangerComponent: FC<PaginationProps> = ({
 
     return (
         <div className={cn("flex items-center", className)}>
-            <div className="flex items-center justify-start gap-2">
-                {children}
-            </div>
+            <div className="flex items-center justify-start gap-2">{children}</div>
             <div className="flex items-center justify-end gap-12">
                 <div className="flex items-center gap-1">
                     <p className="mr-1">{t("pageChanger.numberOfElements")}</p>
@@ -59,27 +54,18 @@ const PageChangerComponent: FC<PaginationProps> = ({
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            <DropdownMenuItem
-                                onSelect={() => handleElementChange(10)}
-                                className="h-8 px-2">
-                                10
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onSelect={() => handleElementChange(20)}
-                                className="h-8 px-2">
-                                20
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onSelect={() => handleElementChange(30)}
-                                className="h-8 px-2">
-                                30
-                            </DropdownMenuItem>
+                            {elements.map((number) => (
+                                <DropdownMenuItem
+                                    onSelect={() => handleElementChange(number)}
+                                    className="h-8 px-2">
+                                    {number}
+                                </DropdownMenuItem>
+                            ))}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
                 <p>
-                    Strona {pageNumber + 1} z{" "}
-                    {totalPages === 0 ? 1 : totalPages}
+                    Strona {pageNumber + 1} z {totalPages === 0 ? 1 : totalPages}
                 </p>
                 <div className="flex gap-1">
                     <Button

@@ -121,6 +121,9 @@ const ProductsList = ({ products, favouriteProducts, addToBasket }: ProductsList
                     productId={productId}
                     onClose={() => handleCloseDialog()}
                     unit={unit}
+                    productName={
+                        products.find((product) => product.id === productId)?.productName || ""
+                    }
                 />
             )}
         </div>

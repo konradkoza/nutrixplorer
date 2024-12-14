@@ -68,7 +68,10 @@ const AddBasketDialog = () => {
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit">Dodaj</Button>
+                            {/* Prevents closing another dialog */}
+                            <Button onClick={form.handleSubmit(handleAddBasket)} type="button">
+                                Dodaj
+                            </Button>
                         </form>
                     </Form>
                 </DialogHeader>

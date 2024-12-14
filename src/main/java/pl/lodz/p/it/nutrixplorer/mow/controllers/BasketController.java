@@ -44,6 +44,12 @@ public class BasketController {
         return ResponseEntity.ok(BasketMapper.INSTANCE.basketsToBasketSimpleDTOs(basketService.getUserBaskets()));
     }
 
+    @GetMapping("/user/list/filtered")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<List<BasketSimpleDTO>> getUserBasketsList(@RequestParam(defaultValue = "") String name) throws NotFoundException {
+        return ResponseEntity.ok(BasketMapper.INSTANCE.basketsToBasketSimpleDTOs(basketService.getUserBasketsByName(name)));
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<BasketDTO> getBasket(@PathVariable UUID id) throws NotFoundException {
@@ -119,4 +125,6 @@ public class BasketController {
         Page<Basket> baskets = basketService.getFilteredBaskets(elements, page, specification);
         return ResponseEntity.ok(new BasketsPageDTO(BasketMapper.INSTANCE.basketsToBasketDTOs(baskets.getContent()), baskets.getTotalPages()));
     }
+
+
 }

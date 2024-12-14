@@ -6,7 +6,6 @@ import org.springframework.data.jpa.domain.Specification;
 import pl.lodz.p.it.nutrixplorer.model.mow.*;
 import pl.lodz.p.it.nutrixplorer.mow.dto.BasketFilteringDTO;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -28,34 +27,34 @@ public class BasketSpecificationUtil {
             specification = specification.and(hasAllNutritionalValues2(filteringDTO.minerals(), "Minerały", ""));
         }
         if (filteringDTO.minCarbs() != null) {
-            specification = specification.and(hasNutritionalValueSumLessThan("Total", "Węglowodany", BigDecimal.valueOf(Double.parseDouble(filteringDTO.minCarbs())), false));
+            specification = specification.and(hasNutritionalValueSumLessThan("Total", "Węglowodany", Double.parseDouble(filteringDTO.minCarbs()), false));
         }
         if (filteringDTO.maxCarbs() != null) {
-            specification = specification.and(hasNutritionalValueSumLessThan("Total", "Węglowodany", BigDecimal.valueOf(Double.parseDouble((filteringDTO.maxCarbs()))), true));
+            specification = specification.and(hasNutritionalValueSumLessThan("Total", "Węglowodany", Double.parseDouble((filteringDTO.maxCarbs())), true));
         }
         if (filteringDTO.minFat() != null) {
-            specification = specification.and(hasNutritionalValueSumLessThan("Total", "Tłuszcz", BigDecimal.valueOf(Double.parseDouble(filteringDTO.minFat())), false));
+            specification = specification.and(hasNutritionalValueSumLessThan("Total", "Tłuszcz", Double.parseDouble(filteringDTO.minFat()), false));
         }
         if (filteringDTO.maxFat() != null) {
-            specification = specification.and(hasNutritionalValueSumLessThan("Total", "Tłuszcz", BigDecimal.valueOf(Double.parseDouble((filteringDTO.maxFat()))), true));
+            specification = specification.and(hasNutritionalValueSumLessThan("Total", "Tłuszcz", Double.parseDouble((filteringDTO.maxFat())), true));
         }
         if (filteringDTO.minProtein() != null) {
-            specification = specification.and(hasNutritionalValueSumLessThan("Białko", "Białko", BigDecimal.valueOf(Double.parseDouble(filteringDTO.minProtein())), false));
+            specification = specification.and(hasNutritionalValueSumLessThan("Białko", "Białko", Double.parseDouble(filteringDTO.minProtein()), false));
         }
         if (filteringDTO.maxProtein() != null) {
-            specification = specification.and(hasNutritionalValueSumLessThan("Białko", "Białko", BigDecimal.valueOf(Double.parseDouble((filteringDTO.maxProtein()))), true));
+            specification = specification.and(hasNutritionalValueSumLessThan("Białko", "Białko", Double.parseDouble((filteringDTO.maxProtein())), true));
         }
         if (filteringDTO.minEnergy() != null) {
-            specification = specification.and(hasNutritionalValueSumLessThan("Wartość Energetyczna", "Wartość Energetyczna", BigDecimal.valueOf(Double.parseDouble(filteringDTO.minEnergy())), false));
+            specification = specification.and(hasNutritionalValueSumLessThan("Wartość Energetyczna", "Wartość Energetyczna", Double.parseDouble(filteringDTO.minEnergy()), false));
         }
         if (filteringDTO.maxEnergy() != null) {
-            specification = specification.and(hasNutritionalValueSumLessThan("Wartość Energetyczna", "Wartość Energetyczna", BigDecimal.valueOf(Double.parseDouble(filteringDTO.maxEnergy())), true));
+            specification = specification.and(hasNutritionalValueSumLessThan("Wartość Energetyczna", "Wartość Energetyczna", Double.parseDouble(filteringDTO.maxEnergy()), true));
         }
         if (filteringDTO.minFiber() != null) {
-            specification = specification.and(hasNutritionalValueSumLessThan("Błonnik", "Błonnik", BigDecimal.valueOf(Double.parseDouble(filteringDTO.minFiber())), false));
+            specification = specification.and(hasNutritionalValueSumLessThan("Błonnik", "Błonnik", Double.parseDouble(filteringDTO.minFiber()), false));
         }
         if (filteringDTO.maxFiber() != null) {
-            specification = specification.and(hasNutritionalValueSumLessThan("Błonnik", "Błonnik", BigDecimal.valueOf(Double.parseDouble(filteringDTO.maxFiber())), true));
+            specification = specification.and(hasNutritionalValueSumLessThan("Błonnik", "Błonnik", Double.parseDouble(filteringDTO.maxFiber()), true));
         }
         if (filteringDTO.allergens() != null && !filteringDTO.allergens().isEmpty()) {
             specification = specification.and(hasNoAllergens(filteringDTO.allergens()));
@@ -184,7 +183,7 @@ public class BasketSpecificationUtil {
     public static Specification<Basket> hasNutritionalValueSumLessThan(
             String name,
             String groupName,
-            BigDecimal maxValue,
+            Double maxValue,
             Boolean isLessThan
     ) {
         return (root, query, criteriaBuilder) -> {
@@ -229,14 +228,14 @@ public class BasketSpecificationUtil {
                     );
 
             // Select sum in the subquery
-            subquery.select(criteriaBuilder.sum(quantityExpression.as(Double.class)))
+            subquery.select(criteriaBuilder.coalesce(criteriaBuilder.sum(quantityExpression.as(Double.class)), 0.0))
                     .where(criteriaBuilder.and(basketPredicate, namePredicate, groupPredicate));
 
             // Main query: ensure sum is less than maxValue
             if (isLessThan) {
-                return criteriaBuilder.lessThan(subquery.as(Double.class), maxValue.doubleValue());
+                return criteriaBuilder.lessThanOrEqualTo(subquery.as(Double.class), maxValue);
             } else {
-                return criteriaBuilder.greaterThanOrEqualTo(subquery.as(Double.class), maxValue.doubleValue());
+                return criteriaBuilder.greaterThanOrEqualTo(subquery.as(Double.class), maxValue);
             }
         };
     }

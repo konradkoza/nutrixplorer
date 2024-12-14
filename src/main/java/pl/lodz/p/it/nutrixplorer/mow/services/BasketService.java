@@ -75,6 +75,13 @@ public class BasketService {
         return basketRepository.findAllByUserId(currentUserId);
     }
 
+    public List<Basket> getUserBasketsByName(String name) throws NotFoundException {
+        UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
+        Specification<Basket> specification = Specification.where((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("client").get("user").get("id"), currentUserId));
+        specification = specification.and((root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%"    + name.toLowerCase() + "%"));
+        return basketRepository.findAll(specification, PageRequest.of(0, 5)).getContent();
+    }
+
     public Basket getBasket(UUID basketId) throws NotFoundException {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
 

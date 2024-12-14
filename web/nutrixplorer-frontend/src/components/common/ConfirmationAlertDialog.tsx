@@ -19,6 +19,7 @@ type ConfirmationAlertDialogProps = {
     title: string;
     content: string;
     confirmContent?: string;
+    trigger?: boolean;
     children?: React.ReactNode;
 };
 
@@ -30,14 +31,17 @@ const ConfirmationAlertDialog: FC<ConfirmationAlertDialogProps> = ({
     content,
     confirmContent,
     children,
+    trigger = true,
 }) => {
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
-            <AlertDialogTrigger asChild>
-                <Button className="flex gap-2" variant="ghost" onClick={() => setOpen()}>
-                    {children}
-                </Button>
-            </AlertDialogTrigger>
+            {trigger && (
+                <AlertDialogTrigger asChild>
+                    <Button className="flex gap-2" variant="ghost" onClick={() => setOpen()}>
+                        {children}
+                    </Button>
+                </AlertDialogTrigger>
+            )}
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>{title}</AlertDialogTitle>

@@ -1,27 +1,23 @@
+import { AutoComplete } from "@/components/common/Autocomplete";
 import { UnitInput } from "@/components/common/UnitInput";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import {
     useAddBasketEntryMutation,
-    useGetUserBasketsListQuery,
+    useGetFilteredBasketsListQuery,
 } from "@/redux/services/basketService";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDebounce } from "use-debounce";
+import AddBasketDialog from "../Baskets/AddBasketDialog";
 
 type AddToBasketDialogProps = {
     open: boolean;
     onClose: () => void;
     productId: string;
     unit: string;
+    productName: string;
 };
 
 type AddToBasketForm = {
@@ -29,8 +25,18 @@ type AddToBasketForm = {
     basketId: string;
 };
 
-const AddToBasketDialog = ({ open, onClose, productId, unit }: AddToBasketDialogProps) => {
-    const { data: basketList, isLoading } = useGetUserBasketsListQuery();
+const AddToBasketDialog = ({
+    open,
+    onClose,
+    productId,
+    unit,
+    productName,
+}: AddToBasketDialogProps) => {
+    const [searchValue, setSearchValue] = useState<string>("");
+    const [value] = useDebounce(searchValue, 100);
+    const { data: basketList, isLoading } = useGetFilteredBasketsListQuery(value);
+    // const { data: basketList, isLoading } = useGetUserBasketsListQuery();
+
     const [addEntry] = useAddBasketEntryMutation();
     const form = useForm<AddToBasketForm>({
         values: {
@@ -45,50 +51,58 @@ const AddToBasketDialog = ({ open, onClose, productId, unit }: AddToBasketDialog
         form.reset();
     };
 
+    const close = () => {
+        setSearchValue("");
+        form.reset();
+        onClose();
+    };
+
     return (
-        <Dialog open={open} onOpenChange={onClose}>
+        <Dialog open={open} onOpenChange={close}>
             <DialogContent>
-                <DialogTitle>Dodaj do koszyka</DialogTitle>
+                <DialogTitle>Dodaj do koszyka - {productName}</DialogTitle>
+
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleAddToBasket)}>
-                        <div className="flex justify-around">
+                        <div className="flex-col justify-around sm:flex sm:flex-row">
                             <FormField
                                 control={form.control}
                                 name="basketId"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Koszyk</FormLabel>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}>
-                                            <SelectTrigger className="w-[180px]">
-                                                <SelectValue placeholder="Wybierz koszyk 1" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectGroup>
-                                                    <SelectLabel>Koszyk</SelectLabel>
-                                                    {!isLoading &&
-                                                        basketList?.map((basket) => (
-                                                            <SelectItem
-                                                                key={basket.id}
-                                                                value={basket.id}>
-                                                                {basket.name}
-                                                            </SelectItem>
-                                                        ))}
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
+                                        <AutoComplete
+                                            selectedValue={field.value}
+                                            onSelectedValueChange={field.onChange}
+                                            searchValue={searchValue}
+                                            onSearchValueChange={setSearchValue}
+                                            items={
+                                                basketList
+                                                    ? basketList.map((basket) => {
+                                                          return {
+                                                              value: basket.id,
+                                                              label: basket.name,
+                                                          };
+                                                      })
+                                                    : []
+                                            }
+                                            isLoading={isLoading}
+                                            emptyMessage="Nie znaleziono koszyków"
+                                            placeholder="Wyszukaj..."
+                                        />
                                     </FormItem>
                                 )}
                             />
+
                             <FormField
                                 control={form.control}
                                 name="quantity"
                                 render={({ field }) => (
-                                    <FormItem className="w-[180px]">
+                                    <FormItem className="w-full sm:w-[180px]">
                                         <FormLabel>Ilość</FormLabel>
                                         <FormControl>
                                             <UnitInput
+                                                autoFocus
                                                 className=""
                                                 unit={unit}
                                                 type="number"
@@ -99,11 +113,14 @@ const AddToBasketDialog = ({ open, onClose, productId, unit }: AddToBasketDialog
                                 )}
                             />
                         </div>
-                        <DialogFooter className="mt-5 gap-5">
-                            <Button onClick={onClose} type="button" variant="outline">
-                                Cancel
-                            </Button>
-                            <Button type="submit">Add</Button>
+                        <DialogFooter className="mt-5 flex flex-row justify-between gap-5 sm:flex-row sm:justify-between">
+                            <AddBasketDialog />
+                            <div className="flex gap-5">
+                                <Button onClick={onClose} type="button" variant="outline">
+                                    Cancel
+                                </Button>
+                                <Button type="submit">Add</Button>
+                            </div>
                         </DialogFooter>
                     </form>
                 </Form>
