@@ -75,5 +75,10 @@
     "quantity": "Ilość",
     "change": "Zmień",
     "cancel": "Anuluj",
-    "energyValue": "Wartość energetyczna"
+    "energyValue": "Wartość energetyczna",
+    "noProducts": "Brak produktów w koszyku.",
+    "details": "Szczegóły",
+    "addToComparison": "Dodaj do porównania"
+    
+
 }
