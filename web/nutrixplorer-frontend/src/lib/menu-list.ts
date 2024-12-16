@@ -1,13 +1,5 @@
 import { AccessLevel } from "@/types/UserTypes";
-import {
-    // ChartColumnStacked,
-    Heart,
-    LucideIcon,
-    ScaleIcon,
-    ShoppingBag,
-    ShoppingBasketIcon,
-    Users,
-} from "lucide-react";
+import { Heart, LucideIcon, ScaleIcon, ShoppingBag, ShoppingBasketIcon, Users } from "lucide-react";
 
 type Submenu = {
     href: string;
@@ -45,58 +37,31 @@ export function getMenuList(authorities: AccessLevel[]): Group[] {
         list.push({
             groupLabel: "Klient",
             menus: [
-                // {
-                //     href: "/categories",
-                //     label: "Kategorie",
-                //     icon: ChartColumnStacked,
-                // },
                 {
                     href: "/compare",
-                    label: "Porównaj",
+                    label: "compare",
                     icon: ScaleIcon,
                 },
-                // {
-                //     href: "/deals",
-                //     label: "Okazje",
-                //     icon: Tag,
-                // },
                 {
                     href: "/favourites",
-                    label: "Ulubione",
+                    label: "favourites",
                     icon: Heart,
                 },
                 {
                     href: "/baskets",
-                    label: "Koszyki",
+                    label: "baskets",
                     icon: ShoppingBasketIcon,
                 },
             ],
         });
     }
-    // if (authorities.includes(AccessLevel.SELLER)) {
-    //     list.push({
-    //         groupLabel: "Sprzedawca",
-    //         menus: [
-    //             {
-    //                 href: "/my-deals",
-    //                 label: "Moje okazje",
-    //                 icon: Users,
-    //             },
-    //             {
-    //                 href: "/deals",
-    //                 label: "Okazje",
-    //                 icon: Tag,
-    //             },
-    //         ],
-    //     });
-    // }
     if (authorities.includes(AccessLevel.ADMINISTRATOR)) {
         list.push({
-            groupLabel: "Administrator",
+            groupLabel: "admin",
             menus: [
                 {
                     href: "/users",
-                    label: "Users",
+                    label: "users",
                     icon: Users,
                 },
             ],

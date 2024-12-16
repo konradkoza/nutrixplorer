@@ -6,12 +6,15 @@ import { SimpleBasket } from "@/types/BasketTypes";
 import { CheckCheckIcon, EraserIcon, ScaleIcon, XIcon } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 
 type ComparisonInfoProps = {
     baskets: SimpleBasket[];
 };
 
 const ComparisonInfo = ({ baskets }: ComparisonInfoProps) => {
+    const { t } = useTranslation(TranslationNS.Baskets);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleRemoveBasket = (basket: SimpleBasket) => {
@@ -42,7 +45,7 @@ const ComparisonInfo = ({ baskets }: ComparisonInfoProps) => {
 
             <PopoverContent className="mr-5">
                 <div className="flex flex-col">
-                    <p className="mb-2 w-full font-semibold">Koszyki do porównania</p>
+                    <p className="mb-2 w-full font-semibold">{t("comparisonBaskets")}</p>
                     {baskets.map((basket) => (
                         <div className="grid w-full grid-cols-2 items-center" key={basket.id}>
                             <p>{basket.name}</p>
@@ -58,10 +61,10 @@ const ComparisonInfo = ({ baskets }: ComparisonInfoProps) => {
                 </div>
                 <div className="mt-2 flex justify-center gap-2">
                     <Button onClick={handleClear} className="gap-2" variant="ghost">
-                        <EraserIcon /> Wyczyść
+                        <EraserIcon /> {t("clear")}
                     </Button>
                     <Button onClick={handleComapare} className="gap-2" variant="ghost">
-                        <CheckCheckIcon /> Porównaj
+                        <CheckCheckIcon /> {t("compare")}
                     </Button>
                 </div>
             </PopoverContent>

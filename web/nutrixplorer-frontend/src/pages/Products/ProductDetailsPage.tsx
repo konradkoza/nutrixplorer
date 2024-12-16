@@ -14,25 +14,20 @@ import ProductIndexes from "@/pages/Products/ProductIndexes.tsx";
 import { useGetProductDetailsQuery } from "@/redux/services/productService.ts";
 import { useParams } from "react-router-dom";
 import NutritionTable from "./NutritionTable";
+import { useTranslation } from "react-i18next";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 
 const ProductDetailsPage = () => {
     const { id } = useParams<{ id: string }>();
     const { data: productDetails, isLoading } = useGetProductDetailsQuery(id!, {
         skip: !id,
     });
+    const { t } = useTranslation(TranslationNS.Products);
     const breadcrumbs = useBreadcrumbs([
-        { title: "NutriXplorer", path: "/" },
-        { title: "Produkty", path: "/products" },
-        { title: productDetails?.productName || "Produkt", path: `/products/${id}` },
+        { title: t("breadcrumbs.home"), path: "/" },
+        { title: t("breadcrumbs.products"), path: "/products" },
+        { title: productDetails?.productName || t("breadcrumbs.product"), path: `/products/${id}` },
     ]);
-
-    if (!id) {
-        return <div>Product ID is missing</div>;
-    }
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
 
     return (
         <>
@@ -46,7 +41,7 @@ const ProductDetailsPage = () => {
                             <Card className="flex items-center justify-center bg-white p-5 sm:w-1/3">
                                 <img
                                     src={`${import.meta.env.VITE_BACKEND_URL}/product/${productDetails.id}/image`}
-                                    alt="Brak zdjęcia"
+                                    alt={t("imageAlt")}
                                     className="max-h-80"
                                     onError={(event) => {
                                         event.currentTarget.src = imageAlt;
@@ -60,7 +55,7 @@ const ProductDetailsPage = () => {
 
                                         <CardDescription className="my-2">
                                             {productDetails.producer
-                                                ? `Producent: ${productDetails.producer.name}`
+                                                ? `${t("producer")}: ${productDetails.producer.name}`
                                                 : ""}
                                         </CardDescription>
                                     </CardHeader>
@@ -88,45 +83,40 @@ const ProductDetailsPage = () => {
                         </div>
                         <Card className="w-full p-5">
                             <CardHeader>
-                                <CardTitle>Składniki, dodatki i substancje odżywcze</CardTitle>
+                                <CardTitle>{t("ingredientsTitle")}</CardTitle>
                             </CardHeader>
-                            {productDetails.productQuantity && (
-                                <CardContent>
+                            <CardContent>
+                                {productDetails.productQuantity && (
                                     <LabeledText
-                                        label={"Ilość:"}
+                                        label={t("quantity")}
                                         text={
                                             productDetails.productQuantity +
                                                 " " +
                                                 productDetails.unit || ""
                                         }
                                     />
-                                </CardContent>
-                            )}
-                            <CardContent>
+                                )}
+
                                 <LabeledText
-                                    label={"Składniki:"}
+                                    label={t("ingredients")}
                                     text={productDetails.composition.ingredients.join(", ")}
                                 />
-                            </CardContent>
-                            {productDetails.composition.additions.length > 0 && (
-                                <CardContent>
+
+                                {productDetails.composition.additions.length > 0 && (
                                     <LabeledText
-                                        label={"Dodatki:"}
+                                        label={t("additions")}
                                         text={productDetails.composition.additions
                                             .map((addition) => "E" + addition)
                                             .join(", ")}
                                     />
-                                </CardContent>
-                            )}
-                            {productDetails.composition.flavour && (
-                                <CardContent>
+                                )}
+                                {productDetails.composition.flavour && (
                                     <LabeledText
-                                        label={"Aromat:"}
+                                        label={t("flavour")}
                                         text={productDetails.composition.flavour}
                                     />
-                                </CardContent>
-                            )}
-                            <CardContent>
+                                )}
+
                                 <NutritionTable
                                     nutritions={productDetails.nutritionalValues}
                                     portion={productDetails.portion}
@@ -135,7 +125,7 @@ const ProductDetailsPage = () => {
                         </Card>
                         <Card className="w-full p-5">
                             <CardHeader>
-                                <CardTitle>Indeksy</CardTitle>
+                                <CardTitle>{t("indexesTitle")}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <ProductIndexes
@@ -154,56 +144,48 @@ const ProductDetailsPage = () => {
                         </Card>
                         <Card className="w-full p-5">
                             <CardHeader>
-                                <CardTitle>Dodatkowe informacje</CardTitle>
+                                <CardTitle>{t("additionalInfoTitle")}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <LabeledText
-                                    label={"Opakowanie:"}
+                                    label={t("packaging")}
                                     text={productDetails.packageType}
                                 />
-                            </CardContent>
-                            <CardContent>
-                                <LabeledText label={"Kraj:"} text={productDetails.country} />
-                            </CardContent>
-                            <CardContent>
-                                <LabeledText label={"EAN:"} text={productDetails.ean} />
-                            </CardContent>
-                            {productDetails.label.instructionsAfterOpening && (
-                                <CardContent>
+
+                                <LabeledText label={t("country")} text={productDetails.country} />
+
+                                <LabeledText label={t("ean")} text={productDetails.ean} />
+
+                                {productDetails.label.instructionsAfterOpening && (
                                     <LabeledText
-                                        label={"Po otwarciu przechowywać:"}
+                                        label={t("instructionsAfterOpening")}
                                         text={productDetails.label.instructionsAfterOpening}
                                     />
-                                </CardContent>
-                            )}
-                            {productDetails.label.storage && (
-                                <CardContent>
+                                )}
+                                {productDetails.label.storage && (
                                     <LabeledText
-                                        label={"Przechowywawanie:"}
+                                        label={t("storage")}
                                         text={productDetails.label.storage}
                                     />
-                                </CardContent>
-                            )}
-                            <CardContent>
+                                )}
+
                                 {productDetails.label.durability && (
                                     <LabeledText
-                                        label={"Trwałość:"}
+                                        label={t("durability")}
                                         text={productDetails.label.durability}
                                     />
                                 )}
-                            </CardContent>
-                            <CardContent>
+
                                 {productDetails.label.allergens && (
                                     <LabeledText
-                                        label={"Alergeny:"}
+                                        label={t("allergens")}
                                         text={productDetails.label.allergens}
                                     />
                                 )}
-                            </CardContent>
-                            <CardContent>
+
                                 {productDetails.label.preparation && (
                                     <LabeledText
-                                        label={"Przygotowanie: "}
+                                        label={t("preparation")}
                                         text={productDetails.label.preparation}
                                     />
                                 )}
@@ -211,42 +193,40 @@ const ProductDetailsPage = () => {
                         </Card>
                         <Card className="w-full p-5">
                             <CardHeader>
-                                <CardTitle>Producent</CardTitle>
+                                <CardTitle>{t("producerTitle")}</CardTitle>
                             </CardHeader>
                             {productDetails.producer ? (
                                 <>
                                     <CardContent>
                                         {productDetails.producer.name && (
                                             <LabeledText
-                                                label={"Nazwa:"}
+                                                label={t("producerName")}
                                                 text={productDetails.producer.name}
                                             />
                                         )}
-                                    </CardContent>
-                                    <CardContent>
+
                                         {productDetails.producer.address && (
                                             <LabeledText
-                                                label={"Adres"}
+                                                label={t("producerAddress")}
                                                 text={productDetails.producer.address}
                                             />
                                         )}
-                                    </CardContent>
-                                    <CardContent>
+
                                         {productDetails.producer.contact && (
                                             <LabeledText
-                                                label={"Kontakt"}
+                                                label={t("producerContact")}
                                                 text={productDetails.producer.contact}
                                             />
                                         )}
                                     </CardContent>
                                 </>
                             ) : (
-                                <CardContent>Brak informacji o producencie</CardContent>
+                                <CardContent>{t("noProducerInfo")}</CardContent>
                             )}
                         </Card>
                     </div>
                 ) : (
-                    <div>Produkt nie istnieje</div>
+                    <div>{t("productNotFound")}</div>
                 )}
             </div>
         </>

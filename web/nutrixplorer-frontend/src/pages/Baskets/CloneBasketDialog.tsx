@@ -6,6 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useCloneBasketMutation } from "@/redux/services/basketService";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useTranslation } from "react-i18next";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 
 const CloneBasketSchema = z.object({
     name: z.string(),
@@ -22,6 +24,7 @@ type AddBasketDialogProps = {
 };
 
 const CloneBasketDialog = ({ currentName, basketId, open, onClose }: AddBasketDialogProps) => {
+    const { t } = useTranslation(TranslationNS.Baskets);
     const [cloneBasket] = useCloneBasketMutation();
 
     const form = useForm<CloneBasketFormType>({
@@ -38,7 +41,7 @@ const CloneBasketDialog = ({ currentName, basketId, open, onClose }: AddBasketDi
     return (
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className="w-96">
-                <DialogTitle>Duplikuj koszyk</DialogTitle>
+                <DialogTitle>{t("duplicateBasket")}</DialogTitle>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleChangeQuantity)}>
                         <FormField
@@ -46,7 +49,7 @@ const CloneBasketDialog = ({ currentName, basketId, open, onClose }: AddBasketDi
                             name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Nazwa</FormLabel>
+                                    <FormLabel>{t("name")}</FormLabel>
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>
@@ -58,7 +61,7 @@ const CloneBasketDialog = ({ currentName, basketId, open, onClose }: AddBasketDi
                             name="description"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Opis</FormLabel>
+                                    <FormLabel>{t("description")}</FormLabel>
                                     <FormControl>
                                         <Textarea {...field} />
                                     </FormControl>
@@ -67,9 +70,9 @@ const CloneBasketDialog = ({ currentName, basketId, open, onClose }: AddBasketDi
                         />
                         <DialogFooter className="mt-5 gap-5">
                             <Button type="button" onClick={onClose} variant="outline">
-                                Anuluj
+                                {t("cancel")}
                             </Button>
-                            <Button type="submit">Kopiuj</Button>
+                            <Button type="submit">{t("copy")}</Button>
                         </DialogFooter>
                     </form>
                 </Form>

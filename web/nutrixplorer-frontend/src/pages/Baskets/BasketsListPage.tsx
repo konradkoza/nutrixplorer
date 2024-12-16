@@ -17,8 +17,11 @@ import BasketCard from "./BasketCard";
 import BasketFilters, { BasketFiltersFormType } from "./BasketsFilters";
 import CloneBasketDialog from "./CloneBasketDialog";
 import ComparisonInfo from "./ComparisonInfo";
+import { useTranslation } from "react-i18next";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 
 const BasketsListPage = () => {
+    const { t } = useTranslation(TranslationNS.Baskets);
     const [pageNumber, setPageNumber] = useState(0);
     const [elements, setElements] = useState(9);
     const [filters, setFilters] = useState<BasketFiltersFormType>({} as BasketFiltersFormType);
@@ -32,8 +35,8 @@ const BasketsListPage = () => {
     });
     const navigate = useNavigate();
     const breadcrumbs = useBreadcrumbs([
-        { title: "NutriXplorer", path: "/" },
-        { title: "Koszyki", path: "/baskets" },
+        { title: t("breadcrumbs.home"), path: "/" },
+        { title: t("breadcrumbs.baskets"), path: "/baskets" },
     ]);
     const [cloneDialogOpen, setCloneDialogOpen] = useState(false);
     const [basketId, setBasketId] = useState<string>("");
@@ -99,7 +102,7 @@ const BasketsListPage = () => {
                                     onCheckedChange={setShowProducts}
                                 />
                                 <Label htmlFor="products-list" aria-disabled>
-                                    Pokaż produkty
+                                    {t("showProducts")}
                                 </Label>
                             </div>
                         </div>
@@ -116,7 +119,7 @@ const BasketsListPage = () => {
                                     />
                                 ))
                             ) : (
-                                <p className="w-full text-center">Brak koszyków.</p>
+                                <p className="w-full text-center">{t("noBaskets")}</p>
                             )}
                         </div>
                         <div className="mt-5 flex w-full justify-center">
@@ -145,9 +148,9 @@ const BasketsListPage = () => {
                     open={confirmationOpen}
                     setOpen={() => setConfirmationOpen(!confirmationOpen)}
                     onConfirm={() => hadleDeleteBasket(basketToDelete)}
-                    content="Czy na pewno chcesz usunąć ten koszyk?"
-                    title="Czy jesteś pewny"
-                    confirmContent="Usuń"
+                    content={t("deleteConfirmationContent")}
+                    title={t("deleteConfirmationTitle")}
+                    confirmContent={t("deleteConfirmationButton")}
                     trigger={false}
                 />
             </div>

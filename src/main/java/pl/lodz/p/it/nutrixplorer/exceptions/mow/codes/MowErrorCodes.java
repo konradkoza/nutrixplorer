@@ -1,7 +1,6 @@
 package pl.lodz.p.it.nutrixplorer.exceptions.mow.codes;
 
 public class MowErrorCodes {
-    public static final String PRODUCT_IMAGE_NOT_FOUND = "productImageNotFound";
     public static final String PRODUCT_NOT_FOUND = "productNotFound";
     public static final String BASKET_NOT_FOUND = "basketNotFound";
     public static final String BASKET_ENTRY_NOT_FOUND = "basketEntryNotFound";

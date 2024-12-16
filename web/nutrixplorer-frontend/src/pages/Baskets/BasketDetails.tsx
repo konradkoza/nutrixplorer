@@ -40,8 +40,11 @@ import NutrtitionsTable from "./NutritionsTable";
 import ProductsNutritionsChart from "./ProductsNutritionsChart";
 import RwsCard from "./RwsCard";
 import UpdateQuantityDialog from "./UpdateQuantityDialog";
+import { useTranslation } from "react-i18next";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 
 const BasketDetails = () => {
+    const { t } = useTranslation(TranslationNS.Baskets);
     const { id } = useParams<{ id: string }>();
     const { data: basket, isLoading: isLoadingDetails } = useGetBasketDetailsQuery(id!, {
         skip: !id,
@@ -56,9 +59,9 @@ const BasketDetails = () => {
     const [deleteBasket] = useDeleteBasketMutation();
     const navigate = useNavigate();
     const breadcrumbs = useBreadcrumbs([
-        { title: "NutriXplorer", path: "/" },
-        { title: "Koszyki", path: "/baskets" },
-        { title: basket?.name || "Koszyk", path: `/baskets/${id}` },
+        { title: t("breadcrumbs.home"), path: "/" },
+        { title: t("breadcrumbs.baskets"), path: "/baskets" },
+        { title: basket?.name || t("breadcrumbs.basket"), path: `/baskets/${id}` },
     ]);
     const [open, setOpen] = useState(false);
     const [quantityDialogOpen, setQuantityDialogOpen] = useState(false);
@@ -103,24 +106,24 @@ const BasketDetails = () => {
                                 onClick={() => setCloneDialogOpen(true)}
                                 variant="ghost"
                                 className="gap-2">
-                                <CopyIcon /> Duplikuj koszyk
+                                <CopyIcon /> {t("duplicateBasket")}
                             </Button>
                             <ConfirmationAlertDialog
                                 open={open}
                                 setOpen={() => setOpen(!open)}
                                 onConfirm={() => hadleDeleteBasket(basket?.id)}
-                                content="Czy na pewno chcesz usunąć ten koszyk?"
-                                title="Czy jesteś pewny"
-                                confirmContent="Usuń">
+                                content={t("deleteConfirmationContent")}
+                                title={t("deleteConfirmationTitle")}
+                                confirmContent={t("deleteConfirmationButton")}>
                                 <Trash2Icon />
-                                <p>Usuń koszyk</p>
+                                <p>{t("deleteBasket")}</p>
                             </ConfirmationAlertDialog>
                             <Button
                                 variant="ghost"
                                 className="gap-2"
                                 onClick={() => setEditDialogOpen(true)}>
                                 <PencilIcon />
-                                Edytuj koszyk
+                                {t("editBasket")}
                             </Button>
                         </div>
                     )}
@@ -138,25 +141,27 @@ const BasketDetails = () => {
                                         <CardDescription>{basket?.description}</CardDescription>
                                     </CardHeader>
                                     <div className="flex flex-col justify-center pr-6 text-sm text-muted-foreground">
-                                        <p>{"Data utworzenia: "}</p>
+                                        <p>{t("creationDate")}</p>
                                         <p>{format(basket.createdAt, "dd.MM.yyyy H:m")} </p>
                                     </div>
                                 </div>
                             </Card>
                             <Card>
                                 <CardHeader>
-                                    <p className="text-2xl">Produkty w koszyku</p>
+                                    <p className="text-2xl">{t("productsInBasket")}</p>
                                 </CardHeader>
                                 <CardContent>
                                     <Table>
                                         <TableHeader>
                                             <TableRow>
-                                                <TableHead>Nazwa</TableHead>
-                                                <TableHead>Opis</TableHead>
-                                                <TableHead align="center">Indeks FF</TableHead>
-                                                <TableHead align="center">Indeks SUM</TableHead>
-                                                <TableHead>Ilość na opakowanie</TableHead>
-                                                <TableHead>Ilość w koszyku</TableHead>
+                                                <TableHead>{t("productName")}</TableHead>
+                                                <TableHead>{t("productDescription")}</TableHead>
+                                                <TableHead align="center">{t("ffIndex")}</TableHead>
+                                                <TableHead align="center">
+                                                    {t("sumIndex")}
+                                                </TableHead>
+                                                <TableHead>{t("quantityPerPackage")}</TableHead>
+                                                <TableHead>{t("quantityInBasket")}</TableHead>
                                                 <TableHead align="right" />
                                             </TableRow>
                                         </TableHeader>
@@ -195,14 +200,14 @@ const BasketDetails = () => {
                                                                     variant="ghost"
                                                                     className="h-8 w-8 p-0">
                                                                     <span className="sr-only">
-                                                                        Open menu
+                                                                        {t("openMenu")}
                                                                     </span>
                                                                     <MoreHorizontal className="h-4 w-4" />
                                                                 </Button>
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent align="end">
                                                                 <DropdownMenuLabel>
-                                                                    Akcje
+                                                                    {t("actions")}
                                                                 </DropdownMenuLabel>
                                                                 <DropdownMenuItem
                                                                     onClick={() =>
@@ -210,14 +215,14 @@ const BasketDetails = () => {
                                                                             `/products/${entry.product.id}`
                                                                         )
                                                                     }>
-                                                                    Szczegóły produktu
+                                                                    {t("productDetails")}
                                                                 </DropdownMenuItem>
                                                                 <DropdownMenuSeparator />
                                                                 <DropdownMenuItem
                                                                     onClick={() =>
                                                                         handleDeleteEntry(entry.id)
                                                                     }>
-                                                                    Usuń z koszyka
+                                                                    {t("removeFromBasket")}
                                                                 </DropdownMenuItem>
                                                                 <DropdownMenuItem
                                                                     onClick={() => {
@@ -227,7 +232,7 @@ const BasketDetails = () => {
                                                                             entry.product.unit
                                                                         );
                                                                     }}>
-                                                                    Zmień ilość
+                                                                    {t("changeQuantity")}
                                                                 </DropdownMenuItem>
                                                             </DropdownMenuContent>
                                                         </DropdownMenu>
@@ -290,7 +295,7 @@ const BasketDetails = () => {
                                     nutritions?.find((nutr) => nutr.name === "Białko")?.quantity ||
                                     0
                                 }
-                                fibre={
+                                fiber={
                                     nutritions?.find((nutr) => nutr.name === "Błonnik")?.quantity ||
                                     0
                                 }
@@ -301,7 +306,7 @@ const BasketDetails = () => {
                             />
                             <Card>
                                 <CardHeader>
-                                    <p className="text-2xl">Alergeny</p>
+                                    <p className="text-2xl">{t("allergens")}</p>
                                 </CardHeader>
                                 <CardContent>
                                     <ul className="list-disc space-y-2 pl-5">
@@ -315,7 +320,7 @@ const BasketDetails = () => {
                                     </ul>
                                     {allergens?.length === 0 && (
                                         <p className="text-lg text-muted-foreground">
-                                            Produkty w koszyku nie zawierają alergenów.
+                                            {t("noAllergens")}
                                         </p>
                                     )}
                                 </CardContent>

@@ -10,8 +10,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRegisterMutation } from "@/redux/services/authService";
+import { TranslationNS } from "@/types/TranslationNamespaces";
+import { oauthUrl } from "@/utils/oatuhUrl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 
@@ -32,6 +36,7 @@ type RegisterFormType = z.infer<typeof RegisterSchema>;
 
 const RegisterPage = () => {
     const [register] = useRegisterMutation();
+    const [t] = useTranslation(TranslationNS.Authentication);
     const form = useForm<RegisterFormType>({
         values: {
             email: "",
@@ -62,10 +67,8 @@ const RegisterPage = () => {
         <div className="flex h-screen w-full items-center justify-center bg-background p-4">
             <Card className="mx-auto w-full max-w-sm">
                 <CardHeader>
-                    <CardTitle className="text-2xl">Utwórz nowe konto</CardTitle>
-                    <CardDescription>
-                        Uzupełnij poniższe pola, aby utworzyć nowe konto
-                    </CardDescription>
+                    <CardTitle className="text-2xl">{t("register.title")}</CardTitle>
+                    <CardDescription>{t("register.description")}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
@@ -77,7 +80,7 @@ const RegisterPage = () => {
                                 name="firstName"
                                 render={({ field }) => (
                                     <FormItem className="">
-                                        <FormLabel>Imię</FormLabel>
+                                        <FormLabel>{t("register.firstName")}</FormLabel>
                                         <FormControl>
                                             <Input autoComplete="name" placeholder="" {...field} />
                                         </FormControl>
@@ -90,7 +93,7 @@ const RegisterPage = () => {
                                 name="lastName"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Nazwisko</FormLabel>
+                                        <FormLabel>{t("register.lastName")}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 autoComplete="family-name"
@@ -107,7 +110,7 @@ const RegisterPage = () => {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem className="col-span-2">
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel>{t("register.email")}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 autoComplete="email"
@@ -125,7 +128,7 @@ const RegisterPage = () => {
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem className="col-span-2">
-                                        <FormLabel>Hasło</FormLabel>
+                                        <FormLabel>{t("register.password")}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 autoComplete="new-password"
@@ -143,7 +146,7 @@ const RegisterPage = () => {
                                 name="confirmPassword"
                                 render={({ field }) => (
                                     <FormItem className="col-span-2">
-                                        <FormLabel>Powtórz hasło</FormLabel>
+                                        <FormLabel>{t("register.confirmPassword")}</FormLabel>
                                         <FormControl>
                                             <Input
                                                 autoComplete="new-password"
@@ -157,14 +160,23 @@ const RegisterPage = () => {
                                 )}
                             />
                             <Button className="col-span-2" type="submit">
-                                Utwórz konto
+                                {t("register.submit")}
                             </Button>
                         </form>
                     </Form>
+                    <Button
+                        type="button"
+                        className="mt-2 w-full gap-2"
+                        variant="outline"
+                        onClick={() => {
+                            window.location.href = oauthUrl;
+                        }}>
+                        <FcGoogle size={20} /> {t("register.google")}
+                    </Button>
                     <div className="mt-4 text-center text-sm">
-                        {"Masz już konto? "}
+                        {t("register.alreadyHaveAccount")}{" "}
                         <Link className="underline" to="/login">
-                            Zaloguj się
+                            {t("register.login")}
                         </Link>
                     </div>
                 </CardContent>

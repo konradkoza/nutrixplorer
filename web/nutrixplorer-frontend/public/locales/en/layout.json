@@ -1,0 +1,21 @@
+{
+    "products":"Products",
+    "client": "Client",
+    "admin": "Admin",
+    "compare": "Compare",
+    "favourites": "Favourites",
+    "baskets": "Baskets",
+    "users": "Users",
+    "account": "Account",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register",
+    "home": "NutriXplorer",
+    "profile": "Profile",
+    "switchTheme": "Switch Theme",
+    "dark": "Dark",
+    "light": "Light",
+    "switchLanguage": "Switch Language",
+    "pl": "Polish",
+    "en": "English"
+}

@@ -12,6 +12,7 @@ import AuthGuard from "./layouts/AuthGuard";
 import { AccessLevel } from "./types/UserTypes";
 import { Navigate } from "react-router-dom";
 import RegisterPage from "./pages/Authentication/RegisterPage";
+import OauthCallback from "./pages/Authentication/OauthCallback";
 
 const clientRoutes: RouteObject[] = [
     {
@@ -57,6 +58,7 @@ export const publicRoutes: RouteObject[] = [
             },
         ],
     },
+    { path: "/auth/google/callback", Component: OauthCallback },
 ];
 
 export const protectedRoutes: RouteObject[] = [

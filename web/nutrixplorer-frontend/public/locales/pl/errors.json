@@ -1,0 +1,31 @@
+{
+    "error": "Błąd",
+    "productNotFound": "Nie znaleziono produktu",
+    "basketNotFound": "Nie znaleziono koszyka",
+    "basketEntryNotFound": "Nie znaleziono wpisu w koszyku",
+    "userNotFound": "Nie znaleziono użytkownika",
+    "productProducerNotFound": "Nie znaleziono producenta produktu",
+    "productCompositionNotFound": "Nie znaleziono składu produktu",
+    "favouriteProductNotFound": "Nie znaleziono ulubionego produktu",
+    "favouriteProductAlreadyExists": "Ulubiony produkt już istnieje",
+    "basketNameNotUnique": "Nazwa koszyka jest już zajęta",
+    "clientNotFound": "Nie znaleziono klienta",
+    "oauthEmailInUse": "Adres e-mail jest używany przez konto z logowaniem za pomocą Google",
+    "oauth2AuthenticationError": "Błąd logowania za pomocą Google",
+    "invalidCredentials": "Nieprawidłowe dane logowania",
+    "unverifiedAccount": "Niezweryfikowane konto",
+    "blockedAccount": "Konto zablokowane",
+    "emailInUse": "Adres e-mail jest już używany",
+    "userBlocked": "Użytkownik jest już zablokowany",
+    "userUnblocked": "Użytkownik jest już odblokowany",
+    "userVerified": "Użytkownik jest już zweryfikowany",
+    "accessLevelAlreadyAssigned": "Poziom dostępu jest już przypisany",
+    "accessLevelAlreadyTaken": "Poziom dostępu jest już zabrany",
+    "accessLevelCannotBeRemoved": "Nie można usunąć poziomu dostępu",
+    "ownAdministratorRoleRemoval": "Nie można usunąć własnej roli administratora",
+    "oauth2User": "Użytkownik z logowaniem za pomocą Google, spróbuj zalogować się za pomocą Google lub użuj opcji odzyskiwania hasła",
+
+
+    "noConnection": "Brak połączenia z serwerem",
+    "otherError": "Wystąpił błąd"
+}

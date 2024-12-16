@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { useUpdateBasketEntryMutation } from "@/redux/services/basketService";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 const UpdateQuantitySchema = z.object({
@@ -28,7 +30,7 @@ const UpdateQuantityDialog = ({
     unit,
 }: AddBasketDialogProps) => {
     const [updateQuantity] = useUpdateBasketEntryMutation();
-
+    const [t] = useTranslation(TranslationNS.Baskets);
     const form = useForm<UpdateQuantityFormType>({
         values: {
             quantity: currentQuantity,
@@ -42,7 +44,7 @@ const UpdateQuantityDialog = ({
     return (
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className="w-96">
-                <DialogTitle>Zmień ilość produktu w koszyku</DialogTitle>
+                <DialogTitle>{t("updateQuantityTitle")}</DialogTitle>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleChangeQuantity)}>
                         <FormField
@@ -51,7 +53,7 @@ const UpdateQuantityDialog = ({
                             render={({ field }) => (
                                 <FormItem className="grid grid-cols-5">
                                     <FormLabel className="col-span-1 mr-3 mt-2 place-content-center justify-self-end">
-                                        Ilość
+                                        {t("quantity")}:
                                     </FormLabel>
                                     <FormControl className="col-span-3 mt-0">
                                         <UnitInput
@@ -66,9 +68,9 @@ const UpdateQuantityDialog = ({
                         />
                         <DialogFooter className="mt-5 gap-5">
                             <Button type="button" onClick={onClose} variant="outline">
-                                Anuluj
+                                {t("cancel")}
                             </Button>
-                            <Button type="submit">Zmień</Button>
+                            <Button type="submit">{t("change")}</Button>
                         </DialogFooter>
                     </form>
                 </Form>

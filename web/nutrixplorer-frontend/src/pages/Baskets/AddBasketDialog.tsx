@@ -14,6 +14,8 @@ import { CreateBasket } from "@/types/BasketTypes";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 
 const AddBasketDialog = () => {
     const form = useForm<CreateBasket>({
@@ -24,6 +26,7 @@ const AddBasketDialog = () => {
     });
     const [open, setOpen] = useState(false);
     const [createBasket] = useCreateBasketMutation();
+    const { t } = useTranslation(TranslationNS.Baskets);
     const handleAddBasket = (data: CreateBasket) => {
         createBasket(data);
         setOpen(false);
@@ -34,12 +37,12 @@ const AddBasketDialog = () => {
             <DialogTrigger asChild>
                 <Button variant="ghost" className="flex gap-2">
                     <PlusIcon className="h-4 w-4" />
-                    <span>Dodaj koszyk</span>
+                    <span>{t("addBasket")}</span>
                 </Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Utwórz nowy koszyk</DialogTitle>
+                    <DialogTitle>{t("createNewBasket")}</DialogTitle>
                     <Form {...form}>
                         <form
                             onSubmit={form.handleSubmit(handleAddBasket)}
@@ -49,7 +52,7 @@ const AddBasketDialog = () => {
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Nazwa</FormLabel>
+                                        <FormLabel>{t("name")}</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -61,7 +64,7 @@ const AddBasketDialog = () => {
                                 name="description"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Opis</FormLabel>
+                                        <FormLabel>{t("description")}</FormLabel>
                                         <FormControl>
                                             <Textarea {...field} />
                                         </FormControl>
@@ -70,7 +73,7 @@ const AddBasketDialog = () => {
                             />
                             {/* Prevents closing another dialog */}
                             <Button onClick={form.handleSubmit(handleAddBasket)} type="button">
-                                Dodaj
+                                {t("add")}
                             </Button>
                         </form>
                     </Form>

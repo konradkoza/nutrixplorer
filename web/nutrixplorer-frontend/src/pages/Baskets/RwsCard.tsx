@@ -9,21 +9,24 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useTranslation } from "react-i18next";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 
 type RwsCardProps = {
     nutritions: BasketNutritions[];
 };
 
 const RwsCard = ({ nutritions }: RwsCardProps) => {
+    const [t] = useTranslation([TranslationNS.Baskets, TranslationNS.RWS]);
     return (
         <Card className="w-full">
             <CardHeader>
-                <CardTitle>%RWS</CardTitle>
+                <CardTitle>{t("rws")}</CardTitle>
             </CardHeader>
             <CardContent>
                 <Accordion type="multiple">
                     <AccordionItem value="item-1">
-                        <AccordionTrigger>Wartości odżywcze</AccordionTrigger>
+                        <AccordionTrigger>{t("nutritionalValues")}</AccordionTrigger>
                         <AccordionContent>
                             {rws.map(
                                 (rws) =>
@@ -47,7 +50,7 @@ const RwsCard = ({ nutritions }: RwsCardProps) => {
                                                         : "g"
                                                 }
                                                 max={rws.value!}
-                                                label={rws.name === "Total" ? rws.group : rws.name}
+                                                label={t(rws.key, { ns: TranslationNS.RWS })}
                                                 variant={rws.variant as GradientBarVariants}
                                             />
                                         </div>
@@ -56,7 +59,7 @@ const RwsCard = ({ nutritions }: RwsCardProps) => {
                         </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="item-2">
-                        <AccordionTrigger>Witaminy</AccordionTrigger>
+                        <AccordionTrigger>{t("vitamins")}</AccordionTrigger>
                         <AccordionContent>
                             {rwsV.map(
                                 (rws) =>
@@ -79,7 +82,7 @@ const RwsCard = ({ nutritions }: RwsCardProps) => {
                                                 height="h-8"
                                                 unit={rws.unit}
                                                 max={rws.value!}
-                                                label={rws.name}
+                                                label={t(rws.key, { ns: TranslationNS.RWS })}
                                                 variant={rws.variant as GradientBarVariants}
                                             />
                                         </div>
@@ -88,7 +91,7 @@ const RwsCard = ({ nutritions }: RwsCardProps) => {
                         </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="item-3">
-                        <AccordionTrigger>Minerały</AccordionTrigger>
+                        <AccordionTrigger>{t("minerals")}</AccordionTrigger>
                         <AccordionContent>
                             {rwsM.map(
                                 (rws) =>
@@ -111,7 +114,7 @@ const RwsCard = ({ nutritions }: RwsCardProps) => {
                                                 height="h-8"
                                                 unit={rws.unit}
                                                 max={rws.value!}
-                                                label={rws.name}
+                                                label={t(rws.key, { ns: TranslationNS.RWS })}
                                                 variant={rws.variant as GradientBarVariants}
                                             />
                                         </div>

@@ -2,10 +2,12 @@ import { MoonIcon, SunIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { useTheme } from "./providers/theme-provider";
+import { TranslationNS } from "@/types/TranslationNamespaces";
+import { useTranslation } from "react-i18next";
 
 export function ModeToggle() {
     const { setTheme, theme } = useTheme();
-
+    const [t] = useTranslation(TranslationNS.Layout);
     return (
         <TooltipProvider disableHoverableContent>
             <Tooltip delayDuration={100}>
@@ -17,10 +19,10 @@ export function ModeToggle() {
                         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
                         <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-transform duration-500 ease-in-out dark:rotate-0 dark:scale-100" />
                         <MoonIcon className="scale-1000 absolute h-[1.2rem] w-[1.2rem] rotate-0 transition-transform duration-500 ease-in-out dark:-rotate-90 dark:scale-0" />
-                        <span className="sr-only">Switch Theme</span>
+                        <span className="sr-only">{t("switchTheme")}</span>
                     </Button>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">Switch Theme</TooltipContent>
+                <TooltipContent side="bottom">{t("switchTheme")}</TooltipContent>
             </Tooltip>
         </TooltipProvider>
     );

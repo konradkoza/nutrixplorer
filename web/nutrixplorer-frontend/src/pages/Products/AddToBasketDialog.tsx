@@ -11,6 +11,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDebounce } from "use-debounce";
 import AddBasketDialog from "../Baskets/AddBasketDialog";
+import { useTranslation } from "react-i18next";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 
 type AddToBasketDialogProps = {
     open: boolean;
@@ -32,6 +34,7 @@ const AddToBasketDialog = ({
     unit,
     productName,
 }: AddToBasketDialogProps) => {
+    const { t } = useTranslation(TranslationNS.Products);
     const [searchValue, setSearchValue] = useState<string>("");
     const [value] = useDebounce(searchValue, 100);
     const { data: basketList, isLoading } = useGetFilteredBasketsListQuery(value);
@@ -60,7 +63,9 @@ const AddToBasketDialog = ({
     return (
         <Dialog open={open} onOpenChange={close}>
             <DialogContent>
-                <DialogTitle>Dodaj do koszyka - {productName}</DialogTitle>
+                <DialogTitle>
+                    {t("addToBasket.addToBasket")} ({productName})
+                </DialogTitle>
 
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleAddToBasket)}>
@@ -70,7 +75,7 @@ const AddToBasketDialog = ({
                                 name="basketId"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Koszyk</FormLabel>
+                                        <FormLabel>{t("addToBasket.basket")}</FormLabel>
                                         <AutoComplete
                                             selectedValue={field.value}
                                             onSelectedValueChange={field.onChange}
@@ -87,8 +92,8 @@ const AddToBasketDialog = ({
                                                     : []
                                             }
                                             isLoading={isLoading}
-                                            emptyMessage="Nie znaleziono koszyków"
-                                            placeholder="Wyszukaj..."
+                                            emptyMessage={t("addToBasket.noBaskets")}
+                                            placeholder={t("addToBasket.search")}
                                         />
                                     </FormItem>
                                 )}
@@ -99,7 +104,7 @@ const AddToBasketDialog = ({
                                 name="quantity"
                                 render={({ field }) => (
                                     <FormItem className="w-full sm:w-[180px]">
-                                        <FormLabel>Ilość</FormLabel>
+                                        <FormLabel>{t("addToBasket.quantity")}</FormLabel>
                                         <FormControl>
                                             <UnitInput
                                                 autoFocus
@@ -117,9 +122,9 @@ const AddToBasketDialog = ({
                             <AddBasketDialog />
                             <div className="flex gap-5">
                                 <Button onClick={onClose} type="button" variant="outline">
-                                    Cancel
+                                    {t("addToBasket.cancel")}
                                 </Button>
-                                <Button type="submit">Add</Button>
+                                <Button type="submit">{t("addToBasket.add")}</Button>
                             </div>
                         </DialogFooter>
                     </form>

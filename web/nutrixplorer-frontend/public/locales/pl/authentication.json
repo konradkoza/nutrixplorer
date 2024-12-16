@@ -1,0 +1,29 @@
+{
+    "login": {
+        "title": "Logowanie",
+        "description": "Podaj email i hasło aby się zalogować",
+        "email": "Email",
+        "password": "Hasło",
+        "submit": "Zaloguj się",
+        "forgotPassword": "Zapomniałem hasła",
+        "register": "Zarejestruj",
+        "google": "Zaloguj się za pomocą Google",
+        "noAccount": "Nie masz konta?",
+        "createAccount": "Utwórz konto"
+        
+    },
+    "register": {
+        "title": "Utwórz nowe konto",
+        "description": "Uzupełnij formularz, aby się zarejestrować",
+        "email": "Email",
+        "password": "Hasło",
+        "confirmPassword": "Potwierdź hasło",
+        "submit": "Utwórz konto",
+        "firstName": "Imię",
+        "lastName": "Nazwisko",
+        "google": "Utwórz konto za pomocą Google",
+        "alreadyHaveAccount": "Masz już konto?",
+        "login": "Zaloguj się"
+    }
+
+}

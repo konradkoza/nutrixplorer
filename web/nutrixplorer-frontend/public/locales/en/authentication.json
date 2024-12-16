@@ -1,0 +1,27 @@
+{
+    "login": {
+        "title": "Login",
+        "description": "Enter your email and password to log in",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Log in",
+        "forgotPassword": "Forgot password",
+        "register": "Register",
+        "google": "Log in with Google",
+        "noAccount": "Don't have an account?",
+        "createAccount": "Create an account"
+    },
+    "register": {
+        "title": "Create a new account",
+        "description": "Fill out the form to register",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm password",
+        "submit": "Create account",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "google": "Create account with Google",
+        "alreadyHaveAccount": "Already have an account?",
+        "login": "Log in"
+    }
+}

@@ -6,6 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useUpdateBasketMutation } from "@/redux/services/basketService";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useTranslation } from "react-i18next";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 
 const EditBasketSchema = z.object({
     name: z.string(),
@@ -29,6 +31,7 @@ const EditBasketDialog = ({
     open,
     onClose,
 }: AddBasketDialogProps) => {
+    const { t } = useTranslation(TranslationNS.Baskets);
     const [editBasket] = useUpdateBasketMutation();
 
     const form = useForm<EditBasketFormType>({
@@ -45,7 +48,7 @@ const EditBasketDialog = ({
     return (
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className="w-96">
-                <DialogTitle>Edytuj koszyk</DialogTitle>
+                <DialogTitle>{t("editBasket")}</DialogTitle>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleChangeQuantity)}>
                         <FormField
@@ -53,7 +56,7 @@ const EditBasketDialog = ({
                             name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Nazwa</FormLabel>
+                                    <FormLabel>{t("name")}</FormLabel>
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>
@@ -65,7 +68,7 @@ const EditBasketDialog = ({
                             name="description"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Opis</FormLabel>
+                                    <FormLabel>{t("description")}</FormLabel>
                                     <FormControl>
                                         <Textarea {...field} />
                                     </FormControl>
@@ -74,9 +77,9 @@ const EditBasketDialog = ({
                         />
                         <DialogFooter className="mt-5 gap-5">
                             <Button type="button" onClick={onClose} variant="outline">
-                                Anuluj
+                                {t("cancel")}
                             </Button>
-                            <Button type="submit">Zapisz</Button>
+                            <Button type="submit">{t("save")}</Button>
                         </DialogFooter>
                     </form>
                 </Form>

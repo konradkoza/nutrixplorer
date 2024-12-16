@@ -1,0 +1,41 @@
+{
+    "breadcrumbs": {
+        "comparison": "Porównaj",
+        "home": "NutriXplorer"
+    },
+    "comparisonTitle": "Porównanie koszyków",
+    "description": "Wybierz koszyki do porównania",
+    "noBaskets": "Nie znaleziono koszyków",
+    "search": "Wyszukaj...",
+    "compare": "Porównaj",
+    "basket1": "Koszyk 1",
+    "basket2": "Koszyk 2",
+    "basket": "Koszyk",
+    "nutritionalValuesComparison": "Porównanie wartości odżywczych",
+    "indexComparison": "Porównanie indeksów",
+    "fatComparison": "Podział tłuszczy",
+    "carbsComparison": "Podział węglowodanów",
+    "nutritionalValuesInEnergy": "Udział wartości odżywczych w wartości energetycznej",
+    "nutritionalValuesInProducts": "Wartość odżywcza poszczególnych produktów",
+    "numberOfElements": "Liczba elementów",
+    "allergens": "Alergeny",
+    "noAllergens": "Brak alergenów",
+    "productsInBasket": "Produkty w koszyku",
+    "summaryFFIndex": "Sumaryczny indeks FF",
+    "summarySUMIndex": "Sumaryczny indeks SUM",
+    "nutritionalValues": "Wartości odżywcze",
+    "carbsSummary": "Węglowodany w sumie",
+    "fatSummary": "Tłuszcz w sumie",
+    "otherCarbs": "Inne węglowodany",
+    "sugar": "Cukry",
+    "nonSaturated" : "Kwasy nienasycone",
+    "saturated" : "Kwasy nasycone",
+    "carbs" : "Węglowodany",
+    "fat" : "Tłuszcz",
+    "protein" : "Białko",
+    "fiber": "Błonnik",
+    "index": "Indeks",
+    "salt": "Sól"
+
+
+}

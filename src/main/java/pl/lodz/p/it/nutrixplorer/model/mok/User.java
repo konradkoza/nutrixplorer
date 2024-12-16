@@ -31,6 +31,10 @@ public class User extends AbstractEntity {
     @Column(name = "email", table = "PERSONAL_DATA", nullable = false, unique = true, length = 50)
     private String email;
 
+    @Setter
+    @Column(name = "google_id", table = "PERSONAL_DATA", unique = true, length = 30)
+    private String googleId;
+
 ////    @Setter
 //    @Column(name = "login", nullable = false, updatable = false, unique = true, length = 50)
 //    private String login;

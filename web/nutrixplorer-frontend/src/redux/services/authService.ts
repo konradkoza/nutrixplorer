@@ -18,7 +18,14 @@ const AuthService = api.injectEndpoints({
                 body: credentials,
             }),
         }),
+        loginOauth: builder.mutation<LoginResponse, string>({
+            query: (code) => ({
+                url: "auth/oauth2/token",
+                method: "POST",
+                body: { code },
+            }),
+        }),
     }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = AuthService;
+export const { useLoginMutation, useRegisterMutation, useLoginOauthMutation } = AuthService;

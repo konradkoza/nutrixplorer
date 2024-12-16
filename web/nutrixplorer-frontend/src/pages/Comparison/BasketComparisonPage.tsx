@@ -37,6 +37,8 @@ import ComparisonNutritionChart from "./ComparisonNutritionChart";
 import ComparisonRadarChart from "./ComparisonRadarChart";
 import IndexComparisonChart from "./IndexComparisonChart";
 import ProductsStackedBarChart from "./ProductsStackedBarChart";
+import { useTranslation } from "react-i18next";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 
 type NutritionSet = {
     name: string;
@@ -70,17 +72,16 @@ const defaultNutritionSet: NutritionSet[] = [
 ];
 
 const BasketComparisonPage = () => {
-    // get baskets1 and basket2 from url params
-    const [urlParams] = useSearchParams();
+    const [t] = useTranslation(TranslationNS.Comparison);
+    const [urlParams, setUrlParams] = useSearchParams();
     const [searchValue1, setSearchValue1] = useState<string>("");
     const [value1] = useDebounce(searchValue1, 100);
     const [searchValue2, setSearchValue2] = useState<string>("");
     const [value2] = useDebounce(searchValue2, 100);
     const { data: basketList1, isLoading: isLoading1 } = useGetFilteredBasketsListQuery(value1);
     const { data: basketList2, isLoading: isLoading2 } = useGetFilteredBasketsListQuery(value2);
-    // const { data: basketOptions, isLoading } = useGetUserBasketsListQuery();
-    const [basket1, setBasket1] = useState<string | null>(urlParams.get("compare1") || null);
-    const [basket2, setBasket2] = useState<string | null>(urlParams.get("compare2") || null);
+    const [basket1, setBasket1] = useState<string | null>(null);
+    const [basket2, setBasket2] = useState<string | null>(null);
     const [showComparison, setShowComparison] = useState<boolean>(false);
     const [basketDetails, setBasketDetails] = useState<Basket[]>([]);
     const [basketNutritions, setBasketNutritions] = useState<BasketNutritions[][]>([]);
@@ -93,29 +94,31 @@ const BasketComparisonPage = () => {
         new DeepSet(defaultNutritionSet)
     );
     const breadcrumbs = useBreadcrumbs([
-        { title: "NutriXplorer", path: "/" },
-        { title: "Porównaj", path: "/compare" },
+        { title: t("breadcrumbs.home"), path: "/" },
+        { title: t("breadcrumbs.comparison"), path: "/compare" },
     ]);
 
     useEffect(() => {
-        if (basket1 !== null && basket2 !== null) {
-            fetchBasketsData();
+        if (urlParams.get("compare1") !== undefined && urlParams.get("compare2") !== undefined) {
+            fetchBasketsData(true);
             setShowComparison(true);
         }
-    }, [basket1, basket2]);
+    }, []);
 
-    const fetchBasketsData = async () => {
+    const fetchBasketsData = async (params: boolean) => {
         setFetchingData(true);
-        if (basket1 && basket2) {
+        const b1 = params ? urlParams.get("compare1") : basket1;
+        const b2 = params ? urlParams.get("compare2") : basket2;
+        if (b1 && b2) {
             try {
                 const [response1, response2, nutritions1, nutritions2, allergens1, allergens2] =
                     await Promise.all([
-                        getBasketDetails(basket1).unwrap(),
-                        getBasketDetails(basket2).unwrap(),
-                        getBasketNutritions(basket1).unwrap(),
-                        getBasketNutritions(basket2).unwrap(),
-                        getBasketALlergens(basket1).unwrap(),
-                        getBasketALlergens(basket2).unwrap(),
+                        getBasketDetails(b1).unwrap(),
+                        getBasketDetails(b2).unwrap(),
+                        getBasketNutritions(b1).unwrap(),
+                        getBasketNutritions(b2).unwrap(),
+                        getBasketALlergens(b1).unwrap(),
+                        getBasketALlergens(b2).unwrap(),
                     ]);
                 setBasketDetails([response1, response2]);
                 const newSet = new DeepSet<NutritionSet>(defaultNutritionSet);
@@ -141,32 +144,10 @@ const BasketComparisonPage = () => {
                 {breadcrumbs}
                 <Card className="w-full">
                     <CardHeader>
-                        <CardTitle className="text-3xl">Porównanie koszyków</CardTitle>
-                        <p>Wybierz koszyki do porównania</p>
+                        <CardTitle className="text-3xl">{t("comparisonTitle")}</CardTitle>
+                        <p>{t("description")}</p>
                     </CardHeader>
                     <CardContent className="flex justify-evenly">
-                        {/* <Select
-                            defaultValue={basket1 || ""}
-                            onValueChange={(val) => {
-                                setBasket1(val);
-                            }}>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Wybierz koszyk 1" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Koszyki</SelectLabel>
-                                    {!isLoading &&
-                                        basketList?.map((basket) => (
-                                            <SelectItem
-                                                key={basket.id + "select1"}
-                                                value={basket.id}>
-                                                {basket.name}
-                                            </SelectItem>
-                                        ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select> */}
                         <AutoComplete
                             selectedValue={basket1 || ""}
                             onSelectedValueChange={setBasket1}
@@ -183,31 +164,10 @@ const BasketComparisonPage = () => {
                                     : []
                             }
                             isLoading={isLoading1}
-                            emptyMessage="Nie znaleziono koszyków"
-                            placeholder="Wyszukaj..."
+                            emptyMessage={t("noBaskets")}
+                            placeholder={t("search")}
                         />
-                        {/* <Select
-                            defaultValue={basket2 || ""}
-                            onValueChange={(val) => {
-                                setBasket2(val);
-                            }}>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Wybierz koszyk 2" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Koszyki</SelectLabel>
-                                    {!isLoading &&
-                                        basketList?.map((basket) => (
-                                            <SelectItem
-                                                key={basket.id + "select1"}
-                                                value={basket.id}>
-                                                {basket.name}
-                                            </SelectItem>
-                                        ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select> */}
+
                         <AutoComplete
                             selectedValue={basket2 || ""}
                             onSelectedValueChange={setBasket2}
@@ -224,22 +184,28 @@ const BasketComparisonPage = () => {
                                     : []
                             }
                             isLoading={isLoading2}
-                            emptyMessage="Nie znaleziono koszyków"
-                            placeholder="Wyszukaj..."
+                            emptyMessage={t("noBaskets")}
+                            placeholder={t("search")}
                         />
                     </CardContent>
                     <CardContent className="flex justify-center">
                         <Button
                             onClick={() => {
                                 setShowComparison(true);
-                                fetchBasketsData();
+                                if (
+                                    urlParams.get("compare1") !== null &&
+                                    urlParams.get("compare2") !== null
+                                ) {
+                                    setUrlParams({});
+                                }
+                                fetchBasketsData(false);
                             }}
                             disabled={!basket1 || !basket2}>
-                            Porównaj
+                            {t("compare")}
                         </Button>
                     </CardContent>
                     {fetchingData && <Spinner />}
-                    {showComparison && !fetchingData && (
+                    {basketDetails.length > 0 && showComparison && !fetchingData && (
                         <div className="flex flex-col justify-center">
                             <CardContent className="w-full">
                                 <Table>
@@ -249,68 +215,32 @@ const BasketComparisonPage = () => {
                                             <TableHead className="w-5/12">
                                                 <Button asChild variant="link">
                                                     <Link to={`/baskets/${basket1}`}>
-                                                        Koszyk 1 ({basketDetails[0].name})
+                                                        {t("basket1")} (
+                                                        {basketDetails[0]
+                                                            ? basketDetails[0].name
+                                                            : ""}
+                                                        )
                                                     </Link>
                                                 </Button>
                                             </TableHead>
                                             <TableHead className="w-5/12">
                                                 <Button asChild variant="link">
                                                     <Link to={`/baskets/${basket2}`}>
-                                                        Koszyk 2 ({basketDetails[1].name})
+                                                        {t("basket2")} (
+                                                        {basketDetails[1]
+                                                            ? basketDetails[1].name
+                                                            : ""}
+                                                        )
                                                     </Link>
                                                 </Button>
                                             </TableHead>
                                         </TableRow>
                                     </TableHeader>
                                 </Table>
-
-                                {/* <Accordion
-                                    type="single"
-                                    collapsible
-                                    defaultValue="item-1"
-                                    className="w-full">
-                                    <AccordionItem value="item-1">
-                                        <AccordionTrigger>
-                                            Wartości odżywcze (% Wartości Energetycznej)
-                                        </AccordionTrigger>
-                                        <AccordionContent>
-                                            <EnergyValueComparison
-                                                energyValues={basketNutritions.map((nutritions) => {
-                                                    return {
-                                                        carbs:
-                                                            nutritions?.find(
-                                                                (nutr) =>
-                                                                    nutr.groupName ===
-                                                                        "Węglowodany" &&
-                                                                    nutr.name === "Total"
-                                                            )?.quantity || 0,
-
-                                                        fat:
-                                                            nutritions?.find(
-                                                                (nutr) =>
-                                                                    nutr.groupName === "Tłuszcz" &&
-                                                                    nutr.name === "Total"
-                                                            )?.quantity || 0,
-
-                                                        protein:
-                                                            nutritions?.find(
-                                                                (nutr) => nutr.name === "Białko"
-                                                            )?.quantity || 0,
-
-                                                        fibre:
-                                                            nutritions?.find(
-                                                                (nutr) => nutr.name === "Błonnik"
-                                                            )?.quantity || 0,
-                                                    };
-                                                })}
-                                            />
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                </Accordion> */}
                             </CardContent>
                             <div>
                                 <p className="text-center text-xl">
-                                    Porównanie wartości odżywczych
+                                    {t("nutritionalValuesComparison")}
                                 </p>
                                 <div className="flex w-full flex-wrap">
                                     <div className="flex flex-1 flex-col">
@@ -319,7 +249,7 @@ const BasketComparisonPage = () => {
                                 </div>
                             </div>
                             <div>
-                                <p className="text-center text-xl">Porównanie indeksów</p>
+                                <p className="text-center text-xl">{t("indexComparison")}</p>
                                 <div className="flex w-full flex-wrap">
                                     <div className="flex flex-1 flex-col">
                                         <IndexComparisonChart baskets={basketDetails} />
@@ -327,14 +257,14 @@ const BasketComparisonPage = () => {
                                 </div>
                             </div>
                             <div>
-                                <p className="text-center text-xl">Podział tłuszczy</p>
+                                <p className="text-center text-xl">{t("fatComparison")}</p>
                                 <div className="flex w-full flex-wrap">
                                     {basketNutritions.map((nutritions, index) => (
                                         <div
                                             key={index + "nutritionChart"}
                                             className="flex flex-1 flex-col">
                                             <p className="w-full p-2 text-center">
-                                                Koszyk {index + 1}
+                                                {t("basket")} {index + 1}
                                             </p>
                                             <ComparisonFatChart nutritions={nutritions} />
                                         </div>
@@ -342,14 +272,14 @@ const BasketComparisonPage = () => {
                                 </div>
                             </div>
                             <div>
-                                <p className="text-center text-xl">Podział węglowodanów</p>
+                                <p className="text-center text-xl">{t("carbsComparison")}</p>
                                 <div className="flex w-full flex-wrap">
                                     {basketNutritions.map((nutritions, index) => (
                                         <div
                                             key={index + "nutritionChart"}
                                             className="flex flex-1 flex-col">
                                             <p className="w-full p-2 text-center">
-                                                Koszyk {index + 1}
+                                                {t("basket")} {index + 1}
                                             </p>
                                             <ComparisonCarbsChart nutritions={nutritions} />
                                         </div>
@@ -358,7 +288,7 @@ const BasketComparisonPage = () => {
                             </div>
                             <div>
                                 <p className="text-center text-xl">
-                                    Udział wartości odżywczych w wartości energetycznej
+                                    {t("nutritionalValuesInEnergy")}
                                 </p>
                                 <div className="flex w-full flex-wrap">
                                     {basketNutritions.map((nutritions, index) => (
@@ -366,7 +296,7 @@ const BasketComparisonPage = () => {
                                             key={index + "nutritionChart"}
                                             className="flex flex-1 flex-col">
                                             <p className="w-full p-2 text-center">
-                                                Koszyk {index + 1}
+                                                {t("basket")} {index + 1}
                                             </p>
                                             <ComparisonNutritionChart
                                                 carbs={
@@ -388,7 +318,7 @@ const BasketComparisonPage = () => {
                                                         (nutr) => nutr.name === "Białko"
                                                     )?.quantity || 0
                                                 }
-                                                fibre={
+                                                fiber={
                                                     nutritions?.find(
                                                         (nutr) => nutr.name === "Błonnik"
                                                     )?.quantity || 0
@@ -400,7 +330,7 @@ const BasketComparisonPage = () => {
                             </div>
                             <div className="">
                                 <p className="text-center text-xl">
-                                    Wartość odżywcza poszczególnych produktów
+                                    {t("nutritionalValuesInProducts")}
                                 </p>
                                 <div className="flex flex-1 flex-wrap">
                                     {basketDetails.map((basket, index) => (
@@ -408,7 +338,7 @@ const BasketComparisonPage = () => {
                                             key={basket.id + "nutritionChart"}
                                             className="flex flex-1 flex-col">
                                             <p className="w-full p-2 text-center">
-                                                Koszyk {index + 1}
+                                                {t("basket")} {index + 1}
                                             </p>
                                             <ProductsStackedBarChart
                                                 key={basket.id + "stackedBarChart"}
@@ -429,7 +359,7 @@ const BasketComparisonPage = () => {
                                 <Table>
                                     <TableBody>
                                         <TableRow>
-                                            <TableHead>Liczba elementów</TableHead>
+                                            <TableHead>{t("numberOfElements")}</TableHead>
                                             {basketDetails.map((basket) => (
                                                 <TableCell key={basket.id + "elements"}>
                                                     {basket.basketEntries.length}
@@ -437,7 +367,7 @@ const BasketComparisonPage = () => {
                                             ))}
                                         </TableRow>
                                         <TableRow>
-                                            <TableHead>Alergeny</TableHead>
+                                            <TableHead>{t("allergens")}</TableHead>
                                             {basketAllergens.map((allergenList, index) => (
                                                 <TableCell
                                                     className={
@@ -455,7 +385,7 @@ const BasketComparisonPage = () => {
                                             ))}
                                         </TableRow>
                                         <TableRow>
-                                            <TableHead>Produkty w koszyku</TableHead>
+                                            <TableHead>{t("productsInBasket")}</TableHead>
                                             {basketDetails.map((basket, index) => {
                                                 return (
                                                     <TableCell key={index + "products"}>
@@ -470,7 +400,7 @@ const BasketComparisonPage = () => {
                                             })}
                                         </TableRow>
                                         <TableRow>
-                                            <TableHead>Sumaryczny indeks FF</TableHead>
+                                            <TableHead>{t("summaryFFIndex")}</TableHead>
                                             {basketDetails.map((basket, index) => {
                                                 const indexes = basket.basketEntries.map(
                                                     (entry) => entry.productIndexes
@@ -490,7 +420,7 @@ const BasketComparisonPage = () => {
                                             })}
                                         </TableRow>
                                         <TableRow>
-                                            <TableHead>Sumaryczny indeks SUM</TableHead>
+                                            <TableHead>{t("summarySUMIndex")}</TableHead>
                                             {basketDetails.map((basket, index) => {
                                                 const indexes = basket.basketEntries.map(
                                                     (entry) => entry.productIndexes
@@ -517,7 +447,9 @@ const BasketComparisonPage = () => {
                                     defaultValue="item-1"
                                     className="w-full">
                                     <AccordionItem value="item-1">
-                                        <AccordionTrigger>Wartości odżywcze</AccordionTrigger>
+                                        <AccordionTrigger>
+                                            {t("nutritionalValues")}
+                                        </AccordionTrigger>
                                         <AccordionContent>
                                             <Table>
                                                 <TableBody>

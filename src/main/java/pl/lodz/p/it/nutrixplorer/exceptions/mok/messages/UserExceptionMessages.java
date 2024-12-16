@@ -5,6 +5,7 @@ public class UserExceptionMessages {
 
     public static final String CLIENT_NOT_FOUND = "Client not found";
     public static final String SELLER_NOT_FOUND = "Seller not found";
+    public static final String OAUTH_EMAIL_IN_USE = "Email is already used, use email and password to log in";
 
     private UserExceptionMessages() {
     }
@@ -21,4 +22,5 @@ public class UserExceptionMessages {
     public static final String ACCESS_LEVEL_TAKEN = "Access level already taken";
     public static final String ACCESS_LEVEL_CANNOT_BE_REMOVED = "Access level cannot be removed, user has only one access level";
     public static final String OWN_ADMINISTRATOR_ROLE_REMOVAL = "Cannot remove own administrator role";
+    public static final String OAUTH2_USER = "User registered with Google, use Google Sign In or reset password";
 }

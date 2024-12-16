@@ -18,7 +18,9 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { useGetAllCountriesQuery, useGetPackageTypesQuery } from "@/redux/services/productService";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 export type FilteringFormType = {
     productName: string | undefined;
@@ -47,14 +49,6 @@ export type FilteringFormType = {
     minIndexT: string | undefined;
     packageType: string | undefined;
 };
-
-const minMaxFields = [
-    { min: "minCarbs", max: "maxCarbs", label: "Węglowodany" },
-    { min: "minFat", max: "maxFat", label: "Tłuszcz" },
-    { min: "minProtein", max: "maxProtein", label: "Białko" },
-    { min: "minFiber", max: "maxFiber", label: "Błonnik" },
-    { min: "minEnergy", max: "maxEnergy", label: "Wartość energetyczna" },
-] satisfies { min: keyof FilteringFormType; max: keyof FilteringFormType; label: string }[];
 
 const indexFields = [
     { min: "minIndexE", label: "EN" },
@@ -122,6 +116,7 @@ type FilteringComponentProps = {
 const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
     const { data: packageTypes, isLoading: isPackageTypesLoading } = useGetPackageTypesQuery();
     const { data: countries, isLoading: isCountriesLoading } = useGetAllCountriesQuery();
+    const [t] = useTranslation(TranslationNS.Products);
     const form = useForm<FilteringFormType>({
         values: {
             productName: "",
@@ -155,6 +150,14 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
         },
     });
 
+    const minMaxFields = [
+        { min: "minCarbs", max: "maxCarbs", label: t("filters.carbs") },
+        { min: "minFat", max: "maxFat", label: t("filters.fats") },
+        { min: "minProtein", max: "maxProtein", label: t("filters.proteins") },
+        { min: "minFiber", max: "maxFiber", label: t("filters.fiber") },
+        { min: "minEnergy", max: "maxEnergy", label: t("filters.calories") },
+    ] satisfies { min: keyof FilteringFormType; max: keyof FilteringFormType; label: string }[];
+
     const onSubmit = (data: FilteringFormType) => {
         const filteredData = Object.entries(data).reduce((acc, [key, value]) => {
             if (value !== "" && value !== undefined) {
@@ -169,7 +172,7 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
         <div className="container w-full">
             <Accordion type="single" collapsible className="mb-5 w-full bg-muted/90 px-5">
                 <AccordionItem value="item-1">
-                    <AccordionTrigger>Filtry</AccordionTrigger>
+                    <AccordionTrigger>{t("filters.filters")}</AccordionTrigger>
                     <AccordionContent>
                         <Form {...form}>
                             <form
@@ -181,7 +184,7 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                         name="productName"
                                         render={({ field }) => (
                                             <FormItem className="w-full flex-grow sm:w-1/4">
-                                                <FormLabel>Nazwa</FormLabel>
+                                                <FormLabel>{t("filters.name")}</FormLabel>
                                                 <FormControl>
                                                     <Input {...field} />
                                                 </FormControl>
@@ -193,7 +196,7 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                         name="ean"
                                         render={({ field }) => (
                                             <FormItem className="w-full flex-grow sm:w-1/4">
-                                                <FormLabel>EAN</FormLabel>
+                                                <FormLabel>{t("filters.ean")}</FormLabel>
                                                 <FormControl>
                                                     <Input type="number" {...field} />
                                                 </FormControl>
@@ -205,7 +208,7 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                         name="description"
                                         render={({ field }) => (
                                             <FormItem className="w-full flex-grow sm:w-2/4">
-                                                <FormLabel>Opis</FormLabel>
+                                                <FormLabel>{t("filters.description")}</FormLabel>
                                                 <FormControl>
                                                     <Input {...field} />
                                                 </FormControl>
@@ -219,14 +222,18 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                         <div
                                             key={label}
                                             className="flex max-w-[480px] flex-grow flex-col gap-5">
-                                            <FormLabel>{label}</FormLabel>
+                                            <p className="text-sm font-medium leading-none">
+                                                {label}
+                                            </p>
                                             <div className="flex gap-2">
                                                 <FormField
                                                     control={form.control}
                                                     name={min}
                                                     render={({ field }) => (
                                                         <FormItem className="w-full">
-                                                            <FormLabel>Od:</FormLabel>
+                                                            <FormLabel>
+                                                                {t("filters.min")}
+                                                            </FormLabel>
                                                             <FormControl>
                                                                 <Input type="number" {...field} />
                                                             </FormControl>
@@ -238,7 +245,9 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                                     name={max}
                                                     render={({ field }) => (
                                                         <FormItem className="w-full">
-                                                            <FormLabel>Do:</FormLabel>
+                                                            <FormLabel>
+                                                                {t("filters.max")}
+                                                            </FormLabel>
                                                             <FormControl>
                                                                 <Input type="number" {...field} />
                                                             </FormControl>
@@ -258,7 +267,7 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                                 render={({ field }) => (
                                                     <FormItem className="w-full">
                                                         <FormLabel>
-                                                            Mininalny indeks {label}
+                                                            {t("filters.minIndex")} {label}
                                                         </FormLabel>
                                                         <FormControl>
                                                             <Input type="number" {...field} />
@@ -275,17 +284,21 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                         name="packageType"
                                         render={({ field }) => (
                                             <FormItem className="w-full">
-                                                <FormLabel>Opakowanie</FormLabel>
+                                                <p className="text-sm font-medium">
+                                                    {t("filters.packaging")}
+                                                </p>
                                                 <Select
                                                     onValueChange={field.onChange}
                                                     defaultValue={field.value}>
                                                     <SelectTrigger className="w-full flex-grow">
-                                                        <SelectValue placeholder="Wybierz opakowanie" />
+                                                        <SelectValue
+                                                            placeholder={t("filters.packaging")}
+                                                        />
                                                     </SelectTrigger>
                                                     <SelectContent>
                                                         <SelectGroup>
                                                             <SelectLabel>
-                                                                Typ opakowania
+                                                                {t("filters.packagingType")}
                                                             </SelectLabel>
                                                             {!isPackageTypesLoading &&
                                                                 packageTypes?.map((packageType) => (
@@ -306,12 +319,16 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                         name="country"
                                         render={({ field }) => (
                                             <FormItem className="w-full">
-                                                <FormLabel>Kraj</FormLabel>
+                                                <p className="text-sm font-medium">
+                                                    {t("filters.country")}
+                                                </p>
                                                 <Select
                                                     onValueChange={field.onChange}
                                                     defaultValue={field.value}>
                                                     <SelectTrigger className="">
-                                                        <SelectValue placeholder="Wybierz kraj" />
+                                                        <SelectValue
+                                                            placeholder={t("filters.country")}
+                                                        />
                                                     </SelectTrigger>
                                                     <SelectContent>
                                                         <SelectGroup>
@@ -331,7 +348,10 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                         )}
                                     />
                                 </div>
-                                <FormLabel>Witaminy</FormLabel>
+
+                                <p className="text-sm font-medium leading-none">
+                                    {t("filters.vitamins")}
+                                </p>
                                 <div className="flex flex-wrap gap-4">
                                     {vitaminsNames.map((vitamin) => (
                                         <FormField
@@ -365,7 +385,9 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                         />
                                     ))}
                                 </div>
-                                <FormLabel>Minerały</FormLabel>
+                                <p className="text-sm font-medium leading-none">
+                                    {t("filters.minerals")}
+                                </p>
                                 <div className="flex flex-wrap gap-4">
                                     {mineralsNames.map((mineral) => (
                                         <FormField
@@ -374,7 +396,7 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                             key={mineral}
                                             render={({ field }) => (
                                                 <FormItem className="flex items-center space-x-2 space-y-0">
-                                                    <FormLabel>{mineral}</FormLabel>
+                                                    <FormLabel>{t(`filters.${mineral}`)}</FormLabel>
                                                     <FormControl>
                                                         <Checkbox
                                                             checked={field.value.includes(mineral)}
@@ -401,13 +423,13 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                 </div>
                                 <div className="flex w-full gap-5">
                                     <Button className="flex-1" type="submit">
-                                        Szukaj
+                                        {t("filters.search")}
                                     </Button>
                                     <Button
                                         className="flex-1"
                                         variant="outline"
                                         onClick={() => form.reset()}>
-                                        Wyczyść
+                                        {t("filters.reset")}
                                     </Button>
                                 </div>
                             </form>

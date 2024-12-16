@@ -10,6 +10,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/
 import { Input } from "@/components/ui/input.tsx";
 import { useGetAllergensQuery } from "@/redux/services/productService";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 
 export type BasketFiltersFormType = {
     minCarbs: string | undefined;
@@ -28,11 +30,11 @@ export type BasketFiltersFormType = {
 };
 
 const minMaxFields = [
-    { min: "minCarbs", max: "maxCarbs", label: "Węglowodany" },
-    { min: "minFat", max: "maxFat", label: "Tłuszcz" },
-    { min: "minProtein", max: "maxProtein", label: "Białko" },
-    { min: "minFiber", max: "maxFiber", label: "Błonnik" },
-    { min: "minEnergy", max: "maxEnergy", label: "Wartość energetyczna" },
+    { min: "minCarbs", max: "maxCarbs", label: "carbs" },
+    { min: "minFat", max: "maxFat", label: "fat" },
+    { min: "minProtein", max: "maxProtein", label: "protein" },
+    { min: "minFiber", max: "maxFiber", label: "fiber" },
+    { min: "minEnergy", max: "maxEnergy", label: "energyValue" },
 ] satisfies { min: keyof BasketFiltersFormType; max: keyof BasketFiltersFormType; label: string }[];
 
 export type Vitamin =
@@ -101,6 +103,7 @@ type BasketFiltersProps = {
 };
 
 const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
+    const { t } = useTranslation(TranslationNS.Baskets);
     const { data: allergens, isLoading: isAllergensLoading } = useGetAllergensQuery();
     const form = useForm<BasketFiltersFormType>({
         values: {
@@ -137,7 +140,7 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
         <div className="container w-full">
             <Accordion type="single" collapsible className="w-full bg-muted/90 px-5">
                 <AccordionItem value="item-1">
-                    <AccordionTrigger>Filtry</AccordionTrigger>
+                    <AccordionTrigger>{t("filters")}</AccordionTrigger>
                     <AccordionContent>
                         <Form {...form}>
                             <form
@@ -148,14 +151,16 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                         <div
                                             key={label}
                                             className="flex max-w-[480px] flex-grow flex-col gap-5">
-                                            <FormLabel>{label}</FormLabel>
+                                            <p className="text-sm font-medium leading-none">
+                                                {t(label)}
+                                            </p>
                                             <div className="flex gap-2">
                                                 <FormField
                                                     control={form.control}
                                                     name={min}
                                                     render={({ field }) => (
                                                         <FormItem className="w-full">
-                                                            <FormLabel>Od:</FormLabel>
+                                                            <FormLabel>{t("min")}</FormLabel>
                                                             <FormControl>
                                                                 <Input type="number" {...field} />
                                                             </FormControl>
@@ -167,7 +172,7 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                                     name={max}
                                                     render={({ field }) => (
                                                         <FormItem className="w-full">
-                                                            <FormLabel>Do:</FormLabel>
+                                                            <FormLabel>{t("max")}</FormLabel>
                                                             <FormControl>
                                                                 <Input type="number" {...field} />
                                                             </FormControl>
@@ -179,7 +184,7 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                     ))}
                                 </div>
 
-                                <FormLabel>Witaminy</FormLabel>
+                                <p className="mt-3 text-sm font-semibold">{t("vitamins")}</p>
                                 <div className="flex flex-wrap gap-8">
                                     {vitaminsNames.map((vitamin) => (
                                         <FormField
@@ -214,7 +219,9 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                         />
                                     ))}
                                 </div>
-                                <FormLabel>Minerały</FormLabel>
+                                <p className="mt-3 text-sm font-medium leading-none">
+                                    {t("minerals")}
+                                </p>
                                 <div className="flex flex-wrap gap-8">
                                     {mineralsNames.map((mineral) => (
                                         <FormField
@@ -223,7 +230,7 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                             key={mineral}
                                             render={({ field }) => (
                                                 <FormItem className="flex items-center space-x-2 space-y-0">
-                                                    <FormLabel>{mineral}</FormLabel>
+                                                    <FormLabel>{t(mineral)}</FormLabel>
                                                     <FormControl>
                                                         <Checkbox
                                                             checked={field.value.includes(mineral)}
@@ -249,7 +256,9 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                         />
                                     ))}
                                 </div>
-                                <FormLabel>Alergeny</FormLabel>
+                                <p className="mt-3 text-sm font-medium leading-none">
+                                    {t("allergens")}
+                                </p>
                                 <div className="flex flex-wrap gap-8">
                                     {!isAllergensLoading &&
                                         allergens?.map((allergen) => (
@@ -291,13 +300,13 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                 </div>
                                 <div className="flex w-full gap-5">
                                     <Button className="flex-1" type="submit">
-                                        Szukaj
+                                        {t("search")}
                                     </Button>
                                     <Button
                                         className="flex-1"
                                         variant="outline"
                                         onClick={() => form.reset()}>
-                                        Wyczyść
+                                        {t("clear")}
                                     </Button>
                                 </div>
                             </form>

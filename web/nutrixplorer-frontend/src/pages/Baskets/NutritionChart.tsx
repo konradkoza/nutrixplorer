@@ -8,12 +8,14 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { LabelList, Pie, PieChart } from "recharts";
+import { useTranslation } from "react-i18next";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 
 type NutritionChartProps = {
     carbs: number;
     fat: number;
     protein: number;
-    fibre: number;
+    fiber: number;
 };
 
 const chartConfig = {
@@ -29,14 +31,14 @@ const chartConfig = {
         label: "Białko",
         color: "hsl(var(--chart-3))",
     },
-    fibre: {
+    fiber: {
         label: "Błonnik",
         color: "hsl(var(--chart-4))",
     },
 } satisfies ChartConfig;
 
-const NutritionChart = ({ carbs, fat, protein, fibre }: NutritionChartProps) => {
-    // const total = carbs * 4 + fat * 9 + protein * 4 + fibre * 2;
+const NutritionChart = ({ carbs, fat, protein, fiber }: NutritionChartProps) => {
+    const { t } = useTranslation(TranslationNS.Baskets);
     const chartData = [
         {
             nutrition: "carbs",
@@ -57,10 +59,10 @@ const NutritionChart = ({ carbs, fat, protein, fibre }: NutritionChartProps) => 
             fill: "var(--color-protein)",
         },
         {
-            nutrition: "fibre",
-            value: fibre,
+            nutrition: "fiber",
+            value: fiber,
             multiplier: 2,
-            fill: "var(--color-fibre)",
+            fill: "var(--color-fiber)",
         },
     ];
 
@@ -68,7 +70,7 @@ const NutritionChart = ({ carbs, fat, protein, fibre }: NutritionChartProps) => 
         <div className="w-full">
             <Card className="flex flex-col">
                 <CardHeader className="items-center pb-10">
-                    <CardTitle>Udział wartości odżywczych w wartości energetycznej</CardTitle>
+                    <CardTitle>{t("nutritionChartTitle")}</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 pb-0">
                     <ChartContainer

@@ -7,24 +7,16 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { BasketNutritions } from "@/types/BasketTypes";
+import { TranslationNS } from "@/types/TranslationNamespaces";
+import { useTranslation } from "react-i18next";
 import { Label, LabelList, Pie, PieChart } from "recharts";
 
 type ComparisonCarbsChartProps = {
     nutritions: BasketNutritions[];
 };
 
-const chartConfig = {
-    carbs: {
-        label: "Inne węglowodany",
-        color: "hsl(var(--chart-1))",
-    },
-    sugar: {
-        label: "Cukry",
-        color: "hsl(var(--chart-2))",
-    },
-} satisfies ChartConfig;
-
 const ComparisonCarbsChart = ({ nutritions }: ComparisonCarbsChartProps) => {
+    const [t] = useTranslation(TranslationNS.Comparison);
     const total =
         nutritions?.find((nutr) => nutr.groupName === "Węglowodany" && nutr.name === "Total")
             ?.quantity || 0;
@@ -45,6 +37,17 @@ const ComparisonCarbsChart = ({ nutritions }: ComparisonCarbsChartProps) => {
             fill: "var(--color-sugar)",
         },
     ];
+
+    const chartConfig = {
+        carbs: {
+            label: t("otherCarbs"),
+            color: "hsl(var(--chart-1))",
+        },
+        sugar: {
+            label: t("sugar"),
+            color: "hsl(var(--chart-2))",
+        },
+    } satisfies ChartConfig;
     return (
         <ChartContainer
             config={chartConfig}
@@ -103,7 +106,7 @@ const ComparisonCarbsChart = ({ nutritions }: ComparisonCarbsChartProps) => {
                                             x={viewBox.cx}
                                             y={viewBox.cy || 0}
                                             className="fill-muted-foreground">
-                                            Węglowodany w sumie
+                                            {t("carbsSummary")}
                                         </tspan>
                                     </text>
                                 );

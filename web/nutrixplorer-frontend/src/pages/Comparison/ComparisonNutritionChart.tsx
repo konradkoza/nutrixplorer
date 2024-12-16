@@ -6,40 +6,24 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart";
+import { TranslationNS } from "@/types/TranslationNamespaces";
+import { useTranslation } from "react-i18next";
 import { LabelList, Pie, PieChart } from "recharts";
 
 type ComparisonNutritionChartProps = {
     carbs: number;
     fat: number;
     protein: number;
-    fibre: number;
+    fiber: number;
 };
-
-const chartConfig = {
-    carbs: {
-        label: "Węglowodany",
-        color: "hsl(var(--chart-1))",
-    },
-    fat: {
-        label: "Tłuszcz",
-        color: "hsl(var(--chart-2))",
-    },
-    protein: {
-        label: "Białko",
-        color: "hsl(var(--chart-3))",
-    },
-    fibre: {
-        label: "Błonnik",
-        color: "hsl(var(--chart-4))",
-    },
-} satisfies ChartConfig;
 
 const ComparisonNutritionChart = ({
     carbs,
     fat,
     protein,
-    fibre,
+    fiber,
 }: ComparisonNutritionChartProps) => {
+    const [t] = useTranslation(TranslationNS.Comparison);
     // const total = carbs * 4 + fat * 9 + protein * 4 + fibre * 2;
     const chartData = [
         {
@@ -61,12 +45,31 @@ const ComparisonNutritionChart = ({
             fill: "var(--color-protein)",
         },
         {
-            nutrition: "fibre",
-            value: fibre,
+            nutrition: "fiber",
+            value: fiber,
             multiplier: 2,
-            fill: "var(--color-fibre)",
+            fill: "var(--color-fiber)",
         },
     ];
+
+    const chartConfig = {
+        carbs: {
+            label: t("carbs"),
+            color: "hsl(var(--chart-1))",
+        },
+        fat: {
+            label: t("fat"),
+            color: "hsl(var(--chart-2))",
+        },
+        protein: {
+            label: t("protein"),
+            color: "hsl(var(--chart-3))",
+        },
+        fiber: {
+            label: t("fiber"),
+            color: "hsl(var(--chart-4))",
+        },
+    } satisfies ChartConfig;
 
     return (
         <ChartContainer

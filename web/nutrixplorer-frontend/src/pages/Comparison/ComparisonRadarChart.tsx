@@ -8,26 +8,18 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart } from "recharts";
+import { TranslationNS } from "@/types/TranslationNamespaces";
+import { useTranslation } from "react-i18next";
 
 type ComparisonRadarChartProps = {
     nutritions: BasketNutritions[][];
 };
 
-const chartConfig = {
-    basket1: {
-        label: "Koszyk 1",
-        color: "hsl(var(--chart-1))",
-    },
-    basket2: {
-        label: "Koszyk 2",
-        color: "hsl(var(--chart-2))",
-    },
-} satisfies ChartConfig;
-
 const ComparisonRadarChart = ({ nutritions }: ComparisonRadarChartProps) => {
+    const [t] = useTranslation(TranslationNS.Comparison);
     const chartData = [
         {
-            name: "Węglowodany",
+            name: t("carbs"),
             basket1:
                 nutritions[0]?.find(
                     (nutr) => nutr.groupName === "Węglowodany" && nutr.name === "Total"
@@ -38,7 +30,7 @@ const ComparisonRadarChart = ({ nutritions }: ComparisonRadarChartProps) => {
                 )?.quantity || 0,
         },
         {
-            name: "Tłuszcz",
+            name: t("fat"),
             basket1:
                 nutritions[0]?.find((nutr) => nutr.groupName === "Tłuszcz" && nutr.name === "Total")
                     ?.quantity || 0,
@@ -47,21 +39,32 @@ const ComparisonRadarChart = ({ nutritions }: ComparisonRadarChartProps) => {
                     ?.quantity || 0,
         },
         {
-            name: "Białko",
+            name: t("protein"),
             basket1: nutritions[0]?.find((nutr) => nutr.name === "Białko")?.quantity || 0,
             basket2: nutritions[1]?.find((nutr) => nutr.name === "Białko")?.quantity || 0,
         },
         {
-            name: "Błonnik",
+            name: t("fiber"),
             basket1: nutritions[0]?.find((nutr) => nutr.name === "Błonnik")?.quantity || 0,
             basket2: nutritions[1]?.find((nutr) => nutr.name === "Błonnik")?.quantity || 0,
         },
         {
-            name: "Sól",
+            name: t("salt"),
             basket1: nutritions[0]?.find((nutr) => nutr.name === "Sól")?.quantity || 0,
             basket2: nutritions[1]?.find((nutr) => nutr.name === "Sól")?.quantity || 0,
         },
     ];
+
+    const chartConfig = {
+        basket1: {
+            label: t("basket1"),
+            color: "hsl(var(--chart-1))",
+        },
+        basket2: {
+            label: t("basket2"),
+            color: "hsl(var(--chart-2))",
+        },
+    } satisfies ChartConfig;
 
     return (
         <ChartContainer

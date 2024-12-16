@@ -4,6 +4,7 @@ export const rws = [
         group: "Wartość Energetyczna",
         value: 2000,
         variant: "greenToYellow",
+        key: "energyValue",
     },
     {
         name: "Total",
@@ -11,6 +12,7 @@ export const rws = [
         displayName: "Tłuszcz",
         value: 70,
         variant: "greenToYellow",
+        key: "totalFat",
     },
     {
         name: "Kwasy nasycone",
@@ -18,6 +20,7 @@ export const rws = [
         displayName: "w tym kwasy tłuszczowe nasycone",
         value: 20,
         variant: "greenToRed",
+        key: "saturatedFat",
     },
     {
         name: "Total",
@@ -25,6 +28,7 @@ export const rws = [
         displayName: "Węglowodany",
         value: 260,
         variant: "greenToYellow",
+        key: "totalCarbohydrates",
     },
     {
         name: "Cukry",
@@ -32,10 +36,11 @@ export const rws = [
         displayName: "w tym cukry",
         value: 90,
         variant: "greenToRed",
+        key: "sugars",
     },
-    { name: "Białko", group: "Białko", value: 50, variant: "greenToLightGreen" },
-    { name: "Sól", group: "Sól", value: 6, variant: "greenToRed" },
-    { name: "Błonnik", group: "Błonnik" },
+    { name: "Białko", group: "Białko", value: 50, variant: "greenToLightGreen", key: "protein" },
+    { name: "Sól", group: "Sól", value: 6, variant: "greenToRed", key: "salt" },
+    { name: "Błonnik", group: "Błonnik", key: "fiber" },
 ];
 
 export const rwsV = [
@@ -45,6 +50,7 @@ export const rwsV = [
         value: 800,
         variant: "blueToGreen",
         unit: "µg",
+        key: "vitaminA",
     },
     {
         name: "Witamina D",
@@ -52,6 +58,7 @@ export const rwsV = [
         value: 5,
         variant: "blueToGreen",
         unit: "µg",
+        key: "vitaminD",
     },
     {
         name: "Witamina E",
@@ -59,6 +66,7 @@ export const rwsV = [
         value: 12,
         variant: "blueToGreen",
         unit: "mg",
+        key: "vitaminE",
     },
     {
         name: "Witamina K",
@@ -66,6 +74,7 @@ export const rwsV = [
         value: 75,
         variant: "blueToGreen",
         unit: "µg",
+        key: "vitaminK",
     },
     {
         name: "Witamina C",
@@ -73,6 +82,7 @@ export const rwsV = [
         value: 80,
         variant: "blueToGreen",
         unit: "mg",
+        key: "vitaminC",
     },
     {
         name: "Witamina B6",
@@ -80,6 +90,7 @@ export const rwsV = [
         value: 1.4,
         variant: "blueToGreen",
         unit: "mg",
+        key: "vitaminB6",
     },
     {
         name: "Witamina B12",
@@ -87,6 +98,7 @@ export const rwsV = [
         value: 2.5,
         variant: "blueToGreen",
         unit: "µg",
+        key: "vitaminB12",
     },
 ];
 
@@ -97,6 +109,7 @@ export const rwsM = [
         value: 375,
         variant: "blueToGreen",
         unit: "mg",
+        key: "magnesium",
     },
     {
         name: "Fluorek",
@@ -104,6 +117,7 @@ export const rwsM = [
         value: 3.5,
         variant: "blueToGreen",
         unit: "mg",
+        key: "fluoride",
     },
     {
         name: "Mangan",
@@ -111,6 +125,7 @@ export const rwsM = [
         value: 2,
         variant: "blueToGreen",
         unit: "mg",
+        key: "manganese",
     },
     {
         name: "Wapń",
@@ -118,6 +133,7 @@ export const rwsM = [
         value: 800,
         variant: "blueToGreen",
         unit: "mg",
+        key: "calcium",
     },
     {
         name: "Miedź",
@@ -125,6 +141,7 @@ export const rwsM = [
         value: 1,
         variant: "blueToGreen",
         unit: "mg",
+        key: "copper",
     },
     {
         name: "Żelazo",
@@ -132,6 +149,7 @@ export const rwsM = [
         value: 14,
         variant: "blueToGreen",
         unit: "mg",
+        key: "iron",
     },
     {
         name: "Selen",
@@ -139,6 +157,7 @@ export const rwsM = [
         value: 55,
         variant: "blueToGreen",
         unit: "µg",
+        key: "selenium",
     },
     {
         name: "Molibden",
@@ -146,6 +165,7 @@ export const rwsM = [
         value: 50,
         variant: "blueToGreen",
         unit: "µg",
+        key: "molybdenum",
     },
     {
         name: "Fosfor",
@@ -153,6 +173,7 @@ export const rwsM = [
         value: 700,
         variant: "blueToGreen",
         unit: "mg",
+        key: "phosphorus",
     },
     {
         name: "Jod",
@@ -160,6 +181,7 @@ export const rwsM = [
         value: 150,
         variant: "blueToGreen",
         unit: "µg",
+        key: "iodine",
     },
     {
         name: "Chrom",
@@ -167,6 +189,7 @@ export const rwsM = [
         value: 40,
         variant: "blueToGreen",
         unit: "µg",
+        key: "chromium",
     },
     {
         name: "Potas",
@@ -174,6 +197,7 @@ export const rwsM = [
         value: 2000,
         variant: "blueToGreen",
         unit: "mg",
+        key: "potassium",
     },
     {
         name: "Cynk",
@@ -181,5 +205,6 @@ export const rwsM = [
         value: 10,
         variant: "blueToGreen",
         unit: "mg",
+        key: "zinc",
     },
 ];

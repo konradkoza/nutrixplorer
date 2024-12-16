@@ -18,13 +18,15 @@ import { logout } from "@/redux/slices/authSlice";
 import { RootState } from "@/redux/store";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 
 export function UserNav() {
     const { token } = useSelector((state: RootState) => state.authSlice);
     const [getUserData, { data: userData, isLoading }] = useLazyGetMeQuery();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    const [t] = useTranslation(TranslationNS.Layout);
     useEffect(() => {
         if (token) {
             getUserData();
@@ -54,7 +56,7 @@ export function UserNav() {
                         </DropdownMenuTrigger>
                     </TooltipTrigger>
                     <TooltipContent side="bottom">
-                        {token ? "Profile" : "Zaloguj się"}
+                        {token ? t("profile") : t("login")}
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
@@ -81,7 +83,7 @@ export function UserNav() {
                         <DropdownMenuItem className="hover:cursor-pointer" asChild>
                             <Link to="/account" className="flex items-center">
                                 <User className="mr-3 h-4 w-4 text-muted-foreground" />
-                                Konto
+                                {t("account")}
                             </Link>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
@@ -92,7 +94,7 @@ export function UserNav() {
                             dispatch(logout());
                         }}>
                         <LogOut className="mr-3 h-4 w-4 text-muted-foreground" />
-                        Wyloguj
+                        {t("logout")}
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             ) : (
@@ -103,7 +105,7 @@ export function UserNav() {
                             navigate("/login");
                         }}>
                         <LogIn className="mr-3 h-4 w-4 text-muted-foreground" />
-                        Zaloguj się
+                        {t("login")}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
@@ -112,7 +114,7 @@ export function UserNav() {
                             navigate("/register");
                         }}>
                         <UserPlus className="mr-3 h-4 w-4 text-muted-foreground" />
-                        Utwórz konto
+                        {t("register")}
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             )}

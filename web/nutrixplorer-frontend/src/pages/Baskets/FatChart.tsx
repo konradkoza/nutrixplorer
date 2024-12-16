@@ -8,24 +8,16 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { BasketNutritions } from "@/types/BasketTypes";
+import { TranslationNS } from "@/types/TranslationNamespaces";
+import { useTranslation } from "react-i18next";
 import { Label, LabelList, Pie, PieChart } from "recharts";
 
 type FatChartProps = {
     nutritions: BasketNutritions[];
 };
 
-const chartConfig = {
-    fat: {
-        label: "Kwasy nienasycone",
-        color: "hsl(var(--chart-3))",
-    },
-    saturated: {
-        label: "Kwasy nasycone",
-        color: "hsl(var(--chart-4))",
-    },
-} satisfies ChartConfig;
-
 const FatChart = ({ nutritions }: FatChartProps) => {
+    const [t] = useTranslation(TranslationNS.Baskets);
     const total =
         nutritions?.find((nutr) => nutr.groupName === "Tłuszcz" && nutr.name === "Total")
             ?.quantity || 0;
@@ -33,6 +25,17 @@ const FatChart = ({ nutritions }: FatChartProps) => {
     const sat =
         nutritions?.find((nutr) => nutr.groupName === "Tłuszcz" && nutr.name === "Kwasy nasycone")
             ?.quantity || 0;
+
+    const chartConfig = {
+        fat: {
+            label: t("nonSaturatedFats"),
+            color: "hsl(var(--chart-3))",
+        },
+        saturated: {
+            label: t("saturatedFats"),
+            color: "hsl(var(--chart-4))",
+        },
+    } satisfies ChartConfig;
 
     const chartData = [
         {
@@ -109,7 +112,7 @@ const FatChart = ({ nutritions }: FatChartProps) => {
                                                     x={viewBox.cx}
                                                     y={viewBox.cy || 0}
                                                     className="fill-muted-foreground">
-                                                    Tłuszcz w sumie
+                                                    {t("totalFat")}
                                                 </tspan>
                                             </text>
                                         );

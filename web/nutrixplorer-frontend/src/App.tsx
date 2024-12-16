@@ -1,10 +1,10 @@
 import { useDispatch } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Toaster } from "sonner";
 import { ThemeProvider } from "./components/providers/theme-provider";
 import { login, logout } from "./redux/slices/authSlice";
 import { protectedRoutes, publicRoutes } from "./routes";
 import { getExpDate } from "./utils/loginUtils";
-import { Toaster } from "sonner";
 
 const router = createBrowserRouter([...publicRoutes, ...protectedRoutes]);
 

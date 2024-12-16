@@ -3,7 +3,9 @@ import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
 import Pagination from "@/pages/Products/Pagination.tsx";
 import ProductsList from "@/pages/Products/ProductsList.tsx";
 import { useGetMyFavouriteProductsPageQuery } from "@/redux/services/favouriteProductsService.ts";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const FavouritesPage = () => {
     const [pageNumber, setPageNumber] = useState(0);
@@ -12,9 +14,10 @@ const FavouritesPage = () => {
         page: pageNumber,
         size: elements,
     });
+    const [t] = useTranslation(TranslationNS.Favourites);
     const breadcrumbs = useBreadcrumbs([
-        { title: "NutriXplorer", path: "/" },
-        { title: "Ulubione", path: "/favourites" },
+        { title: t("breadcrumbs.home"), path: "/" },
+        { title: t("breadcrumbs.favourites"), path: "/favourites" },
     ]);
 
     return (
@@ -42,8 +45,7 @@ const FavouritesPage = () => {
                         />
                     )}
             </div>
-            {!productPage ||
-                (productPage.products.length === 0 && <div>Brak ulubionych produktów</div>)}
+            {!productPage || (productPage.products.length === 0 && <div>{t("noFavourites")}</div>)}
         </div>
     );
 };

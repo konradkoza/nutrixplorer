@@ -7,24 +7,16 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { BasketNutritions } from "@/types/BasketTypes";
+import { TranslationNS } from "@/types/TranslationNamespaces";
+import { useTranslation } from "react-i18next";
 import { Label, LabelList, Pie, PieChart } from "recharts";
 
 type ComparisonFatChartProps = {
     nutritions: BasketNutritions[];
 };
 
-const chartConfig = {
-    fat: {
-        label: "Kwasy nienasycone",
-        color: "hsl(var(--chart-3))",
-    },
-    saturated: {
-        label: "Kwasy nasycone",
-        color: "hsl(var(--chart-4))",
-    },
-} satisfies ChartConfig;
-
 const ComparisonFatChart = ({ nutritions }: ComparisonFatChartProps) => {
+    const [t] = useTranslation(TranslationNS.Comparison);
     const total =
         nutritions?.find((nutr) => nutr.groupName === "Tłuszcz" && nutr.name === "Total")
             ?.quantity || 0;
@@ -32,6 +24,17 @@ const ComparisonFatChart = ({ nutritions }: ComparisonFatChartProps) => {
     const sat =
         nutritions?.find((nutr) => nutr.groupName === "Tłuszcz" && nutr.name === "Kwasy nasycone")
             ?.quantity || 0;
+
+    const chartConfig = {
+        fat: {
+            label: t("nonSaturated"),
+            color: "hsl(var(--chart-3))",
+        },
+        saturated: {
+            label: t("saturated"),
+            color: "hsl(var(--chart-4))",
+        },
+    } satisfies ChartConfig;
 
     const chartData = [
         {
@@ -103,7 +106,7 @@ const ComparisonFatChart = ({ nutritions }: ComparisonFatChartProps) => {
                                             x={viewBox.cx}
                                             y={viewBox.cy || 0}
                                             className="fill-muted-foreground">
-                                            Tłuszcz w sumie
+                                            {t("fatSummary")}
                                         </tspan>
                                     </text>
                                 );

@@ -17,11 +17,14 @@ import { format } from "date-fns";
 import { ArrowRightIcon, CopyIcon, ScaleIcon, Trash2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import GradientBarSmall, { GradientBarVariants } from "../../components/common/GradientBarSmall";
-import { rws, rwsM } from "@/utils/rws";
+import { rws, rwsM, rwsV } from "@/utils/rws";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { add, remove } from "@/redux/slices/comparisonSlice";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { TranslationNS } from "@/types/TranslationNamespaces";
+import { useTranslation } from "react-i18next";
 
 type BasketCardProps = {
     basket: Basket;
@@ -71,7 +74,7 @@ const BasketCard = ({
     };
     const { baskets } = useSelector((state: RootState) => state.comparisonSlice);
     const dispatch = useDispatch();
-
+    const [t] = useTranslation([TranslationNS.Baskets, TranslationNS.RWS]);
     basket.basketEntries.forEach((entry) => {
         entry.product.nutritionalValues.forEach((nutrition) => {
             if (
@@ -126,7 +129,6 @@ const BasketCard = ({
     });
 
     const addToComparison = (basket: Basket): void => {
-        console.log(basket);
         if (baskets.some((bsk) => bsk.id === basket.id)) {
             // TODO: show toast
             dispatch(
@@ -137,8 +139,9 @@ const BasketCard = ({
             );
             return;
         } else if (baskets.length >= 2) {
-            // TODO: show toast
-            console.log("Too many items in comparison");
+            toast.error("Błąd", {
+                description: "Możesz porównać maksymalnie 2 koszyki.",
+            });
             return;
         } else {
             dispatch(
@@ -149,8 +152,6 @@ const BasketCard = ({
             );
         }
     };
-    console.log(filters);
-    console.log(filteredNutritions);
     return (
         <Card className="flex w-full flex-col" key={basket.id}>
             <div className="flex justify-between">
@@ -159,7 +160,7 @@ const BasketCard = ({
                     <CardDescription>{basket.description}</CardDescription>
                 </CardHeader>
                 <div className="flex flex-col justify-center pr-6 text-sm text-muted-foreground">
-                    <p>{"Data utworzenia: "}</p>
+                    <p>{t("creationDate")}</p>
                     <p>{format(basket.createdAt, "dd.MM.yyyy H:mm")} </p>
                 </div>
             </div>
@@ -173,7 +174,16 @@ const BasketCard = ({
                                     <div
                                         className="grid w-full grid-cols-3"
                                         key={nutrition.name + nutrition.group}>
-                                        <p>{nutrition.name}: </p>
+                                        <p>
+                                            {t(
+                                                rwsM.find(
+                                                    (n) =>
+                                                        n.name === nutrition.name &&
+                                                        n.group === nutrition.group
+                                                )?.key || "",
+                                                { ns: TranslationNS.RWS }
+                                            )}{" "}
+                                        </p>
                                         <p className="place-self-center">
                                             {
                                                 nutritions.find(
@@ -182,7 +192,11 @@ const BasketCard = ({
                                                         n.groupName === nutrition.group
                                                 )?.quantity
                                             }{" "}
-                                            {nutrition.unit}
+                                            {nutrition
+                                                ? nutrition.unit === "mcg"
+                                                    ? "μg"
+                                                    : nutrition.unit
+                                                : ""}
                                         </p>
                                         <div className="flex items-center justify-end">
                                             <GradientBarSmall
@@ -215,7 +229,16 @@ const BasketCard = ({
                                     <div
                                         className="grid w-full grid-cols-3"
                                         key={nutrition.name + nutrition.group}>
-                                        <p>{nutrition.name}: </p>
+                                        <p>
+                                            {t(
+                                                rwsV.find(
+                                                    (n) =>
+                                                        n.name === nutrition.name &&
+                                                        n.group === nutrition.group
+                                                )?.key || "",
+                                                { ns: TranslationNS.RWS }
+                                            )}
+                                        </p>
                                         <p className="place-self-center">
                                             {
                                                 nutritions.find(
@@ -224,12 +247,16 @@ const BasketCard = ({
                                                         n.groupName === nutrition.group
                                                 )?.quantity
                                             }{" "}
-                                            {nutrition.unit}
+                                            {nutrition
+                                                ? nutrition.unit === "mcg"
+                                                    ? "μg"
+                                                    : nutrition.unit
+                                                : ""}
                                         </p>
                                         <div className="flex items-center justify-end">
                                             <GradientBarSmall
                                                 max={
-                                                    rws.find(
+                                                    rwsV.find(
                                                         (n) =>
                                                             n.name === nutrition.name &&
                                                             n.group === nutrition.group
@@ -339,9 +366,7 @@ const BasketCard = ({
                                                 key={nutr.name + nutr.groupName + "table"}
                                                 className="hover:bg-inherit">
                                                 <TableCell>
-                                                    {nutr.name === "Total"
-                                                        ? nutr.groupName
-                                                        : nutr.name}
+                                                    {t(rw.key, { ns: TranslationNS.RWS })}
                                                 </TableCell>
                                                 <TableCell className="text-nowrap">
                                                     {nutr.quantity.toFixed(2) + " " + nutr.unit ||
@@ -382,7 +407,7 @@ const BasketCard = ({
                         </Table>
                     )
                 ) : (
-                    <p>Brak produktów w koszyku .</p>
+                    <p>{t("noProducts")}</p>
                 )}
             </CardContent>
             <CardFooter className="flex flex-wrap">
@@ -391,27 +416,28 @@ const BasketCard = ({
                     variant="ghost"
                     className="gap-2">
                     <CopyIcon />
-                    <p className="hidden">Duplikuj koszyk</p>
+                    <p className="hidden">{t("duplicateBasket")}</p>
                 </Button>
                 <Button
                     className="gap-2"
                     variant="ghost"
                     onClick={() => handleDeleteBasket(basket.id)}>
                     <Trash2Icon />
-                    <p className="hidden">Usuń koszyk</p>
+                    <p className="hidden">{t("deleteBasket")}</p>
                 </Button>
                 <Button
                     className={cn(
                         "gap-2",
-                        baskets.some((bsk) => bsk.id === basket.id) && "bg-red-200 hover:bg-red-300"
+                        baskets.some((bsk) => bsk.id === basket.id) &&
+                            "bg-red-200 hover:bg-red-300 dark:bg-red-400 dark:hover:bg-red-700"
                     )}
                     variant="ghost"
                     onClick={() => addToComparison(basket)}>
                     <ScaleIcon />
-                    <p className="hidden">Dodaj do porównania</p>
+                    <p className="hidden">{t("addToComparison")}</p>
                 </Button>
                 <Button className="gap-2" variant="ghost" onClick={() => navigate(`${basket.id}`)}>
-                    <p className="block">Szczegóły</p>
+                    <p className="block">{t("details")}</p>
                     <ArrowRightIcon />
                 </Button>
             </CardFooter>

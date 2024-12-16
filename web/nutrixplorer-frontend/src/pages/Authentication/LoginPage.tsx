@@ -16,7 +16,10 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
-
+import { FcGoogle } from "react-icons/fc";
+import { oauthUrl } from "@/utils/oatuhUrl";
+import { useTranslation } from "react-i18next";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 const LoginSchema = z.object({
     email: z.string(),
     password: z.string(),
@@ -35,6 +38,7 @@ const LoginPage = () => {
     });
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [t] = useTranslation(TranslationNS.Authentication);
     const onSubmit = async (data: LoginFormType) => {
         try {
             const response = await loginMutation(data);
@@ -51,10 +55,8 @@ const LoginPage = () => {
         <div className="flex h-screen w-full items-center justify-center bg-background p-4">
             <Card className="mx-auto w-full max-w-sm">
                 <CardHeader>
-                    <CardTitle className="text-2xl">Login</CardTitle>
-                    <CardDescription>
-                        Enter your email below to login to your account
-                    </CardDescription>
+                    <CardTitle className="text-2xl">{t("login.title")}</CardTitle>
+                    <CardDescription>{t("login.description")}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
@@ -66,7 +68,7 @@ const LoginPage = () => {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel>{t("login.email")}</FormLabel>
                                         <FormControl>
                                             <Input placeholder="example@mail.com" {...field} />
                                         </FormControl>
@@ -79,7 +81,7 @@ const LoginPage = () => {
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Hasło</FormLabel>
+                                        <FormLabel>{t("login.password")}</FormLabel>
                                         <FormControl>
                                             <Input placeholder="" type="password" {...field} />
                                         </FormControl>
@@ -87,13 +89,22 @@ const LoginPage = () => {
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit">Login</Button>
+                            <Button type="submit">{t("login.submit")}</Button>
                         </form>
                     </Form>
+                    <Button
+                        type="button"
+                        className="mt-2 w-full gap-2"
+                        variant="outline"
+                        onClick={() => {
+                            window.location.href = oauthUrl;
+                        }}>
+                        <FcGoogle size={20} /> {t("login.google")}
+                    </Button>
                     <div className="mt-4 text-center text-sm">
-                        {"Nie masz konta? "}
+                        {t("login.noAccount")}{" "}
                         <Link className="underline" to="/register">
-                            Utwórz konto
+                            {t("login.createAccount")}
                         </Link>
                     </div>
                 </CardContent>

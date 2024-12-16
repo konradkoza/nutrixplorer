@@ -1,0 +1,21 @@
+{
+    "products":"Produkty",
+    "client": "Klient",
+    "admin": "Administrator",
+    "compare": "Porównaj",
+    "favourites": "Ulubione",
+    "baskets": "Koszyki",
+    "users": "Użytkownicy",
+    "account": "Konto",
+    "logout": "Wyloguj się",
+    "login": "Zaloguj się",
+    "register": "Utwóz konto",
+    "home": "NutriXplorer",
+    "profile": "Profil",
+    "switchTheme": "Zmień motyw",
+    "dark": "Ciemny",
+    "light": "Jasny",
+    "switchLanguage": "Zmień język",
+    "pl": "Polski",
+    "en": "Angielski"
+}

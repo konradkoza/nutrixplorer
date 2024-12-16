@@ -8,24 +8,16 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { BasketNutritions } from "@/types/BasketTypes";
+import { TranslationNS } from "@/types/TranslationNamespaces";
+import { useTranslation } from "react-i18next";
 import { Label, LabelList, Pie, PieChart } from "recharts";
 
 type CarbsChartProps = {
     nutritions: BasketNutritions[];
 };
 
-const chartConfig = {
-    carbs: {
-        label: "Inne węglowodany",
-        color: "hsl(var(--chart-1))",
-    },
-    sugar: {
-        label: "Cukry",
-        color: "hsl(var(--chart-2))",
-    },
-} satisfies ChartConfig;
-
 const CarbsChart = ({ nutritions }: CarbsChartProps) => {
+    const [t] = useTranslation(TranslationNS.Baskets);
     const total =
         nutritions?.find((nutr) => nutr.groupName === "Węglowodany" && nutr.name === "Total")
             ?.quantity || 0;
@@ -33,6 +25,17 @@ const CarbsChart = ({ nutritions }: CarbsChartProps) => {
     const sugar =
         nutritions?.find((nutr) => nutr.groupName === "Węglowodany" && nutr.name === "Cukry")
             ?.quantity || 0;
+
+    const chartConfig = {
+        carbs: {
+            label: t("otherCarbs"),
+            color: "hsl(var(--chart-1))",
+        },
+        sugar: {
+            label: t("sugar"),
+            color: "hsl(var(--chart-2))",
+        },
+    } satisfies ChartConfig;
 
     const chartData = [
         {
@@ -49,7 +52,7 @@ const CarbsChart = ({ nutritions }: CarbsChartProps) => {
     return (
         <Card className="flex min-w-[370px] flex-grow flex-col">
             <CardHeader className="items-center">
-                <CardTitle>Węglowodany</CardTitle>
+                <CardTitle>{t("carbs")}</CardTitle>
             </CardHeader>
             <CardContent className="mb-0 flex-1">
                 <ChartContainer
@@ -109,7 +112,7 @@ const CarbsChart = ({ nutritions }: CarbsChartProps) => {
                                                     x={viewBox.cx}
                                                     y={viewBox.cy || 0}
                                                     className="fill-muted-foreground">
-                                                    Węglowodany w sumie
+                                                    {t("totalCarbs")}
                                                 </tspan>
                                             </text>
                                         );

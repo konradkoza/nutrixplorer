@@ -7,22 +7,13 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Basket } from "@/types/BasketTypes";
+import { TranslationNS } from "@/types/TranslationNamespaces";
+import { useTranslation } from "react-i18next";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 type IndexComparisonChartProps = {
     baskets: Basket[];
 };
-
-const chartConfig = {
-    basket1: {
-        label: "Koszyk 1",
-        color: "hsl(var(--chart-1))",
-    },
-    basket2: {
-        label: "Koszyk 2",
-        color: "hsl(var(--chart-2))",
-    },
-} satisfies ChartConfig;
 
 const productIndexes = [
     { name: "V", displayName: "VIT" },
@@ -35,8 +26,21 @@ const productIndexes = [
 ];
 
 const IndexComparisonChart = ({ baskets }: IndexComparisonChartProps) => {
+    const [t] = useTranslation(TranslationNS.Comparison);
+
+    const chartConfig = {
+        basket1: {
+            label: t("basket1"),
+            color: "hsl(var(--chart-1))",
+        },
+        basket2: {
+            label: t("basket2"),
+            color: "hsl(var(--chart-2))",
+        },
+    } satisfies ChartConfig;
+
     const chartData = productIndexes.map((index) => ({
-        name: "Indeks " + index.displayName,
+        name: t("index") + " " + index.displayName,
         basket1: baskets[0].basketEntries
             .map((entry) => entry.productIndexes)
             .reduce((acc, curr) => {

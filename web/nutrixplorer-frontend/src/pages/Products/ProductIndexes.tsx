@@ -8,6 +8,8 @@ import {
     returnIndexValue,
 } from "@/utils/productUtils";
 import IndexCircle from "./IndexCircle";
+import { TranslationNS } from "@/types/TranslationNamespaces";
+import { useTranslation } from "react-i18next";
 
 type ProductIndexesProps = {
     indexes: ProductIndex[];
@@ -16,6 +18,7 @@ type ProductIndexesProps = {
 };
 
 const ProductIndexes = ({ indexes, nutritionalIndexes, energy }: ProductIndexesProps) => {
+    const [t] = useTranslation(TranslationNS.Products);
     return (
         <div>
             {/* <IndexCircle
@@ -49,7 +52,7 @@ const ProductIndexes = ({ indexes, nutritionalIndexes, energy }: ProductIndexesP
             <Table className="text-md mt-5">
                 <TableFooter>
                     <TableRow>
-                        <TableHead>Wartości odżywcze</TableHead>
+                        <TableHead>{t("nutritionalValues")}</TableHead>
                         <TableHead></TableHead>
                     </TableRow>
                     {nutritionalIndexes.map(

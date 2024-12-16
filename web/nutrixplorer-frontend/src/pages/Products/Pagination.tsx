@@ -6,8 +6,9 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { t } from "i18next";
+import { TranslationNS } from "@/types/TranslationNamespaces";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { RiExpandUpDownLine } from "react-icons/ri";
 
@@ -36,13 +37,13 @@ const PageChangerComponent: FC<PaginationProps> = ({
         setNumberOfElements(numberOfElements);
         setPageNumber(0);
     };
-
+    const [t] = useTranslation(TranslationNS.Pagination);
     return (
         <div className={cn("flex items-center", className)}>
             <div className="flex items-center justify-start gap-2">{children}</div>
             <div className="flex items-center justify-end gap-12">
                 <div className="flex items-center gap-1">
-                    <p className="mr-1">{t("pageChanger.numberOfElements")}</p>
+                    <p className="mr-1">{t("numberOfElements")}</p>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button
@@ -56,6 +57,7 @@ const PageChangerComponent: FC<PaginationProps> = ({
                         <DropdownMenuContent>
                             {elements.map((number) => (
                                 <DropdownMenuItem
+                                    key={number + "pagination"}
                                     onSelect={() => handleElementChange(number)}
                                     className="h-8 px-2">
                                     {number}
@@ -65,7 +67,7 @@ const PageChangerComponent: FC<PaginationProps> = ({
                     </DropdownMenu>
                 </div>
                 <p>
-                    Strona {pageNumber + 1} z {totalPages === 0 ? 1 : totalPages}
+                    {t("page")} {pageNumber + 1} {t("of")} {totalPages === 0 ? 1 : totalPages}
                 </p>
                 <div className="flex gap-1">
                     <Button

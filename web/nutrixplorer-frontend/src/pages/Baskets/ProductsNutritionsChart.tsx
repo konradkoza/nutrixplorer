@@ -8,35 +8,15 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { BasketEntry } from "@/types/BasketTypes";
+import { TranslationNS } from "@/types/TranslationNamespaces";
+import { useTranslation } from "react-i18next";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Text } from "recharts";
 type ProductsNutritionsChartProps = {
     basketEntries: BasketEntry[];
 };
 
-const chartConfig = {
-    carbs: {
-        label: "Węglowodany",
-        color: "hsl(var(--chart-1))",
-    },
-    fat: {
-        label: "Tłuszcz",
-        color: "hsl(var(--chart-2))",
-    },
-    protein: {
-        label: "Białko",
-        color: "hsl(var(--chart-3))",
-    },
-    fibre: {
-        label: "Błonnik",
-        color: "hsl(var(--chart-4))",
-    },
-    salt: {
-        label: "Sól",
-        color: "hsl(var(--chart-5))",
-    },
-} satisfies ChartConfig;
-
 const ProductsNutritionsChart = ({ basketEntries }: ProductsNutritionsChartProps) => {
+    const [t] = useTranslation(TranslationNS.Baskets);
     const chartData = basketEntries.map((entry) => ({
         name: entry.product.productName,
         carbs:
@@ -58,7 +38,7 @@ const ProductsNutritionsChart = ({ basketEntries }: ProductsNutritionsChartProps
                 (value) => value.nutritionalValueName.name === "Białko"
             )?.quantity || 0) *
             (entry.product.unit === "l" ? (1000 * entry.units) / 100 : entry.units / 100),
-        fibre:
+        fiber:
             (entry.product.nutritionalValues.find(
                 (value) => value.nutritionalValueName.name === "Błonnik"
             )?.quantity || 0) *
@@ -69,6 +49,29 @@ const ProductsNutritionsChart = ({ basketEntries }: ProductsNutritionsChartProps
             )?.quantity || 0) *
             (entry.product.unit === "l" ? (1000 * entry.units) / 100 : entry.units / 100),
     }));
+
+    const chartConfig = {
+        carbs: {
+            label: t("carbs"),
+            color: "hsl(var(--chart-1))",
+        },
+        fat: {
+            label: t("fat"),
+            color: "hsl(var(--chart-2))",
+        },
+        protein: {
+            label: t("protein"),
+            color: "hsl(var(--chart-3))",
+        },
+        fiber: {
+            label: t("fiber"),
+            color: "hsl(var(--chart-4))",
+        },
+        salt: {
+            label: t("salt"),
+            color: "hsl(var(--chart-5))",
+        },
+    } satisfies ChartConfig;
 
     const CustomXAxisTick = ({ x, y, payload }: any) => {
         if (payload && payload.value) {
@@ -84,7 +87,7 @@ const ProductsNutritionsChart = ({ basketEntries }: ProductsNutritionsChartProps
     return (
         <Card className="w-full">
             <CardHeader>
-                <CardTitle>Wartość odżywcza poszczególnych produktów</CardTitle>
+                <CardTitle>{t("productsNutrTitle")}</CardTitle>
             </CardHeader>
             <CardContent>
                 <ChartContainer className="aspect-square max-h-[500px] w-full" config={chartConfig}>

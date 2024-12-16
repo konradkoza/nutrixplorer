@@ -4,11 +4,8 @@ public class MokErrorCodes {
 
 
     public static final String CLIENT_NOT_FOUND = "clientNotFound";
-    public static final String SELLER_NOT_FOUND = "sellerNotFound";
-
-    private MokErrorCodes() {
-    }
-
+    public static final String OAUTH_EMAIL_IN_USE = "oauthEmailInUse";
+    public static final String OAUTH2_ERROR = "oauth2AuthenticationError";
     public static final String USER_NOT_FOUND = "userNotFound";
     public static final String INVALID_CREDENTIALS = "invalidCredentials";
     public static final String UNVERIFIED_ACCOUNT = "unverifiedAccount";
@@ -21,4 +18,9 @@ public class MokErrorCodes {
     public static final String ACCESS_LEVEL_TAKEN = "accessLevelAlreadyTaken";
     public static final String ACCESS_LEVEL_CANNOT_BE_REMOVED = "accessLevelCannotBeRemoved";
     public static final String ADMINISTRATOR_OWN_ROLE_REMOVAL = "ownAdministratorRoleRemoval";
+    public static final String OAUTH2_USER = "oauth2User";
+
+
+    private MokErrorCodes() {
+    }
 }

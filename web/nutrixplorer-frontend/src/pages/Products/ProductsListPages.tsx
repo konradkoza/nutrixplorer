@@ -9,11 +9,14 @@ import { AccessLevel } from "@/types/UserTypes";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Pagination from "./Pagination";
+import { TranslationNS } from "@/types/TranslationNamespaces";
+import { useTranslation } from "react-i18next";
 
 const ProductsListPages = () => {
     const [pageNumber, setPageNumber] = useState(0);
     const [elements, setElements] = useState(8);
     const [filters, setFilters] = useState<FilteringFormType>();
+    const [t] = useTranslation(TranslationNS.Products);
     const { data: productPage, isLoading } = useGetProductFilteredPageQuery({
         page: pageNumber,
         elements: elements,
@@ -25,8 +28,8 @@ const ProductsListPages = () => {
     });
 
     const breadcrumbs = useBreadcrumbs([
-        { title: "NutriXplorer", path: "/" },
-        { title: "Produkty", path: "/products" },
+        { title: t("breadcrumbs.home"), path: "/" },
+        { title: t("breadcrumbs.products"), path: "/products" },
     ]);
     return (
         <div className="flex flex-col items-center justify-center gap-2">

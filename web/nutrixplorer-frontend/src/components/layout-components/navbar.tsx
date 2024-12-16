@@ -3,6 +3,7 @@ import { UserNav } from "@/components/layout-components/user-nav";
 import { ModeToggle } from "@/components/mode-toggle";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+import { LanguageToggle } from "../language-toggle";
 
 interface NavbarProps {
     title: string;
@@ -20,6 +21,7 @@ export function Navbar({ title, children }: NavbarProps) {
                 </div>
                 <div className="flex flex-1 items-center justify-end">
                     {children}
+                    <LanguageToggle />
                     <ModeToggle />
                     <UserNav />
                 </div>

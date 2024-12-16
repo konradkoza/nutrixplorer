@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/table";
 import { BasketNutritions } from "@/types/BasketTypes";
 import Indicator from "../../components/common/Indicator";
+import { TranslationNS } from "@/types/TranslationNamespaces";
+import { useTranslation } from "react-i18next";
 
 type NutritionsTableProps = {
     nutritions: BasketNutritions[];
@@ -63,18 +65,19 @@ export const simpleNutritionTable: SimpleNutritionElements[] = [
 ];
 
 const NutrtitionsTable = ({ nutritions }: NutritionsTableProps) => {
+    const [t] = useTranslation(TranslationNS.Baskets);
     return (
         <Card className="h-full">
             <CardHeader>
-                <p className="text-2xl">Sumaryczna wartość odżywcza</p>
+                <p className="text-2xl">{t("summaryNutrValue")}</p>
             </CardHeader>
             <CardContent>
                 <Table>
                     <TableHeader>
                         <TableRow>
                             <TableHead align="left" className="w-8"></TableHead>
-                            <TableHead align="left">Wartość odżywcza</TableHead>
-                            <TableHead>Sumaryczna wartość</TableHead>
+                            <TableHead align="left">{t("nutrValue")}</TableHead>
+                            <TableHead>{t("totalValue")}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -139,7 +142,11 @@ const NutrtitionsTable = ({ nutritions }: NutritionsTableProps) => {
                                     <TableCell>{nutrition.name}</TableCell>
                                     <TableCell>
                                         {nutrition ? Number(nutrition.quantity.toFixed(2)) : 0}{" "}
-                                        {nutrition ? nutrition.unit : ""}
+                                        {nutrition
+                                            ? nutrition.unit === "mcg"
+                                                ? "μg"
+                                                : nutrition.unit
+                                            : ""}
                                     </TableCell>
                                 </TableRow>
                             ))}
