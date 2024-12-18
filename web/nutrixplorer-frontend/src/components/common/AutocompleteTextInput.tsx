@@ -1,5 +1,4 @@
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Label } from "../ui/label";
 import { Skeleton } from "../ui/skeleton";

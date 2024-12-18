@@ -16,12 +16,40 @@ import { useParams } from "react-router-dom";
 import NutritionTable from "./NutritionTable";
 import { useTranslation } from "react-i18next";
 import { TranslationNS } from "@/utils/translationNamespaces";
+import { useMemo, useState } from "react";
+import {
+    useAddFavouriteMutation,
+    useDeleteFavoriteMutation,
+    useGetMyFavouriteProductsQuery,
+} from "@/redux/services/favouriteProductsService";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
+import { AccessLevel } from "@/types/UserTypes";
+import { Button } from "@/components/ui/button";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { ShoppingBasketIcon } from "lucide-react";
+import AddToBasketDialog from "./AddToBasketDialog";
 
 const ProductDetailsPage = () => {
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [setFavourite] = useAddFavouriteMutation();
+    const [deleteFavourite] = useDeleteFavoriteMutation();
+    const { accessLevels } = useSelector((state: RootState) => state.authSlice);
+    const { data: favouriteProducts } = useGetMyFavouriteProductsQuery(undefined, {
+        skip: !accessLevels.includes(AccessLevel.CLIENT),
+    });
     const { id } = useParams<{ id: string }>();
     const { data: productDetails, isLoading } = useGetProductDetailsQuery(id!, {
         skip: !id,
     });
+
+    const isFavourite = useMemo(() => {
+        return (
+            favouriteProducts !== undefined &&
+            favouriteProducts.some((product) => product.id === id)
+        );
+    }, [favouriteProducts, id]);
+
     const { t } = useTranslation(TranslationNS.Products);
     const breadcrumbs = useBreadcrumbs([
         { title: t("breadcrumbs.home"), path: "/" },
@@ -48,7 +76,41 @@ const ProductDetailsPage = () => {
                                     }}
                                 />
                             </Card>
-                            <div className="flex flex-grow basis-0 flex-col sm:w-2/3">
+                            <div className="relative flex flex-grow basis-0 flex-col sm:w-2/3">
+                                {favouriteProducts !== undefined && (
+                                    <div className="absolute right-0 m-1 flex h-auto flex-col space-y-1">
+                                        {!isFavourite ? (
+                                            <Button
+                                                className="rounded-[0.5rem] bg-secondary/20"
+                                                variant="ghost"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setFavourite(id!);
+                                                }}>
+                                                <FaRegHeart />
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                variant="ghost"
+                                                className="rounded-[0.5rem] bg-secondary/20"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    deleteFavourite(id!);
+                                                }}>
+                                                <FaHeart />
+                                            </Button>
+                                        )}
+                                        <Button
+                                            variant="ghost"
+                                            className="rounded-[0.5rem] bg-secondary/20"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setDialogOpen(true);
+                                            }}>
+                                            <ShoppingBasketIcon />
+                                        </Button>
+                                    </div>
+                                )}
                                 <Card className="min-h-32">
                                     <CardHeader>
                                         <CardTitle>{productDetails.productName}</CardTitle>
@@ -224,6 +286,13 @@ const ProductDetailsPage = () => {
                                 <CardContent>{t("noProducerInfo")}</CardContent>
                             )}
                         </Card>
+                        <AddToBasketDialog
+                            open={dialogOpen}
+                            productId={id!}
+                            onClose={() => setDialogOpen(false)}
+                            unit={productDetails?.unit || ""}
+                            productName={productDetails?.productName || ""}
+                        />
                     </div>
                 ) : (
                     <div>{t("productNotFound")}</div>
