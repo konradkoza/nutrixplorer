@@ -24,6 +24,8 @@
     "accessLevelCannotBeRemoved": "Access level cannot be removed",
     "ownAdministratorRoleRemoval": "Cannot remove own administrator role",
     "oauth2User": "User with Google login, try logging in with Google or use the password recovery option",
-    "noConnection": "No connection to the server",
-    "otherError": "An error occurred"
+    "connectionError": "No connection to the server",
+    "otherError": "An error occurred",
+    "unexpectedError": "An unexpected error occurred",
+    "invalidQuantity": "Invalid quantity of product"
 }

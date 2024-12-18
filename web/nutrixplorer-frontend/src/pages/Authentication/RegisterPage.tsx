@@ -10,29 +10,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRegisterMutation } from "@/redux/services/authService";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { getRegisterSchema, RegisterFormType } from "@/types/schemas/AuthenticationSchema";
 import { oauthUrl } from "@/utils/oatuhUrl";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
-import { z } from "zod";
-
-const RegisterSchema = z
-    .object({
-        email: z.string().email(),
-        password: z.string(),
-        confirmPassword: z.string(),
-        firstName: z.string(),
-        lastName: z.string(),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-        message: "Passwords do not match",
-        path: ["confirmPassword"],
-    });
-
-type RegisterFormType = z.infer<typeof RegisterSchema>;
 
 const RegisterPage = () => {
     const [register] = useRegisterMutation();
@@ -45,7 +30,7 @@ const RegisterPage = () => {
             firstName: "",
             lastName: "",
         },
-        resolver: zodResolver(RegisterSchema),
+        resolver: zodResolver(getRegisterSchema(t)),
     });
     const navigate = useNavigate();
 

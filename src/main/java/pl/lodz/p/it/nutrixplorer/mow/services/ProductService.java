@@ -78,4 +78,8 @@ public class ProductService {
     public List<String> getCountries() {
         return productRepository.findAllCountries();
     }
+
+    public List<String> getProductMatchingProductNames(int elements, String productName) {
+        return productRepository.findProductByProductNameContaining(productName.toLowerCase(), PageRequest.of(0, elements)).getContent().stream().map(Product::getProductName).toList();
+    }
 }

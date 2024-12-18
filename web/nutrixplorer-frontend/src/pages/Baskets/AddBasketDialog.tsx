@@ -6,29 +6,49 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateBasketMutation } from "@/redux/services/basketService";
 import { CreateBasket } from "@/types/BasketTypes";
+import { AddBasketDialogFormType, getAddBasketSchema } from "@/types/schemas/BasketSchema";
+import { TranslationNS } from "@/utils/translationNamespaces";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { TranslationNS } from "@/types/TranslationNamespaces";
 
-const AddBasketDialog = () => {
-    const form = useForm<CreateBasket>({
+type AddBasketDialogProps = {
+    addBasket?: (basket: CreateBasket) => void;
+};
+
+const AddBasketDialog = ({ addBasket }: AddBasketDialogProps) => {
+    const { t } = useTranslation(TranslationNS.Baskets);
+    const form = useForm<AddBasketDialogFormType>({
         values: {
             name: "",
-            description: "",
+            description: undefined,
         },
+        resolver: zodResolver(getAddBasketSchema(t)),
     });
     const [open, setOpen] = useState(false);
     const [createBasket] = useCreateBasketMutation();
-    const { t } = useTranslation(TranslationNS.Baskets);
-    const handleAddBasket = (data: CreateBasket) => {
-        createBasket(data);
+
+    const handleAddBasket = async (data: AddBasketDialogFormType) => {
+        if (addBasket) {
+            await addBasket(data);
+        } else {
+            createBasket(data);
+        }
+        form.reset();
         setOpen(false);
     };
 
@@ -45,7 +65,17 @@ const AddBasketDialog = () => {
                     <DialogTitle>{t("createNewBasket")}</DialogTitle>
                     <Form {...form}>
                         <form
-                            onSubmit={form.handleSubmit(handleAddBasket)}
+                            // Prevents closing another dialog
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    e.preventDefault();
+                                    form.handleSubmit(handleAddBasket)();
+                                }
+                            }}
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                form.handleSubmit(handleAddBasket);
+                            }}
                             className="flex flex-col gap-2">
                             <FormField
                                 control={form.control}
@@ -56,6 +86,9 @@ const AddBasketDialog = () => {
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
+                                        <FormMessage>
+                                            {form.formState.errors.name?.message}
+                                        </FormMessage>
                                     </FormItem>
                                 )}
                             />
@@ -68,6 +101,9 @@ const AddBasketDialog = () => {
                                         <FormControl>
                                             <Textarea {...field} />
                                         </FormControl>
+                                        <FormMessage>
+                                            {form.formState.errors.description?.message}
+                                        </FormMessage>
                                     </FormItem>
                                 )}
                             />

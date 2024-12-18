@@ -9,7 +9,7 @@ import { AccessLevel } from "@/types/UserTypes";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Pagination from "./Pagination";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
 
 const ProductsListPages = () => {
@@ -17,7 +17,7 @@ const ProductsListPages = () => {
     const [elements, setElements] = useState(8);
     const [filters, setFilters] = useState<FilteringFormType>();
     const [t] = useTranslation(TranslationNS.Products);
-    const { data: productPage, isLoading } = useGetProductFilteredPageQuery({
+    const { data: productPage, isFetching } = useGetProductFilteredPageQuery({
         page: pageNumber,
         elements: elements,
         ...(filters || ({} as FilteringFormType)),
@@ -35,7 +35,7 @@ const ProductsListPages = () => {
         <div className="flex flex-col items-center justify-center gap-2">
             <div className="container">{breadcrumbs}</div>
             <FilteringComponent setFilters={setFilters} />
-            {isLoading ? (
+            {isFetching ? (
                 <Spinner />
             ) : (
                 productPage && (

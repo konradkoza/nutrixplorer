@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 
 export function LanguageToggle() {
     const { i18n } = useTranslation();

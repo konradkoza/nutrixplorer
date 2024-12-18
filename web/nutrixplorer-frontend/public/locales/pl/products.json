@@ -15,6 +15,9 @@
         "fats": "Tłuszcz",
         "calories": "Wartość energetyczna",
         "fiber": "Błonnik",
+        "salt": "Sól",
+        "sugar": "Cukry",
+        "saturatedFats": "Tłuszcze nasycone",
         "min": "Od:",
         "max": "Do:",
         "minIndex": "Minimalny indeks",
@@ -36,16 +39,21 @@
         "Chrom": "Chrom",
         "Potas": "Potas",
         "Cynk": "Cynk",
-        "reset": "Wyczyść"
+        "reset": "Wyczyść",
+        "per100g": "na 100 g/ml"
     },
     "addToBasket": {
-        "basket": "Koszyk",
+        "basket": "Koszyk*",
         "addToBasket": "Dodaj do koszyka",
-        "quantity": "Ilość",
+        "quantity": "Ilość*",
         "add": "Dodaj",
         "cancel": "Anuluj",
         "noBaskets": "Nie znaleziono koszyków",
         "search": "Wyszukaj..."
+    },
+    "errors": {
+        "basketId": "Koszyk jest wymagany",
+        "quantity": "Ilość musi być większa niż 0"
     },
     "imageAlt": "Brak zdjęcia",
     "producer": "Producent",
@@ -70,5 +78,8 @@
     "producerContact": "Kontakt:",
     "noProducerInfo": "Brak informacji o producencie",
     "productNotFound": "Produkt nie istnieje",
-    "nutritionalValues": "Wartości odżywcze"
+    "nutritionalValues": "Wartości odżywcze",
+    "portion": "Porcja",
+    "nutritionalValue": "Wartość odżywcza",
+    "noProducts": "Nie znaleziono produktów"
 }

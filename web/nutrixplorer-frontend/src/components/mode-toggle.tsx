@@ -2,7 +2,7 @@ import { MoonIcon, SunIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { useTheme } from "./providers/theme-provider";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
 
 export function ModeToggle() {

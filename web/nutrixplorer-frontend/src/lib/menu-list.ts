@@ -27,7 +27,7 @@ export function getMenuList(authorities: AccessLevel[]): Group[] {
         menus: [
             {
                 href: "/products",
-                label: "Produkty",
+                label: "products",
                 icon: ShoppingBag,
                 submenus: [],
             },
@@ -35,7 +35,7 @@ export function getMenuList(authorities: AccessLevel[]): Group[] {
     });
     if (authorities.includes(AccessLevel.CLIENT)) {
         list.push({
-            groupLabel: "Klient",
+            groupLabel: "client",
             menus: [
                 {
                     href: "/compare",

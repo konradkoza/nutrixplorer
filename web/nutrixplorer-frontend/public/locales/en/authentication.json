@@ -1,4 +1,13 @@
 {
+    "errors": {
+        "email": "Invalid email address",
+        "emailRequired": "Email address is required",
+        "password": "Password is too short",
+        "passwordRequired": "Password is required",
+        "passwordPattern": "Password must be at least 8 characters long and contain at least one digit, one uppercase letter, one lowercase letter, and one special character",
+        "firstName": "First name is required",
+        "lastName": "Last name is required"
+    },
     "login": {
         "title": "Login",
         "description": "Enter your email and password to log in",

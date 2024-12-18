@@ -15,7 +15,7 @@ import { useGetProductDetailsQuery } from "@/redux/services/productService.ts";
 import { useParams } from "react-router-dom";
 import NutritionTable from "./NutritionTable";
 import { useTranslation } from "react-i18next";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 
 const ProductDetailsPage = () => {
     const { id } = useParams<{ id: string }>();

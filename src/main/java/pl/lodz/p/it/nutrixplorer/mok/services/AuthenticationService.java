@@ -1,6 +1,5 @@
 package pl.lodz.p.it.nutrixplorer.mok.services;
 
-import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -84,7 +83,7 @@ public class AuthenticationService {
         client.setUser(user);
         try {
             return clientRepository.saveAndFlush(client).getUser();
-        } catch (ConstraintViolationException e) {
+        } catch (Exception e) {
             throw new EmailAddressInUseException(UserExceptionMessages.EMAIL_IN_USE, MokErrorCodes.EMAIL_IN_USE);
         }
     }

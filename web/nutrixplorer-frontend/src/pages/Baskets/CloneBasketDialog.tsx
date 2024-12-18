@@ -1,20 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useCloneBasketMutation } from "@/redux/services/basketService";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { useTranslation } from "react-i18next";
-import { TranslationNS } from "@/types/TranslationNamespaces";
-
-const CloneBasketSchema = z.object({
-    name: z.string(),
-    description: z.string(),
-});
-
-type CloneBasketFormType = z.infer<typeof CloneBasketSchema>;
+import { TranslationNS } from "@/utils/translationNamespaces";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AddBasketDialogFormType, getAddBasketSchema } from "@/types/schemas/BasketSchema";
 
 type AddBasketDialogProps = {
     currentName: string;
@@ -27,13 +28,14 @@ const CloneBasketDialog = ({ currentName, basketId, open, onClose }: AddBasketDi
     const { t } = useTranslation(TranslationNS.Baskets);
     const [cloneBasket] = useCloneBasketMutation();
 
-    const form = useForm<CloneBasketFormType>({
+    const form = useForm<AddBasketDialogFormType>({
         values: {
             name: currentName + " - kopia",
             description: "",
         },
+        resolver: zodResolver(getAddBasketSchema(t)),
     });
-    const handleChangeQuantity = (data: CloneBasketFormType) => {
+    const handleChangeQuantity = (data: AddBasketDialogFormType) => {
         cloneBasket({ basketId: basketId, basket: data });
         onClose();
     };
@@ -53,6 +55,7 @@ const CloneBasketDialog = ({ currentName, basketId, open, onClose }: AddBasketDi
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>
+                                    <FormMessage>{form.formState.errors.name?.message}</FormMessage>
                                 </FormItem>
                             )}
                         />
@@ -65,6 +68,9 @@ const CloneBasketDialog = ({ currentName, basketId, open, onClose }: AddBasketDi
                                     <FormControl>
                                         <Textarea {...field} />
                                     </FormControl>
+                                    <FormMessage>
+                                        {form.formState.errors.description?.message}
+                                    </FormMessage>
                                 </FormItem>
                             )}
                         />

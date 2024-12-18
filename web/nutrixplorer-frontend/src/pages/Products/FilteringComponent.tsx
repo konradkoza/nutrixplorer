@@ -1,3 +1,4 @@
+import AutocompleteTextInput from "@/components/common/AutocompleteTextInput";
 import {
     Accordion,
     AccordionContent,
@@ -17,10 +18,18 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { useGetAllCountriesQuery, useGetPackageTypesQuery } from "@/redux/services/productService";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { mineralsNames, vitaminsNames } from "@/constants/NutritionConstants";
+import {
+    useGetAllCountriesQuery,
+    useGetPackageTypesQuery,
+    useGetProductByNameQuery,
+} from "@/redux/services/productService";
+import { Mineral, Vitamin } from "@/types/NutritionalValueTypes";
+import { TranslationNS } from "@/utils/translationNamespaces";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useDebounce } from "use-debounce";
 
 export type FilteringFormType = {
     productName: string | undefined;
@@ -37,6 +46,12 @@ export type FilteringFormType = {
     maxFiber: string | undefined;
     minEnergy: string | undefined;
     maxEnergy: string | undefined;
+    minSalt: string | undefined;
+    maxSalt: string | undefined;
+    minSugar: string | undefined;
+    maxSugar: string | undefined;
+    minSaturatedFat: string | undefined;
+    maxSaturatedFat: string | undefined;
     vitamins: Vitamin[];
     minerals: Mineral[];
     minIndexE: string | undefined;
@@ -61,59 +76,14 @@ const indexFields = [
     { min: "minIndexT", label: "FF" },
 ] satisfies { min: keyof FilteringFormType; label: string }[];
 
-type Vitamin = "B7" | "K" | "B2" | "B6" | "C" | "B1" | "B5" | "D" | "B9" | "E" | "A" | "B12" | "B3";
-type Mineral =
-    | "Magnez"
-    | "Fluorek"
-    | "Mangan"
-    | "Wapń"
-    | "Miedź"
-    | "Żelazo"
-    | "Selen"
-    | "Molibden"
-    | "Fosfor"
-    | "Jod"
-    | "Chrom"
-    | "Potas"
-    | "Cynk";
-
-const vitaminsNames: Vitamin[] = [
-    "B7",
-    "K",
-    "B2",
-    "B6",
-    "C",
-    "B1",
-    "B5",
-    "D",
-    "B9",
-    "E",
-    "A",
-    "B12",
-    "B3",
-];
-
-const mineralsNames: Mineral[] = [
-    "Magnez",
-    "Fluorek",
-    "Mangan",
-    "Wapń",
-    "Miedź",
-    "Żelazo",
-    "Selen",
-    "Molibden",
-    "Fosfor",
-    "Jod",
-    "Chrom",
-    "Potas",
-    "Cynk",
-];
-
 type FilteringComponentProps = {
     setFilters: (data: FilteringFormType) => void;
 };
 
 const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
+    const [searchValue, setSearchValue] = useState<string>("");
+    const [value] = useDebounce(searchValue, 300);
+    const { data: productsByName, isFetching } = useGetProductByNameQuery(value);
     const { data: packageTypes, isLoading: isPackageTypesLoading } = useGetPackageTypesQuery();
     const { data: countries, isLoading: isCountriesLoading } = useGetAllCountriesQuery();
     const [t] = useTranslation(TranslationNS.Products);
@@ -133,6 +103,12 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
             maxFiber: "",
             minEnergy: "",
             maxEnergy: "",
+            minSalt: "",
+            maxSalt: "",
+            minSugar: "",
+            maxSugar: "",
+            minSaturatedFat: "",
+            maxSaturatedFat: "",
             vitamins: [],
             minerals: [],
             minIndexE: "",
@@ -149,13 +125,39 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
             keepDefaultValues: true,
         },
     });
-
     const minMaxFields = [
-        { min: "minCarbs", max: "maxCarbs", label: t("filters.carbs") },
+        {
+            min: "minCarbs",
+            max: "maxCarbs",
+            label: t("filters.carbs") + " " + t("filters.per100g"),
+        },
         { min: "minFat", max: "maxFat", label: t("filters.fats") },
-        { min: "minProtein", max: "maxProtein", label: t("filters.proteins") },
-        { min: "minFiber", max: "maxFiber", label: t("filters.fiber") },
-        { min: "minEnergy", max: "maxEnergy", label: t("filters.calories") },
+        {
+            min: "minProtein",
+            max: "maxProtein",
+            label: t("filters.proteins") + " " + t("filters.per100g"),
+        },
+        {
+            min: "minFiber",
+            max: "maxFiber",
+            label: t("filters.fiber") + " " + t("filters.per100g"),
+        },
+        {
+            min: "minEnergy",
+            max: "maxEnergy",
+            label: t("filters.calories") + " " + t("filters.per100g"),
+        },
+        { min: "minSalt", max: "maxSalt", label: t("filters.salt") + " " + t("filters.per100g") },
+        {
+            min: "minSugar",
+            max: "maxSugar",
+            label: t("filters.sugar") + " " + t("filters.per100g"),
+        },
+        {
+            min: "minSaturatedFat",
+            max: "maxSaturatedFat",
+            label: t("filters.saturatedFats") + " " + t("filters.per100g"),
+        },
     ] satisfies { min: keyof FilteringFormType; max: keyof FilteringFormType; label: string }[];
 
     const onSubmit = (data: FilteringFormType) => {
@@ -179,18 +181,25 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                 onSubmit={form.handleSubmit(onSubmit)}
                                 className="m-2 flex flex-col gap-5">
                                 <div className="flex w-full flex-wrap gap-5">
-                                    <FormField
-                                        control={form.control}
-                                        name="productName"
-                                        render={({ field }) => (
-                                            <FormItem className="w-full flex-grow sm:w-1/4">
-                                                <FormLabel>{t("filters.name")}</FormLabel>
-                                                <FormControl>
-                                                    <Input {...field} />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
+                                    <div className="w-full flex-grow sm:w-1/4">
+                                        <FormField
+                                            control={form.control}
+                                            name="productName"
+                                            render={({ field }) => (
+                                                <AutocompleteTextInput
+                                                    searchValue={field.value || ""}
+                                                    setSearchValue={(e) => {
+                                                        field.onChange(e);
+                                                        setSearchValue(e);
+                                                    }}
+                                                    suggestions={productsByName || []}
+                                                    emptyMessage={t("noProducts")}
+                                                    label={t("filters.name")}
+                                                    isLoading={isFetching}
+                                                />
+                                            )}
+                                        />
+                                    </div>
                                     <FormField
                                         control={form.control}
                                         name="ean"
@@ -235,7 +244,35 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                                                 {t("filters.min")}
                                                             </FormLabel>
                                                             <FormControl>
-                                                                <Input type="number" {...field} />
+                                                                <Input
+                                                                    type="number"
+                                                                    {...field}
+                                                                    onKeyDown={(event) => {
+                                                                        if (
+                                                                            event.code ===
+                                                                                "Minus" ||
+                                                                            event.code ===
+                                                                                "NumpadSubtract" ||
+                                                                            event.code ===
+                                                                                "Period" ||
+                                                                            event.code === "Comma"
+                                                                        ) {
+                                                                            event.preventDefault();
+                                                                        }
+                                                                    }}
+                                                                    onChange={(e) => {
+                                                                        if (
+                                                                            Number(e.target.value) <
+                                                                            0
+                                                                        ) {
+                                                                            field.onChange(0);
+                                                                        } else {
+                                                                            field.onChange(
+                                                                                e.target.value
+                                                                            );
+                                                                        }
+                                                                    }}
+                                                                />
                                                             </FormControl>
                                                         </FormItem>
                                                     )}
@@ -249,7 +286,35 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                                                 {t("filters.max")}
                                                             </FormLabel>
                                                             <FormControl>
-                                                                <Input type="number" {...field} />
+                                                                <Input
+                                                                    type="number"
+                                                                    {...field}
+                                                                    onKeyDown={(event) => {
+                                                                        if (
+                                                                            event.code ===
+                                                                                "Minus" ||
+                                                                            event.code ===
+                                                                                "NumpadSubtract" ||
+                                                                            event.code ===
+                                                                                "Period" ||
+                                                                            event.code === "Comma"
+                                                                        ) {
+                                                                            event.preventDefault();
+                                                                        }
+                                                                    }}
+                                                                    onChange={(e) => {
+                                                                        if (
+                                                                            Number(e.target.value) <
+                                                                            0
+                                                                        ) {
+                                                                            field.onChange(0);
+                                                                        } else {
+                                                                            field.onChange(
+                                                                                e.target.value
+                                                                            );
+                                                                        }
+                                                                    }}
+                                                                />
                                                             </FormControl>
                                                         </FormItem>
                                                     )}
@@ -265,12 +330,37 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                                 control={form.control}
                                                 name={min}
                                                 render={({ field }) => (
-                                                    <FormItem className="w-full">
+                                                    <FormItem className="flex w-full flex-col justify-between gap-1">
                                                         <FormLabel>
                                                             {t("filters.minIndex")} {label}
                                                         </FormLabel>
-                                                        <FormControl>
-                                                            <Input type="number" {...field} />
+                                                        <FormControl className="">
+                                                            <Input
+                                                                type="number"
+                                                                {...field}
+                                                                onKeyDown={(event) => {
+                                                                    if (
+                                                                        event.code === "Minus" ||
+                                                                        event.code ===
+                                                                            "NumpadSubtract" ||
+                                                                        event.code === "Period" ||
+                                                                        event.code === "Comma"
+                                                                    ) {
+                                                                        event.preventDefault();
+                                                                    }
+                                                                }}
+                                                                onChange={(e) => {
+                                                                    if (
+                                                                        Number(e.target.value) < 0
+                                                                    ) {
+                                                                        field.onChange(0);
+                                                                    } else {
+                                                                        field.onChange(
+                                                                            e.target.value
+                                                                        );
+                                                                    }
+                                                                }}
+                                                            />
                                                         </FormControl>
                                                     </FormItem>
                                                 )}

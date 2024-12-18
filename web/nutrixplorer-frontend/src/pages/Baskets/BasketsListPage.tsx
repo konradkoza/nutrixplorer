@@ -14,11 +14,12 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../Products/Pagination";
 import AddBasketDialog from "./AddBasketDialog";
 import BasketCard from "./BasketCard";
-import BasketFilters, { BasketFiltersFormType } from "./BasketsFilters";
+import BasketFilters from "./BasketsFilters";
 import CloneBasketDialog from "./CloneBasketDialog";
 import ComparisonInfo from "./ComparisonInfo";
 import { useTranslation } from "react-i18next";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
+import { BasketFiltersFormType } from "@/types/BasketTypes";
 
 const BasketsListPage = () => {
     const { t } = useTranslation(TranslationNS.Baskets);

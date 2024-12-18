@@ -6,64 +6,31 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { simpleNutritionTable } from "@/constants/NutritionConstants";
 import { NutritionalValue, Portion } from "@/types/ProductTypes";
+import { TranslationNS } from "@/utils/translationNamespaces";
+import { useTranslation } from "react-i18next";
 
 type NutritionTableProps = {
     nutritions: NutritionalValue[];
     portion: Portion;
 };
 
-type SimpleNutritionElements = {
-    name: string;
-    group: string;
-    displayName?: string;
-    showIfZero?: boolean;
-};
-
-const SimpleNutritionTable: SimpleNutritionElements[] = [
-    {
-        name: "Wartość Energetyczna",
-        group: "Wartość Energetyczna",
-    },
-    {
-        name: "Total",
-        group: "Tłuszcz",
-        displayName: "Tłuszcz",
-    },
-    {
-        name: "Kwasy nasycone",
-        group: "Tłuszcz",
-        displayName: "w tym kwasy tłuszczowe nasycone",
-    },
-    {
-        name: "Total",
-        group: "Węglowodany",
-        displayName: "Węglowodany",
-    },
-    {
-        name: "Cukry",
-        group: "Węglowodany",
-        displayName: "w tym cukry",
-    },
-    { name: "Białko", group: "Białko" },
-    { name: "Błonnik", group: "Błonnik" },
-    { name: "Sól", group: "Sól" },
-];
-
 const NutritionTable = ({ nutritions, portion }: NutritionTableProps) => {
+    const [t] = useTranslation(TranslationNS.Products);
     return (
         <Table className="mt-4">
             <TableHeader className="w-full">
                 <TableRow>
-                    <TableHead className="">Wartość odżywcza</TableHead>
+                    <TableHead className=""> {t("nutritionalValue")} </TableHead>
                     <TableHead>100 {portion.unit}</TableHead>
                     <TableHead>
-                        Porcja ({portion.portionQuantity} {portion.unit})
+                        {t("portion")} ({portion.portionQuantity} {portion.unit})
                     </TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {SimpleNutritionTable.map((element) => {
+                {simpleNutritionTable.map((element) => {
                     const nutrition = nutritions.find(
                         (nutrition) =>
                             nutrition.nutritionalValueName.name === element.name &&
@@ -92,7 +59,7 @@ const NutritionTable = ({ nutritions, portion }: NutritionTableProps) => {
                 })}
                 {nutritions
                     .filter((nutr) => {
-                        return !SimpleNutritionTable.some((simpleElement) => {
+                        return !simpleNutritionTable.some((simpleElement) => {
                             return nutr.nutritionalValueName.name === simpleElement.name;
                         });
                     })

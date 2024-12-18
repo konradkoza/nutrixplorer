@@ -6,7 +6,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
 import { LabelList, Pie, PieChart } from "recharts";
 

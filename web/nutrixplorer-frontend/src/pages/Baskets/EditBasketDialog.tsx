@@ -1,20 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useUpdateBasketMutation } from "@/redux/services/basketService";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { useTranslation } from "react-i18next";
-import { TranslationNS } from "@/types/TranslationNamespaces";
-
-const EditBasketSchema = z.object({
-    name: z.string(),
-    description: z.string(),
-});
-
-type EditBasketFormType = z.infer<typeof EditBasketSchema>;
+import { TranslationNS } from "@/utils/translationNamespaces";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AddBasketDialogFormType, getAddBasketSchema } from "@/types/schemas/BasketSchema";
 
 type AddBasketDialogProps = {
     currentName: string;
@@ -34,13 +35,14 @@ const EditBasketDialog = ({
     const { t } = useTranslation(TranslationNS.Baskets);
     const [editBasket] = useUpdateBasketMutation();
 
-    const form = useForm<EditBasketFormType>({
+    const form = useForm<AddBasketDialogFormType>({
         values: {
             name: currentName,
             description: currentDescription,
         },
+        resolver: zodResolver(getAddBasketSchema(t)),
     });
-    const handleChangeQuantity = (data: EditBasketFormType) => {
+    const handleChangeQuantity = (data: AddBasketDialogFormType) => {
         editBasket({ basketId: basketId, basket: data });
         onClose();
     };
@@ -50,7 +52,9 @@ const EditBasketDialog = ({
             <DialogContent className="w-96">
                 <DialogTitle>{t("editBasket")}</DialogTitle>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(handleChangeQuantity)}>
+                    <form
+                        className="flex flex-col gap-2"
+                        onSubmit={form.handleSubmit(handleChangeQuantity)}>
                         <FormField
                             control={form.control}
                             name="name"
@@ -60,6 +64,7 @@ const EditBasketDialog = ({
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>
+                                    <FormMessage>{form.formState.errors.name?.message}</FormMessage>
                                 </FormItem>
                             )}
                         />
@@ -72,6 +77,9 @@ const EditBasketDialog = ({
                                     <FormControl>
                                         <Textarea {...field} />
                                     </FormControl>
+                                    <FormMessage>
+                                        {form.formState.errors.description?.message}
+                                    </FormMessage>
                                 </FormItem>
                             )}
                         />

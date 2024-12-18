@@ -1,7 +1,7 @@
-import { BasketFiltersFormType } from "@/pages/Baskets/BasketsFilters";
 import { api } from "./api";
 import {
     Basket,
+    BasketFiltersFormType,
     BasketNutritions,
     BasketsPage,
     CreateBasket,
@@ -26,7 +26,7 @@ const BasketService = api.injectEndpoints({
             }),
             providesTags: ["Baskets"],
         }),
-        createBasket: builder.mutation<Basket, CreateBasket>({
+        createBasket: builder.mutation<SimpleBasket, CreateBasket>({
             query: (basket) => ({
                 url: "/basket",
                 method: "POST",

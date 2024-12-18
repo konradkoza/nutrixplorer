@@ -9,7 +9,7 @@ import { CollapseMenuButton } from "@/components/layout-components/collapse-menu
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
 
 interface MenuProps {

@@ -30,7 +30,6 @@ import { calculateMax } from "@/utils/maxValue";
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useDebounce } from "use-debounce";
-import { simpleNutritionTable } from "../Baskets/NutritionsTable";
 import ComparisonCarbsChart from "./ComparisonCarbsChart";
 import ComparisonFatChart from "./ComparisonFatChart";
 import ComparisonNutritionChart from "./ComparisonNutritionChart";
@@ -38,7 +37,8 @@ import ComparisonRadarChart from "./ComparisonRadarChart";
 import IndexComparisonChart from "./IndexComparisonChart";
 import ProductsStackedBarChart from "./ProductsStackedBarChart";
 import { useTranslation } from "react-i18next";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
+import { simpleNutritionTable } from "@/constants/NutritionConstants";
 
 type NutritionSet = {
     name: string;
@@ -517,8 +517,11 @@ const BasketComparisonPage = () => {
                                                                                         3
                                                                                     )
                                                                                 ) || 0}{" "}
-                                                                                {nutritionValue?.unit ||
-                                                                                    ""}
+                                                                                {nutritionValue?.unit ===
+                                                                                "mcg"
+                                                                                    ? "μg"
+                                                                                    : nutritionValue?.unit ||
+                                                                                      ""}
                                                                             </div>
                                                                         </TableCell>
                                                                     );

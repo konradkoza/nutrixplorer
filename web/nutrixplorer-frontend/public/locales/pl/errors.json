@@ -24,8 +24,9 @@
     "accessLevelCannotBeRemoved": "Nie można usunąć poziomu dostępu",
     "ownAdministratorRoleRemoval": "Nie można usunąć własnej roli administratora",
     "oauth2User": "Użytkownik z logowaniem za pomocą Google, spróbuj zalogować się za pomocą Google lub użuj opcji odzyskiwania hasła",
+    "invalidQuantity": "Nieprawidłowa ilość produktu",
 
-
-    "noConnection": "Brak połączenia z serwerem",
-    "otherError": "Wystąpił błąd"
+    "connectionError": "Brak połączenia z serwerem",
+    "otherError": "Wystąpił błąd",
+    "unexpectedError": "Wystąpił nieoczekiwany błąd"
 }

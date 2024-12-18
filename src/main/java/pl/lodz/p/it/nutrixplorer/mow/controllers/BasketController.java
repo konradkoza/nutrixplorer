@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
+import pl.lodz.p.it.nutrixplorer.exceptions.mow.BasketEntryException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.BasketNameNotUniqueException;
 import pl.lodz.p.it.nutrixplorer.model.mow.Basket;
 import pl.lodz.p.it.nutrixplorer.mow.dto.*;
@@ -58,14 +59,14 @@ public class BasketController {
 
     @PostMapping
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<BasketDTO> createBasket(@RequestBody CreateBasketDTO createBasketDTO) throws NotFoundException, BasketNameNotUniqueException {
+    public ResponseEntity<BasketSimpleDTO> createBasket(@RequestBody CreateBasketDTO createBasketDTO) throws NotFoundException, BasketNameNotUniqueException {
         Basket basket = basketService.createBasket(BasketMapper.INSTANCE.basketEntryDTOsToBasketEntries(createBasketDTO.basketEntries()), createBasketDTO.name(), createBasketDTO.description());
-        return ResponseEntity.status(HttpStatus.CREATED).body(BasketMapper.INSTANCE.basketToBasketDTO(basket));
+        return ResponseEntity.status(HttpStatus.CREATED).body(BasketMapper.INSTANCE.basketToBasketSimpleDTO(basket));
     }
 
     @PostMapping("/{basketId}/entry")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<BasketDTO> addEntryToBasket(@PathVariable UUID basketId, @RequestBody BasketEntryDTO entryDTO) throws NotFoundException {
+    public ResponseEntity<BasketDTO> addEntryToBasket(@PathVariable UUID basketId, @RequestBody BasketEntryDTO entryDTO) throws NotFoundException, BasketEntryException {
         Basket basket = basketService.addEntryToBasket(basketId, entryDTO.productId(), entryDTO.quantity());
         return ResponseEntity.ok(BasketMapper.INSTANCE.basketToBasketDTO(basket));
     }

@@ -1,5 +1,5 @@
 import i18next from "@/i18n";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { isFulfilled, isRejected, Middleware, MiddlewareAPI } from "@reduxjs/toolkit";
 import { toast } from "sonner";
 
@@ -14,20 +14,27 @@ type ErrorPayload = {
 export const rtkQueryErrorHandler: Middleware = (api: MiddlewareAPI) => (next) => async (action) => {
         if (isRejected(action)) {
             // console.error(action.payload);
-            console.log("i18next.hasLoadedNamespace(TranslationNS.Error");
-            console.log(i18next.hasLoadedNamespace(TranslationNS.Error));
             const error = action.payload as ErrorPayload;
+            console.log(error);
             if (i18next.isInitialized) {
+                if(error.data && !error.data.errorCode) {
+                    toast.error(i18next.t("error", { ns: TranslationNS.Error }), {
+                        description: i18next.t("unexpectedError", { ns: TranslationNS.Error })
+                    });
+                    return next(action);
+                }
                 toast.error(i18next.t("error", { ns: TranslationNS.Error }), {
                     description: error.data
                         ? i18next.t(error.data.errorCode, { ns: TranslationNS.Error })
                         : i18next.t("connectionError", { ns: TranslationNS.Error }),
                 });
+                return next(action);
             } else {
                 // Fallback message if i18next is not initialized
                 toast.error("Error", {
                     description: error.data ? error.data.message : "Connection error",
                 });
+                return next(action);
             }
         }
         if (isFulfilled(action)) {

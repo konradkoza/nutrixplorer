@@ -8,7 +8,7 @@ import {
     returnIndexValue,
 } from "@/utils/productUtils";
 import IndexCircle from "./IndexCircle";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
 
 type ProductIndexesProps = {

@@ -7,8 +7,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { Basket } from "@/types/BasketTypes";
-import { BasketFiltersFormType, Mineral, Vitamin } from "./BasketsFilters";
+import { Basket, BasketFiltersFormType } from "@/types/BasketTypes";
 
 import { Button } from "@/components/ui/button";
 import { useGetBasketNutritionsQuery } from "@/redux/services/basketService";
@@ -23,8 +22,9 @@ import { RootState } from "@/redux/store";
 import { add, remove } from "@/redux/slices/comparisonSlice";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
+import { Mineral, SimpleNutritionalValue, Vitamin } from "@/types/NutritionalValueTypes";
 
 type BasketCardProps = {
     basket: Basket;
@@ -45,12 +45,12 @@ const filterToNutritionalValue = {
     maxProtein: { group: "Białko", name: "Białko" },
     maxFiber: { group: "Błonnik", name: "Błonnik" },
     maxEnergy: { group: "Wartość Energetyczna", name: "Wartość Energetyczna" },
-};
-
-type SimpleNutritionalValue = {
-    name: string;
-    group: string;
-    unit: string;
+    minSalt: { group: "Sól", name: "Sól" },
+    maxSalt: { group: "Sól", name: "Sól" },
+    minSaturatedFat: { group: "Tłuszcz", name: "Kwasy nasycone" },
+    maxSaturatedFat: { group: "Tłuszcz", name: "Kwasy nasycone" },
+    minSugars: { group: "Węglowodany", name: "Cukry" },
+    maxSugars: { group: "Węglowodany", name: "Cukry" },
 };
 
 const BasketCard = ({
@@ -100,7 +100,13 @@ const BasketCard = ({
                 });
             }
             Object.keys(filters).forEach((key) => {
-                if (key === "minerals" || key === "vitamins" || key === "allergens") return;
+                if (
+                    key === "minerals" ||
+                    key === "vitamins" ||
+                    key === "allergens" ||
+                    key === "name"
+                )
+                    return;
                 // if (
                 //     filterToNutritionalValue[key as keyof typeof filterToNutritionalValue].group ===
                 //         nutrition.nutritionalValueName.group &&
@@ -139,8 +145,8 @@ const BasketCard = ({
             );
             return;
         } else if (baskets.length >= 2) {
-            toast.error("Błąd", {
-                description: "Możesz porównać maksymalnie 2 koszyki.",
+            toast.error(t("errors.error"), {
+                description: t("errors.max2"),
             });
             return;
         } else {
@@ -157,7 +163,10 @@ const BasketCard = ({
             <div className="flex justify-between">
                 <CardHeader>
                     <CardTitle>{basket.name}</CardTitle>
-                    <CardDescription>{basket.description}</CardDescription>
+                    <CardDescription>
+                        {basket.description?.substring(0, 100) +
+                            (basket.description && basket.description?.length > 100 ? "..." : "")}
+                    </CardDescription>
                 </CardHeader>
                 <div className="flex flex-col justify-center pr-6 text-sm text-muted-foreground">
                     <p>{t("creationDate")}</p>

@@ -15,6 +15,9 @@
         "fats": "Fats",
         "calories": "Energy Value",
         "fiber": "Fiber",
+        "salt": "Salt",
+        "sugar": "Sugar",
+        "saturatedFats": "Saturated Fats",
         "min": "From:",
         "max": "To:",
         "minIndex": "Minimum Index",
@@ -36,16 +39,21 @@
         "Chrom": "Chromium",
         "Potas": "Potassium",
         "Cynk": "Zinc",
-        "reset": "Reset"
+        "reset": "Reset",
+        "per100g": "per 100 g/ml"
     },
     "addToBasket": {
-        "basket": "Basket",
+        "basket": "Basket*",
         "addToBasket": "Add to Basket",
-        "quantity": "Quantity",
+        "quantity": "Quantity*",
         "add": "Add",
         "cancel": "Cancel",
         "noBaskets": "No baskets found",
         "search": "Search..."
+    },
+    "errors": {
+        "basketId": "Basket is required",
+        "quantity": "Quantity must be greater than 0"
     },
     "imageAlt": "No image",
     "producer": "Producer",
@@ -70,5 +78,8 @@
     "producerContact": "Contact:",
     "noProducerInfo": "No producer information",
     "productNotFound": "Product not found",
-    "nutritionalValues": "Nutritional Values"
+    "nutritionalValues": "Nutritional Values",
+    "portion": "Portion",
+    "nutritionalValue": "Nutritional Value",
+    "noProducts": "No products found"
 }

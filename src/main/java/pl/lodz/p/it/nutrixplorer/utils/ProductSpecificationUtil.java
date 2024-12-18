@@ -44,13 +44,13 @@ public class ProductSpecificationUtil {
             specification = specification.and(minSpecification("Total", "Węglowodany", Double.valueOf(filteringDTO.minCarbs())));
         }
         if (filteringDTO.maxCarbs() != null) {
-            specification = specification.and(maxSpecification2("Total", "Węglowodany", Double.valueOf(filteringDTO.maxCarbs())));
+            specification = specification.and(maxSpecification("Total", "Węglowodany", Double.valueOf(filteringDTO.maxCarbs())));
         }
         if (filteringDTO.minFat() != null) {
             specification = specification.and(minSpecification("Total", "Tłuszcz", Double.valueOf(filteringDTO.minFat())));
         }
         if (filteringDTO.maxFat() != null) {
-            specification = specification.and(maxSpecification2("Total", "Tłuszcz", Double.valueOf(filteringDTO.maxFat())));
+            specification = specification.and(maxSpecification("Total", "Tłuszcz", Double.valueOf(filteringDTO.maxFat())));
         }
         if (filteringDTO.minProtein() != null) {
             specification = specification.and(minSpecification("Białko", "Białko", Double.valueOf(filteringDTO.minProtein())));
@@ -69,6 +69,24 @@ public class ProductSpecificationUtil {
         }
         if (filteringDTO.maxFiber() != null) {
             specification = specification.and(maxSpecification("Błonnik", "Błonnik", Double.valueOf(filteringDTO.maxFiber())));
+        }
+        if (filteringDTO.minSalt() != null) {
+            specification = specification.and(minSpecification("Sól", "Sól", Double.valueOf(filteringDTO.minSalt())));
+        }
+        if (filteringDTO.maxSalt() != null) {
+            specification = specification.and(maxSpecification("Sól", "Sól", Double.valueOf(filteringDTO.maxSalt())));
+        }
+        if (filteringDTO.minSugar() != null) {
+            specification = specification.and(minSpecification("Cukry", "Węglowodany", Double.valueOf(filteringDTO.minSugar())));
+        }
+        if (filteringDTO.maxSugar() != null) {
+            specification = specification.and(maxSpecification("Cukry", "Węglowodany", Double.valueOf(filteringDTO.maxSugar())));
+        }
+        if (filteringDTO.minSaturatedFat() != null) {
+            specification = specification.and(minSpecification("Kwasy nasycone", "Tłuszcz", Double.valueOf(filteringDTO.minSaturatedFat())));
+        }
+        if (filteringDTO.maxSaturatedFat() != null) {
+            specification = specification.and(maxSpecification("Kwasy nasycone", "Tłuszcz", Double.valueOf(filteringDTO.maxSaturatedFat())));
         }
         if (filteringDTO.packageType() != null) {
             specification = specification.and(packageSpecification(filteringDTO.packageType()));
@@ -209,7 +227,9 @@ public class ProductSpecificationUtil {
     static Specification<Product> minSpecification(String nutritionalValueName, String groupName, Double quantity) {
         return (root, query, criteriaBuilder) -> {
             query.distinct(true); // Ensure no duplicates
-
+            if (quantity == 0.0) {
+                return criteriaBuilder.and();
+            }
             // Joins
             Join<Product, NutritionalValue> nutritionalValuesJoin = root.join("nutritionalValues", JoinType.INNER);
             Join<NutritionalValue, NutritionalValueName> nameJoin = nutritionalValuesJoin.join("nutritionalValueName", JoinType.INNER);
@@ -229,6 +249,7 @@ public class ProductSpecificationUtil {
                     nutritionalValueName
             );
             // Combine Predicates
+
             return criteriaBuilder.and(lessThanPredicate, groupNamePredicate, namePredicate);
         };
     }
@@ -236,52 +257,64 @@ public class ProductSpecificationUtil {
 
     static Specification<Product> maxSpecification(String nutritionalValueName, String groupName, Double quantity) {
         return (root, query, criteriaBuilder) -> {
-            Join<Product, NutritionalValue> nutritionalValuesJoin = root.join("nutritionalValues", JoinType.INNER);
+            query.distinct(true); // Avoid duplicates
 
-            Join<NutritionalValue, NutritionalValueName> nameJoin = nutritionalValuesJoin.join("nutritionalValueName", JoinType.INNER);
+            // Left Joins to include products without the specified NutritionalValue
+            Join<Product, NutritionalValue> nutritionalValuesJoin = root.join("nutritionalValues", JoinType.LEFT);
+            Join<NutritionalValue, NutritionalValueName> nameJoin = nutritionalValuesJoin.join("nutritionalValueName", JoinType.LEFT);
+            Join<NutritionalValueName, NutritionalValueGroup> groupJoin = nameJoin.join("group", JoinType.LEFT);
 
-            Join<NutritionalValueName, NutritionalValueGroup> groupJoin = nameJoin.join("group", JoinType.INNER);
+            // Predicates for matching the group and name
+            Predicate groupNamePredicate = criteriaBuilder.equal(groupJoin.get("groupName"), groupName);
+            Predicate namePredicate = criteriaBuilder.equal(nameJoin.get("name"), nutritionalValueName);
 
-            Predicate lessThanPredicate = criteriaBuilder.lessThanOrEqualTo(
-                    nutritionalValuesJoin.get("quantity"),
+            // Predicate for quantity comparison
+            Predicate quantityPredicate = criteriaBuilder.lessThanOrEqualTo(
+                    criteriaBuilder.coalesce(nutritionalValuesJoin.get("quantity"), 0.0), // Treat null as 0
                     quantity
             );
-            Predicate groupNamePredicate = criteriaBuilder.equal(
-                    groupJoin.get("groupName"),
-                    groupName
-            );
-            Predicate namePredicate = criteriaBuilder.equal(
-                    nameJoin.get("name"),
-                    nutritionalValueName
-            );
-            return criteriaBuilder.and(lessThanPredicate, groupNamePredicate, namePredicate);
+
+            // Subquery to check if the product has the specified NutritionalValue
+            Subquery<Long> subquery = query.subquery(Long.class);
+            Root<NutritionalValue> subqueryRoot = subquery.from(NutritionalValue.class);
+
+            // Check if the Product has a matching NutritionalValue
+            Join<NutritionalValue, NutritionalValueName> subNameJoin = subqueryRoot.join("nutritionalValueName", JoinType.INNER);
+            Join<NutritionalValueName, NutritionalValueGroup> subGroupJoin = subNameJoin.join("group", JoinType.INNER);
+            Join<Product, NutritionalValue> subProductJoin = subqueryRoot.join("products", JoinType.INNER);
+
+            subquery.select(criteriaBuilder.literal(1L)) // Return 1 if the product has the specified NutritionalValue
+                    .where(
+                            criteriaBuilder.and(
+                                    criteriaBuilder.equal(subProductJoin.get("id"), root.get("id")),
+                                    criteriaBuilder.equal(subGroupJoin.get("groupName"), groupName),
+                                    criteriaBuilder.equal(subNameJoin.get("name"), nutritionalValueName)
+                            )
+                    );
+
+            // Logic: For quantity == 0, include products with no matching NutritionalValue
+            if (quantity == 0) {
+                // Include products that either have no matching NutritionalValue (subquery is 0)
+                // or products with a matching NutritionalValue and quantity <= 0
+                return criteriaBuilder.or(
+                        criteriaBuilder.not(criteriaBuilder.exists(subquery)), // No matching NutritionalValue
+                        criteriaBuilder.and(
+                                groupNamePredicate,
+                                namePredicate,
+                                criteriaBuilder.lessThanOrEqualTo(
+                                        criteriaBuilder.coalesce(nutritionalValuesJoin.get("quantity"), 0.0),
+                                        quantity
+                                )
+                        )
+                );
+            } else {
+                // Normal case: Combine Predicates for products that have matching NutritionalValue
+                return criteriaBuilder.and(namePredicate, groupNamePredicate, quantityPredicate);
+            }
         };
     }
 
-    public static Specification<Product> maxSpecification2(String nutritionalValueName, String groupName, Double quantity) {
-        return (root, query, criteriaBuilder) -> {
-            query.distinct(true); // Ensure no duplicates
 
-            // Joins
-            Join<Product, NutritionalValue> nutritionalValuesJoin = root.join("nutritionalValues", JoinType.INNER);
-            Join<NutritionalValue, NutritionalValueName> nameJoin = nutritionalValuesJoin.join("nutritionalValueName", JoinType.INNER);
-            Join<NutritionalValueName, NutritionalValueGroup> groupJoin = nameJoin.join("group", JoinType.INNER);
 
-            // Predicates
-            Predicate lessThanPredicate = criteriaBuilder.lessThanOrEqualTo(
-                    criteriaBuilder.coalesce(nutritionalValuesJoin.get("quantity"), 0.0), // Handle nulls
-                    quantity
-            );
-            Predicate groupNamePredicate = criteriaBuilder.equal(
-                    groupJoin.get("groupName"),
-                    groupName
-            );
-            Predicate namePredicate = criteriaBuilder.equal(
-                    nameJoin.get("name"),
-                    nutritionalValueName
-            );
-            // Combine Predicates
-            return criteriaBuilder.and(lessThanPredicate, groupNamePredicate, namePredicate);
-        };
-    }
+
 }

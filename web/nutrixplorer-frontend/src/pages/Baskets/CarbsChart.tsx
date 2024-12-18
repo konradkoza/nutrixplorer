@@ -8,7 +8,7 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { BasketNutritions } from "@/types/BasketTypes";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
 import { Label, LabelList, Pie, PieChart } from "recharts";
 

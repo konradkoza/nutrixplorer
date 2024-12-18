@@ -10,7 +10,7 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useTranslation } from "react-i18next";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 
 type RwsCardProps = {
     nutritions: BasketNutritions[];

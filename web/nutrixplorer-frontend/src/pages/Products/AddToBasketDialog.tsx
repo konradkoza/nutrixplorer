@@ -2,17 +2,28 @@ import { AutoComplete } from "@/components/common/Autocomplete";
 import { UnitInput } from "@/components/common/UnitInput";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
 import {
     useAddBasketEntryMutation,
+    useCreateBasketMutation,
     useGetFilteredBasketsListQuery,
 } from "@/redux/services/basketService";
+import { CreateBasket } from "@/types/BasketTypes";
+import { AddToBasketForm, getAddToBasketSchema } from "@/types/schemas/BasketSchema";
+import { TranslationNS } from "@/utils/translationNamespaces";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useDebounce } from "use-debounce";
 import AddBasketDialog from "../Baskets/AddBasketDialog";
-import { useTranslation } from "react-i18next";
-import { TranslationNS } from "@/types/TranslationNamespaces";
 
 type AddToBasketDialogProps = {
     open: boolean;
@@ -20,11 +31,6 @@ type AddToBasketDialogProps = {
     productId: string;
     unit: string;
     productName: string;
-};
-
-type AddToBasketForm = {
-    quantity: number;
-    basketId: string;
 };
 
 const AddToBasketDialog = ({
@@ -39,25 +45,39 @@ const AddToBasketDialog = ({
     const [value] = useDebounce(searchValue, 100);
     const { data: basketList, isLoading } = useGetFilteredBasketsListQuery(value);
     // const { data: basketList, isLoading } = useGetUserBasketsListQuery();
-
+    const [createBasket] = useCreateBasketMutation();
     const [addEntry] = useAddBasketEntryMutation();
     const form = useForm<AddToBasketForm>({
         values: {
             quantity: 0,
             basketId: "",
         },
+        resolver: zodResolver(getAddToBasketSchema(t)),
     });
 
     const handleAddToBasket = (data: AddToBasketForm) => {
         addEntry({ basketId: data.basketId, entry: { productId, quantity: data.quantity } });
-        onClose();
+        setSearchValue("");
         form.reset();
+        onClose();
     };
 
     const close = () => {
         setSearchValue("");
         form.reset();
         onClose();
+    };
+
+    const handleBasketCreation = async (data: CreateBasket) => {
+        try {
+            const response = await createBasket(data);
+            if (response.data) {
+                setSearchValue(response.data.name);
+                form.setValue("basketId", response.data.id);
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -95,6 +115,9 @@ const AddToBasketDialog = ({
                                             emptyMessage={t("addToBasket.noBaskets")}
                                             placeholder={t("addToBasket.search")}
                                         />
+                                        <FormMessage>
+                                            {form.formState.errors.basketId?.message}
+                                        </FormMessage>
                                     </FormItem>
                                 )}
                             />
@@ -114,12 +137,15 @@ const AddToBasketDialog = ({
                                                 {...field}
                                             />
                                         </FormControl>
+                                        <FormMessage>
+                                            {form.formState.errors.quantity?.message}
+                                        </FormMessage>
                                     </FormItem>
                                 )}
                             />
                         </div>
                         <DialogFooter className="mt-5 flex flex-row justify-between gap-5 sm:flex-row sm:justify-between">
-                            <AddBasketDialog />
+                            <AddBasketDialog addBasket={handleBasketCreation} />
                             <div className="flex gap-5">
                                 <Button onClick={onClose} type="button" variant="outline">
                                     {t("addToBasket.cancel")}

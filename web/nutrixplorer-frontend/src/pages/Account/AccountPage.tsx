@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
 import { useGetMeQuery } from "@/redux/services/meService";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
 
 const AccountPage = () => {

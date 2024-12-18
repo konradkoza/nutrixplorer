@@ -52,6 +52,16 @@ public class ProductController {
         return ResponseEntity.ok(new ProductsListDTO(ProductMapper.INSTANCE.productsToProductSimpleDTOs(products.getContent()), products.getTotalPages()));
     }
 
+    @GetMapping("/name/filtered")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<List<String>> getFilteredProducts(@RequestParam(defaultValue = "5") int elements,
+                                                            @RequestParam String productName) {
+        List<String> products = productService.getProductMatchingProductNames(elements, productName);
+        return ResponseEntity.ok(products);
+    }
+
+
+
     @GetMapping("/{id}/image")
     @PreAuthorize("permitAll()")
     public ResponseEntity<byte[]> getProductImage(@PathVariable UUID id) throws NotFoundException {

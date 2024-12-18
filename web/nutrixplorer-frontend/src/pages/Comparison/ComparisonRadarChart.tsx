@@ -8,7 +8,7 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart } from "recharts";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
 
 type ComparisonRadarChartProps = {

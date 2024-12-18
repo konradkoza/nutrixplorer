@@ -11,34 +11,29 @@ import {
 import { Input } from "@/components/ui/input";
 import { useLoginMutation } from "@/redux/services/authService";
 import { login } from "@/redux/slices/authSlice";
+import { getLoginSchema, LoginFormType } from "@/types/schemas/AuthenticationSchema";
+import { oauthUrl } from "@/utils/oatuhUrl";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { FcGoogle } from "react-icons/fc";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { z } from "zod";
-import { FcGoogle } from "react-icons/fc";
-import { oauthUrl } from "@/utils/oatuhUrl";
-import { useTranslation } from "react-i18next";
-import { TranslationNS } from "@/types/TranslationNamespaces";
-const LoginSchema = z.object({
-    email: z.string(),
-    password: z.string(),
-});
-
-type LoginFormType = z.infer<typeof LoginSchema>;
 
 const LoginPage = () => {
     const [loginMutation] = useLoginMutation();
+    const [t] = useTranslation(TranslationNS.Authentication);
     const form = useForm<LoginFormType>({
         values: {
             email: "",
             password: "",
         },
-        resolver: zodResolver(LoginSchema),
+        resolver: zodResolver(getLoginSchema(t)),
     });
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [t] = useTranslation(TranslationNS.Authentication);
+
     const onSubmit = async (data: LoginFormType) => {
         try {
             const response = await loginMutation(data);

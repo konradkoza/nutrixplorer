@@ -8,7 +8,7 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { BasketEntry } from "@/types/BasketTypes";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Text } from "recharts";
 type ProductsNutritionsChartProps = {

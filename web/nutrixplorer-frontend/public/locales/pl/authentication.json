@@ -1,9 +1,19 @@
 {
+    "errors": {
+            "email": "Podany email jest nieprawidłowy",
+            "emailRequired": "Adres email jest wymagany",
+            "password": "Hasło jest za krótkie",
+            "passwordRequired": "Podaj hasło",
+            "passwordPattern": "Hasło musi być nie krótsze niż 8 znaków i zawierać co najmniej jedną cyfrę, jedną dużą literę, jedną małą literę i jeden znak specjal",
+            "firstName": "Imię jest wymagane",
+            "lastName": "Nazwisko jest wymagane"
+        },
     "login": {
+        
         "title": "Logowanie",
         "description": "Podaj email i hasło aby się zalogować",
-        "email": "Email",
-        "password": "Hasło",
+        "email": "Email*",
+        "password": "Hasło*",
         "submit": "Zaloguj się",
         "forgotPassword": "Zapomniałem hasła",
         "register": "Zarejestruj",
@@ -15,12 +25,12 @@
     "register": {
         "title": "Utwórz nowe konto",
         "description": "Uzupełnij formularz, aby się zarejestrować",
-        "email": "Email",
-        "password": "Hasło",
-        "confirmPassword": "Potwierdź hasło",
+        "email": "Email*",
+        "password": "Hasło*",
+        "confirmPassword": "Potwierdź hasło*",
         "submit": "Utwórz konto",
-        "firstName": "Imię",
-        "lastName": "Nazwisko",
+        "firstName": "Imię*",
+        "lastName": "Nazwisko*",
         "google": "Utwórz konto za pomocą Google",
         "alreadyHaveAccount": "Masz już konto?",
         "login": "Zaloguj się"

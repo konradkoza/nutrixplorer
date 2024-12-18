@@ -7,7 +7,7 @@ import { CheckCheckIcon, EraserIcon, ScaleIcon, XIcon } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 
 type ComparisonInfoProps = {
     baskets: SimpleBasket[];

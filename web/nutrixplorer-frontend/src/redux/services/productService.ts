@@ -1,3 +1,4 @@
+import { FilteringFormType } from "@/pages/Products/FilteringComponent.tsx";
 import {
     Producer,
     ProductComposition,
@@ -6,7 +7,6 @@ import {
     SimpleProductPage,
 } from "@/types/ProductTypes";
 import { api } from "./api";
-import { FilteringFormType } from "@/pages/Products/FilteringComponent.tsx";
 
 const ProductService = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -39,6 +39,17 @@ const ProductService = api.injectEndpoints({
                 method: "GET",
                 params: {
                     ...data,
+                },
+            }),
+            providesTags: ["Products"],
+        }),
+        getProductByName: builder.query<string[], string>({
+            query: (data) => ({
+                url: "/product/name/filtered",
+                method: "GET",
+                params: {
+                    productName: data,
+                    elements: 5,
                 },
             }),
             providesTags: ["Products"],
@@ -112,4 +123,5 @@ export const {
     useGetPackageTypesQuery,
     useGetAllergensQuery,
     useGetAllCountriesQuery,
+    useGetProductByNameQuery,
 } = ProductService;

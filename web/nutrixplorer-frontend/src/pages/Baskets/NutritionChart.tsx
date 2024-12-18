@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/chart";
 import { LabelList, Pie, PieChart } from "recharts";
 import { useTranslation } from "react-i18next";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 
 type NutritionChartProps = {
     carbs: number;
@@ -17,25 +17,6 @@ type NutritionChartProps = {
     protein: number;
     fiber: number;
 };
-
-const chartConfig = {
-    carbs: {
-        label: "Węglowodany",
-        color: "hsl(var(--chart-1))",
-    },
-    fat: {
-        label: "Tłuszcz",
-        color: "hsl(var(--chart-2))",
-    },
-    protein: {
-        label: "Białko",
-        color: "hsl(var(--chart-3))",
-    },
-    fiber: {
-        label: "Błonnik",
-        color: "hsl(var(--chart-4))",
-    },
-} satisfies ChartConfig;
 
 const NutritionChart = ({ carbs, fat, protein, fiber }: NutritionChartProps) => {
     const { t } = useTranslation(TranslationNS.Baskets);
@@ -65,7 +46,24 @@ const NutritionChart = ({ carbs, fat, protein, fiber }: NutritionChartProps) => 
             fill: "var(--color-fiber)",
         },
     ];
-
+    const chartConfig = {
+        carbs: {
+            label: t("carbs"),
+            color: "hsl(var(--chart-1))",
+        },
+        fat: {
+            label: t("fat"),
+            color: "hsl(var(--chart-2))",
+        },
+        protein: {
+            label: t("protein"),
+            color: "hsl(var(--chart-3))",
+        },
+        fiber: {
+            label: t("fiber"),
+            color: "hsl(var(--chart-4))",
+        },
+    } satisfies ChartConfig;
     return (
         <div className="w-full">
             <Card className="flex flex-col">

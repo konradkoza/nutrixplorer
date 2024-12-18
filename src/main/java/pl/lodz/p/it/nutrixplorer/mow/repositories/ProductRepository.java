@@ -45,4 +45,9 @@ public interface ProductRepository extends JpaRepository<Product, UUID> , JpaSpe
 
     @Query("SELECT DISTINCT p.country FROM Product p")
     List<String> findAllCountries();
+
+    @Query("SELECT DISTINCT p FROM Product p WHERE lower(p.productName) LIKE %:productName%")
+    Page<Product> findProductByProductNameContaining(String productName, Pageable pageable);
+
+
 }

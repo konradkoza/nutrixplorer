@@ -1,3 +1,4 @@
+import { Mineral, Vitamin } from "./NutritionalValueTypes";
 import { NutritionalValue, ProductIndex } from "./ProductTypes";
 
 export type BasketEntry = {
@@ -10,7 +11,7 @@ export type BasketEntry = {
 export type Basket = {
     id: string;
     name: string;
-    description: string;
+    description?: string;
     createdAt: Date;
     basketEntries: BasketEntry[];
 };
@@ -47,7 +48,7 @@ export type CreateEntry = {
 
 export type CreateBasket = {
     name: string;
-    description: string;
+    description?: string | undefined;
 };
 
 export type EntryUpdate = {
@@ -60,4 +61,27 @@ export type BasketNutritions = {
     groupName: string;
     quantity: number;
     unit: string;
+};
+
+export type BasketFiltersFormType = {
+    name: string | undefined;
+    minCarbs: string | undefined;
+    maxCarbs: string | undefined;
+    minFat: string | undefined;
+    maxFat: string | undefined;
+    minProtein: string | undefined;
+    maxProtein: string | undefined;
+    minFiber: string | undefined;
+    maxFiber: string | undefined;
+    minEnergy: string | undefined;
+    maxEnergy: string | undefined;
+    minSalt: string | undefined;
+    maxSalt: string | undefined;
+    minSugar: string | undefined;
+    maxSugar: string | undefined;
+    minSaturatedFat: string | undefined;
+    maxSaturatedFat: string | undefined;
+    vitamins: Vitamin[];
+    minerals: Mineral[];
+    allergens: string[];
 };

@@ -18,7 +18,7 @@ public class BasketSpecificationUtil {
             return null;
         }
         if (filteringDTO.name() != null) {
-            specification = specification.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("name"), "%" + filteringDTO.name() + "%"));
+            specification = specification.and((root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + filteringDTO.name().toLowerCase() + "%"));
         }
         if (filteringDTO.vitamins() != null && !filteringDTO.vitamins().isEmpty()) {
             specification = specification.and(hasAllNutritionalValues2(filteringDTO.vitamins(), "Witaminy", "Witamina "));
@@ -55,6 +55,24 @@ public class BasketSpecificationUtil {
         }
         if (filteringDTO.maxFiber() != null) {
             specification = specification.and(hasNutritionalValueSumLessThan("Błonnik", "Błonnik", Double.parseDouble(filteringDTO.maxFiber()), true));
+        }
+        if (filteringDTO.minSalt() != null) {
+            specification = specification.and(hasNutritionalValueSumLessThan("Sól", "Sól", Double.parseDouble(filteringDTO.minSalt()), false));
+        }
+        if (filteringDTO.maxSalt() != null) {
+            specification = specification.and(hasNutritionalValueSumLessThan("Sól", "Sól", Double.parseDouble(filteringDTO.maxSalt()), true));
+        }
+        if (filteringDTO.minSugar() != null) {
+            specification = specification.and(hasNutritionalValueSumLessThan("Cukry", "Węglowodany", Double.parseDouble(filteringDTO.minSugar()), false));
+        }
+        if (filteringDTO.maxSugar() != null) {
+            specification = specification.and(hasNutritionalValueSumLessThan("Cukry", "Węglowodany", Double.parseDouble(filteringDTO.maxSugar()), true));
+        }
+        if (filteringDTO.minSaturatedFat() != null) {
+            specification = specification.and(hasNutritionalValueSumLessThan("Kwasy nasycone", "Tłuszcz", Double.parseDouble(filteringDTO.minSaturatedFat()), false));
+        }
+        if (filteringDTO.maxSaturatedFat() != null) {
+            specification = specification.and(hasNutritionalValueSumLessThan("Kwasy nasycone", "Tłuszcz", Double.parseDouble(filteringDTO.maxSaturatedFat()), true));
         }
         if (filteringDTO.allergens() != null && !filteringDTO.allergens().isEmpty()) {
             specification = specification.and(hasNoAllergens(filteringDTO.allergens()));

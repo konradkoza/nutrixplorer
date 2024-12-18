@@ -1,3 +1,4 @@
+import AutocompleteTextInput from "@/components/common/AutocompleteTextInput";
 import {
     Accordion,
     AccordionContent,
@@ -8,26 +9,15 @@ import { Button } from "@/components/ui/button.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input.tsx";
+import { mineralsNames, vitaminsNames } from "@/constants/NutritionConstants";
+import { useGetFilteredBasketsListQuery } from "@/redux/services/basketService";
 import { useGetAllergensQuery } from "@/redux/services/productService";
+import { BasketFiltersFormType } from "@/types/BasketTypes";
+import { TranslationNS } from "@/utils/translationNamespaces";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { TranslationNS } from "@/types/TranslationNamespaces";
-
-export type BasketFiltersFormType = {
-    minCarbs: string | undefined;
-    maxCarbs: string | undefined;
-    minFat: string | undefined;
-    maxFat: string | undefined;
-    minProtein: string | undefined;
-    maxProtein: string | undefined;
-    minFiber: string | undefined;
-    maxFiber: string | undefined;
-    minEnergy: string | undefined;
-    maxEnergy: string | undefined;
-    vitamins: Vitamin[];
-    minerals: Mineral[];
-    allergens: string[];
-};
+import { useDebounce } from "use-debounce";
 
 const minMaxFields = [
     { min: "minCarbs", max: "maxCarbs", label: "carbs" },
@@ -35,78 +25,24 @@ const minMaxFields = [
     { min: "minProtein", max: "maxProtein", label: "protein" },
     { min: "minFiber", max: "maxFiber", label: "fiber" },
     { min: "minEnergy", max: "maxEnergy", label: "energyValue" },
+    { min: "minSalt", max: "maxSalt", label: "salt" },
+    { min: "minSugar", max: "maxSugar", label: "sugar" },
+    { min: "minSaturatedFat", max: "maxSaturatedFat", label: "saturatedFat" },
 ] satisfies { min: keyof BasketFiltersFormType; max: keyof BasketFiltersFormType; label: string }[];
-
-export type Vitamin =
-    | "B7"
-    | "K"
-    | "B2"
-    | "B6"
-    | "C"
-    | "B1"
-    | "B5"
-    | "D"
-    | "B9"
-    | "E"
-    | "A"
-    | "B12"
-    | "B3";
-export type Mineral =
-    | "Magnez"
-    | "Fluorek"
-    | "Mangan"
-    | "Wapń"
-    | "Miedź"
-    | "Żelazo"
-    | "Selen"
-    | "Molibden"
-    | "Fosfor"
-    | "Jod"
-    | "Chrom"
-    | "Potas"
-    | "Cynk";
-
-const vitaminsNames: Vitamin[] = [
-    "B7",
-    "K",
-    "B2",
-    "B6",
-    "C",
-    "B1",
-    "B5",
-    "D",
-    "B9",
-    "E",
-    "A",
-    "B12",
-    "B3",
-];
-
-const mineralsNames: Mineral[] = [
-    "Magnez",
-    "Fluorek",
-    "Mangan",
-    "Wapń",
-    "Miedź",
-    "Żelazo",
-    "Selen",
-    "Molibden",
-    "Fosfor",
-    "Jod",
-    "Chrom",
-    "Potas",
-    "Cynk",
-];
 
 type BasketFiltersProps = {
     setFilters: (data: any) => void;
 };
 
 const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
+    const [searchValue, setSearchValue] = useState<string>("");
+    const [value] = useDebounce(searchValue, 100);
+    const { data: basketList, isLoading } = useGetFilteredBasketsListQuery(value);
     const { t } = useTranslation(TranslationNS.Baskets);
     const { data: allergens, isLoading: isAllergensLoading } = useGetAllergensQuery();
     const form = useForm<BasketFiltersFormType>({
         values: {
+            name: "",
             minCarbs: "",
             maxCarbs: "",
             minFat: "",
@@ -117,6 +53,12 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
             maxFiber: "",
             minEnergy: "",
             maxEnergy: "",
+            minSalt: "",
+            maxSalt: "",
+            minSugar: "",
+            maxSugar: "",
+            minSaturatedFat: "",
+            maxSaturatedFat: "",
             vitamins: [],
             minerals: [],
             allergens: [],
@@ -146,6 +88,33 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                             <form
                                 onSubmit={form.handleSubmit(onSubmit)}
                                 className="m-2 flex flex-col gap-5">
+                                <div className="w-full">
+                                    <FormField
+                                        control={form.control}
+                                        name="name"
+                                        render={({ field }) => (
+                                            <FormItem className="">
+                                                <FormControl>
+                                                    <AutocompleteTextInput
+                                                        searchValue={field.value || ""}
+                                                        setSearchValue={(e) => {
+                                                            field.onChange(e);
+                                                            setSearchValue(e);
+                                                        }}
+                                                        suggestions={
+                                                            basketList?.map(
+                                                                (basket) => basket.name
+                                                            ) || []
+                                                        }
+                                                        isLoading={isLoading}
+                                                        emptyMessage={t("noBaskets")}
+                                                        label={t("basketName")}
+                                                    />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
                                 <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] flex-wrap gap-5">
                                     {minMaxFields.map(({ min, max, label }) => (
                                         <div
@@ -162,7 +131,36 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                                         <FormItem className="w-full">
                                                             <FormLabel>{t("min")}</FormLabel>
                                                             <FormControl>
-                                                                <Input type="number" {...field} />
+                                                                <Input
+                                                                    type="number"
+                                                                    min={0}
+                                                                    {...field}
+                                                                    onKeyDown={(event) => {
+                                                                        if (
+                                                                            event.code ===
+                                                                                "Minus" ||
+                                                                            event.code ===
+                                                                                "NumpadSubtract" ||
+                                                                            event.code ===
+                                                                                "Period" ||
+                                                                            event.code === "Comma"
+                                                                        ) {
+                                                                            event.preventDefault();
+                                                                        }
+                                                                    }}
+                                                                    onChange={(e) => {
+                                                                        if (
+                                                                            Number(e.target.value) <
+                                                                            0
+                                                                        ) {
+                                                                            field.onChange(0);
+                                                                        } else {
+                                                                            field.onChange(
+                                                                                e.target.value
+                                                                            );
+                                                                        }
+                                                                    }}
+                                                                />
                                                             </FormControl>
                                                         </FormItem>
                                                     )}
@@ -174,7 +172,35 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                                         <FormItem className="w-full">
                                                             <FormLabel>{t("max")}</FormLabel>
                                                             <FormControl>
-                                                                <Input type="number" {...field} />
+                                                                <Input
+                                                                    type="number"
+                                                                    {...field}
+                                                                    onKeyDown={(event) => {
+                                                                        if (
+                                                                            event.code ===
+                                                                                "Minus" ||
+                                                                            event.code ===
+                                                                                "NumpadSubtract" ||
+                                                                            event.code ===
+                                                                                "Period" ||
+                                                                            event.code === "Comma"
+                                                                        ) {
+                                                                            event.preventDefault();
+                                                                        }
+                                                                    }}
+                                                                    onChange={(e) => {
+                                                                        if (
+                                                                            Number(e.target.value) <
+                                                                            0
+                                                                        ) {
+                                                                            field.onChange(0);
+                                                                        } else {
+                                                                            field.onChange(
+                                                                                e.target.value
+                                                                            );
+                                                                        }
+                                                                    }}
+                                                                />
                                                             </FormControl>
                                                         </FormItem>
                                                     )}
@@ -198,7 +224,6 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                                         <Checkbox
                                                             checked={field.value.includes(vitamin)}
                                                             onCheckedChange={(checked) => {
-                                                                console.log(field.value);
                                                                 return checked
                                                                     ? field.onChange([
                                                                           ...field.value,
@@ -235,7 +260,6 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                                         <Checkbox
                                                             checked={field.value.includes(mineral)}
                                                             onCheckedChange={(checked) => {
-                                                                console.log(field.value);
                                                                 return checked
                                                                     ? field.onChange([
                                                                           ...field.value,
@@ -276,7 +300,6 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                                                     allergen
                                                                 )}
                                                                 onCheckedChange={(checked) => {
-                                                                    console.log(field.value);
                                                                     return checked
                                                                         ? field.onChange([
                                                                               ...field.value,

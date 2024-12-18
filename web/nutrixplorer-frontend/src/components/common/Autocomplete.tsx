@@ -22,6 +22,7 @@ type Props<T extends string> = {
     isLoading?: boolean;
     emptyMessage?: string;
     placeholder?: string;
+    clearOnOutsideClick?: boolean;
 };
 
 export function AutoComplete<T extends string>({
@@ -33,6 +34,7 @@ export function AutoComplete<T extends string>({
     isLoading,
     emptyMessage = "No items.",
     placeholder = "Search...",
+    clearOnOutsideClick = true,
 }: Props<T>) {
     const [open, setOpen] = useState(false);
 
@@ -54,7 +56,11 @@ export function AutoComplete<T extends string>({
     };
 
     const onInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-        if (!e.relatedTarget?.hasAttribute("cmdk-list") && labels[selectedValue] !== searchValue) {
+        if (
+            !e.relatedTarget?.hasAttribute("cmdk-list") &&
+            labels[selectedValue] !== searchValue &&
+            clearOnOutsideClick
+        ) {
             reset();
         }
     };

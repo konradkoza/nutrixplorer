@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
+import pl.lodz.p.it.nutrixplorer.exceptions.mow.BasketEntryException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.BasketNameNotUniqueException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.codes.MowErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.messages.ErrorMessages;
@@ -50,7 +51,10 @@ public class BasketService {
         return basket;
     }
 
-    public Basket addEntryToBasket(UUID basketId, UUID productId, BigDecimal quantity) throws NotFoundException {
+    public Basket addEntryToBasket(UUID basketId, UUID productId, BigDecimal quantity) throws NotFoundException, BasketEntryException {
+        if (quantity.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BasketEntryException(ErrorMessages.INVALID_QUANTITY, MowErrorCodes.INVALID_QUANTITY);
+        }
         Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new NotFoundException(ErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
         BasketEntry entry = new BasketEntry();
         entry.setProduct(productRepository.findById(productId).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_NOT_FOUND, MowErrorCodes.PRODUCT_NOT_FOUND)));

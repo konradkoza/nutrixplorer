@@ -3,7 +3,7 @@ import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
 import Pagination from "@/pages/Products/Pagination.tsx";
 import ProductsList from "@/pages/Products/ProductsList.tsx";
 import { useGetMyFavouriteProductsPageQuery } from "@/redux/services/favouriteProductsService.ts";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 

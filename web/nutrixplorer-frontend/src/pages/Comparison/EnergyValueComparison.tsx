@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 

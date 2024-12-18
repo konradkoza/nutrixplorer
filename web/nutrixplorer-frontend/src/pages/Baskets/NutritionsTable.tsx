@@ -9,60 +9,13 @@ import {
 } from "@/components/ui/table";
 import { BasketNutritions } from "@/types/BasketTypes";
 import Indicator from "../../components/common/Indicator";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
+import { simpleNutritionTable } from "@/constants/NutritionConstants";
 
 type NutritionsTableProps = {
     nutritions: BasketNutritions[];
 };
-
-type SimpleNutritionElements = {
-    name: string;
-    group: string;
-    displayName?: string;
-    showIfZero?: boolean;
-    variantConsists?: "red" | "yellow" | "green" | null;
-    variantNotConsists?: "red" | "yellow" | "green" | null;
-};
-
-export const simpleNutritionTable: SimpleNutritionElements[] = [
-    {
-        name: "Wartość Energetyczna",
-        group: "Wartość Energetyczna",
-        variantConsists: null,
-        variantNotConsists: null,
-    },
-    {
-        name: "Total",
-        group: "Tłuszcz",
-        displayName: "Tłuszcz",
-        variantConsists: "yellow",
-        variantNotConsists: "green",
-    },
-    {
-        name: "Kwasy nasycone",
-        group: "Tłuszcz",
-        displayName: "w tym kwasy tłuszczowe nasycone",
-        variantConsists: "red",
-        variantNotConsists: "green",
-    },
-    {
-        name: "Total",
-        group: "Węglowodany",
-        displayName: "Węglowodany",
-        variantConsists: "yellow",
-    },
-    {
-        name: "Cukry",
-        group: "Węglowodany",
-        displayName: "w tym cukry",
-        variantConsists: "red",
-        variantNotConsists: "green",
-    },
-    { name: "Białko", group: "Białko", variantConsists: "green", variantNotConsists: "red" },
-    { name: "Sól", group: "Sól", variantConsists: "red", variantNotConsists: "green" },
-    { name: "Błonnik", group: "Błonnik", variantConsists: "green", variantNotConsists: "red" },
-];
 
 const NutrtitionsTable = ({ nutritions }: NutritionsTableProps) => {
     const [t] = useTranslation(TranslationNS.Baskets);

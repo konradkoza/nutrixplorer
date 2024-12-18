@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import pl.lodz.p.it.nutrixplorer.model.mok.Client;
-import pl.lodz.p.it.nutrixplorer.model.mok.User;
 
 import java.util.HashSet;
 import java.util.List;
@@ -68,6 +67,11 @@ public class Product extends AbstractEntity {
     private Set<Rating> ratings;
 
     @ManyToMany
+    @JoinTable(
+            name = "product_nutritional_value", // name of the join table
+            joinColumns = @JoinColumn(name = "product_id"), // column referencing Product
+            inverseJoinColumns = @JoinColumn(name = "nutritionalvalues_id") // column referencing NutritionalValue
+    )
     private List<NutritionalValue> nutritionalValues;
 
     @ManyToMany(mappedBy = "favouriteProducts")

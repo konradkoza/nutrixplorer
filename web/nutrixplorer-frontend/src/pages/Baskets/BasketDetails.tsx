@@ -41,7 +41,7 @@ import ProductsNutritionsChart from "./ProductsNutritionsChart";
 import RwsCard from "./RwsCard";
 import UpdateQuantityDialog from "./UpdateQuantityDialog";
 import { useTranslation } from "react-i18next";
-import { TranslationNS } from "@/types/TranslationNamespaces";
+import { TranslationNS } from "@/utils/translationNamespaces";
 
 const BasketDetails = () => {
     const { t } = useTranslation(TranslationNS.Baskets);
@@ -136,14 +136,18 @@ const BasketDetails = () => {
                         <>
                             <Card>
                                 <div className="flex justify-between">
-                                    <CardHeader>
-                                        <CardTitle className="text-3xl">{basket?.name}</CardTitle>
+                                    <CardHeader className="w-full">
+                                        <CardTitle className="flex w-full justify-between text-3xl">
+                                            {basket?.name}{" "}
+                                            <div className="flex flex-col justify-center pr-6 text-sm text-muted-foreground">
+                                                <p>{t("creationDate")}</p>
+                                                <p>
+                                                    {format(basket.createdAt, "dd.MM.yyyy H:mm")}{" "}
+                                                </p>
+                                            </div>
+                                        </CardTitle>
                                         <CardDescription>{basket?.description}</CardDescription>
                                     </CardHeader>
-                                    <div className="flex flex-col justify-center pr-6 text-sm text-muted-foreground">
-                                        <p>{t("creationDate")}</p>
-                                        <p>{format(basket.createdAt, "dd.MM.yyyy H:m")} </p>
-                                    </div>
                                 </div>
                             </Card>
                             <Card>
@@ -252,7 +256,7 @@ const BasketDetails = () => {
                             <EditBasketDialog
                                 basketId={basket.id}
                                 currentName={basket.name}
-                                currentDescription={basket.description}
+                                currentDescription={basket.description || ""}
                                 onClose={() => setEditDialogOpen(false)}
                                 open={editDialogOpen}
                             />
