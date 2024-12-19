@@ -15,6 +15,7 @@ type ComparisonNutritionChartProps = {
     fat: number;
     protein: number;
     fiber: number;
+    poliole?: number;
 };
 
 const ComparisonNutritionChart = ({
@@ -22,6 +23,7 @@ const ComparisonNutritionChart = ({
     fat,
     protein,
     fiber,
+    poliole,
 }: ComparisonNutritionChartProps) => {
     const [t] = useTranslation(TranslationNS.Comparison);
     // const total = carbs * 4 + fat * 9 + protein * 4 + fibre * 2;
@@ -71,6 +73,10 @@ const ComparisonNutritionChart = ({
         },
     } satisfies ChartConfig;
 
+    const sum = poliole
+        ? chartData.reduce((acc, curr) => acc + curr.value * curr.multiplier, 0) - poliole * 1.6
+        : chartData.reduce((acc, curr) => acc + curr.value * curr.multiplier, 0);
+
     return (
         <ChartContainer
             config={chartConfig}
@@ -106,11 +112,24 @@ const ComparisonNutritionChart = ({
                             const element = chartData.find(
                                 (element) => element.nutrition === value
                             );
-                            let sum = chartData.reduce(
-                                (acc, curr) => acc + curr.value * curr.multiplier,
-                                0
-                            );
-                            return `${(((element!.value * element!.multiplier) / sum) * 100).toFixed(1)}%`;
+
+                            let percentage;
+                            if (poliole && element!.nutrition === "carbs") {
+                                percentage =
+                                    ((element!.value * element!.multiplier - poliole * 1.6) / sum) *
+                                    100;
+
+                                if (percentage < 0.05) {
+                                    return "";
+                                }
+                                return `${percentage.toFixed(1)}%`;
+                            } else {
+                                percentage = ((element!.value * element!.multiplier) / sum) * 100;
+                                if (percentage < 0.05) {
+                                    return "";
+                                }
+                                return `${percentage.toFixed(1)}%`;
+                            }
                         }}
                     />
                     {/* <Label

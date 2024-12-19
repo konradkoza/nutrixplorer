@@ -303,10 +303,10 @@ const BasketDetails = () => {
                                     nutritions?.find((nutr) => nutr.name === "Błonnik")?.quantity ||
                                     0
                                 }
-                                // total={
-                                //     nutritions?.find((nutr) => nutr.name === "Wartość Energetyczna")
-                                //         ?.quantity || 0
-                                // }
+                                poliole={
+                                    nutritions?.find((nutr) => nutr.name === "Poliole")?.quantity ||
+                                    undefined
+                                }
                             />
                             <Card>
                                 <CardHeader>

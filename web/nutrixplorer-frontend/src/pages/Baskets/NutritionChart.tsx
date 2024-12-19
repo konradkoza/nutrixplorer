@@ -16,9 +16,10 @@ type NutritionChartProps = {
     fat: number;
     protein: number;
     fiber: number;
+    poliole?: number;
 };
 
-const NutritionChart = ({ carbs, fat, protein, fiber }: NutritionChartProps) => {
+const NutritionChart = ({ carbs, fat, protein, fiber, poliole }: NutritionChartProps) => {
     const { t } = useTranslation(TranslationNS.Baskets);
     const chartData = [
         {
@@ -64,6 +65,11 @@ const NutritionChart = ({ carbs, fat, protein, fiber }: NutritionChartProps) => 
             color: "hsl(var(--chart-4))",
         },
     } satisfies ChartConfig;
+
+    const sum = poliole
+        ? chartData.reduce((acc, curr) => acc + curr.value * curr.multiplier, 0) - poliole * 1.6
+        : chartData.reduce((acc, curr) => acc + curr.value * curr.multiplier, 0);
+
     return (
         <div className="w-full">
             <Card className="flex flex-col">
@@ -105,16 +111,28 @@ const NutritionChart = ({ carbs, fat, protein, fiber }: NutritionChartProps) => 
                                         const element = chartData.find(
                                             (element) => element.nutrition === value
                                         );
-                                        let sum = chartData.reduce(
-                                            (acc, curr) => acc + curr.value * curr.multiplier,
-                                            0
-                                        );
-                                        const percentage =
-                                            ((element!.value * element!.multiplier) / sum) * 100;
-                                        if (percentage < 0.05) {
-                                            return "";
+
+                                        let percentage;
+                                        if (poliole && element!.nutrition === "carbs") {
+                                            percentage =
+                                                ((element!.value * element!.multiplier -
+                                                    poliole * 1.6) /
+                                                    sum) *
+                                                100;
+
+                                            if (percentage < 0.05) {
+                                                return "";
+                                            }
+                                            return `${percentage.toFixed(1)}%`;
+                                        } else {
+                                            percentage =
+                                                ((element!.value * element!.multiplier) / sum) *
+                                                100;
+                                            if (percentage < 0.05) {
+                                                return "";
+                                            }
+                                            return `${percentage.toFixed(1)}%`;
                                         }
-                                        return `${percentage.toFixed(1)}%`;
                                     }}
                                 />
                                 {/* <Label
