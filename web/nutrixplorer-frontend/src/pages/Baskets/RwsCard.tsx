@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/accordion";
 import { useTranslation } from "react-i18next";
 import { TranslationNS } from "@/utils/translationNamespaces";
+import GradientBarAdjusted from "@/components/common/GradientBarAdjusted.tsx";
 
 type RwsCardProps = {
     nutritions: BasketNutritions[];
@@ -34,7 +35,7 @@ const RwsCard = ({ nutritions }: RwsCardProps) => {
                                         <div
                                             key={rws.group + rws.name + "rws"}
                                             className="items-center">
-                                            <GradientBar
+                                            <GradientBarAdjusted
                                                 value={
                                                     nutritions.find(
                                                         (n) =>
@@ -70,7 +71,7 @@ const RwsCard = ({ nutritions }: RwsCardProps) => {
                                         <div
                                             key={rws.group + rws.name + "rws"}
                                             className="items-center">
-                                            <GradientBar
+                                            <GradientBarAdjusted
                                                 value={
                                                     nutritions.find(
                                                         (n) =>
@@ -102,7 +103,7 @@ const RwsCard = ({ nutritions }: RwsCardProps) => {
                                         <div
                                             key={rws.group + rws.name + "rws"}
                                             className="items-center">
-                                            <GradientBar
+                                            <GradientBarAdjusted
                                                 value={
                                                     nutritions.find(
                                                         (n) =>

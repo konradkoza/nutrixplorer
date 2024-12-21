@@ -1,4 +1,4 @@
-package pl.lodz.p.it.nutrixplorer.model.mow;
+package pl.lodz.p.it.nutrixplorer.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

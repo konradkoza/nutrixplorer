@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import pl.lodz.p.it.nutrixplorer.model.AbstractEntity;
 import pl.lodz.p.it.nutrixplorer.model.mok.Client;
 
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ import java.util.List;
                 @UniqueConstraint(columnNames = {"client_id", "name"})
         }
 )
-public class Basket extends AbstractEntity{
+public class Basket extends AbstractEntity {
 
 
     @OneToMany(mappedBy = "basket", cascade = CascadeType.ALL, orphanRemoval = true)

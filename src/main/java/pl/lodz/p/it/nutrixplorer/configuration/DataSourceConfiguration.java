@@ -3,25 +3,40 @@ package pl.lodz.p.it.nutrixplorer.configuration;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 
 @Configuration
 public class DataSourceConfiguration {
-
+    private DataSourceConfigProperties adminDataSourceConfigProperties;
+    private DataSourceConfigProperties userDataSourceConfigProperties;
 
     @Bean
-    public DataSource adminDatasource() {
-        HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl("jdbc:postgresql://localhost:5432/nutrixplorer");
-        hikariConfig.setUsername("nutriadmin");
-        hikariConfig.setPassword("adminP@ssw0rd");
-        hikariConfig.setDriverClassName("org.postgresql.Driver");
+    @ConfigurationProperties(prefix = "datasource.admin")
+    public DataSourceConfigProperties adminDataSourceConfigProperties() {
+        return new DataSourceConfigProperties();
+    }
 
+    @Bean
+    @ConfigurationProperties(prefix = "datasource.user")
+    public DataSourceConfigProperties userDataSourceConfigProperties() {
+        return new DataSourceConfigProperties();
+    }
+
+    @Bean
+    public DataSource adminDatasource(DataSourceConfigProperties adminDataSourceConfigProperties) {
+        HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl (adminDataSourceConfigProperties().getJdbcUrl());
+        hikariConfig.setUsername(adminDataSourceConfigProperties.getUsername());
+        hikariConfig.setPassword(adminDataSourceConfigProperties.getPassword());
+        hikariConfig.setDriverClassName("org.postgresql.Driver");
+        hikariConfig.setAutoCommit(false);
         // Custom HikariCP settings
         hikariConfig.setMaximumPoolSize(20);
         hikariConfig.setMinimumIdle(10);
@@ -41,13 +56,13 @@ public class DataSourceConfiguration {
 
     @Bean
     @Primary
-    public DataSource userDatasource() {
+    public DataSource userDatasource(DataSourceConfigProperties userDataSourceConfigProperties) {
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl("jdbc:postgresql://localhost:5432/nutrixplorer");
-        hikariConfig.setUsername("nutriuser");
-        hikariConfig.setPassword("mokP@ssw0rd");
+        hikariConfig.setJdbcUrl(userDataSourceConfigProperties().getJdbcUrl());
+        hikariConfig.setUsername(userDataSourceConfigProperties.getUsername());
+        hikariConfig.setPassword(userDataSourceConfigProperties.getPassword());
         hikariConfig.setDriverClassName("org.postgresql.Driver");
-
+        hikariConfig.setAutoCommit(false);
         // Custom HikariCP settings
         hikariConfig.setMaximumPoolSize(20);
         hikariConfig.setMinimumIdle(10);

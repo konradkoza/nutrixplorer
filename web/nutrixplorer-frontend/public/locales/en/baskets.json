@@ -88,5 +88,6 @@
     "noProducts": "No products in basket.",
     "details": "Details",
     "compare": "Compare",
-    "addToComparison": "Add to comparison"
+    "addToComparison": "Add to comparison",
+    "quantityHeader": "Quantity"
 }

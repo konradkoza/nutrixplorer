@@ -2,10 +2,12 @@ package pl.lodz.p.it.nutrixplorer.mok.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.nutrixplorer.configuration.LoggingInterceptor;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.AuthenctiactionFailedException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.EmailAddressInUseException;
@@ -13,12 +15,12 @@ import pl.lodz.p.it.nutrixplorer.exceptions.mok.UserBlockedException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.UserNotVerifiedException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.MokErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.UserExceptionMessages;
+import pl.lodz.p.it.nutrixplorer.mail.EmailEvent;
 import pl.lodz.p.it.nutrixplorer.model.mok.Client;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
 import pl.lodz.p.it.nutrixplorer.mok.dto.ErrorResponseDTO;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.AdministratorRepository;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.ClientRepository;
-import pl.lodz.p.it.nutrixplorer.mok.repositories.SellerRepository;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.UserRepository;
 
 import java.util.ArrayList;
@@ -29,14 +31,15 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(propagation = Propagation.REQUIRES_NEW)
+@LoggingInterceptor
 public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final ClientRepository clientRepository;
-    private final SellerRepository sellerRepository;
     private final AdministratorRepository administratorRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public String login(String email, String password) throws NotFoundException, AuthenctiactionFailedException, UserBlockedException, UserNotVerifiedException {
@@ -64,7 +67,6 @@ public class AuthenticationService {
         List<String> roles = new ArrayList<>();
 
         clientRepository.findByUserId(user.getId()).ifPresent(owner -> roles.add("CLIENT"));
-        sellerRepository.findByUserId(user.getId()).ifPresent(tenant -> roles.add("SELLER"));
         administratorRepository.findByUserId(user.getId()).ifPresent(admin -> roles.add("ADMINISTRATOR"));
 
         return roles;
@@ -72,6 +74,7 @@ public class AuthenticationService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public User registerClient(String email, String password, String firstName, String lastName) throws EmailAddressInUseException {
+        eventPublisher.publishEvent(new EmailEvent(this, email, "Welcome to Nutrixplorer", "Hello " + firstName + " " + lastName +"\nWelcome to Nutrixplorer!"));
         User user = new User();
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));

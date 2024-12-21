@@ -6,7 +6,14 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { Basket, BasketFiltersFormType } from "@/types/BasketTypes";
 
 import { Button } from "@/components/ui/button";
@@ -15,7 +22,6 @@ import { DeepSet } from "@/utils/deepSet";
 import { format } from "date-fns";
 import { ArrowRightIcon, CopyIcon, ScaleIcon, Trash2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import GradientBarSmall, { GradientBarVariants } from "../../components/common/GradientBarSmall";
 import { rws, rwsM, rwsV } from "@/utils/rws";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -25,6 +31,9 @@ import { toast } from "sonner";
 import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
 import { Mineral, SimpleNutritionalValue, Vitamin } from "@/types/NutritionalValueTypes";
+import GradientBarSmallAdjusted, {
+    GradientBarVariants,
+} from "@/components/common/GradientBarSmallAdjusted.tsx";
 
 type BasketCardProps = {
     basket: Basket;
@@ -208,7 +217,7 @@ const BasketCard = ({
                                                 : ""}
                                         </p>
                                         <div className="flex items-center justify-end">
-                                            <GradientBarSmall
+                                            <GradientBarSmallAdjusted
                                                 max={
                                                     rwsM.find(
                                                         (n) =>
@@ -263,7 +272,7 @@ const BasketCard = ({
                                                 : ""}
                                         </p>
                                         <div className="flex items-center justify-end">
-                                            <GradientBarSmall
+                                            <GradientBarSmallAdjusted
                                                 max={
                                                     rwsV.find(
                                                         (n) =>
@@ -321,7 +330,7 @@ const BasketCard = ({
                                                     n.name === nutrition.name &&
                                                     n.group === nutrition.group
                                             )?.variant ? (
-                                                <GradientBarSmall
+                                                <GradientBarSmallAdjusted
                                                     max={
                                                         rws.find(
                                                             (n) =>
@@ -359,6 +368,13 @@ const BasketCard = ({
                     !showProducts ? (
                         !isFiltered() && (
                             <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>{t("productName")}</TableHead>
+                                        <TableHead>{t("quantityHeader")}</TableHead>
+                                        <TableHead className="text-center">{t("rws")}</TableHead>
+                                    </TableRow>
+                                </TableHeader>
                                 <TableBody>
                                     {rws.map((rw) => {
                                         const nutr = nutritions?.find(
@@ -383,7 +399,7 @@ const BasketCard = ({
                                                 </TableCell>
                                                 <TableCell align="center">
                                                     {rw.value ? (
-                                                        <GradientBarSmall
+                                                        <GradientBarSmallAdjusted
                                                             max={rw.value}
                                                             value={nutr.quantity}
                                                             variant={

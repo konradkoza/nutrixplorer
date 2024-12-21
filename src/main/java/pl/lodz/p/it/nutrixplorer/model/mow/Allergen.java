@@ -3,9 +3,9 @@ package pl.lodz.p.it.nutrixplorer.model.mow;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import pl.lodz.p.it.nutrixplorer.model.AbstractEntity;
 
 @Getter
 @Setter

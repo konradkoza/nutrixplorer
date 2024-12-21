@@ -1,0 +1,17 @@
+spring:
+  flyway:
+    url: jdbc:postgresql://nutrixplorer-db:5432/nutrixplorer
+  mail:
+    host: nutrixplorer-mail
+logging:
+  file:
+    name: /var/log/nutrixplorer.log
+datasource:
+  admin:
+    jdbc-url: "jdbc:postgresql://nutrixplorer-db:5432/nutrixplorer"
+    username: nutriadmin
+    password: adminP@ssw0rd
+  user:
+    jdbc-url: "jdbc:postgresql://nutrixplorer-db:5432/nutrixplorer"
+    username: nutriuser
+    password: mokP@ssw0rd

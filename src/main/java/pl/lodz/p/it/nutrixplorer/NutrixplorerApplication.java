@@ -2,7 +2,9 @@ package pl.lodz.p.it.nutrixplorer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @EnableJpaRepositories(
@@ -10,6 +12,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 		entityManagerFactoryRef = "userEntityManagerFactory",
 		transactionManagerRef = "userTransactionManager"
 )
+@EnableAsync
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class NutrixplorerApplication {
 
 	public static void main(String[] args) {

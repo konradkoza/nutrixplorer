@@ -2,10 +2,8 @@
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.users TO nutriuser;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.personal_data TO nutriuser;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.administrators TO nutriuser;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.sellers TO nutriuser;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.clients TO nutriuser;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.access_levels TO nutriuser;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.addresses TO nutriuser;
 
 GRANT SELECT ON TABLE public.addition TO nutriuser;
 GRANT SELECT ON TABLE public.access_levels TO nutriuser;
@@ -33,7 +31,6 @@ GRANT SELECT ON TABLE public.rating TO nutriuser;
 GRANT SELECT ON TABLE public.unit TO nutriuser;
 GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE public.basket TO nutriuser;
 GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE public.basket_entry TO nutriuser;
-GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE public.deal TO nutriuser;
 GRANT SELECT ON TABLE public.allergen TO nutriuser;
 GRANT SELECT ON TABLE public.label_allergen TO nutriuser;
 GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE public.user_favourite_products TO nutriuser;
@@ -59,21 +56,6 @@ INSERT INTO public.access_levels (version, id, user_id, level)
 VALUES (0, '6f15b280-581f-423e-a0ff-c02cce1c3350', 'e646e3dc-9170-4abb-b0b7-82b507324271', 'CLIENT');
 INSERT INTO public.clients (id)
 VALUES ('6f15b280-581f-423e-a0ff-c02cce1c3350');
-
-INSERT INTO public.addresses (id, version, country, number, street, city, zip, shop_name)
-VALUES ('878f9027-1779-480d-8e6c-a9616c26b575', 0, 'Polska', '123', 'Gdańska', 'Łódź', '12-345', 'Biedronka');
-
-INSERT INTO public.users (active, blocked, login_attempts, verified, last_failed_login, last_successful_login, version,
-                          id, password, last_failed_login_ip, last_successful_login_ip)
-VALUES (true, false, 0, true, null, null, 0, '9f9e4e2d-52f1-4d53-b606-095884e69d72',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', 'lastFailedLoginIp', 'lastSuccessfulLoginIp');
-INSERT INTO public.personal_data (user_id, email, first_name, last_name)
-VALUES ('9f9e4e2d-52f1-4d53-b606-095884e69d72', 'email@seller.com', 'Michał', 'Krawczyk');
-INSERT INTO public.access_levels (version, id, user_id, level)
-VALUES (0, 'f5fcf708-a416-45fa-b96b-0bd9eac29fac', '9f9e4e2d-52f1-4d53-b606-095884e69d72', 'SELLER');
-INSERT INTO public.sellers (id, address_id)
-VALUES ('f5fcf708-a416-45fa-b96b-0bd9eac29fac', '878f9027-1779-480d-8e6c-a9616c26b575');
-
 
 INSERT INTO public.basket (id, version, client_id, name, description, created_at, updated_at)
 VALUES ('0bfc4ba2-9e55-4b70-b4e2-6dc71bb7328f', 0, '6f15b280-581f-423e-a0ff-c02cce1c3350', 'Basket', 'Description of example basket', now(), now());
@@ -278,29 +260,3 @@ VALUES ('6f15b280-581f-423e-a0ff-c02cce1c3350', '927d0f18-7e48-4440-a4a7-ab7a3de
 
 INSERT INTO public.user_favourite_products (client_id, product_id)
 VALUES ('6f15b280-581f-423e-a0ff-c02cce1c3350', '562dc9a9-ca76-4d04-91d8-be69782d0338');
-
-
--- Create an offer for one of the products
-INSERT INTO public.deal (id, version, product_id, name, description, old_price, new_price, start_date, end_date, active, seller_id)
-VALUES ('0941ec93-e8b3-44f6-8041-9433dd291fa8', 0, 'd75cda81-ea16-4652-825c-a65f891bd657', 'Special Offer', 'Description of the offer', 10.00, 5.00, '2024-01-12', '2025-01-01', true, 'f5fcf708-a416-45fa-b96b-0bd9eac29fac');
-
-INSERT INTO public.deal (id, version, product_id, name, description, old_price, new_price, start_date, end_date, active, seller_id)
-VALUES ('90fd3ad7-c851-4f26-8652-7a97c3da439d', 0, '562dc9a9-ca76-4d04-91d8-be69782d0338', 'Special Offer 2', 'Description of the offer 2', 15.00, 7.50, '2024-01-12', '2025-01-01', true, 'f5fcf708-a416-45fa-b96b-0bd9eac29fac');
-
-INSERT INTO public.deal (id, version, product_id, name, description, old_price, new_price, start_date, end_date, active, seller_id)
-VALUES ('c3684947-cd97-41de-8ba9-1bb18ba946e7', 0, '94123876-5a5a-4f29-84de-b546b47d2b27', 'Special Offer 3', 'Description of the offer 3', 20.00, 10.00, '2024-01-12', '2025-01-01', true, 'f5fcf708-a416-45fa-b96b-0bd9eac29fac');
-
-INSERT INTO public.deal (id, version, product_id, name, description, old_price, new_price, start_date, end_date, active, seller_id)
-VALUES ('f93619f9-0c26-4f8a-ab24-c7ebf3d465ea', 0, '927d0f18-7e48-4440-a4a7-ab7a3de8f5a1', 'Special Offer 4', 'Description of the offer 4', 25.00, 12.50, '2024-01-12', '2025-01-01', true, 'f5fcf708-a416-45fa-b96b-0bd9eac29fac');
-
-INSERT INTO public.deal (id, version, product_id, name, description, old_price, new_price, start_date, end_date, active, seller_id)
-VALUES ('762a4792-6f86-485a-88ef-15670319628c', 0, '7bad072d-5d3e-4275-b56f-ca0e1b7e8bc7', 'Special Offer 5', 'Description of the offer 5', 30.00, 15.00, '2024-01-12', '2025-01-01', true, 'f5fcf708-a416-45fa-b96b-0bd9eac29fac');
-
-INSERT INTO public.deal (id, version, product_id, name, description, old_price, new_price, start_date, end_date, active, seller_id)
-VALUES ('236e889e-dd4e-4910-8139-bb2fae3dde48', 0, 'd75cda81-ea16-4652-825c-a65f891bd657', 'Special Offer 6', 'Description of the offer 6', 35.00, 17.50, '2024-01-12', '2025-01-01', true, 'f5fcf708-a416-45fa-b96b-0bd9eac29fac');
-
-INSERT INTO public.deal (id, version, product_id, name, description, old_price, new_price, start_date, end_date, active, seller_id)
-VALUES ('82940bef-0c30-45be-820e-a32dc1764b0d', 0, '53f75855-6149-4ec0-8174-35257c4a40bb', 'Mleko taniej', 'Description of the offer 6', 5.00, 2.00, '2024-01-12', '2025-01-01', true, 'f5fcf708-a416-45fa-b96b-0bd9eac29fac');
-
-INSERT INTO public.deal (id, version, product_id, name, description, old_price, new_price, start_date, end_date, active, seller_id)
-VALUES ('d4763f52-374a-43b0-bb08-083c2452888a', 0, 'd4efd7b8-bd00-433f-a675-e7f5a7236325', 'Oferta specjalna', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ultricies dolor id nisi feugiat, non consequat est convallis. Fusce a justo mi. Suspendisse potenti. Sed dui eros, eleifend eu tincidunt nec, sagittis vitae dolor. Vivamus vehicula urna non lobortis ultrices. Vestibulum commodo ex sed libero fringilla sagittis. Phasellus iaculis tellus ac ex ornare volutpat. Pellentesque molestie tempor dolor id maximus. Pellentesque ut porta velit, quis vulputate lorem. Proin mattis augue in tellus rhoncus feugiat. Pellentesque lacinia, nisi et aliquet fringilla, ipsum velit vestibulum erat, a euismod justo felis at augue. Donec sodales gravida aliquet. Duis aliquam risus ac tortor laoreet, ultrices molestie dui condimentum. Fusce efficitur, ante in volutpat suscipit, turpis libero vestibulum neque, non laoreet risus ligula tempus massa. Curabitur urna sem, vestibulum vitae fermentum nec, pellentesque sed tellus.', 35.00, 17.50, '2024-01-12', '2025-01-01', true, 'f5fcf708-a416-45fa-b96b-0bd9eac29fac');

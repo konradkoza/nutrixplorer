@@ -3,6 +3,7 @@ package pl.lodz.p.it.nutrixplorer.model.mow;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import pl.lodz.p.it.nutrixplorer.model.AbstractEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "basket_entry")
 @AllArgsConstructor
-public class BasketEntry extends AbstractEntity{
+public class BasketEntry extends AbstractEntity {
 
     @ManyToOne
     @NotNull
