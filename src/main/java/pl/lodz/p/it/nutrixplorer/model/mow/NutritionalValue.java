@@ -31,6 +31,7 @@ public class NutritionalValue extends AbstractEntity {
 
     private Double nrv; // Referencja wartości spożycia - RWS
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "nutritionalValues")
     private Set<Product> products;
 }

@@ -13,6 +13,49 @@ export const getLoginSchema = (t: TFunction) => {
 
 export type LoginFormType = z.infer<ReturnType<typeof getLoginSchema>>;
 
+export const getResetPasswordSchema = (t: TFunction) => {
+    return z.object({
+        email: z
+            .string()
+            .min(1, { message: t("errors.emailRequired") })
+            .email(t("errors.email")),
+    });
+};
+
+export type ResetPasswordFormType = z.infer<ReturnType<typeof getResetPasswordSchema>>;
+
+
+export const getChangePasswordSchema = (t: TFunction) => {
+    return z.object({
+        newPassword: z.string() .min(8, { message: t("errors.passwordRequired") })
+        .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {
+            message: t("errors.passwordPattern"),
+        }),
+        confirmPassword: z.string().min(8, t("errors.passwordRequired")),
+    }).refine((data) => data.newPassword === data.confirmPassword, {
+        message: t("errors.passwordsDontMatch"),
+        path: ["confirmPassword"],
+    });
+}
+
+export type ChangePasswordFormType = z.infer<ReturnType<typeof getChangePasswordSchema>>;
+
+export const getChangeOwnPasswordSchema = (t: TFunction) => {
+    return z.object({
+        oldPassword: z.string().min(8, t("errors.passwordRequired")),
+        newPassword: z.string() .min(8, { message: t("errors.passwordRequired") })
+        .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {
+            message: t("errors.passwordPattern"),
+        }),
+        confirmPassword: z.string().min(8, t("errors.passwordRequired")),
+    }).refine((data) => data.newPassword === data.confirmPassword, {
+        message: t("errors.passwordsDontMatch"),
+        path: ["confirmPassword"],
+    });
+}
+
+export type ChangeOwnPasswordFormType = z.infer<ReturnType<typeof getChangeOwnPasswordSchema>>;
+
 export const getRegisterSchema = (t: TFunction) => {
     return z
         .object({

@@ -1,10 +1,12 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
 import { useGetMeQuery } from "@/redux/services/meService";
 import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
+import ChangeEmailDialog from "./ChangeEmailDialog";
+import ChangeNameDialog from "./ChangeNameDialog";
+import ChangePasswordDialog from "./ChangePasswordDialog";
 
 const AccountPage = () => {
     const [t] = useTranslation(TranslationNS.Account);
@@ -26,9 +28,7 @@ const AccountPage = () => {
                         <div className="p-2">
                             <Separator className="mb-2 mt-4" />
                             <div className="relative my-1">
-                                <Button variant="ghost" className="absolute right-0 top-0">
-                                    {t("edit")}
-                                </Button>
+                                <ChangeNameDialog />
                                 <p className="text-xl">{t("nameAndLastName")}</p>
                                 <p className="font-semi-bold">
                                     {user?.firstName} {user?.lastName}
@@ -36,13 +36,12 @@ const AccountPage = () => {
                             </div>
                             <Separator className="mb-2 mt-4" />
                             <div className="relative my-1">
-                                <Button variant="ghost" className="absolute right-0 top-0">
-                                    {t("change")}
-                                </Button>
+                                <ChangeEmailDialog />
                                 <p className="text-xl">{t("email")}</p>
                                 <p className="font-semi-bold">{user?.email}</p>
                             </div>
                             <Separator className="mb-2 mt-4" />
+                            <ChangePasswordDialog />
                         </div>
                     </CardContent>
                     {/* <CardContent>

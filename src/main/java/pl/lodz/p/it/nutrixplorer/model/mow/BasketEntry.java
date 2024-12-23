@@ -30,6 +30,7 @@ public class BasketEntry extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "basket_id", nullable = false, updatable = false)
+    @ToString.Exclude
     private Basket basket;
 
     @PrePersist

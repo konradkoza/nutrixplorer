@@ -25,7 +25,35 @@ const AuthService = api.injectEndpoints({
                 body: { code },
             }),
         }),
+        activateAccount: builder.mutation<void, string>({
+            query: (token) => ({
+                url: "auth/activate",
+                method: "POST",
+                body: { token },
+            }),
+        }),
+        forgotPassword: builder.mutation<void, string>({
+            query: (email) => ({
+                url: "auth/reset-password",
+                method: "POST",
+                body: { email },
+            }),
+        }),
+        changePasswordWithToken: builder.mutation<void, { token: string; newPassword: string }>({
+            query: (data) => ({
+                url: "auth/change-password",
+                method: "PATCH",
+                body: data,
+            }),
+        }),
     }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useLoginOauthMutation } = AuthService;
+export const {
+    useLoginMutation,
+    useRegisterMutation,
+    useLoginOauthMutation,
+    useActivateAccountMutation,
+    useForgotPasswordMutation,
+    useChangePasswordWithTokenMutation,
+} = AuthService;

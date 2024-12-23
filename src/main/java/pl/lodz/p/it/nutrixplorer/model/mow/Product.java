@@ -76,5 +76,6 @@ public class Product extends AbstractEntity {
     private List<NutritionalValue> nutritionalValues;
 
     @ManyToMany(mappedBy = "favouriteProducts")
+    @ToString.Exclude
     private Set<Client> usersWhoFavourited = new HashSet<>();
 }

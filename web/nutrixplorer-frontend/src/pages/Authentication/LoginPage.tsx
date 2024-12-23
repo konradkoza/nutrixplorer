@@ -75,8 +75,19 @@ const LoginPage = () => {
                                 control={form.control}
                                 name="password"
                                 render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t("login.password")}</FormLabel>
+                                    <FormItem className="w-full">
+                                        <div className="flex items-center justify-between">
+                                            <FormLabel>{t("login.password")}</FormLabel>
+                                            <Button
+                                                asChild
+                                                variant="link"
+                                                type="button"
+                                                className="h-fit w-fit p-1">
+                                                <Link className="text-sm" to="/forgot-password">
+                                                    {t("login.forgotPassword")}
+                                                </Link>
+                                            </Button>
+                                        </div>
                                         <FormControl>
                                             <Input placeholder="" type="password" {...field} />
                                         </FormControl>

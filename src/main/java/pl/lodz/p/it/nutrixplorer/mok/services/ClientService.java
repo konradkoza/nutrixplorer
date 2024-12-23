@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.AccessLevelAssignException;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.MokErrorCodes;
-import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.UserExceptionMessages;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.MokExceptionMessages;
 import pl.lodz.p.it.nutrixplorer.model.mok.Client;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.ClientRepository;
@@ -28,9 +28,9 @@ public class ClientService {
 
         Client client;
         if (clientOptional.isPresent()) {
-            throw new AccessLevelAssignException(UserExceptionMessages.ACCESS_LEVEL_ASSIGNED, MokErrorCodes.ACCESS_LEVEL_ASSIGNED);
+            throw new AccessLevelAssignException(MokExceptionMessages.ACCESS_LEVEL_ASSIGNED, MokErrorCodes.ACCESS_LEVEL_ASSIGNED);
         } else {
-            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
+            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
             client = new Client();
             client.setUser(user);
         }
@@ -41,18 +41,18 @@ public class ClientService {
         Optional<Client> client = clientRepository.findByUserId(id);
 
         if (client.isEmpty()){
-            throw new AccessLevelAssignException(UserExceptionMessages.ACCESS_LEVEL_TAKEN, MokErrorCodes.ACCESS_LEVEL_TAKEN);
+            throw new AccessLevelAssignException(MokExceptionMessages.ACCESS_LEVEL_TAKEN, MokErrorCodes.ACCESS_LEVEL_TAKEN);
         }
 
         if(client.get().getUser().getAccessLevels().size() <= 1){
-            throw new AccessLevelAssignException(UserExceptionMessages.ACCESS_LEVEL_CANNOT_BE_REMOVED, MokErrorCodes.ACCESS_LEVEL_CANNOT_BE_REMOVED);
+            throw new AccessLevelAssignException(MokExceptionMessages.ACCESS_LEVEL_CANNOT_BE_REMOVED, MokErrorCodes.ACCESS_LEVEL_CANNOT_BE_REMOVED);
         }
 
         clientRepository.delete(client.get());
     }
 
     public Client getClient(UUID id) throws NotFoundException {
-        return clientRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
+        return clientRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
     }
 
 }

@@ -6,7 +6,8 @@
         "passwordRequired": "Password is required",
         "passwordPattern": "Password must be at least 8 characters long and contain at least one digit, one uppercase letter, one lowercase letter, and one special character",
         "firstName": "First name is required",
-        "lastName": "Last name is required"
+        "lastName": "Last name is required",
+        "passwordsDontMatch": "Passwords don't match"
     },
     "login": {
         "title": "Login",
@@ -32,5 +33,19 @@
         "google": "Create account with Google",
         "alreadyHaveAccount": "Already have an account?",
         "login": "Log in"
+    },
+    "reset": {
+        "title": "Reset password",
+        "description": "Enter your email to reset your password",
+        "email": "Email*",
+        "submit": "Reset password",
+        "backToLogin": "Back to login"
+    },
+    "newPassword": {
+        "title": "Reset password",
+        "description": "Enter your new password",
+        "password": "Password*",
+        "confirmPassword": "Confirm password*",
+        "submit": "Change password"
     }
 }

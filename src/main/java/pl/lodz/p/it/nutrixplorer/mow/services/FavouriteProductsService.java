@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.MokErrorCodes;
-import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.UserExceptionMessages;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.MokExceptionMessages;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.ProductAlreadyFavourite;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.codes.MowErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.messages.ErrorMessages;
@@ -38,7 +38,7 @@ public class FavouriteProductsService {
 
     public void addProductToFavourites(UUID id, UUID productId) throws NotFoundException, ProductAlreadyFavourite {
         Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_NOT_FOUND, MowErrorCodes.PRODUCT_NOT_FOUND));
-        Client client = clientRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.CLIENT_NOT_FOUND, MokErrorCodes.CLIENT_NOT_FOUND));
+        Client client = clientRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(MokExceptionMessages.CLIENT_NOT_FOUND, MokErrorCodes.CLIENT_NOT_FOUND));
         if (!client.getFavouriteProducts().add(product)) {
             throw new ProductAlreadyFavourite(ErrorMessages.FAVOURITE_PRODUCT_ALREADY_EXISTS, MowErrorCodes.FAVOURITE_PRODUCT_ALREADY_EXISTS);
         }
@@ -47,7 +47,7 @@ public class FavouriteProductsService {
 
     public void removeProductFromFavourites(UUID id, UUID productId) throws NotFoundException {
         Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_NOT_FOUND, MowErrorCodes.PRODUCT_NOT_FOUND));
-        Client client = clientRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.CLIENT_NOT_FOUND, MokErrorCodes.CLIENT_NOT_FOUND));
+        Client client = clientRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(MokExceptionMessages.CLIENT_NOT_FOUND, MokErrorCodes.CLIENT_NOT_FOUND));
         if (!client.getFavouriteProducts().remove(product)) {
             throw new NotFoundException(ErrorMessages.FAVOURITE_PRODUCT_NOT_FOUND, MowErrorCodes.FAVOURITE_PRODUCT_NOT_FOUND);
         }

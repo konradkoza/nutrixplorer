@@ -40,7 +40,7 @@ export const rtkQueryErrorHandler: Middleware = (api: MiddlewareAPI) => (next) =
         if (isFulfilled(action)) {
             // prettier-ignore
             // @ts-expect-error
-            if (action.meta.arg.type === "mutation" && action.meta.arg.endpointName !== "login" &&  action.meta.arg.endpointName !== "register" && action.meta.arg.endpointName !== "loginOauth"
+            if (action.meta.arg.type === "mutation" && action.meta.arg.endpointName !== "login" && action.meta.arg.endpointName !== "loginOauth"
         ) {
              toast.success(i18next.t("success", {ns:TranslationNS.Success}), { description: i18next.t("successMessage", {ns:TranslationNS.Success}) });
             }

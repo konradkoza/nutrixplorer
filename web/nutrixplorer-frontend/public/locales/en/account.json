@@ -8,5 +8,15 @@
     "edit": "Edit",
     "change": "Change",
     "email": "Email Address",
-    "nameAndLastName": "First and Last Name"
+    "nameAndLastName": "First and Last Name",
+    "changePassword": "Change Password",
+    "changeEmail": "Change Email",
+    "submitEmail": "Send confrimation email",
+    "emailLabel": "Email*",
+    "newPassword": {
+        "password": "New Password*",
+        "confirmPassword": "Confirm New Password*",
+        "submit": "Submit",
+        "oldPassword": "Old Password*"
+    }
 }

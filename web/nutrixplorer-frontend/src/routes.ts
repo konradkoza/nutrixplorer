@@ -13,6 +13,11 @@ import { AccessLevel } from "./types/UserTypes";
 import { Navigate } from "react-router-dom";
 import RegisterPage from "./pages/Authentication/RegisterPage";
 import OauthCallback from "./pages/Authentication/OauthCallback";
+import AccountActivationPage from "@/pages/Verification/AccountActivationPage.tsx";
+import ForgotPassword from "./pages/Authentication/ForgotPassword";
+import PasswordResetPage from "./pages/Verification/PasswordResetPage";
+import AuthLayout from "./layouts/AuthLayout";
+import ConfirmEmailChangePage from "./pages/Verification/ConfirmEmailChangePage";
 
 const clientRoutes: RouteObject[] = [
     {
@@ -41,8 +46,12 @@ const clientRoutes: RouteObject[] = [
 const adminRoutes: RouteObject[] = [];
 
 export const publicRoutes: RouteObject[] = [
-    { path: "/login", Component: LoginPage },
-    { path: "/register", Component: RegisterPage },
+    {Component: AuthLayout, children: [ 
+        { path: "/login", Component: LoginPage },
+        { path: "/register", Component: RegisterPage },
+        {path: "forgot-password", Component: ForgotPassword},
+    ]},
+   
     { path: "/", Component: () => Navigate({ to: "/products", replace: true }) },
     {
         path: "/products",
@@ -59,6 +68,11 @@ export const publicRoutes: RouteObject[] = [
         ],
     },
     { path: "/auth/google/callback", Component: OauthCallback },
+    { path: "/verify/", children: [
+        {path: "activation", Component: AccountActivationPage},
+        {path: "forgot-password", Component: PasswordResetPage},
+        {path: "email", Component: ConfirmEmailChangePage},
+    ]},
 ];
 
 export const protectedRoutes: RouteObject[] = [

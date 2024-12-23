@@ -1,7 +1,6 @@
 package pl.lodz.p.it.nutrixplorer.mok.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,8 +19,6 @@ import pl.lodz.p.it.nutrixplorer.exceptions.mow.messages.ErrorMessages;
 import pl.lodz.p.it.nutrixplorer.mok.dto.*;
 import pl.lodz.p.it.nutrixplorer.mok.mappers.UserMapper;
 import pl.lodz.p.it.nutrixplorer.mok.services.AuthenticationService;
-
-import java.util.Base64;
 
 @RequiredArgsConstructor
 @Controller
@@ -44,7 +41,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register-client")
-    public ResponseEntity<UserDTO> registerClient(@RequestBody RegisterClientDTO registerClientDTO) throws EmailAddressInUseException {
+    public ResponseEntity<UserDTO> registerClient(@RequestBody RegisterClientDTO registerClientDTO) throws EmailAddressInUseException, UserRegisteringException {
         return ResponseEntity.ok(
                 UserMapper.INSTANCE.userToUserDTO(
                         authenticationService.registerClient(
@@ -63,7 +60,7 @@ public class AuthenticationController {
                 .queryParam("grant_type", "authorization_code")
                 .queryParam("redirect_uri", redirectUrl)
                 .build().toUriString();
-        GoogleOauth2Response result = null;
+        GoogleOauth2Response result;
         try {
             RestClient restClient = RestClient.create();
             result = restClient.post()
@@ -72,16 +69,30 @@ public class AuthenticationController {
                     .retrieve()
                     .body(GoogleOauth2Response.class);
         } catch (Exception e) {
+            throw new Oauth2Exception(ErrorMessages.OAUTH2_ERROR, MokErrorCodes.OAUTH2_ERROR, e);
+        }
+        if (result == null) {
             throw new Oauth2Exception(ErrorMessages.OAUTH2_ERROR, MokErrorCodes.OAUTH2_ERROR);
         }
-        String token = result.getIdToken();
-        String[] tokenChunks = token.split("\\.");
-        Base64.Decoder decoder = Base64.getUrlDecoder();
-        String tokenPayload = new String(decoder.decode(tokenChunks[1]));
-        ObjectMapper mapper = new ObjectMapper();
-        ErrorResponseDTO.GoogleOauth2Payload payload = mapper.readValue(tokenPayload, ErrorResponseDTO.GoogleOauth2Payload.class);
-
-        return ResponseEntity.ok(new AuthTokenDTO(authenticationService.signInOAuth(payload)));
-
+        return ResponseEntity.ok(new AuthTokenDTO(authenticationService.signInOAuth(result)));
     }
+
+    @PostMapping("/activate")
+    public ResponseEntity<Void> activateAccount(@RequestBody VerificationTokenDTO activationDTO) throws VerificationTokenInvalidException, VerificationTokenExpiredException, NotFoundException {
+        authenticationService.activateAccount(activationDTO.token());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
+        authenticationService.resetPassword(resetPasswordDTO.email());
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/change-password")
+    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordWithTokenDTO changePasswordDTO) throws VerificationTokenInvalidException, NotFoundException, VerificationTokenExpiredException {
+        authenticationService.changePassword(changePasswordDTO.token(), changePasswordDTO.newPassword());
+        return ResponseEntity.ok().build();
+    }
+
 }

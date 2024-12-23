@@ -35,6 +35,7 @@ public class Label extends AbstractEntity {
     )
     private List<Allergen> allergenList;
 
+    @ToString.Exclude
     private byte[] image;
 
 }

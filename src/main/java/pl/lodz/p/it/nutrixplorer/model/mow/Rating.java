@@ -27,6 +27,7 @@ public class Rating extends AbstractEntity {
     private String name;
 
     @JsonBackReference
+    @ToString.Exclude
     @ManyToMany(mappedBy = "ratings")
     private Set<Product> products;
 

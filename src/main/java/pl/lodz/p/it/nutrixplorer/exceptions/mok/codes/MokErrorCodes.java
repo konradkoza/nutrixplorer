@@ -19,6 +19,11 @@ public class MokErrorCodes {
     public static final String ACCESS_LEVEL_CANNOT_BE_REMOVED = "accessLevelCannotBeRemoved";
     public static final String ADMINISTRATOR_OWN_ROLE_REMOVAL = "ownAdministratorRoleRemoval";
     public static final String OAUTH2_USER = "oauth2User";
+    public static final String TOKEN_GENERATION_ERROR = "tokenGenerationError";
+    public static final String VERIFICATION_TOKEN_INVALID = "verificationTokenInvalid";
+    public static final String VERIFICATION_TOKEN_EXPIRED = "verificationTokenExpired";
+    public static final String UNEXPECTED_ROLLBACK = "unexpectedRollback";
+    public static final String UNEXPECTED_ERROR = "unexpectedError";
 
 
     private MokErrorCodes() {

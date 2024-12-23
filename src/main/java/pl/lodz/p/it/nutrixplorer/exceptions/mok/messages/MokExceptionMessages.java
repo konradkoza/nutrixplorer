@@ -1,13 +1,18 @@
 package pl.lodz.p.it.nutrixplorer.exceptions.mok.messages;
 
-public class UserExceptionMessages {
+public class MokExceptionMessages {
 
 
     public static final String CLIENT_NOT_FOUND = "Client not found";
     public static final String SELLER_NOT_FOUND = "Seller not found";
     public static final String OAUTH_EMAIL_IN_USE = "Email is already used, use email and password to log in";
+    public static final String TOKEN_GENERATION_ERROR = "Token generation error";
+    public static final String VERIFICATION_TOKEN_INVALID = "Verification token invalid";
+    public static final String VERIFICATION_TOKEN_EXPIRED = "Verification token expired";
+    public static final String UNEXPECTED_ROLLBACK = "Unexpected rollback";
+    public static final String UNEXPECTED_ERROR = "Unexpected error";
 
-    private UserExceptionMessages() {
+    private MokExceptionMessages() {
     }
 
     public static final String NOT_FOUND = "User not found";

@@ -36,7 +36,6 @@ public class DataSourceConfiguration {
         hikariConfig.setUsername(adminDataSourceConfigProperties.getUsername());
         hikariConfig.setPassword(adminDataSourceConfigProperties.getPassword());
         hikariConfig.setDriverClassName("org.postgresql.Driver");
-        hikariConfig.setAutoCommit(false);
         // Custom HikariCP settings
         hikariConfig.setMaximumPoolSize(20);
         hikariConfig.setMinimumIdle(10);
@@ -62,7 +61,6 @@ public class DataSourceConfiguration {
         hikariConfig.setUsername(userDataSourceConfigProperties.getUsername());
         hikariConfig.setPassword(userDataSourceConfigProperties.getPassword());
         hikariConfig.setDriverClassName("org.postgresql.Driver");
-        hikariConfig.setAutoCommit(false);
         // Custom HikariCP settings
         hikariConfig.setMaximumPoolSize(20);
         hikariConfig.setMinimumIdle(10);

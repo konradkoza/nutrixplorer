@@ -4,6 +4,10 @@ GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.personal_data TO nutriuser;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.administrators TO nutriuser;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.clients TO nutriuser;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.access_levels TO nutriuser;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.tokens TO nutriuser;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.email_verification_tokens TO nutriuser;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.account_verification_tokens TO nutriuser;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.password_verification_tokens TO nutriuser;
 
 GRANT SELECT ON TABLE public.addition TO nutriuser;
 GRANT SELECT ON TABLE public.access_levels TO nutriuser;

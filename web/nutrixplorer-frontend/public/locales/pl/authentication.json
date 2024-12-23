@@ -1,15 +1,15 @@
 {
     "errors": {
-            "email": "Podany email jest nieprawidłowy",
-            "emailRequired": "Adres email jest wymagany",
-            "password": "Hasło jest za krótkie",
-            "passwordRequired": "Podaj hasło",
-            "passwordPattern": "Hasło musi być nie krótsze niż 8 znaków i zawierać co najmniej jedną cyfrę, jedną dużą literę, jedną małą literę i jeden znak specjal",
-            "firstName": "Imię jest wymagane",
-            "lastName": "Nazwisko jest wymagane"
-        },
+        "email": "Podany email jest nieprawidłowy",
+        "emailRequired": "Adres email jest wymagany",
+        "password": "Hasło jest za krótkie",
+        "passwordRequired": "Podaj hasło",
+        "passwordPattern": "Hasło musi być nie krótsze niż 8 znaków i zawierać co najmniej jedną cyfrę, jedną dużą literę, jedną małą literę i jeden znak specjal",
+        "firstName": "Imię jest wymagane",
+        "lastName": "Nazwisko jest wymagane",
+        "passwordsDontMatch": "Hasła nie są takie same"
+    },
     "login": {
-        
         "title": "Logowanie",
         "description": "Podaj email i hasło aby się zalogować",
         "email": "Email*",
@@ -20,7 +20,6 @@
         "google": "Zaloguj się za pomocą Google",
         "noAccount": "Nie masz konta?",
         "createAccount": "Utwórz konto"
-        
     },
     "register": {
         "title": "Utwórz nowe konto",
@@ -34,6 +33,19 @@
         "google": "Utwórz konto za pomocą Google",
         "alreadyHaveAccount": "Masz już konto?",
         "login": "Zaloguj się"
+    },
+    "reset": {
+        "title": "Zresetuj hasło",
+        "description": "Podaj email, aby zresetować hasło",
+        "email": "Email*",
+        "submit": "Zresetuj hasło",
+        "backToLogin": "Powrót do logowania"
+    },
+    "newPassword": {
+        "title": "Zmień hasło",
+        "description": "Podaj nowe hasło",
+        "password": "Hasło*",
+        "confirmPassword": "Potwierdź hasło*",
+        "submit": "Zmień hasło"
     }
-
 }

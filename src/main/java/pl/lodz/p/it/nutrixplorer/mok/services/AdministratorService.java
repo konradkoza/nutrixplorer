@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.AccessLevelAssignException;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.MokErrorCodes;
-import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.UserExceptionMessages;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.MokExceptionMessages;
 import pl.lodz.p.it.nutrixplorer.model.mok.Administrator;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.AdministratorRepository;
@@ -28,9 +28,9 @@ public class AdministratorService {
 
         Administrator administrator;
         if (administratorOptional.isPresent()) {
-            throw new AccessLevelAssignException(UserExceptionMessages.ACCESS_LEVEL_ASSIGNED, MokErrorCodes.ACCESS_LEVEL_ASSIGNED);
+            throw new AccessLevelAssignException(MokExceptionMessages.ACCESS_LEVEL_ASSIGNED, MokErrorCodes.ACCESS_LEVEL_ASSIGNED);
         } else {
-            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
+            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
             administrator = new Administrator();
             administrator.setUser(user);
         }
@@ -41,15 +41,15 @@ public class AdministratorService {
         Optional<Administrator> administrator = administratorRepository.findByUserId(id);
 
         if (administrator.isEmpty()){
-            throw new AccessLevelAssignException(UserExceptionMessages.ACCESS_LEVEL_TAKEN, MokErrorCodes.ACCESS_LEVEL_TAKEN);
+            throw new AccessLevelAssignException(MokExceptionMessages.ACCESS_LEVEL_TAKEN, MokErrorCodes.ACCESS_LEVEL_TAKEN);
         }
 
         if(administrator.get().getUser().getAccessLevels().size() <= 1){
-            throw new AccessLevelAssignException(UserExceptionMessages.ACCESS_LEVEL_CANNOT_BE_REMOVED, MokErrorCodes.ACCESS_LEVEL_CANNOT_BE_REMOVED);
+            throw new AccessLevelAssignException(MokExceptionMessages.ACCESS_LEVEL_CANNOT_BE_REMOVED, MokErrorCodes.ACCESS_LEVEL_CANNOT_BE_REMOVED);
         }
 
         if(administrator.get().getUser().getId().equals(administratorId)){
-            throw new AccessLevelAssignException(UserExceptionMessages.OWN_ADMINISTRATOR_ROLE_REMOVAL, MokErrorCodes.ADMINISTRATOR_OWN_ROLE_REMOVAL);
+            throw new AccessLevelAssignException(MokExceptionMessages.OWN_ADMINISTRATOR_ROLE_REMOVAL, MokErrorCodes.ADMINISTRATOR_OWN_ROLE_REMOVAL);
         }
         administratorRepository.delete(administrator.get());
     }

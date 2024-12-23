@@ -7,7 +7,16 @@
     "yourData": "Twoje dane",
     "edit": "Edytuj",
     "change": "Zmień",
-    "email": "Aders Email",
-    "nameAndLastName": "Imię i nazwisko"
-
+    "email": "Adres Email",
+    "nameAndLastName": "Imię i nazwisko",
+    "changePassword": "Zmień hasło",
+    "changeEmail": "Zmień email",
+    "submitEmail": "Wyślij email potwierdzający",
+    "emailLabel": "Email*",
+    "newPassword": {
+        "password": "Nowe hasło*",
+        "confirmPassword": "Potwierdź nowe hasło*",
+        "submit": "Zatwierdź",
+        "oldPassword": "Stare hasło*"
+    }
 }
