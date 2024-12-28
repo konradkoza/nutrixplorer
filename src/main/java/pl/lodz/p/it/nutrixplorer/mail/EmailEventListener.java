@@ -14,9 +14,10 @@ public class EmailEventListener {
         this.emailService = emailService;
     }
 
+
     @Async // Makes the email-sending process asynchronous
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handleEmailEvent(EmailEvent event) {
-        emailService.sendEmail(event.getRecipient(), event.getSubject(), event.getBody());
+    public void handleEmailEvent(HtmlEmailEvent event) {
+        emailService.createHtmlEmail(event.getRecipient(), event.getTemplateName(), event.getModel(), event.getLang());
     }
 }

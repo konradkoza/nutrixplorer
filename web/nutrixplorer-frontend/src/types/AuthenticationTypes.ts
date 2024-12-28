@@ -1,10 +1,12 @@
 export type LoginRequest = {
     email: string;
     password: string;
+    language: 'pl' | 'en';
 };
 
 export type LoginResponse = {
     token: string;
+
 };
 
 export type RegisterRequest = {
@@ -12,4 +14,5 @@ export type RegisterRequest = {
     password: string;
     firstName: string;
     lastName: string;
+    language: 'pl' | 'en';
 };

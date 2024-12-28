@@ -24,6 +24,8 @@ public class MokErrorCodes {
     public static final String VERIFICATION_TOKEN_EXPIRED = "verificationTokenExpired";
     public static final String UNEXPECTED_ROLLBACK = "unexpectedRollback";
     public static final String UNEXPECTED_ERROR = "unexpectedError";
+    public static final String SIGN_IN_BLOCKED = "signInBlocked";
+    public static final String CANNOT_BLOCK_YOURSELF = "cannotBlockYourself";
 
 
     private MokErrorCodes() {

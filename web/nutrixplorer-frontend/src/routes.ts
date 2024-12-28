@@ -18,6 +18,8 @@ import ForgotPassword from "./pages/Authentication/ForgotPassword";
 import PasswordResetPage from "./pages/Verification/PasswordResetPage";
 import AuthLayout from "./layouts/AuthLayout";
 import ConfirmEmailChangePage from "./pages/Verification/ConfirmEmailChangePage";
+import UsersPage from "./pages/Users/UsersPage";
+import UserDetailsPage from "./pages/Users/UserDetailsPage";
 
 const clientRoutes: RouteObject[] = [
     {
@@ -43,15 +45,32 @@ const clientRoutes: RouteObject[] = [
     },
 ];
 
-const adminRoutes: RouteObject[] = [];
+const adminRoutes: RouteObject[] = [
+    {
+        path: "/users",
+        children: [
+            {
+                index: true,
+                Component: UsersPage,
+            },
+            {
+                path: ":id",
+                Component: UserDetailsPage,
+            },
+        ],
+    },
+];
 
 export const publicRoutes: RouteObject[] = [
-    {Component: AuthLayout, children: [ 
-        { path: "/login", Component: LoginPage },
-        { path: "/register", Component: RegisterPage },
-        {path: "forgot-password", Component: ForgotPassword},
-    ]},
-   
+    {
+        Component: AuthLayout,
+        children: [
+            { path: "/login", Component: LoginPage },
+            { path: "/register", Component: RegisterPage },
+            { path: "forgot-password", Component: ForgotPassword },
+        ],
+    },
+
     { path: "/", Component: () => Navigate({ to: "/products", replace: true }) },
     {
         path: "/products",
@@ -68,11 +87,14 @@ export const publicRoutes: RouteObject[] = [
         ],
     },
     { path: "/auth/google/callback", Component: OauthCallback },
-    { path: "/verify/", children: [
-        {path: "activation", Component: AccountActivationPage},
-        {path: "forgot-password", Component: PasswordResetPage},
-        {path: "email", Component: ConfirmEmailChangePage},
-    ]},
+    {
+        path: "/verify/",
+        children: [
+            { path: "activation", Component: AccountActivationPage },
+            { path: "forgot-password", Component: PasswordResetPage },
+            { path: "email", Component: ConfirmEmailChangePage },
+        ],
+    },
 ];
 
 export const protectedRoutes: RouteObject[] = [
@@ -85,7 +107,7 @@ export const protectedRoutes: RouteObject[] = [
             },
             {
                 Component: () => AuthGuard({ requiredRole: AccessLevel.ADMINISTRATOR }),
-                children: [{ path: "/admin", children: adminRoutes }],
+                children: [{ path: "/", children: adminRoutes }],
             },
             {
                 path: "/account",

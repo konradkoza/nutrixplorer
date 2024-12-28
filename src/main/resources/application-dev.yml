@@ -15,3 +15,6 @@ datasource:
     jdbc-url: "jdbc:postgresql://nutrixplorer-db:5432/nutrixplorer"
     username: nutriuser
     password: mokP@ssw0rd
+
+nutrixplorer:
+  fronted-url: http://localhost:3000

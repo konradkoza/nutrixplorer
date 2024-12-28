@@ -163,6 +163,7 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
     const onSubmit = (data: FilteringFormType) => {
         const filteredData = Object.entries(data).reduce((acc, [key, value]) => {
             if (value !== "" && value !== undefined) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (acc as any)[key] = value;
             }
             return acc;

@@ -15,7 +15,6 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useChangeNameMutation } from "@/redux/services/meService";
 import { ChangeNameFormType, getChangeNameSchema } from "@/types/schemas/AccountModificationSchema";
 import { TranslationNS } from "@/utils/translationNamespaces";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,14 +22,19 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-const ChangeNameDialog = () => {
-    const [changeName] = useChangeNameMutation();
+type ChangeNameDialogProps = {
+    firstName: string;
+    lastName: string;
+    changeName: (data: ChangeNameFormType) => void;
+};
+
+const ChangeNameDialog = ({ firstName, lastName, changeName }: ChangeNameDialogProps) => {
     const [t] = useTranslation(TranslationNS.Account);
     const [open, setOpen] = useState(false);
     const form = useForm<ChangeNameFormType>({
         values: {
-            firstName: "",
-            lastName: "",
+            firstName: firstName,
+            lastName: lastName,
         },
         resolver: zodResolver(getChangeNameSchema(t)),
     });

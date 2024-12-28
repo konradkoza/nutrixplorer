@@ -2,13 +2,21 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { TranslationNS } from "@/utils/translationNamespaces";
+import { useChangeLanguageMutation } from "@/redux/services/meService";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 export function LanguageToggle() {
+    const [changeLanguage] = useChangeLanguageMutation();
     const { i18n } = useTranslation();
     const [t] = useTranslation(TranslationNS.Layout);
+    const [token] = useSelector((state: RootState) => [state.authSlice.token]);
     const toggleLanguage = () => {
         const newLanguage = i18n.language === "en" ? "pl" : "en";
         i18n.changeLanguage(newLanguage);
+        if (token) {
+            changeLanguage(newLanguage);
+        }
     };
 
     return (

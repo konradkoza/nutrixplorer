@@ -21,7 +21,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
     const [register] = useRegisterMutation();
-    const [t] = useTranslation(TranslationNS.Authentication);
+    const [t, i18n] = useTranslation(TranslationNS.Authentication);
     const form = useForm<RegisterFormType>({
         values: {
             email: "",
@@ -41,6 +41,7 @@ const RegisterPage = () => {
                 password: data.password,
                 firstName: data.firstName,
                 lastName: data.lastName,
+                language: i18n.language as "pl" | "en",
             });
             navigate("/login", { replace: true });
         } catch (error) {
@@ -67,7 +68,11 @@ const RegisterPage = () => {
                                     <FormItem className="">
                                         <FormLabel>{t("register.firstName")}</FormLabel>
                                         <FormControl>
-                                            <Input autoComplete="name" placeholder="" {...field} />
+                                            <Input
+                                                autoComplete="given-name"
+                                                placeholder=""
+                                                {...field}
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

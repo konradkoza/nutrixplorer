@@ -1,7 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
-import { useGetMeQuery } from "@/redux/services/meService";
+import {
+    useChangeEmailMutation,
+    useChangeNameMutation,
+    useGetMeQuery,
+} from "@/redux/services/meService";
 import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
 import ChangeEmailDialog from "./ChangeEmailDialog";
@@ -11,6 +15,8 @@ import ChangePasswordDialog from "./ChangePasswordDialog";
 const AccountPage = () => {
     const [t] = useTranslation(TranslationNS.Account);
     const { data: user } = useGetMeQuery();
+    const [changeEmail] = useChangeEmailMutation();
+    const [changeName] = useChangeNameMutation();
     const breadcrumbs = useBreadcrumbs([
         { title: t("breadcrumbs.home"), path: "/" },
         { title: t("breadcrumbs.account"), path: "/account" },
@@ -28,7 +34,11 @@ const AccountPage = () => {
                         <div className="p-2">
                             <Separator className="mb-2 mt-4" />
                             <div className="relative my-1">
-                                <ChangeNameDialog />
+                                <ChangeNameDialog
+                                    changeName={changeName}
+                                    firstName={user?.firstName || ""}
+                                    lastName={user?.lastName || ""}
+                                />
                                 <p className="text-xl">{t("nameAndLastName")}</p>
                                 <p className="font-semi-bold">
                                     {user?.firstName} {user?.lastName}
@@ -36,12 +46,15 @@ const AccountPage = () => {
                             </div>
                             <Separator className="mb-2 mt-4" />
                             <div className="relative my-1">
-                                <ChangeEmailDialog />
+                                <ChangeEmailDialog
+                                    changeEmail={changeEmail}
+                                    email={user?.email || ""}
+                                />
                                 <p className="text-xl">{t("email")}</p>
                                 <p className="font-semi-bold">{user?.email}</p>
                             </div>
                             <Separator className="mb-2 mt-4" />
-                            <ChangePasswordDialog />
+                            {!user?.oauth && <ChangePasswordDialog />}
                         </div>
                     </CardContent>
                     {/* <CardContent>

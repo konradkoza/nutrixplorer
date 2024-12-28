@@ -54,7 +54,7 @@ const ChangePasswordDialog = () => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="ghost" className="flex gap-2">
+                <Button className="flex gap-2">
                     <span>{t("changePassword")}</span>
                 </Button>
             </DialogTrigger>

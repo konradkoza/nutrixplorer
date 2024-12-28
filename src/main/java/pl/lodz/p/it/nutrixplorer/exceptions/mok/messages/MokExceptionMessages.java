@@ -11,6 +11,8 @@ public class MokExceptionMessages {
     public static final String VERIFICATION_TOKEN_EXPIRED = "Verification token expired";
     public static final String UNEXPECTED_ROLLBACK = "Unexpected rollback";
     public static final String UNEXPECTED_ERROR = "Unexpected error";
+    public static final String SIGN_IN_BLOCKED = "Too many sign in attempts, account blocked";
+    public static final String CANNOT_BLOCK_YOURSELF = "Cannot block yourself";
 
     private MokExceptionMessages() {
     }

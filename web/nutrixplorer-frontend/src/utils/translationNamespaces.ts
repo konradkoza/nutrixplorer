@@ -10,4 +10,5 @@ export const TranslationNS = {
     RWS: "rws",
     Error: "errors",
     Success: "success",
+    Users: "users",
 };

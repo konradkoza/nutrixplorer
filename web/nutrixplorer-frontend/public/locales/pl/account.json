@@ -18,5 +18,9 @@
         "confirmPassword": "Potwierdź nowe hasło*",
         "submit": "Zatwierdź",
         "oldPassword": "Stare hasło*"
-    }
+    },
+    "changeName": "Zmień imię",
+    "firstNameLabel": "Imię*",
+    "lastNameLabel": "Nazwisko*",
+    "submitName": "Zatwierdź"
 }

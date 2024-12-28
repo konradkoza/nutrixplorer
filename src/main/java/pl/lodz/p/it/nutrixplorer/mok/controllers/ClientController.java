@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,14 +25,14 @@ import java.util.UUID;
 public class ClientController {
     private final ClientService clientService;
 
-    @PutMapping(path = "/{id}/assign")
+    @DeleteMapping(path = "/{id}/access-level")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<Void> removeAccessLevel(@PathVariable UUID id) throws AccessLevelAssignException, NotFoundException {
         clientService.removeClientAccessLevel(id);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(path = "/{id}/unassign")
+    @PutMapping(path = "/{id}/access-level")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<Void> addAccessLevel(@PathVariable UUID id) throws AccessLevelAssignException, NotFoundException {
         clientService.addClientAccessLevel(id);

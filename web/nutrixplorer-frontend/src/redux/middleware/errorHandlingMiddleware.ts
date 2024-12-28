@@ -10,8 +10,8 @@ type ErrorPayload = {
     };
 };
 // prettier-ignore
-// @ts-ignore
-export const rtkQueryErrorHandler: Middleware = (api: MiddlewareAPI) => (next) => async (action) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const rtkQueryErrorHandler: Middleware = (_api: MiddlewareAPI) => (next) => async (action) => {
         if (isRejected(action)) {
             // console.error(action.payload);
             const error = action.payload as ErrorPayload;
@@ -39,8 +39,8 @@ export const rtkQueryErrorHandler: Middleware = (api: MiddlewareAPI) => (next) =
         }
         if (isFulfilled(action)) {
             // prettier-ignore
-            // @ts-expect-error
-            if (action.meta.arg.type === "mutation" && action.meta.arg.endpointName !== "login" && action.meta.arg.endpointName !== "loginOauth"
+            // @ts-expect-error ignore type error
+            if (action.meta.arg.type === "mutation" && action.meta.arg.endpointName !== "login" && action.meta.arg.endpointName !== "loginOauth" && action.meta.arg.endpointName !== "changeLanguage"
         ) {
              toast.success(i18next.t("success", {ns:TranslationNS.Success}), { description: i18next.t("successMessage", {ns:TranslationNS.Success}) });
             }

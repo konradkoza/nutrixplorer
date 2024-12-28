@@ -36,8 +36,8 @@ public class AuthenticationController {
     @Value("${nutrixplorer.oauth.token_url}")
     private String tokenUrl;
     @PostMapping("/login")
-    public ResponseEntity<AuthTokenDTO> login(@RequestBody AuthenticationDTO authenticationDTO) throws UserNotVerifiedException, NotFoundException, UserBlockedException, AuthenctiactionFailedException {
-        return ResponseEntity.ok(new AuthTokenDTO(authenticationService.login(authenticationDTO.email(), authenticationDTO.password())));
+    public ResponseEntity<AuthTokenDTO> login(@RequestBody AuthenticationDTO authenticationDTO) throws UserNotVerifiedException, NotFoundException, UserBlockedException, AuthenctiactionFailedException, LoginAttemptsExceededException {
+        return ResponseEntity.ok(new AuthTokenDTO(authenticationService.login(authenticationDTO.email(), authenticationDTO.password(), authenticationDTO.language())));
     }
 
     @PostMapping("/register-client")
@@ -45,7 +45,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(
                 UserMapper.INSTANCE.userToUserDTO(
                         authenticationService.registerClient(
-                                registerClientDTO.email(), registerClientDTO.password(), registerClientDTO.firstName(), registerClientDTO.lastName()
+                                registerClientDTO.email(), registerClientDTO.password(), registerClientDTO.firstName(), registerClientDTO.lastName(), registerClientDTO.language()
                         )));
     }
 
@@ -84,7 +84,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
+    public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) throws UserNotVerifiedException, UserBlockedException {
         authenticationService.resetPassword(resetPasswordDTO.email());
         return ResponseEntity.ok().build();
     }

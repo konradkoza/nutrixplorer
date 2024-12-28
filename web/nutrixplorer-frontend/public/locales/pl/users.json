@@ -1,0 +1,40 @@
+{
+    "filters": {
+        "filters": "Filtry",
+        "email": "Email",
+        "firstName": "Imię",
+        "lastName": "Nazwisko",
+        "accessLevel": "Poziom dostępu",
+        "search": "Szukaj",
+        "reset": "Resetuj"
+    },
+    "table": {
+        "firstName": "Imię",
+        "lastName": "Nazwisko",
+        "email": "Email",
+        "oauth": "Google",
+        "id": "ID",
+        "accessLevels": "Poziomy dostępu",
+        "yes": "Tak",
+        "no": "Nie",
+        "openMenu": "Otwórz menu",
+        "actions": "Akcje",
+        "block": "Zablokuj",
+        "details": "Szczegóły",
+        "unlock": "Odblokuj"
+    },
+    "accessLevels": "Poziomy dostępu",
+    "userDetails": "Szczegóły użytkownika",
+    "personalData": "Dane osobowe",
+    "fullName": "Imię i nazwisko",
+    "unblock": "Odblokuj",
+    "block": "Zablokuj",
+    "takeAdmin": "Zabierz administratora",
+    "giveAdmin": "Nadaj administratora",
+    "takeClient": "Zabierz klienta",
+    "giveClient": "Nadaj klienta",
+    "email": "Email",
+    "oauth": "Użytkownik Google",
+    "yes": "Tak",
+    "no": "Nie"
+}

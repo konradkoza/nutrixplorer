@@ -6,6 +6,7 @@ import lombok.Setter;
 public record UserDTO(
         String firstName,
         String lastName,
-        String email
+        String email,
+        boolean oauth
 ) {
 }

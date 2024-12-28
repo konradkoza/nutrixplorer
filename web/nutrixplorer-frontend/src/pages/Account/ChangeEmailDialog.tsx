@@ -1,12 +1,3 @@
-import { useChangeEmailMutation } from "@/redux/services/meService";
-import {
-    ChangeEmailFormType,
-    getChangeEmailSchema,
-} from "@/types/schemas/AccountModificationSchema";
-import { TranslationNS } from "@/utils/translationNamespaces";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -24,15 +15,27 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+    ChangeEmailFormType,
+    getChangeEmailSchema,
+} from "@/types/schemas/AccountModificationSchema";
+import { TranslationNS } from "@/utils/translationNamespaces";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
-const ChangeEmailDialog = () => {
-    const [changeEmail] = useChangeEmailMutation();
+type ChangeEmailDialogProps = {
+    email: string;
+    changeEmail: (email: string) => void;
+};
+
+const ChangeEmailDialog = ({ email, changeEmail }: ChangeEmailDialogProps) => {
     const [t] = useTranslation(TranslationNS.Account);
     const [open, setOpen] = useState(false);
     const form = useForm<ChangeEmailFormType>({
         values: {
-            email: "",
+            email: email,
         },
         resolver: zodResolver(getChangeEmailSchema(t)),
     });

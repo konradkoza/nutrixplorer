@@ -17,6 +17,7 @@ import java.util.List;
         name = "PERSONAL_DATA",
         pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"),
         schema = "PUBLIC")
+@SecondaryTable(name = "GOOGLE_AUTH", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 @ToString
 @Getter
 @NoArgsConstructor
@@ -33,12 +34,17 @@ public class User extends AbstractEntity {
     private String email;
 
     @Setter
-    @Column(name = "google_id", table = "PERSONAL_DATA", unique = true, length = 30)
+    @Column(name = "google_id", table = "GOOGLE_AUTH", unique = true, length = 30)
     private String googleId;
 
 ////    @Setter
 //    @Column(name = "login", nullable = false, updatable = false, unique = true, length = 50)
 //    private String login;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "language", nullable = false)
+    private Language language = Language.PL;
 
     @Setter
     @Column(name = "password", length = 64)
@@ -73,10 +79,16 @@ public class User extends AbstractEntity {
     @Column(name = "verified", nullable = false)
     private boolean verified = false;
 
-    @Setter
-    @Column(name = "active", nullable = false)
-    private boolean active = true;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AccessLevel> accessLevels = new ArrayList<>();
+
+    public void setLanguage(String language) {
+        this.language = Language.valueOf(language.toUpperCase());
+    }
+
+    public String getLanguage() {
+        return language.getValue().toLowerCase();
+    }
+
 }

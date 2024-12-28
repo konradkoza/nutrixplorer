@@ -107,7 +107,6 @@ const BasketService = api.injectEndpoints({
             {
                 elements: number;
                 page: number;
-                sorting: string;
             } & BasketFiltersFormType
         >({
             query: (data) => ({

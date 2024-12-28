@@ -1,0 +1,39 @@
+{
+    "filters": {
+        "filters": "Filters",
+        "email": "Email",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "accessLevel": "Access Level",
+        "search": "Search",
+        "reset": "Reset"
+    },
+    "table": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "oauth": "Google",
+        "id": "ID",
+        "accessLevels": "Access Levels",
+        "yes": "Yes",
+        "no": "No",
+        "openMenu": "Open Menu",
+        "actions": "Actions",
+        "block": "Block",
+        "details": "Details",
+        "unlock": "Unlock"
+    },
+    "accessLevels": "Access Levels",
+    "userDetails": "User Details",
+    "personalData": "Personal Data",
+    "fullName": "Full Name",
+    "unblock": "Unblock",
+    "takeAdmin": "Take administrator",
+    "giveAdmin": "Give administrator",
+    "takeClient": "Take client",
+    "giveClient": "Give client",
+    "email": "Email",
+    "oauth": "Google User",
+    "yes": "Yes",
+    "no": "No"
+}

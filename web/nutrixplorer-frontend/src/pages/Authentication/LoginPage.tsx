@@ -23,7 +23,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
     const [loginMutation] = useLoginMutation();
-    const [t] = useTranslation(TranslationNS.Authentication);
+    const [t, i18n] = useTranslation(TranslationNS.Authentication);
     const form = useForm<LoginFormType>({
         values: {
             email: "",
@@ -36,7 +36,10 @@ const LoginPage = () => {
 
     const onSubmit = async (data: LoginFormType) => {
         try {
-            const response = await loginMutation(data);
+            const response = await loginMutation({
+                ...data,
+                language: i18n.language as "pl" | "en",
+            });
             if (response.data) {
                 dispatch(login(response.data));
                 navigate("/");

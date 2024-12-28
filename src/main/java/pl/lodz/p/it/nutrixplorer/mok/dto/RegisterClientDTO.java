@@ -4,5 +4,6 @@ public record RegisterClientDTO(
         String password,
         String email,
         String firstName,
-        String lastName) {
+        String lastName,
+        String language) {
 }

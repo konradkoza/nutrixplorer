@@ -22,7 +22,7 @@ const MeService = api.injectEndpoints({
             query: (newEmail) => ({
                 url: "/me/change-email-init",
                 method: "PATCH",
-                body: {newEmail: newEmail},
+                body: { newEmail: newEmail },
             }),
             invalidatesTags: ["UserData"],
         }),
@@ -30,11 +30,11 @@ const MeService = api.injectEndpoints({
             query: (token) => ({
                 url: "/me/change-email",
                 method: "PATCH",
-                body: {token},
+                body: { token },
             }),
             invalidatesTags: ["UserData"],
         }),
-        changeName: builder.mutation<void, {firstName: string, lastName: string}>({
+        changeName: builder.mutation<void, { firstName: string; lastName: string }>({
             query: (data) => ({
                 url: "/me/name",
                 method: "PATCH",
@@ -42,7 +42,23 @@ const MeService = api.injectEndpoints({
             }),
             invalidatesTags: ["UserData"],
         }),
+        changeLanguage: builder.mutation<void, string>({
+            query: (language) => ({
+                url: "/me/language",
+                method: "PATCH",
+                body: { language },
+            }),
+            invalidatesTags: ["UserData"],
+        }),
     }),
 });
 
-export const { useGetMeQuery, useLazyGetMeQuery, useChangeEmailMutation, useChangePasswordMutation, useChangeEmailFinishMutation, useChangeNameMutation } = MeService;
+export const {
+    useGetMeQuery,
+    useLazyGetMeQuery,
+    useChangeEmailMutation,
+    useChangePasswordMutation,
+    useChangeEmailFinishMutation,
+    useChangeNameMutation,
+    useChangeLanguageMutation,
+} = MeService;

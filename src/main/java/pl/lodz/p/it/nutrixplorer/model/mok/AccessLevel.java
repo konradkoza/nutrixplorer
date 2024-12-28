@@ -24,6 +24,8 @@ public abstract class AccessLevel extends AbstractEntity implements Serializable
     @Serial
     private static final long serialVersionUID = 1L; // TODO: check if this is needed
 
+    @Column(name = "active", nullable = false)
+    private boolean active;
 
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false)
     @ManyToOne(optional = false, cascade = CascadeType.PERSIST)

@@ -4,14 +4,14 @@ import { useChangeEmailFinishMutation } from "@/redux/services/meService";
 
 const ConfirmEmailChangePage = () => {
     const [params, setParams] = useSearchParams();
-    const [verifyAccount] = useChangeEmailFinishMutation();
+    const [changeEmail] = useChangeEmailFinishMutation();
     const token = params.get("token");
     const ref = useRef(false);
     useEffect(() => {
         if (token && !ref.current) {
             ref.current = true;
             console.log("Email change token: ", token);
-            verifyAccount(token);
+            changeEmail(token);
             setParams({});
         } else {
             ref.current = true;

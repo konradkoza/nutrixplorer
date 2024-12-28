@@ -18,5 +18,9 @@
         "confirmPassword": "Confirm New Password*",
         "submit": "Submit",
         "oldPassword": "Old Password*"
-    }
+    },
+    "changeName": "Change Name",
+    "firstNameLabel": "First Name*",
+    "lastNameLabel": "Last Name*",
+    "submitName": "Submit"
 }

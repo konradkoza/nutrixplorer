@@ -17,6 +17,6 @@ export const getChangeNameSchema = (t: TFunction) => {
         firstName: z.string().min(1, t("errors.nameRequired")),
         lastName: z.string().min(1, t("errors.nameRequired")),
     });
-}
+};
 
 export type ChangeNameFormType = z.infer<ReturnType<typeof getChangeNameSchema>>;

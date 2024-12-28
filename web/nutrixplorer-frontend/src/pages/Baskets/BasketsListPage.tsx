@@ -26,12 +26,9 @@ const BasketsListPage = () => {
     const [pageNumber, setPageNumber] = useState(0);
     const [elements, setElements] = useState(9);
     const [filters, setFilters] = useState<BasketFiltersFormType>({} as BasketFiltersFormType);
-    // @ts-ignore
-    const [sorting, setSorting] = useState<"asc" | "desc">("desc");
     const { data: basketsPage, isLoading: isBasketsPageLoading } = useGetFilteredBasketsQuery({
         page: pageNumber,
         elements: elements,
-        sorting: sorting,
         ...(filters || ({} as BasketFiltersFormType)),
     });
     const navigate = useNavigate();
@@ -87,15 +84,6 @@ const BasketsListPage = () => {
                     <div className="container flex h-full w-full flex-col items-stretch gap-5 md:flex-row md:flex-wrap xl:flex-row xl:flex-wrap">
                         <BasketFilters setFilters={setFilters} />
                         <div className="flex w-full justify-end">
-                            {/* <Button
-                                variant="ghost"
-                                onClick={() => setSorting(sorting === "asc" ? "desc" : "asc")}>
-                                {sorting === "asc" ? (
-                                    <ArrowUpNarrowWideIcon />
-                                ) : (
-                                    <ArrowDownNarrowWideIcon />
-                                )}
-                            </Button> */}
                             <div className="flex items-center space-x-2">
                                 <Switch
                                     id="products-list"
