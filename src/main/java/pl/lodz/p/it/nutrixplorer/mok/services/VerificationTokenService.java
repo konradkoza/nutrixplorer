@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.nutrixplorer.configuration.LoggingInterceptor;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.TokenGenerationException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.VerificationTokenExpiredException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.VerificationTokenInvalidException;
@@ -22,6 +23,7 @@ import java.time.temporal.ChronoUnit;
 @Service
 @RequiredArgsConstructor
 @Transactional(propagation = Propagation.MANDATORY)
+@LoggingInterceptor
 public class VerificationTokenService {
     private final AccountVerificationTokenRepository accountTokenRepository;
     private final EmailVerificationTokenRepository emailTokenRepository;

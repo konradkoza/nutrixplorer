@@ -26,6 +26,7 @@ public class MokErrorCodes {
     public static final String UNEXPECTED_ERROR = "unexpectedError";
     public static final String SIGN_IN_BLOCKED = "signInBlocked";
     public static final String CANNOT_BLOCK_YOURSELF = "cannotBlockYourself";
+    public static final String OAUTH2_USER_PASSWORD = "oauth2UserPassword";
 
 
     private MokErrorCodes() {

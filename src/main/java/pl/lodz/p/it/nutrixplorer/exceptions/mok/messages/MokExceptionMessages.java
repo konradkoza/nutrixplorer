@@ -13,6 +13,7 @@ public class MokExceptionMessages {
     public static final String UNEXPECTED_ERROR = "Unexpected error";
     public static final String SIGN_IN_BLOCKED = "Too many sign in attempts, account blocked";
     public static final String CANNOT_BLOCK_YOURSELF = "Cannot block yourself";
+    public static final String OAUTH2_USER_PASSWORD = "Action not allowed for user registered with Google";
 
     private MokExceptionMessages() {
     }
@@ -29,5 +30,5 @@ public class MokExceptionMessages {
     public static final String ACCESS_LEVEL_TAKEN = "Access level already taken";
     public static final String ACCESS_LEVEL_CANNOT_BE_REMOVED = "Access level cannot be removed, user has only one access level";
     public static final String OWN_ADMINISTRATOR_ROLE_REMOVAL = "Cannot remove own administrator role";
-    public static final String OAUTH2_USER = "User registered with Google, use Google Sign In or reset password";
+    public static final String OAUTH2_USER = "Action not allowed for user registered with Google";
 }

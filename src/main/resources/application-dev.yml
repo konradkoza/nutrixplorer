@@ -17,4 +17,4 @@ datasource:
     password: mokP@ssw0rd
 
 nutrixplorer:
-  fronted-url: http://localhost:3000
+  frontend-url: http://localhost:3000

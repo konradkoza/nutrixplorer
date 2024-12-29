@@ -105,6 +105,8 @@ public class ServiceLoggingAspect {
                 for (Object entity : entities) {
                     if (entity instanceof AbstractEntity abstractEntity) {
                         sb.append(abstractEntity).append(", ");
+                    } else if (entity == null) {
+                        sb.append("null, ");
                     } else {
                         sb.append(entity.toString()).append(", ");
                     }

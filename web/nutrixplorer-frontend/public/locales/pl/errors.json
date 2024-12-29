@@ -23,10 +23,17 @@
     "accessLevelAlreadyTaken": "Poziom dostępu jest już zabrany",
     "accessLevelCannotBeRemoved": "Nie można usunąć poziomu dostępu",
     "ownAdministratorRoleRemoval": "Nie można usunąć własnej roli administratora",
-    "oauth2User": "Użytkownik z logowaniem za pomocą Google, spróbuj zalogować się za pomocą Google lub użuj opcji odzyskiwania hasła",
+    "oauth2User": "Użytkownik z logowaniem za pomocą Google, spróbuj zalogować się za pomocą Google",
     "invalidQuantity": "Nieprawidłowa ilość produktu",
-
     "connectionError": "Brak połączenia z serwerem",
     "otherError": "Wystąpił błąd",
-    "unexpectedError": "Wystąpił nieoczekiwany błąd"
+    "unexpectedError": "Wystąpił nieoczekiwany błąd",
+    "oauth2UserPassword": "Użytkownik z logowaniem za pomocą Google, akcja niedostępna",
+    "cannotBlockYourself": "Nie można zablokować samego siebie",
+    "signInBlocked": "Logowanie zablokowane z powodu zbyt wielu prób",
+    "unexpectedRollback": "Dane niespójne, spróbuj ponownie",
+    "verificationTokenExpired": "Link weryfikacyjny wygasł",
+    "verificationTokenInvalid": "Link weryfikacyjny jest nieprawidłowy",
+    "tokenGenerationError": "Błąd podczas próby modyfikacji danych",
+    "validationError": "Przesłane dane są nieprawidłowe"
 }

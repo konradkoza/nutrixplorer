@@ -3,7 +3,10 @@ import { z } from "zod";
 
 export const getAddToBasketSchema = (t: TFunction) => {
     return z.object({
-        quantity: z.coerce.number().gt(0, { message: t("errors.quantity") }),
+        quantity: z.coerce
+            .number()
+            .gt(0, { message: t("errors.quantity") })
+            .lt(10000, { message: t("errors.quantity") }),
         basketId: z.string().min(1, { message: t("errors.basketId") }),
     });
 };

@@ -4,7 +4,7 @@
         "baskets": "Baskets",
         "basket": "Basket"
     },
-    "errors":{
+    "errors": {
         "max2": "You can compare a maximum of 2 baskets.",
         "error": "Error",
         "nameMinLength": "Name must be at least 3 characters long.",
@@ -89,5 +89,6 @@
     "details": "Details",
     "compare": "Compare",
     "addToComparison": "Add to comparison",
-    "quantityHeader": "Quantity"
+    "quantityHeader": "Quantity",
+    "noDescription": "No description"
 }

@@ -1,6 +1,7 @@
 package pl.lodz.p.it.nutrixplorer.mok.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import pl.lodz.p.it.nutrixplorer.exceptions.mow.messages.ErrorMessages;
 import pl.lodz.p.it.nutrixplorer.mok.dto.*;
 import pl.lodz.p.it.nutrixplorer.mok.mappers.UserMapper;
 import pl.lodz.p.it.nutrixplorer.mok.services.AuthenticationService;
+import pl.lodz.p.it.nutrixplorer.utils.PasswordHolder;
 
 @RequiredArgsConstructor
 @Controller
@@ -36,16 +38,16 @@ public class AuthenticationController {
     @Value("${nutrixplorer.oauth.token_url}")
     private String tokenUrl;
     @PostMapping("/login")
-    public ResponseEntity<AuthTokenDTO> login(@RequestBody AuthenticationDTO authenticationDTO) throws UserNotVerifiedException, NotFoundException, UserBlockedException, AuthenctiactionFailedException, LoginAttemptsExceededException {
-        return ResponseEntity.ok(new AuthTokenDTO(authenticationService.login(authenticationDTO.email(), authenticationDTO.password(), authenticationDTO.language())));
+    public ResponseEntity<AuthTokenDTO> login(@RequestBody @Valid AuthenticationDTO authenticationDTO) throws UserNotVerifiedException, NotFoundException, UserBlockedException, AuthenctiactionFailedException, LoginAttemptsExceededException {
+        return ResponseEntity.ok(new AuthTokenDTO(authenticationService.login(authenticationDTO.email(), new PasswordHolder(authenticationDTO.password()), authenticationDTO.language())));
     }
 
     @PostMapping("/register-client")
-    public ResponseEntity<UserDTO> registerClient(@RequestBody RegisterClientDTO registerClientDTO) throws EmailAddressInUseException, UserRegisteringException {
+    public ResponseEntity<UserDTO> registerClient(@RequestBody @Valid RegisterClientDTO registerClientDTO) throws EmailAddressInUseException, UserRegisteringException {
         return ResponseEntity.ok(
                 UserMapper.INSTANCE.userToUserDTO(
                         authenticationService.registerClient(
-                                registerClientDTO.email(), registerClientDTO.password(), registerClientDTO.firstName(), registerClientDTO.lastName(), registerClientDTO.language()
+                                registerClientDTO.email(), new PasswordHolder(registerClientDTO.password()), registerClientDTO.firstName(), registerClientDTO.lastName(), registerClientDTO.language()
                         )));
     }
 
@@ -78,20 +80,20 @@ public class AuthenticationController {
     }
 
     @PostMapping("/activate")
-    public ResponseEntity<Void> activateAccount(@RequestBody VerificationTokenDTO activationDTO) throws VerificationTokenInvalidException, VerificationTokenExpiredException, NotFoundException {
+    public ResponseEntity<Void> activateAccount(@RequestBody @Valid VerificationTokenDTO activationDTO) throws VerificationTokenInvalidException, VerificationTokenExpiredException, NotFoundException {
         authenticationService.activateAccount(activationDTO.token());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) throws UserNotVerifiedException, UserBlockedException {
+    public ResponseEntity<Void> resetPassword(@RequestBody @Valid ResetPasswordDTO resetPasswordDTO) throws UserNotVerifiedException, UserBlockedException, OauthUserException {
         authenticationService.resetPassword(resetPasswordDTO.email());
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/change-password")
-    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordWithTokenDTO changePasswordDTO) throws VerificationTokenInvalidException, NotFoundException, VerificationTokenExpiredException {
-        authenticationService.changePassword(changePasswordDTO.token(), changePasswordDTO.newPassword());
+    public ResponseEntity<Void> changePassword(@RequestBody @Valid ChangePasswordWithTokenDTO changePasswordDTO) throws VerificationTokenInvalidException, NotFoundException, VerificationTokenExpiredException {
+        authenticationService.changePassword(changePasswordDTO.token(), new PasswordHolder(changePasswordDTO.newPassword()));
         return ResponseEntity.ok().build();
     }
 

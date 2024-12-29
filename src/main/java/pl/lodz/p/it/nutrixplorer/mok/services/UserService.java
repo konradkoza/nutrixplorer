@@ -2,6 +2,7 @@ package pl.lodz.p.it.nutrixplorer.mok.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,16 +12,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.configuration.LoggingInterceptor;
-import pl.lodz.p.it.nutrixplorer.exceptions.mok.*;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.*;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.MokErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.MokExceptionMessages;
-import pl.lodz.p.it.nutrixplorer.mail.EmailEvent;
 import pl.lodz.p.it.nutrixplorer.mail.HtmlEmailEvent;
 import pl.lodz.p.it.nutrixplorer.model.mok.EmailVerificationToken;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
-import pl.lodz.p.it.nutrixplorer.mok.repositories.AdministratorRepository;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.UserRepository;
+import pl.lodz.p.it.nutrixplorer.utils.PasswordHolder;
 import pl.lodz.p.it.nutrixplorer.utils.SecurityContextUtil;
 
 import java.util.List;
@@ -34,11 +34,13 @@ import java.util.UUID;
 @LoggingInterceptor
 @Slf4j
 public class UserService {
-    private final AdministratorRepository administratorRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher eventPublisher;
     private final VerificationTokenService verificationTokenService;
+
+    @Value("${nutrixplorer.frontend-url}")
+    private String appUrl;
 
     public List<User> getUsers() {
         return userRepository.findAll();
@@ -92,11 +94,11 @@ public class UserService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class})
-    public void changeOwnPassword(String newPassword, String oldPassword) throws NotFoundException, AuthenctiactionFailedException {
+    public void changeOwnPassword(PasswordHolder newPassword, PasswordHolder oldPassword) throws NotFoundException, AuthenctiactionFailedException {
         String id = SecurityContextUtil.getCurrentUser();
         User user = userRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
-        if (passwordEncoder.matches(oldPassword, user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(newPassword));
+        if (passwordEncoder.matches(oldPassword.getPassword(), user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(newPassword.getPassword()));
             userRepository.saveAndFlush(user);
         } else {
             throw new AuthenctiactionFailedException(MokExceptionMessages.INVALID_CREDENTIALS, MokErrorCodes.INVALID_CREDENTIALS);
@@ -115,7 +117,7 @@ public class UserService {
         }
         String token = verificationTokenService.generateEmailVerificationToken(user, email);
 
-        String url = "http://localhost:3000/verify/email?token=" + token;
+        String url = appUrl + "/verify/email?token=" + token;
         eventPublisher.publishEvent(new HtmlEmailEvent(
                 this,
                 email,
@@ -136,7 +138,7 @@ public class UserService {
         }
         String token = verificationTokenService.generateEmailVerificationToken(user, email);
 
-        String url = "http://localhost:3000/verify/email?token=" + token;
+        String url = appUrl + "/verify/email?token=" + token;
         eventPublisher.publishEvent(new HtmlEmailEvent(
                 this,
                 email,
@@ -185,7 +187,7 @@ public class UserService {
         userRepository.saveAndFlush(user);
     }
 
-    public void changeUserPassword(UUID id) throws UserNotVerifiedException, UserBlockedException {
+    public void changeUserPassword(UUID id) throws UserNotVerifiedException, UserBlockedException, OauthUserException {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()){
 
@@ -196,6 +198,9 @@ public class UserService {
             if (user.isBlocked()) {
                 throw new UserBlockedException(MokExceptionMessages.ACCOUNT_BLOCKED, MokErrorCodes.ACCOUNT_BLOCKED);
             }
+            if (user.getPassword() == null) {
+                throw new OauthUserException(MokExceptionMessages.OAUTH2_USER_PASSWORD, MokErrorCodes.OAUTH2_USER_PASSWORD);
+            }
             String token = null;
             try {
                 token = verificationTokenService.generatePasswordVerificationToken(user);
@@ -203,7 +208,7 @@ public class UserService {
                 log.error("Token generation error", e);
             }
             if (token != null) {
-                String url = "http://localhost:3000/verify/forgot-password?token=" + token;
+                String url = appUrl + "/verify/forgot-password?token=" + token;
                 eventPublisher.publishEvent(new HtmlEmailEvent(
                         this,
                         user.getEmail(),

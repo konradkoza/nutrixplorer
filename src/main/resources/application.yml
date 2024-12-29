@@ -50,10 +50,11 @@ logging:
     sql: debug
 
 nutrixplorer:
-  fronted-url: http://localhost:3000
+  remove-unverified: 24
+  frontend-url: http://localhost:3000
   login:
     max-attempts: 3
-    lock-duration: 5
+    lock-duration: 300
   jwt:
     public-key-path: classpath:public.pem
     private-key-path: classpath:private.pem

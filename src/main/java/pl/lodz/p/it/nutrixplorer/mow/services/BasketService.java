@@ -38,9 +38,8 @@ public class BasketService {
     private final ClientRepository clientRepository;
 
     @Transactional(rollbackFor = {BasketNameNotUniqueException.class})
-    public Basket createBasket(List<BasketEntry> entries, String name, String description) throws NotFoundException, BasketNameNotUniqueException {
+    public Basket createBasket(String name, String description) throws NotFoundException, BasketNameNotUniqueException {
         Basket basket = new Basket();
-        basket.setBasketEntries(entries);
         basket.setName(name);
         basket.setDescription(description);
         UUID userId = UUID.fromString(SecurityContextUtil.getCurrentUser());

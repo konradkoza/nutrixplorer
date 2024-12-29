@@ -79,7 +79,7 @@ public class AdministratorService {
                         this,
                         administrator1.getUser().getEmail(),
                         Map.of("name", administrator1.getUser().getFirstName() + " " + administrator1.getUser().getLastName()),
-                        "adminPermissionLost",
+                        "permissionLost",
                         administrator1.getUser().getLanguage()));
     }
 }

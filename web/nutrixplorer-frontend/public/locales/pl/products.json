@@ -4,7 +4,7 @@
         "products": "Produkty",
         "product": "Produkt"
     },
-    "filters" : {
+    "filters": {
         "filters": "Filtry",
         "search": "Szukaj",
         "name": "Nazwa",
@@ -22,7 +22,7 @@
         "max": "Do:",
         "minIndex": "Minimalny indeks",
         "packaging": "Opakowanie",
-        "packagingType": "Typ opakowania", 
+        "packagingType": "Typ opakowania",
         "country": "Kraj",
         "vitamins": "Witaminy",
         "minerals": "Minerały",
@@ -53,7 +53,7 @@
     },
     "errors": {
         "basketId": "Koszyk jest wymagany",
-        "quantity": "Ilość musi być większa niż 0"
+        "quantity": "Ilość musi być większa niż 0 i mniejsza niż 10000"
     },
     "imageAlt": "Brak zdjęcia",
     "producer": "Producent",

@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.nutrixplorer.configuration.LoggingInterceptor;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.MokErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.MokExceptionMessages;
@@ -17,6 +18,7 @@ import pl.lodz.p.it.nutrixplorer.model.mok.Client;
 import pl.lodz.p.it.nutrixplorer.model.mow.Product;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.ClientRepository;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.ProductRepository;
+import pl.lodz.p.it.nutrixplorer.utils.SecurityContextUtil;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +27,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 @Slf4j
+@LoggingInterceptor
 public class FavouriteProductsService {
 
 
@@ -32,7 +35,8 @@ public class FavouriteProductsService {
     private final ProductRepository productRepository;
 
 
-    public List<Product> getFavoriteProducts(UUID id) throws NotFoundException {
+    public List<Product> getCurrentUserFavoriteProducts() throws NotFoundException {
+        UUID id = UUID.fromString(SecurityContextUtil.getCurrentUser());
         return productRepository.findFavoriteProductsByUserId(id);
     }
 
@@ -54,7 +58,8 @@ public class FavouriteProductsService {
         clientRepository.save(client);
     }
 
-    public Page<Product> getFavoriteProducts(UUID id, int page, int elements) {
+    public Page<Product> getCurrentUserFavoriteProducts(int page, int elements) {
+        UUID id = UUID.fromString(SecurityContextUtil.getCurrentUser());
         return productRepository.findFavoriteProductsByUserId(id, PageRequest.of(page, elements));
     }
 }

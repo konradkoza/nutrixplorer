@@ -85,7 +85,7 @@ public class UserController {
 
     @PatchMapping("/{id}/password")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<Void> changeUserPassword(@PathVariable UUID id) throws UserNotVerifiedException, UserBlockedException {
+    public ResponseEntity<Void> changeUserPassword(@PathVariable UUID id) throws UserNotVerifiedException, UserBlockedException, OauthUserException {
         userService.changeUserPassword(id);
         return ResponseEntity.ok().build();
     }

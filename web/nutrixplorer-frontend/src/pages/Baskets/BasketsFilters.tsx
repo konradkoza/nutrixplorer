@@ -31,7 +31,7 @@ const minMaxFields = [
 ] satisfies { min: keyof BasketFiltersFormType; max: keyof BasketFiltersFormType; label: string }[];
 
 type BasketFiltersProps = {
-    setFilters: (data: any) => void;
+    setFilters: (data: BasketFiltersFormType) => void;
 };
 
 const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
@@ -71,6 +71,7 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
     const onSubmit = (data: BasketFiltersFormType) => {
         const filteredData = Object.entries(data).reduce((acc, [key, value]) => {
             if (value !== "" && value !== undefined) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (acc as any)[key] = value;
             }
             return acc;

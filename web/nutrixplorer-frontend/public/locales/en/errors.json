@@ -23,9 +23,17 @@
     "accessLevelAlreadyTaken": "Access level is already taken",
     "accessLevelCannotBeRemoved": "Access level cannot be removed",
     "ownAdministratorRoleRemoval": "Cannot remove own administrator role",
-    "oauth2User": "User with Google login, try logging in with Google or use the password recovery option",
+    "oauth2User": "User with Google login, try logging in with Google",
     "connectionError": "No connection to the server",
     "otherError": "An error occurred",
     "unexpectedError": "An unexpected error occurred",
-    "invalidQuantity": "Invalid quantity of product"
+    "invalidQuantity": "Invalid quantity of product",
+    "oauth2UserPassword": "User with Google login, action not available",
+    "cannotBlockYourself": "Cannot block yourself",
+    "signInBlocked": "Sign-in blocked due to too many attempts",
+    "unexpectedRollback": "Inconsistent data, try again",
+    "verificationTokenExpired": "Verification link expired",
+    "verificationTokenInvalid": "Verification link is invalid",
+    "tokenGenerationError": "Error while trying to modify data",
+    "validationError": "Submitted data is invalid"
 }

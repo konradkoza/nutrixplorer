@@ -173,8 +173,11 @@ const BasketCard = ({
                 <CardHeader>
                     <CardTitle>{basket.name}</CardTitle>
                     <CardDescription>
-                        {basket.description?.substring(0, 100) +
-                            (basket.description && basket.description?.length > 100 ? "..." : "")}
+                        {basket.description
+                            ? basket.description?.length > 100
+                                ? basket.description?.substring(0, 100) + "..."
+                                : basket.description
+                            : t("noDescription")}
                     </CardDescription>
                 </CardHeader>
                 <div className="flex flex-col justify-center pr-6 text-sm text-muted-foreground">

@@ -1,5 +1,6 @@
 package pl.lodz.p.it.nutrixplorer.mow.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -59,14 +60,14 @@ public class BasketController {
 
     @PostMapping
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<BasketSimpleDTO> createBasket(@RequestBody CreateBasketDTO createBasketDTO) throws NotFoundException, BasketNameNotUniqueException {
-        Basket basket = basketService.createBasket(BasketMapper.INSTANCE.basketEntryDTOsToBasketEntries(createBasketDTO.basketEntries()), createBasketDTO.name(), createBasketDTO.description());
+    public ResponseEntity<BasketSimpleDTO> createBasket(@RequestBody @Valid CreateBasketDTO createBasketDTO) throws NotFoundException, BasketNameNotUniqueException {
+        Basket basket = basketService.createBasket(createBasketDTO.name(), createBasketDTO.description());
         return ResponseEntity.status(HttpStatus.CREATED).body(BasketMapper.INSTANCE.basketToBasketSimpleDTO(basket));
     }
 
     @PostMapping("/{basketId}/entry")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<BasketDTO> addEntryToBasket(@PathVariable UUID basketId, @RequestBody BasketEntryDTO entryDTO) throws NotFoundException, BasketEntryException {
+    public ResponseEntity<BasketDTO> addEntryToBasket(@PathVariable UUID basketId, @RequestBody @Valid BasketEntryDTO entryDTO) throws NotFoundException, BasketEntryException {
         Basket basket = basketService.addEntryToBasket(basketId, entryDTO.productId(), entryDTO.quantity());
         return ResponseEntity.ok(BasketMapper.INSTANCE.basketToBasketDTO(basket));
     }
@@ -94,8 +95,8 @@ public class BasketController {
 
     @PatchMapping("/{basketId}")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<Void> updateBasket(@RequestBody UpdateBasketDTO updateBasketDTO, @PathVariable UUID basketId) throws NotFoundException {
-        basketService.updateBasket(basketId, updateBasketDTO.name(), updateBasketDTO.description());
+    public ResponseEntity<Void> updateBasket(@RequestBody @Valid CreateBasketDTO basketDTO, @PathVariable UUID basketId) throws NotFoundException {
+        basketService.updateBasket(basketId, basketDTO.name(), basketDTO.description());
         return ResponseEntity.ok().build();
     }
 
@@ -113,7 +114,7 @@ public class BasketController {
 
     @PostMapping("/{basketId}/clone")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<BasketDTO> cloneBasket(@PathVariable UUID basketId,@RequestBody CreateBasketDTO basketDTO) throws NotFoundException {
+    public ResponseEntity<BasketDTO> cloneBasket(@PathVariable UUID basketId,@RequestBody @Valid CreateBasketDTO basketDTO) throws NotFoundException {
         Basket basket = basketService.cloneBasket(basketId, basketDTO.name(), basketDTO.description());
         return ResponseEntity.status(HttpStatus.CREATED).body(BasketMapper.INSTANCE.basketToBasketDTO(basket));
     }

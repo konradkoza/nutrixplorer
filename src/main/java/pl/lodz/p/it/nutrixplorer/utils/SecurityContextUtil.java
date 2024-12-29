@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
 public class SecurityContextUtil {
 
     public static String getCurrentUser() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+        return SecurityContextHolder.getContext().getAuthentication() == null ? "<anonymous>" : SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }

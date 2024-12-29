@@ -4,7 +4,7 @@
         "baskets": "Koszyki",
         "basket": "Koszyk"
     },
-    "errors":{
+    "errors": {
         "max2": "Możesz porównać maksymalnie 2 koszyki.",
         "error": "Błąd",
         "nameMinLength": "Nazwa musi mieć co najmniej 3 znaki.",
@@ -89,7 +89,6 @@
     "details": "Szczegóły",
     "compare": "Porównaj",
     "addToComparison": "Dodaj do porównania",
-    "quantityHeader": "Ilość"
-    
-
+    "quantityHeader": "Ilość",
+    "noDescription": "Brak opisu"
 }

@@ -79,6 +79,9 @@ public class User extends AbstractEntity {
     @Column(name = "verified", nullable = false)
     private boolean verified = false;
 
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @ToString.Exclude
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AccessLevel> accessLevels = new ArrayList<>();
@@ -89,6 +92,11 @@ public class User extends AbstractEntity {
 
     public String getLanguage() {
         return language.getValue().toLowerCase();
+    }
+
+    @PrePersist
+    public void onPrePersist() {
+        this.createdAt = LocalDateTime.now();
     }
 
 }

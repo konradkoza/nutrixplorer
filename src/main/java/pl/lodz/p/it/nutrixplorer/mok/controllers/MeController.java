@@ -1,5 +1,6 @@
 package pl.lodz.p.it.nutrixplorer.mok.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +14,7 @@ import pl.lodz.p.it.nutrixplorer.exceptions.mok.*;
 import pl.lodz.p.it.nutrixplorer.mok.dto.*;
 import pl.lodz.p.it.nutrixplorer.mok.mappers.UserMapper;
 import pl.lodz.p.it.nutrixplorer.mok.services.UserService;
+import pl.lodz.p.it.nutrixplorer.utils.PasswordHolder;
 
 @RequiredArgsConstructor
 @Controller
@@ -28,21 +30,21 @@ public class MeController {
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/change-password")
-    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) throws NotFoundException, AuthenctiactionFailedException {
-        userService.changeOwnPassword(changePasswordDTO.newPassword(), changePasswordDTO.oldPassword());
+    public ResponseEntity<Void> changePassword(@RequestBody @Valid ChangePasswordDTO changePasswordDTO) throws NotFoundException, AuthenctiactionFailedException {
+        userService.changeOwnPassword(new PasswordHolder(changePasswordDTO.newPassword()), new PasswordHolder(changePasswordDTO.oldPassword()));
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/change-email-init")
-    public ResponseEntity<Void> changeEmail(@RequestBody ChangeEmailDTO changeEmailDTO) throws NotFoundException, TokenGenerationException, EmailAddressInUseException {
+    public ResponseEntity<Void> changeEmail(@RequestBody @Valid ChangeEmailDTO changeEmailDTO) throws NotFoundException, TokenGenerationException, EmailAddressInUseException {
         userService.changeOwnEmailInit(changeEmailDTO.newEmail());
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/change-email")
-    public ResponseEntity<Void> changeEmail(@RequestBody ConfirmEmailChangeDTO confirmEmailChangeDTO) throws EmailAddressInUseException, VerificationTokenInvalidException, VerificationTokenExpiredException {
+    public ResponseEntity<Void> changeEmail(@RequestBody @Valid ConfirmEmailChangeDTO confirmEmailChangeDTO) throws EmailAddressInUseException, VerificationTokenInvalidException, VerificationTokenExpiredException {
         userService.changeOwnEmailFinish(confirmEmailChangeDTO.token());
         return ResponseEntity.ok().build();
     }
@@ -56,7 +58,7 @@ public class MeController {
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/language")
-    public ResponseEntity<Void> changeLanguage(@RequestBody LanguageDTO languageDTO) throws NotFoundException {
+    public ResponseEntity<Void> changeLanguage(@RequestBody @Valid LanguageDTO languageDTO) throws NotFoundException {
         userService.changeOwnLanguage(languageDTO.language());
         return ResponseEntity.ok().build();
     }

@@ -9,7 +9,11 @@ import {
 import UsersFilters from "./UsersFilters";
 import { UserFilters } from "@/types/UserTypes";
 import { useState } from "react";
-import { useBlockUserMutation, useGetUsersQuery } from "@/redux/services/userService";
+import {
+    useBlockUserMutation,
+    useGetUsersQuery,
+    useUnblockUserMutation,
+} from "@/redux/services/userService";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -31,7 +35,7 @@ const UsersPage = () => {
     const [elements, setElements] = useState(10);
     const [filters, setFilters] = useState<UserFilters>();
     const [block] = useBlockUserMutation();
-    const [unblock] = useBlockUserMutation();
+    const [unblock] = useUnblockUserMutation();
     const { t } = useTranslation(TranslationNS.Users);
     const { data: usersPage, isFetching } = useGetUsersQuery({
         page: pageNumber,
