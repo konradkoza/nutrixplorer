@@ -34,5 +34,20 @@ services:
       - my_network
     environment:
       - SPRING_PROFILES_ACTIVE=dev
+  nginx:
+    build:
+      context: ..
+      dockerfile: Docker/DockerfileNginx
+      pull: false
+    container_name: nutrixplorer-nginx
+    restart: always
+    depends_on:
+      - tomcat
+    ports:
+      - "9090:80"
+    networks:
+      - my_network
+    volumes:
+      - ./nginxdev.conf:/etc/nginx/nginx.conf
 networks:
   my_network:
