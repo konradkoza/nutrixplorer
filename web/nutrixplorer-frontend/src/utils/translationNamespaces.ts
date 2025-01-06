@@ -13,4 +13,5 @@ export const TranslationNS = {
     Users: "users",
     Allergens: "allergens",
     NutritionalValues: "nutritionalValues",
+    NotFound: "notFound",
 };

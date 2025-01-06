@@ -10,12 +10,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useUpdateBasketMutation } from "@/redux/services/basketService";
-import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { AddBasketDialogFormType, getAddBasketSchema } from "@/types/schemas/BasketSchema";
 import { TranslationNS } from "@/utils/translationNamespaces";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AddBasketDialogFormType, getAddBasketSchema } from "@/types/schemas/BasketSchema";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 type AddBasketDialogProps = {
     currentName: string;
@@ -23,17 +22,18 @@ type AddBasketDialogProps = {
     basketId: string;
     open: boolean;
     onClose: () => void;
+    editBasket: (data: AddBasketDialogFormType) => void;
 };
 
 const EditBasketDialog = ({
     currentName,
     currentDescription,
-    basketId,
     open,
     onClose,
+    editBasket,
 }: AddBasketDialogProps) => {
     const { t } = useTranslation(TranslationNS.Baskets);
-    const [editBasket] = useUpdateBasketMutation();
+    // const [editBasket] = useUpdateBasketMutation();
 
     const form = useForm<AddBasketDialogFormType>({
         values: {
@@ -43,7 +43,7 @@ const EditBasketDialog = ({
         resolver: zodResolver(getAddBasketSchema(t)),
     });
     const handleChangeQuantity = (data: AddBasketDialogFormType) => {
-        editBasket({ basketId: basketId, basket: data });
+        editBasket(data);
         onClose();
     };
 

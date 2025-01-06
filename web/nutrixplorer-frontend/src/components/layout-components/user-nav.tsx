@@ -20,6 +20,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { TranslationNS } from "@/utils/translationNamespaces";
+import { api } from "@/redux/services/api";
 
 export function UserNav() {
     const { token } = useSelector((state: RootState) => state.authSlice);
@@ -92,6 +93,7 @@ export function UserNav() {
                         className="hover:cursor-pointer"
                         onClick={() => {
                             dispatch(logout());
+                            dispatch(api.util.resetApiState());
                             navigate("/", { replace: true });
                         }}>
                         <LogOut className="mr-3 h-4 w-4 text-muted-foreground" />

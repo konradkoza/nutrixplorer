@@ -1,4 +1,4 @@
-import { AutoComplete } from "@/components/common/Autocomplete";
+import AutocompleteSelect from "@/components/common/AutocompleteSelect";
 import { UnitInput } from "@/components/common/UnitInput";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/components/ui/dialog";
@@ -64,16 +64,17 @@ const AddToBasketDialog = ({
 
     const close = () => {
         setSearchValue("");
+        form.setValue("basketId", "");
         form.reset();
         onClose();
     };
-
     const handleBasketCreation = async (data: CreateBasket) => {
         try {
             const response = await createBasket(data);
             if (response.data) {
                 setSearchValue(response.data.name);
                 form.setValue("basketId", response.data.id);
+                setSearchValue(response.data.name);
             }
         } catch (error) {
             console.error(error);
@@ -95,13 +96,15 @@ const AddToBasketDialog = ({
                                 name="basketId"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t("addToBasket.basket")}</FormLabel>
-                                        <AutoComplete
+                                        <AutocompleteSelect
+                                            errorMessage={form.formState.errors.basketId?.message}
                                             selectedValue={field.value}
-                                            onSelectedValueChange={field.onChange}
+                                            setSelectedValue={field.onChange}
                                             searchValue={searchValue}
-                                            onSearchValueChange={setSearchValue}
-                                            items={
+                                            setSearchValue={(e) => {
+                                                setSearchValue(e);
+                                            }}
+                                            suggestions={
                                                 basketList
                                                     ? basketList.map((basket) => {
                                                           return {
@@ -111,9 +114,10 @@ const AddToBasketDialog = ({
                                                       })
                                                     : []
                                             }
-                                            isLoading={isLoading}
-                                            emptyMessage={t("addToBasket.noBaskets")}
+                                            emptyMessage={t("noProducts")}
+                                            label={t("addToBasket.basket")}
                                             placeholder={t("addToBasket.search")}
+                                            isLoading={isLoading}
                                         />
                                         <FormMessage>
                                             {form.formState.errors.basketId?.message}
@@ -135,6 +139,23 @@ const AddToBasketDialog = ({
                                                 unit={unit}
                                                 type="number"
                                                 {...field}
+                                                onKeyDown={(event) => {
+                                                    if (
+                                                        event.code === "Minus" ||
+                                                        event.code === "NumpadSubtract" ||
+                                                        event.code === "Period" ||
+                                                        event.code === "Comma"
+                                                    ) {
+                                                        event.preventDefault();
+                                                    }
+                                                }}
+                                                onChange={(e) => {
+                                                    if (Number(e.target.value) < 0) {
+                                                        field.onChange(0);
+                                                    } else {
+                                                        field.onChange(e.target.value);
+                                                    }
+                                                }}
                                             />
                                         </FormControl>
                                         <FormMessage>

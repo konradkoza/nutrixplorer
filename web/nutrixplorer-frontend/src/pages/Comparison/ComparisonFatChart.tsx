@@ -16,7 +16,7 @@ type ComparisonFatChartProps = {
 };
 
 const ComparisonFatChart = ({ nutritions }: ComparisonFatChartProps) => {
-    const [t] = useTranslation(TranslationNS.Comparison);
+    const [t, i18n] = useTranslation(TranslationNS.Comparison);
     const total =
         nutritions?.find((nutr) => nutr.groupName === "Tłuszcz" && nutr.name === "Total")
             ?.quantity || 0;
@@ -84,7 +84,13 @@ const ComparisonFatChart = ({ nutritions }: ComparisonFatChartProps) => {
                             const element = chartData.find(
                                 (element) => element.nutrition === value
                             );
-                            return `${((element!.value / total) * 100).toFixed(1)}%`;
+                            return `${((element!.value / total) * 100).toLocaleString(
+                                i18n.language,
+                                {
+                                    minimumFractionDigits: 1,
+                                    maximumFractionDigits: 1,
+                                }
+                            )}%`;
                         }}
                     />
                     <Label
@@ -100,7 +106,10 @@ const ComparisonFatChart = ({ nutritions }: ComparisonFatChartProps) => {
                                             x={viewBox.cx}
                                             y={(viewBox.cy || 0) - 24}
                                             className="fill-foreground text-3xl font-bold">
-                                            {total.toFixed(2) + " g"}
+                                            {total.toLocaleString(i18n.language, {
+                                                minimumFractionDigits: 1,
+                                                maximumFractionDigits: 1,
+                                            }) + " g"}
                                         </tspan>
                                         <tspan
                                             x={viewBox.cx}

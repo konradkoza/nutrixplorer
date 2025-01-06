@@ -50,7 +50,7 @@ const ProductsListPages = () => {
             )}
             <div className="mt-5 flex w-full justify-center">
                 {productPage &&
-                    (productPage?.numberOfPages > 1 || productPage.products.length > 10) && (
+                    (productPage?.numberOfPages > 1 || productPage.products.length > 8) && (
                         <Pagination
                             pageNumber={pageNumber}
                             pageSize={elements}

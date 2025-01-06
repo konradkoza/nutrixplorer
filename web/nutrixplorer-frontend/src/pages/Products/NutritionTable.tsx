@@ -17,7 +17,7 @@ type NutritionTableProps = {
 };
 
 const NutritionTable = ({ nutritions, portion }: NutritionTableProps) => {
-    const [t] = useTranslation(TranslationNS.Products);
+    const [t, i18n] = useTranslation([TranslationNS.Products, TranslationNS.NutritionalValues]);
     return (
         <Table className="mt-4">
             <TableHeader className="w-full">
@@ -42,7 +42,12 @@ const NutritionTable = ({ nutritions, portion }: NutritionTableProps) => {
                                 {element.displayName ? element.displayName : element.name}
                             </TableCell>
                             <TableCell>
-                                {nutrition ? nutrition.quantity.toFixed(2) : 0}{" "}
+                                {nutrition
+                                    ? nutrition.quantity.toLocaleString(i18n.language, {
+                                          minimumFractionDigits: 0,
+                                          maximumFractionDigits: 2,
+                                      })
+                                    : 0}{" "}
                                 {nutrition ? nutrition.unit : ""}
                             </TableCell>
                             <TableCell>
@@ -50,7 +55,10 @@ const NutritionTable = ({ nutritions, portion }: NutritionTableProps) => {
                                     ? (
                                           (nutrition.quantity / 100) *
                                           portion.portionQuantity
-                                      ).toFixed(2)
+                                      ).toLocaleString(i18n.language, {
+                                          minimumFractionDigits: 0,
+                                          maximumFractionDigits: 2,
+                                      })
                                     : 0}{" "}
                                 {nutrition ? nutrition.unit : ""}
                             </TableCell>
@@ -69,9 +77,18 @@ const NutritionTable = ({ nutritions, portion }: NutritionTableProps) => {
                                 nutrition.nutritionalValueName.name +
                                 nutrition.nutritionalValueName.group
                             }>
-                            <TableCell>{nutrition.nutritionalValueName.name}</TableCell>
                             <TableCell>
-                                {nutrition ? nutrition.quantity.toFixed(2) : 0}{" "}
+                                {t(nutrition.nutritionalValueName.name, {
+                                    ns: TranslationNS.NutritionalValues,
+                                })}
+                            </TableCell>
+                            <TableCell>
+                                {nutrition
+                                    ? nutrition.quantity.toLocaleString(i18n.language, {
+                                          minimumFractionDigits: 0,
+                                          maximumFractionDigits: 2,
+                                      })
+                                    : 0}{" "}
                                 {nutrition
                                     ? nutrition.unit === "mcg"
                                         ? "μg"
@@ -83,7 +100,10 @@ const NutritionTable = ({ nutritions, portion }: NutritionTableProps) => {
                                     ? (
                                           (nutrition.quantity / 100) *
                                           portion.portionQuantity
-                                      ).toFixed(2)
+                                      ).toLocaleString(i18n.language, {
+                                          minimumFractionDigits: 0,
+                                          maximumFractionDigits: 2,
+                                      })
                                     : 0}{" "}
                                 {nutrition
                                     ? nutrition.unit === "mcg"

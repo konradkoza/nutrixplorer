@@ -38,7 +38,7 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
     const [searchValue, setSearchValue] = useState<string>("");
     const [value] = useDebounce(searchValue, 100);
     const { data: basketList, isLoading } = useGetFilteredBasketsListQuery(value);
-    const { t } = useTranslation(TranslationNS.Baskets);
+    const { t } = useTranslation([TranslationNS.Baskets, TranslationNS.Allergens]);
     const { data: allergens, isLoading: isAllergensLoading } = useGetAllergensQuery();
     const form = useForm<BasketFiltersFormType>({
         values: {
@@ -293,7 +293,11 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                                 key={allergen}
                                                 render={({ field }) => (
                                                     <FormItem className="flex items-center space-x-2 space-y-0">
-                                                        <FormLabel>{allergen}</FormLabel>
+                                                        <FormLabel>
+                                                            {t(allergen, {
+                                                                ns: TranslationNS.Allergens,
+                                                            })}
+                                                        </FormLabel>
                                                         <FormControl>
                                                             <Checkbox
                                                                 className="border-red-700 data-[state=checked]:bg-red-700"

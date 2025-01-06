@@ -17,7 +17,7 @@ type FatChartProps = {
 };
 
 const FatChart = ({ nutritions }: FatChartProps) => {
-    const [t] = useTranslation(TranslationNS.Baskets);
+    const [t, i18n] = useTranslation(TranslationNS.Baskets);
     const total =
         nutritions?.find((nutr) => nutr.groupName === "Tłuszcz" && nutr.name === "Total")
             ?.quantity || 0;
@@ -106,7 +106,10 @@ const FatChart = ({ nutritions }: FatChartProps) => {
                                                     x={viewBox.cx}
                                                     y={(viewBox.cy || 0) - 24}
                                                     className="fill-foreground text-3xl font-bold">
-                                                    {total.toFixed(2) + " g"}
+                                                    {total.toLocaleString(i18n.language, {
+                                                        minimumFractionDigits: 1,
+                                                        maximumFractionDigits: 1,
+                                                    }) + " g"}
                                                 </tspan>
                                                 <tspan
                                                     x={viewBox.cx}

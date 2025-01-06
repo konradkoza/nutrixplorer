@@ -28,7 +28,6 @@ function generateGradientBackground(max: number, value: number, variant: string)
     const percentage = ((value / max) * 100).toFixed(0);
     const percentage1 = ((value / max + 0.05) * 100).toFixed(0);
 
-    console.log("percentage", percentage);
     return `linear-gradient(to right, ${colors[0]} 0%, ${colors[1]} ${percentage}%, ${colors[2]} ${percentage1}%)`;
 }
 

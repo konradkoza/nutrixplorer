@@ -1,5 +1,6 @@
 import { UserDetails, UserFilters, UsersPage } from "@/types/UserTypes";
 import { api } from "./api";
+import { EtagType } from "@/types/Etag";
 
 const UserService = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -17,35 +18,46 @@ const UserService = api.injectEndpoints({
             }),
             providesTags: ["Users"],
         }),
-        getUser: builder.query<UserDetails, string>({
+        getUser: builder.query<EtagType<UserDetails>, string>({
             query: (id) => ({
                 url: `/users/${id}`,
                 method: "GET",
             }),
             providesTags: ["Users"],
+            transformResponse: (baseQueryReturnValue: UserDetails, meta) => {
+                const etag = meta!.response!.headers.get("etag");
+                return {
+                    ...baseQueryReturnValue,
+                    etag: etag?.substring(1, etag.length - 1) || "",
+                };
+            },
         }),
         changeUserEmail: builder.mutation<void, { id: string; email: string }>({
             query: ({ id, email }) => ({
                 url: `/users/${id}/email`,
-                method: "PUT",
+                method: "PATCH",
                 body: { email },
             }),
             invalidatesTags: (_result, _error, { id }) => [{ type: "Users", id }],
         }),
-        changeUserName: builder.mutation<void, { id: string; firstName: string; lastName: string }>(
-            {
-                query: ({ id, firstName, lastName }) => ({
-                    url: `/users/${id}/name`,
-                    method: "PUT",
-                    body: { firstName, lastName },
-                }),
-                invalidatesTags: ["Users"],
-            }
-        ),
+        changeUserName: builder.mutation<
+            void,
+            EtagType<{ id: string; firstName: string; lastName: string }>
+        >({
+            query: ({ id, firstName, lastName, etag }) => ({
+                url: `/users/${id}/name`,
+                method: "PATCH",
+                body: { firstName, lastName },
+                headers: {
+                    "If-Match": etag,
+                },
+            }),
+            invalidatesTags: ["Users"],
+        }),
         assignAdminAccessLevel: builder.mutation<void, string>({
             query: (id) => ({
                 url: `/administrator/${id}/access-level`,
-                method: "PUT",
+                method: "PATCH",
             }),
             invalidatesTags: ["Users"],
         }),
@@ -59,7 +71,7 @@ const UserService = api.injectEndpoints({
         assignClientAccessLevel: builder.mutation<void, string>({
             query: (id) => ({
                 url: `/client/${id}/access-level`,
-                method: "PUT",
+                method: "PATCH",
             }),
             invalidatesTags: ["Users"],
         }),

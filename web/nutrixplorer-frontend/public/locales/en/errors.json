@@ -35,5 +35,11 @@
     "verificationTokenExpired": "Verification link expired",
     "verificationTokenInvalid": "Verification link is invalid",
     "tokenGenerationError": "Error while trying to modify data",
-    "validationError": "Submitted data is invalid"
+    "validationError": "Submitted data is invalid",
+    "optimisticLock": "Data was modified by another user, try again",
+    "etagHeaderError":"ETag header error",
+    "invalidIfMatch": "Invalid If-Match header",
+    "databaseConnectionError": "Database connection error",
+    "invalidRequestParam": "Invalid request parameter",
+    "productAlreadyInBasket": "Product is already in the basket, you can change the quantity in the basket"
 }

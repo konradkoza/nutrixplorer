@@ -1,5 +1,6 @@
-import { UserPersonalData } from "@/types/UserTypes";
+import { UserDetails, UserPersonalData } from "@/types/UserTypes";
 import { api } from "./api";
+import { EtagType } from "@/types/Etag";
 
 const MeService = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -9,6 +10,20 @@ const MeService = api.injectEndpoints({
                 method: "GET",
             }),
             providesTags: ["UserData"],
+        }),
+        getMeDetails: builder.query<EtagType<UserDetails>, void>({
+            query: () => ({
+                url: "/me/details",
+                method: "GET",
+            }),
+            providesTags: ["UserData"],
+            transformResponse: (baseQueryReturnValue: UserDetails, meta) => {
+                const etag = meta!.response!.headers.get("etag");
+                return {
+                    ...baseQueryReturnValue,
+                    etag: etag?.substring(1, etag.length - 1) || "",
+                };
+            },
         }),
         changePassword: builder.mutation<void, { oldPassword: string; newPassword: string }>({
             query: (credentials) => ({
@@ -34,11 +49,17 @@ const MeService = api.injectEndpoints({
             }),
             invalidatesTags: ["UserData"],
         }),
-        changeName: builder.mutation<void, { firstName: string; lastName: string }>({
+        changeName: builder.mutation<void, EtagType<{ firstName: string; lastName: string }>>({
             query: (data) => ({
                 url: "/me/name",
                 method: "PATCH",
-                body: data,
+                body: {
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                },
+                headers: {
+                    "If-Match": data.etag,
+                },
             }),
             invalidatesTags: ["UserData"],
         }),
@@ -55,6 +76,7 @@ const MeService = api.injectEndpoints({
 
 export const {
     useGetMeQuery,
+    useGetMeDetailsQuery,
     useLazyGetMeQuery,
     useChangeEmailMutation,
     useChangePasswordMutation,

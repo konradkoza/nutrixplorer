@@ -20,7 +20,7 @@ type NutritionChartProps = {
 };
 
 const NutritionChart = ({ carbs, fat, protein, fiber, poliole }: NutritionChartProps) => {
-    const { t } = useTranslation(TranslationNS.Baskets);
+    const { t, i18n } = useTranslation(TranslationNS.Baskets);
     const chartData = [
         {
             nutrition: "carbs",
@@ -123,7 +123,10 @@ const NutritionChart = ({ carbs, fat, protein, fiber, poliole }: NutritionChartP
                                             if (percentage < 0.05) {
                                                 return "";
                                             }
-                                            return `${percentage.toFixed(1)}%`;
+                                            return `${percentage.toLocaleString(i18n.language, {
+                                                minimumFractionDigits: 1,
+                                                maximumFractionDigits: 1,
+                                            })}%`;
                                         } else {
                                             percentage =
                                                 ((element!.value * element!.multiplier) / sum) *
@@ -131,7 +134,10 @@ const NutritionChart = ({ carbs, fat, protein, fiber, poliole }: NutritionChartP
                                             if (percentage < 0.05) {
                                                 return "";
                                             }
-                                            return `${percentage.toFixed(1)}%`;
+                                            return `${percentage.toLocaleString(i18n.language, {
+                                                minimumFractionDigits: 1,
+                                                maximumFractionDigits: 1,
+                                            })}%`;
                                         }
                                     }}
                                 />

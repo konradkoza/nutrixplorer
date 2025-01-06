@@ -3,6 +3,18 @@
         "account": "Account",
         "home": "NutriXplorer"
     },
+    "errors": {
+        "email": "Email is invalid",
+        "emailRequired": "Email is required",
+        "password": "Password is required",
+        "passwordsDontMatch": "Passwords do not match",
+        "firstNameRequired": "First name is required",
+        "lastNameRequired": "Last name is required",
+        "passwordRequired": "Password is required",
+        "newPassword": "New password is required",
+        "passwordPattern": "Password must be at least 8 characters long and contain at least one digit, one uppercase letter, one lowercase letter, and one special character",
+        "confirmPassword": "Confirm password is required"
+    },
     "account": "Account",
     "yourData": "Your data",
     "edit": "Edit",
@@ -22,5 +34,10 @@
     "changeName": "Change Name",
     "firstNameLabel": "First Name*",
     "lastNameLabel": "Last Name*",
-    "submitName": "Submit"
+    "submitName": "Submit",
+    "lastSuccessfulLogin": "Last successful login",
+    "lastFailedLogin": "Last failed login",
+    "fromIP": "from IP address",
+    "noFailedLogins": "No failed logins",
+    "loginData": "Information about logins"
 }

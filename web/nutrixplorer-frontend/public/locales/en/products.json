@@ -46,14 +46,14 @@
         "basket": "Basket*",
         "addToBasket": "Add to Basket",
         "quantity": "Quantity*",
-        "add": "Add",
+        "add": "Add", 
         "cancel": "Cancel",
         "noBaskets": "No baskets found",
         "search": "Search..."
     },
     "errors": {
         "basketId": "Basket is required",
-        "quantity": "Quantity must be greater than 0 and less than 10000"
+        "quantity": "Quantity must be greater than 0"
     },
     "imageAlt": "No image",
     "producer": "Producer",

@@ -1,5 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { TranslationNS } from "@/utils/translationNamespaces";
+import { useTranslation } from "react-i18next";
 
 type GradientBarProps = {
     value: number;
@@ -32,7 +34,6 @@ function generateGradientBackground(max: number, value: number, variant: string)
     const percentage = ((value / max) * 100).toFixed(0);
     const percentage1 = ((value / max + 0.02) * 100).toFixed(0);
 
-    console.log("percentage", percentage);
     return `linear-gradient(to right, ${colors[0]} 0%, ${colors[1]} ${percentage}%, ${colors[2]} ${percentage1}%)`;
 }
 
@@ -46,6 +47,7 @@ const GradientBar = ({
     variant,
     label,
 }: GradientBarProps) => {
+    const [t] = useTranslation(TranslationNS.RWS);
     const total = value > 2 * max ? value : 2 * max;
     const percentage = (value / total) * 100;
     // console.log("label", label);
@@ -107,7 +109,8 @@ const GradientBar = ({
                 </TooltipTrigger>
                 <TooltipContent side="top">
                     <p className="text-sm font-bold text-popover-foreground">
-                        {value.toFixed(2)} {unit || ""} ({((value / max) * 100).toFixed(2)}%RWS)
+                        {value.toFixed(2)} {unit || ""} ({((value / max) * 100).toFixed(2)}
+                        {t("rws")})
                     </p>
                 </TooltipContent>
             </Tooltip>

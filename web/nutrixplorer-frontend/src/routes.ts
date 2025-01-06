@@ -20,6 +20,7 @@ import AuthLayout from "./layouts/AuthLayout";
 import ConfirmEmailChangePage from "./pages/Verification/ConfirmEmailChangePage";
 import UsersPage from "./pages/Users/UsersPage";
 import UserDetailsPage from "./pages/Users/UserDetailsPage";
+import NotFoundPage from "./pages/NotFound/NotFoundPage";
 
 const clientRoutes: RouteObject[] = [
     {
@@ -86,6 +87,7 @@ export const publicRoutes: RouteObject[] = [
             },
         ],
     },
+
     { path: "/auth/google/callback", Component: OauthCallback },
     {
         path: "/verify/",
@@ -118,6 +120,7 @@ export const protectedRoutes: RouteObject[] = [
                     },
                 ],
             },
+            { path: "*", Component: NotFoundPage },
         ],
     },
 ];

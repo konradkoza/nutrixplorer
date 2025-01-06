@@ -61,6 +61,23 @@ const UpdateQuantityDialog = ({
                                             unit={unit}
                                             type="number"
                                             {...field}
+                                            onKeyDown={(event) => {
+                                                if (
+                                                    event.code === "Minus" ||
+                                                    event.code === "NumpadSubtract" ||
+                                                    event.code === "Period" ||
+                                                    event.code === "Comma"
+                                                ) {
+                                                    event.preventDefault();
+                                                }
+                                            }}
+                                            onChange={(e) => {
+                                                if (Number(e.target.value) < 0) {
+                                                    field.onChange(0);
+                                                } else {
+                                                    field.onChange(e.target.value);
+                                                }
+                                            }}
                                         />
                                     </FormControl>
                                 </FormItem>

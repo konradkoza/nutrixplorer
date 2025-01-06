@@ -34,7 +34,7 @@ const ProductDetailsPage = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [setFavourite] = useAddFavouriteMutation();
     const [deleteFavourite] = useDeleteFavoriteMutation();
-    const { accessLevels } = useSelector((state: RootState) => state.authSlice);
+    const { accessLevels, token } = useSelector((state: RootState) => state.authSlice);
     const { data: favouriteProducts } = useGetMyFavouriteProductsQuery(undefined, {
         skip: !accessLevels.includes(AccessLevel.CLIENT),
     });
@@ -286,13 +286,15 @@ const ProductDetailsPage = () => {
                                 <CardContent>{t("noProducerInfo")}</CardContent>
                             )}
                         </Card>
-                        <AddToBasketDialog
-                            open={dialogOpen}
-                            productId={id!}
-                            onClose={() => setDialogOpen(false)}
-                            unit={productDetails?.unit || ""}
-                            productName={productDetails?.productName || ""}
-                        />
+                        {token && (
+                            <AddToBasketDialog
+                                open={dialogOpen}
+                                productId={id!}
+                                onClose={() => setDialogOpen(false)}
+                                unit={productDetails?.unit || ""}
+                                productName={productDetails?.productName || ""}
+                            />
+                        )}
                     </div>
                 ) : (
                     <div>{t("productNotFound")}</div>

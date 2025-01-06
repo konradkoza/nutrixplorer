@@ -36,5 +36,12 @@
     "email": "Email",
     "oauth": "Użytkownik Google",
     "yes": "Tak",
-    "no": "Nie"
+    "no": "Nie",
+    "lastSuccessfulLogin": "Ostatnie udane logowanie",
+    "lastFailedLogin": "Ostatnie nieudane logowanie",
+    "fromIP": "z adresem IP",
+    "noFailedLogins": "Brak nieudanych logowań",
+    "noSuccessfullLogins": "Brak udanych logowań",
+    "loginData": "Informacje o logowaniu",
+    "verified": "Konto zweryfikowane"
 }

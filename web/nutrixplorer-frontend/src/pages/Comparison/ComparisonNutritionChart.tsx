@@ -25,7 +25,7 @@ const ComparisonNutritionChart = ({
     fiber,
     poliole,
 }: ComparisonNutritionChartProps) => {
-    const [t] = useTranslation(TranslationNS.Comparison);
+    const [t, i18n] = useTranslation(TranslationNS.Comparison);
     // const total = carbs * 4 + fat * 9 + protein * 4 + fibre * 2;
     const chartData = [
         {
@@ -122,13 +122,19 @@ const ComparisonNutritionChart = ({
                                 if (percentage < 0.05) {
                                     return "";
                                 }
-                                return `${percentage.toFixed(1)}%`;
+                                return `${percentage.toLocaleString(i18n.language, {
+                                    minimumFractionDigits: 1,
+                                    maximumFractionDigits: 1,
+                                })}%`;
                             } else {
                                 percentage = ((element!.value * element!.multiplier) / sum) * 100;
                                 if (percentage < 0.05) {
                                     return "";
                                 }
-                                return `${percentage.toFixed(1)}%`;
+                                return `${percentage.toLocaleString(i18n.language, {
+                                    minimumFractionDigits: 1,
+                                    maximumFractionDigits: 1,
+                                })}%`;
                             }
                         }}
                     />

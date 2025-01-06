@@ -114,7 +114,7 @@ const BasketsListPage = () => {
                         <div className="mt-5 flex w-full justify-center">
                             {basketsPage &&
                                 (basketsPage?.numberOfPages > 1 ||
-                                    basketsPage.baskets.length > 10) && (
+                                    basketsPage.baskets.length > 9) && (
                                     <Pagination
                                         pageNumber={pageNumber}
                                         pageSize={elements}

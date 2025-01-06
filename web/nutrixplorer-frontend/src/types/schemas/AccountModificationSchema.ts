@@ -14,8 +14,8 @@ export type ChangeEmailFormType = z.infer<ReturnType<typeof getChangeEmailSchema
 
 export const getChangeNameSchema = (t: TFunction) => {
     return z.object({
-        firstName: z.string().min(1, t("errors.nameRequired")),
-        lastName: z.string().min(1, t("errors.nameRequired")),
+        firstName: z.string().min(1, t("errors.firstNameRequired")),
+        lastName: z.string().min(1, t("errors.lastNameRequired")),
     });
 };
 

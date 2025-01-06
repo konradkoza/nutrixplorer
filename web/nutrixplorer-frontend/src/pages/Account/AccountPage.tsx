@@ -4,17 +4,18 @@ import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
 import {
     useChangeEmailMutation,
     useChangeNameMutation,
-    useGetMeQuery,
+    useGetMeDetailsQuery,
 } from "@/redux/services/meService";
 import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
 import ChangeEmailDialog from "./ChangeEmailDialog";
 import ChangeNameDialog from "./ChangeNameDialog";
 import ChangePasswordDialog from "./ChangePasswordDialog";
+import { format } from "date-fns";
 
 const AccountPage = () => {
-    const [t] = useTranslation(TranslationNS.Account);
-    const { data: user } = useGetMeQuery();
+    const [t, i18n] = useTranslation(TranslationNS.Account);
+    const { data: user } = useGetMeDetailsQuery();
     const [changeEmail] = useChangeEmailMutation();
     const [changeName] = useChangeNameMutation();
     const breadcrumbs = useBreadcrumbs([
@@ -35,7 +36,9 @@ const AccountPage = () => {
                             <Separator className="mb-2 mt-4" />
                             <div className="relative my-1">
                                 <ChangeNameDialog
-                                    changeName={changeName}
+                                    changeName={({ firstName, lastName }) => {
+                                        changeName({ firstName, lastName, etag: user?.etag || "" });
+                                    }}
                                     firstName={user?.firstName || ""}
                                     lastName={user?.lastName || ""}
                                 />
@@ -55,6 +58,50 @@ const AccountPage = () => {
                             </div>
                             <Separator className="mb-2 mt-4" />
                             {!user?.oauth && <ChangePasswordDialog />}
+                        </div>
+                        <p className="mt-4 text-2xl">{t("loginData")}</p>
+                        <div className="p-2">
+                            <Separator className="mb-2 mt-4" />
+                            <div className="my-1">
+                                <p className="text-xl">{t("lastFailedLogin")}</p>
+                                <p className="font-semi-bold">
+                                    {user?.lastFailedLogin
+                                        ? (i18n.language === "pl"
+                                              ? format(
+                                                    new Date(user?.lastFailedLogin),
+                                                    "dd.MM.yyyy H:mm"
+                                                )
+                                              : format(
+                                                    new Date(user?.lastFailedLogin),
+                                                    "dd/MM/yyyy H:mm"
+                                                )) +
+                                          " " +
+                                          t("fromIP") +
+                                          " " +
+                                          user?.lastFailedLoginIp
+                                        : t("noFailedLogins")}
+                                </p>
+                            </div>
+                            <div className="my-1">
+                                <p className="text-xl">{t("lastSuccessfulLogin")}</p>
+                                <p className="font-semi-bold">
+                                    {user?.lastSuccessfulLogin
+                                        ? (i18n.language === "pl"
+                                              ? format(
+                                                    new Date(user?.lastSuccessfulLogin),
+                                                    "dd.MM.yyyy H:mm"
+                                                )
+                                              : format(
+                                                    new Date(user?.lastSuccessfulLogin),
+                                                    "dd/MM/yyyy H:mm"
+                                                )) +
+                                          " " +
+                                          t("fromIP") +
+                                          " " +
+                                          user?.lastSuccessfulLoginIp
+                                        : t("noSuccessfullLogins")}
+                                </p>
+                            </div>
                         </div>
                     </CardContent>
                     {/* <CardContent>

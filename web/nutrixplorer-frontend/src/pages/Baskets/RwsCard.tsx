@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BasketNutritions } from "@/types/BasketTypes";
-import GradientBar from "../../components/common/GradientBar";
 import { rws, rwsM, rwsV } from "@/utils/rws";
 import { GradientBarVariants } from "../../components/common/GradientBarSmall";
 import {

@@ -1,3 +1,4 @@
+import { EtagType } from "@/types/Etag";
 import { api } from "./api";
 import {
     Basket,
@@ -19,12 +20,19 @@ const BasketService = api.injectEndpoints({
             }),
             providesTags: ["Baskets"],
         }),
-        getBasketDetails: builder.query<Basket, string>({
+        getBasketDetails: builder.query<EtagType<Basket>, string>({
             query: (id) => ({
                 url: `/basket/${id}`,
                 method: "GET",
             }),
             providesTags: ["Baskets"],
+            transformResponse: (baseQueryReturnValue: Basket, meta) => {
+                const etag = meta!.response!.headers.get("etag");
+                return {
+                    ...baseQueryReturnValue,
+                    etag: etag?.substring(1, etag.length - 1) || "",
+                };
+            },
         }),
         createBasket: builder.mutation<SimpleBasket, CreateBasket>({
             query: (basket) => ({
@@ -65,11 +73,17 @@ const BasketService = api.injectEndpoints({
             }),
             invalidatesTags: ["Baskets"],
         }),
-        updateBasket: builder.mutation<Basket, { basketId: string; basket: CreateBasket }>({
-            query: ({ basketId, basket }) => ({
+        updateBasket: builder.mutation<
+            Basket,
+            EtagType<{ basketId: string; basket: CreateBasket }>
+        >({
+            query: ({ basketId, basket, etag }) => ({
                 url: `/basket/${basketId}`,
                 method: "PATCH",
                 body: basket,
+                headers: {
+                    "If-Match": etag,
+                },
             }),
             invalidatesTags: ["Baskets"],
         }),

@@ -25,6 +25,7 @@ import {
     useGetBasketAllergensQuery,
     useGetBasketDetailsQuery,
     useGetBasketNutritionsQuery,
+    useUpdateBasketMutation,
 } from "@/redux/services/basketService.ts";
 import { returnIndexValue } from "@/utils/productUtils";
 import { format } from "date-fns";
@@ -44,7 +45,7 @@ import { useTranslation } from "react-i18next";
 import { TranslationNS } from "@/utils/translationNamespaces";
 
 const BasketDetails = () => {
-    const { t } = useTranslation(TranslationNS.Baskets);
+    const { t, i18n } = useTranslation([TranslationNS.Baskets, TranslationNS.Allergens]);
     const { id } = useParams<{ id: string }>();
     const { data: basket, isLoading: isLoadingDetails } = useGetBasketDetailsQuery(id!, {
         skip: !id,
@@ -70,6 +71,7 @@ const BasketDetails = () => {
     const [entryId, setEntryId] = useState<string | null>(null);
     const [currentQuantity, setCurrentQuantity] = useState<number>(0);
     const [unit, setUnit] = useState<string>("");
+    const [editBasket] = useUpdateBasketMutation();
     const handleDeleteEntry = (id: string) => {
         deleteEntry(id);
     };
@@ -89,14 +91,6 @@ const BasketDetails = () => {
 
     return (
         <div className="flex w-full justify-center">
-            <UpdateQuantityDialog
-                open={quantityDialogOpen}
-                onClose={() => setQuantityDialogOpen(false)}
-                currentQuantity={currentQuantity}
-                entryId={entryId || ""}
-                unit={unit}
-            />
-
             <div className="container flex flex-col gap-2">
                 <div className="flex w-full items-center justify-between">
                     {breadcrumbs}
@@ -142,7 +136,15 @@ const BasketDetails = () => {
                                             <div className="flex flex-col justify-center pr-6 text-sm text-muted-foreground">
                                                 <p>{t("creationDate")}</p>
                                                 <p>
-                                                    {format(basket.createdAt, "dd.MM.yyyy H:mm")}{" "}
+                                                    {i18n.language === "pl"
+                                                        ? format(
+                                                              basket.createdAt,
+                                                              "dd.MM.yyyy H:mm"
+                                                          )
+                                                        : format(
+                                                              basket.createdAt,
+                                                              "dd/MM/yyyy H:mm"
+                                                          )}{" "}
                                                 </p>
                                             </div>
                                         </CardTitle>
@@ -198,7 +200,7 @@ const BasketDetails = () => {
                                                         {entry.units} {entry.product.unit}
                                                     </TableCell>
                                                     <TableCell align="right">
-                                                        <DropdownMenu>
+                                                        <DropdownMenu modal={false}>
                                                             <DropdownMenuTrigger asChild>
                                                                 <Button
                                                                     variant="ghost"
@@ -259,6 +261,20 @@ const BasketDetails = () => {
                                 currentDescription={basket.description || ""}
                                 onClose={() => setEditDialogOpen(false)}
                                 open={editDialogOpen}
+                                editBasket={(data) =>
+                                    editBasket({
+                                        basketId: basket.id,
+                                        basket: data,
+                                        etag: basket.etag,
+                                    })
+                                }
+                            />
+                            <UpdateQuantityDialog
+                                open={quantityDialogOpen}
+                                onClose={() => setQuantityDialogOpen(false)}
+                                currentQuantity={currentQuantity}
+                                entryId={entryId || ""}
+                                unit={unit}
                             />
                         </>
                     )
@@ -318,7 +334,7 @@ const BasketDetails = () => {
                                             <li
                                                 className="text-lg text-muted-foreground"
                                                 key={allergen}>
-                                                {allergen}
+                                                {t(allergen, { ns: TranslationNS.Allergens })}
                                             </li>
                                         ))}
                                     </ul>

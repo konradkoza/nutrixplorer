@@ -1,4 +1,3 @@
-import { AutoComplete } from "@/components/common/Autocomplete";
 import Indicator from "@/components/common/Indicator";
 import Spinner from "@/components/common/Spinner";
 import {
@@ -39,6 +38,8 @@ import ProductsStackedBarChart from "./ProductsStackedBarChart";
 import { useTranslation } from "react-i18next";
 import { TranslationNS } from "@/utils/translationNamespaces";
 import { simpleNutritionTable } from "@/constants/NutritionConstants";
+import { cn } from "@/lib/utils";
+import AutocompleteSelect from "@/components/common/AutocompleteSelect";
 
 type NutritionSet = {
     name: string;
@@ -72,7 +73,11 @@ const defaultNutritionSet: NutritionSet[] = [
 ];
 
 const BasketComparisonPage = () => {
-    const [t] = useTranslation(TranslationNS.Comparison);
+    const [t, i18n] = useTranslation([
+        TranslationNS.Comparison,
+        TranslationNS.Allergens,
+        TranslationNS.NutritionalValues,
+    ]);
     const [urlParams, setUrlParams] = useSearchParams();
     const [searchValue1, setSearchValue1] = useState<string>("");
     const [value1] = useDebounce(searchValue1, 100);
@@ -148,7 +153,7 @@ const BasketComparisonPage = () => {
                         <p>{t("description")}</p>
                     </CardHeader>
                     <CardContent className="flex justify-evenly">
-                        <AutoComplete
+                        {/* <AutoComplete
                             selectedValue={basket1 || ""}
                             onSelectedValueChange={setBasket1}
                             searchValue={searchValue1}
@@ -166,27 +171,51 @@ const BasketComparisonPage = () => {
                             isLoading={isLoading1}
                             emptyMessage={t("noBaskets")}
                             placeholder={t("search")}
-                        />
-
-                        <AutoComplete
-                            selectedValue={basket2 || ""}
-                            onSelectedValueChange={setBasket2}
-                            searchValue={searchValue2}
-                            onSearchValueChange={setSearchValue2}
-                            items={
-                                basketList2
-                                    ? basketList2.map((basket) => {
-                                          return {
-                                              value: basket.id,
-                                              label: basket.name,
-                                          };
-                                      })
-                                    : []
-                            }
-                            isLoading={isLoading2}
-                            emptyMessage={t("noBaskets")}
-                            placeholder={t("search")}
-                        />
+                        /> */}
+                        <div className="w-1/3">
+                            <AutocompleteSelect
+                                selectedValue={basket1 || ""}
+                                setSelectedValue={setBasket1}
+                                searchValue={searchValue1}
+                                setSearchValue={setSearchValue1}
+                                suggestions={
+                                    basketList1
+                                        ? basketList1.map((basket) => {
+                                              return {
+                                                  value: basket.id,
+                                                  label: basket.name,
+                                              };
+                                          })
+                                        : []
+                                }
+                                emptyMessage={t("noBaskets")}
+                                label={t("basket1")}
+                                placeholder={t("search")}
+                                isLoading={isLoading1}
+                            />
+                        </div>
+                        <div className="w-1/3">
+                            <AutocompleteSelect
+                                selectedValue={basket2 || ""}
+                                setSelectedValue={setBasket2}
+                                searchValue={searchValue2}
+                                setSearchValue={setSearchValue2}
+                                suggestions={
+                                    basketList2
+                                        ? basketList2.map((basket) => {
+                                              return {
+                                                  value: basket.id,
+                                                  label: basket.name,
+                                              };
+                                          })
+                                        : []
+                                }
+                                emptyMessage={t("noBaskets")}
+                                label={t("basket2")}
+                                placeholder={t("search")}
+                                isLoading={isLoading2}
+                            />
+                        </div>
                     </CardContent>
                     <CardContent className="flex justify-center">
                         <Button
@@ -366,7 +395,9 @@ const BasketComparisonPage = () => {
                                         <TableRow>
                                             <TableHead>{t("numberOfElements")}</TableHead>
                                             {basketDetails.map((basket) => (
-                                                <TableCell key={basket.id + "elements"}>
+                                                <TableCell
+                                                    className="w-5/12"
+                                                    key={basket.id + "elements"}>
                                                     {basket.basketEntries.length}
                                                 </TableCell>
                                             ))}
@@ -375,17 +406,22 @@ const BasketComparisonPage = () => {
                                             <TableHead>{t("allergens")}</TableHead>
                                             {basketAllergens.map((allergenList, index) => (
                                                 <TableCell
-                                                    className={
+                                                    className={cn(
                                                         allergenList.length > 0
                                                             ? "text-red-500"
-                                                            : "text-green-500"
-                                                    }
+                                                            : "text-green-500",
+                                                        "w-5/12"
+                                                    )}
                                                     key={index + "allergens"}>
                                                     {allergenList.length > 0
                                                         ? allergenList.map((allergen) => (
-                                                              <p key={allergen}>{allergen}</p>
+                                                              <p key={allergen}>
+                                                                  {t(allergen, {
+                                                                      ns: TranslationNS.Allergens,
+                                                                  })}
+                                                              </p>
                                                           ))
-                                                        : "Brak alergenów"}
+                                                        : t("noAllergens")}
                                                 </TableCell>
                                             ))}
                                         </TableRow>
@@ -393,7 +429,9 @@ const BasketComparisonPage = () => {
                                             <TableHead>{t("productsInBasket")}</TableHead>
                                             {basketDetails.map((basket, index) => {
                                                 return (
-                                                    <TableCell key={index + "products"}>
+                                                    <TableCell
+                                                        key={index + "products"}
+                                                        className="w-5/12">
                                                         {basket.basketEntries.map((entry) => (
                                                             <p key={entry.id}>
                                                                 {entry.product.productName} -{" "}
@@ -420,7 +458,11 @@ const BasketComparisonPage = () => {
                                                 }, 0);
 
                                                 return (
-                                                    <TableCell key={index + "ff"}>{sum}</TableCell>
+                                                    <TableCell
+                                                        className="w-5/12"
+                                                        key={index + "ff"}>
+                                                        {sum}
+                                                    </TableCell>
                                                 );
                                             })}
                                         </TableRow>
@@ -440,7 +482,11 @@ const BasketComparisonPage = () => {
                                                 }, 0);
 
                                                 return (
-                                                    <TableCell key={index + "sum"}>{sum}</TableCell>
+                                                    <TableCell
+                                                        className="w-5/12"
+                                                        key={index + "sum"}>
+                                                        {sum}
+                                                    </TableCell>
                                                 );
                                             })}
                                         </TableRow>
@@ -461,9 +507,14 @@ const BasketComparisonPage = () => {
                                                     {Array.from(nutritionSet).map((set) => (
                                                         <TableRow key={set.name + set.groupName}>
                                                             <TableHead className="w-2/12">
-                                                                {set.name === "Total"
-                                                                    ? set.groupName
-                                                                    : set.name}
+                                                                {t(
+                                                                    set.name === "Total"
+                                                                        ? set.groupName
+                                                                        : set.name.trim(),
+                                                                    {
+                                                                        ns: TranslationNS.NutritionalValues,
+                                                                    }
+                                                                )}
                                                             </TableHead>
                                                             {basketNutritions.map(
                                                                 (basketNutrition, index) => {
@@ -517,10 +568,12 @@ const BasketComparisonPage = () => {
                                                                                         })()}
                                                                                     />
                                                                                 )}
-                                                                                {Number(
-                                                                                    nutritionValue?.quantity.toFixed(
-                                                                                        3
-                                                                                    )
+                                                                                {nutritionValue?.quantity.toLocaleString(
+                                                                                    i18n.language,
+                                                                                    {
+                                                                                        minimumFractionDigits: 0,
+                                                                                        maximumFractionDigits: 3,
+                                                                                    }
                                                                                 ) || 0}{" "}
                                                                                 {nutritionValue?.unit ===
                                                                                 "mcg"

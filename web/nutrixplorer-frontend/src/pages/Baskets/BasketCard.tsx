@@ -83,7 +83,11 @@ const BasketCard = ({
     };
     const { baskets } = useSelector((state: RootState) => state.comparisonSlice);
     const dispatch = useDispatch();
-    const [t] = useTranslation([TranslationNS.Baskets, TranslationNS.RWS]);
+    const [t, i18n] = useTranslation([
+        TranslationNS.Baskets,
+        TranslationNS.RWS,
+        TranslationNS.NutritionalValues,
+    ]);
     basket.basketEntries.forEach((entry) => {
         entry.product.nutritionalValues.forEach((nutrition) => {
             if (
@@ -128,6 +132,11 @@ const BasketCard = ({
                 //         unit: nutrition.unit,
                 //     });
                 // }
+                if (
+                    filterToNutritionalValue[key as keyof typeof filterToNutritionalValue] ===
+                    undefined
+                )
+                    return;
                 filteredNutritions.add({
                     group: filterToNutritionalValue[key as keyof typeof filterToNutritionalValue]
                         .group,
@@ -182,7 +191,11 @@ const BasketCard = ({
                 </CardHeader>
                 <div className="flex flex-col justify-center pr-6 text-sm text-muted-foreground">
                     <p>{t("creationDate")}</p>
-                    <p>{format(basket.createdAt, "dd.MM.yyyy H:mm")} </p>
+                    <p>
+                        {i18n.language === "pl"
+                            ? format(basket.createdAt, "dd.MM.yyyy H:mm")
+                            : format(basket.createdAt, "dd/MM/yyyy H:mm")}{" "}
+                    </p>
                 </div>
             </div>
 
@@ -206,13 +219,16 @@ const BasketCard = ({
                                             )}{" "}
                                         </p>
                                         <p className="place-self-center">
-                                            {
-                                                nutritions.find(
+                                            {nutritions
+                                                .find(
                                                     (n) =>
                                                         n.name === nutrition.name &&
                                                         n.groupName === nutrition.group
-                                                )?.quantity
-                                            }{" "}
+                                                )
+                                                ?.quantity.toLocaleString(i18n.language, {
+                                                    minimumFractionDigits: 0,
+                                                    maximumFractionDigits: 3,
+                                                })}{" "}
                                             {nutrition
                                                 ? nutrition.unit === "mcg"
                                                     ? "μg"
@@ -261,13 +277,16 @@ const BasketCard = ({
                                             )}
                                         </p>
                                         <p className="place-self-center">
-                                            {
-                                                nutritions.find(
+                                            {nutritions
+                                                .find(
                                                     (n) =>
                                                         n.name === nutrition.name &&
                                                         n.groupName === nutrition.group
-                                                )?.quantity
-                                            }{" "}
+                                                )
+                                                ?.quantity.toLocaleString(i18n.language, {
+                                                    minimumFractionDigits: 0,
+                                                    maximumFractionDigits: 3,
+                                                })}{" "}
                                             {nutrition
                                                 ? nutrition.unit === "mcg"
                                                     ? "μg"
@@ -306,9 +325,12 @@ const BasketCard = ({
                                         className="grid w-full grid-cols-3"
                                         key={nutrition.name + nutrition.group}>
                                         <p>
-                                            {nutrition.name === "Total"
-                                                ? nutrition.group
-                                                : nutrition.name}
+                                            {t(
+                                                nutrition.name === "Total"
+                                                    ? nutrition.group
+                                                    : nutrition.name,
+                                                { ns: TranslationNS.NutritionalValues }
+                                            )}
                                             :{" "}
                                         </p>
                                         <p className="place-self-center">
@@ -323,7 +345,10 @@ const BasketCard = ({
                                                               n.name === nutrition.name &&
                                                               n.groupName === nutrition.group
                                                       )!
-                                                      .quantity.toFixed(2)
+                                                      .quantity.toLocaleString(i18n.language, {
+                                                          minimumFractionDigits: 0,
+                                                          maximumFractionDigits: 3,
+                                                      })
                                                 : "0.00"}{" "}
                                             {nutrition.unit}
                                         </p>
@@ -397,8 +422,12 @@ const BasketCard = ({
                                                     {t(rw.key, { ns: TranslationNS.RWS })}
                                                 </TableCell>
                                                 <TableCell className="text-nowrap">
-                                                    {nutr.quantity.toFixed(2) + " " + nutr.unit ||
-                                                        ""}
+                                                    {nutr.quantity.toLocaleString(i18n.language, {
+                                                        minimumFractionDigits: 0,
+                                                        maximumFractionDigits: 3,
+                                                    }) +
+                                                        " " +
+                                                        nutr.unit || ""}
                                                 </TableCell>
                                                 <TableCell align="center">
                                                     {rw.value ? (

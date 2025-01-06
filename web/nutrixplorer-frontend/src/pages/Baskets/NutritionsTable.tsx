@@ -18,7 +18,7 @@ type NutritionsTableProps = {
 };
 
 const NutrtitionsTable = ({ nutritions }: NutritionsTableProps) => {
-    const [t] = useTranslation(TranslationNS.Baskets);
+    const [t, i18n] = useTranslation([TranslationNS.Baskets, TranslationNS.NutritionalValues]);
     return (
         <Card className="h-full">
             <CardHeader>
@@ -64,10 +64,20 @@ const NutrtitionsTable = ({ nutritions }: NutritionsTableProps) => {
                                         )}
                                     </TableCell>
                                     <TableCell>
-                                        {element.displayName ? element.displayName : element.name}
+                                        {t(
+                                            element.displayName
+                                                ? element.displayName
+                                                : element.name,
+                                            { ns: TranslationNS.NutritionalValues }
+                                        )}
                                     </TableCell>
                                     <TableCell>
-                                        {nutrition ? Number(nutrition.quantity.toFixed(2)) : 0}{" "}
+                                        {nutrition
+                                            ? nutrition.quantity.toLocaleString(i18n.language, {
+                                                  minimumFractionDigits: 0,
+                                                  maximumFractionDigits: 3,
+                                              })
+                                            : 0}{" "}
                                         {nutrition ? nutrition.unit : ""}
                                     </TableCell>
                                 </TableRow>
@@ -92,9 +102,16 @@ const NutrtitionsTable = ({ nutritions }: NutritionsTableProps) => {
                                             }
                                         />
                                     </TableCell>
-                                    <TableCell>{nutrition.name}</TableCell>
                                     <TableCell>
-                                        {nutrition ? Number(nutrition.quantity.toFixed(2)) : 0}{" "}
+                                        {t(nutrition.name, { ns: TranslationNS.NutritionalValues })}
+                                    </TableCell>
+                                    <TableCell>
+                                        {nutrition
+                                            ? nutrition.quantity.toLocaleString(i18n.language, {
+                                                  minimumFractionDigits: 0,
+                                                  maximumFractionDigits: 3,
+                                              })
+                                            : 0}{" "}
                                         {nutrition
                                             ? nutrition.unit === "mcg"
                                                 ? "μg"

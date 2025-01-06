@@ -17,14 +17,14 @@ export const rtkQueryErrorHandler: Middleware = (_api: MiddlewareAPI) => (next) 
             const error = action.payload as ErrorPayload;
             console.log(error);
             if (i18next.isInitialized) {
-                if(error.data && !error.data.errorCode) {
+                if(error && error.data && !error.data.errorCode) {
                     toast.error(i18next.t("error", { ns: TranslationNS.Error }), {
                         description: i18next.t("unexpectedError", { ns: TranslationNS.Error })
                     });
                     return next(action);
                 }
                 toast.error(i18next.t("error", { ns: TranslationNS.Error }), {
-                    description: error.data
+                    description: error && error.data
                         ? i18next.t(error.data.errorCode, { ns: TranslationNS.Error })
                         : i18next.t("connectionError", { ns: TranslationNS.Error }),
                 });

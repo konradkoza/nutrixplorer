@@ -35,5 +35,12 @@
     "verificationTokenExpired": "Link weryfikacyjny wygasł",
     "verificationTokenInvalid": "Link weryfikacyjny jest nieprawidłowy",
     "tokenGenerationError": "Błąd podczas próby modyfikacji danych",
-    "validationError": "Przesłane dane są nieprawidłowe"
+    "validationError": "Przesłane dane są nieprawidłowe",
+    "optimisticLock": "Dane zostały zmodyfikowane przez innego użytkownika, spróbuj ponownie",
+    "etagHeaderError": "Błąd nagłówka ETag",
+    "invalidIfMatch": "Nieprawidłowy nagłówek If-Match",
+    "databaseConnectionError": "Błąd połączenia z bazą danych",
+    "invalidRequestParam": "Nieprawidłowy parametr żądania",
+    "productAlreadyInBasket": "Produkt jest już w koszyku, możesz zmienić ilość w koszyku"
+
 }

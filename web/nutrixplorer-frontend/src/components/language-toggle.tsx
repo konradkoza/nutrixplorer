@@ -10,7 +10,7 @@ export function LanguageToggle() {
     const [changeLanguage] = useChangeLanguageMutation();
     const { i18n } = useTranslation();
     const [t] = useTranslation(TranslationNS.Layout);
-    const [token] = useSelector((state: RootState) => [state.authSlice.token]);
+    const token = useSelector((state: RootState) => state.authSlice.token);
     const toggleLanguage = () => {
         const newLanguage = i18n.language === "en" ? "pl" : "en";
         i18n.changeLanguage(newLanguage);
