@@ -131,7 +131,7 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
             max: "maxCarbs",
             label: t("filters.carbs") + " " + t("filters.per100g"),
         },
-        { min: "minFat", max: "maxFat", label: t("filters.fats") },
+        { min: "minFat", max: "maxFat", label: t("filters.fats") + " " + t("filters.per100g") },
         {
             min: "minProtein",
             max: "maxProtein",

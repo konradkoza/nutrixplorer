@@ -90,5 +90,6 @@
     "compare": "Porównaj",
     "addToComparison": "Dodaj do porównania",
     "quantityHeader": "Ilość",
-    "noDescription": "Brak opisu"
+    "noDescription": "Brak opisu",
+    "totalGrams": " (gramów w sumie)"
 }
