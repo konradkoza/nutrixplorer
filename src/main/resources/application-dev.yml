@@ -13,15 +13,20 @@ logging:
 datasource:
   admin:
     jdbc-url: "jdbc:postgresql://nutrixplorer-db:5432/nutrixplorer"
-    username: nutriadmin
-    password: adminP@ssw0rd
+    username: ${ADMIN_DB_USER}
+    password: ${ADMIN_DB_PASSWORD}
   user:
     jdbc-url: "jdbc:postgresql://nutrixplorer-db:5432/nutrixplorer"
-    username: nutriuser
-    password: mokP@ssw0rd
+    username: ${USER_DB_USER}
+    password: ${USER_DB_PASSWORD}
 
 nutrixplorer:
   proxy: true
-  frontend-url: http://localhost:3000
+  frontend-url: https://192.168.18.7
   jws:
-    secret: ZhLR58MdJjGl6MAlEC9OWUkS34KTEsYd
+    secret: ${JWS_SECRET_KEY}
+  oauth:
+    client_id: ${GOOGLE_CLIENT_ID}
+    client_secret: ${GOOGLE_CLIENT_SECRET}
+    redirect_url: https://localhost/auth/google/callback
+    token_url: https://oauth2.googleapis.com/token

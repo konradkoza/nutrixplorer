@@ -1,5 +1,5 @@
 {
-  "users": [
+  "user": [
     {
       "id": "848272c7-656f-4b51-970c-fdbb9297df23",
       "password": "$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.",
@@ -43,7 +43,7 @@
       "user_id": "dee18450-a6cf-495f-885e-41f8a5d21b36"
     }
   ],
-  "access_levels": [
+  "access_level": [
     {
       "active": true,
       "version": 0,
@@ -59,7 +59,7 @@
       "level": "CLIENT"
     }
   ],
-  "clients": [
+  "client": [
     {
       "id": "2da078b9-6461-408c-bae6-27ddbede0a2b"
     },

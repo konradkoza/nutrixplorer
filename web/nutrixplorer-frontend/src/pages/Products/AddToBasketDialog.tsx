@@ -74,7 +74,6 @@ const AddToBasketDialog = ({
             if (response.data) {
                 setSearchValue(response.data.name);
                 form.setValue("basketId", response.data.id);
-                setSearchValue(response.data.name);
             }
         } catch (error) {
             console.error(error);

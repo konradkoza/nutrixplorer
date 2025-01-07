@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @DiscriminatorValue("CLIENT")
-@Table(name = "CLIENTS")
+@Table(name = "CLIENT")
 @NoArgsConstructor
 @Getter
 @Setter

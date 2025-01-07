@@ -104,21 +104,17 @@ export const protectedRoutes: RouteObject[] = [
         Component: MainLayout,
         children: [
             {
-                Component: () => AuthGuard({ requiredRole: AccessLevel.CLIENT }),
+                Component: () => AuthGuard({ requiredRoles: [AccessLevel.CLIENT] }),
                 children: [{ path: "/", children: clientRoutes }],
             },
             {
-                Component: () => AuthGuard({ requiredRole: AccessLevel.ADMINISTRATOR }),
+                Component: () => AuthGuard({ requiredRoles: [AccessLevel.ADMINISTRATOR] }),
                 children: [{ path: "/", children: adminRoutes }],
             },
             {
-                path: "/account",
-                children: [
-                    {
-                        index: true,
-                        Component: AccountPage,
-                    },
-                ],
+                Component: () =>
+                    AuthGuard({ requiredRoles: [AccessLevel.CLIENT, AccessLevel.ADMINISTRATOR] }),
+                children: [{ path: "/account", Component: AccountPage }],
             },
             { path: "*", Component: NotFoundPage },
         ],

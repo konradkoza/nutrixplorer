@@ -27,6 +27,15 @@ i18n
             loadPath: "/locales/{{lng}}/{{ns}}.json",
         },
         ns: ["errors", "success"],
+        detection: {
+            convertDetectedLanguage: (lng) => {
+                if (lng.includes("pl")) {
+                    return "pl";
+                } else {
+                    return "en";
+                }
+            },
+        },
     });
 
 export default i18n;

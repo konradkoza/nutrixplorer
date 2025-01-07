@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor
 @Table(
-        name = "ACCESS_LEVELS",
+        name = "ACCESS_LEVEL",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"USER_ID", "LEVEL"})
         })

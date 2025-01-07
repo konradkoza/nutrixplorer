@@ -10,7 +10,7 @@ import java.time.Instant;
 
 @DiscriminatorValue("EMAIL")
 @Entity
-@Table(name = "EMAIL_VERIFICATION_TOKENS")
+@Table(name = "EMAIL_VERIFICATION_TOKEN")
 @NoArgsConstructor
 @Getter
 public class EmailVerificationToken extends VerificationToken {

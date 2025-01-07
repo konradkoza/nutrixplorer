@@ -1,0 +1,132 @@
+{
+  "user": [
+    {
+      "id": "ba537227-d54f-42b3-aa58-10492cddf8a6",
+      "password": "$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.",
+      "login_attempts": 0,
+      "last_successful_login": "2024-05-04 14:33:01.413581",
+      "last_failed_login": "2024-05-04 14:33:01.413581",
+      "last_successful_login_ip": "[null]",
+      "last_failed_login_ip": "[null]",
+      "created_at": "[now]",
+      "blocked": false,
+      "verified": true,
+      "language": "EN",
+      "version": 0
+    },
+    {
+      "id": "d2a1f1b2-3c4d-4e5f-8a6b-7c8d9e0f1a2b",
+      "password": "$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.",
+      "login_attempts": 0,
+      "last_successful_login": "2024-05-04 14:33:01.413581",
+      "last_failed_login": "2024-05-04 14:33:01.413581",
+      "last_successful_login_ip": "[null]",
+      "last_failed_login_ip": "[null]",
+      "created_at": "[now]",
+      "blocked": false,
+      "verified": true,
+      "language": "EN",
+      "version": 0
+    },
+    {
+      "id": "e3b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+      "password": "$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.",
+      "login_attempts": 0,
+      "last_successful_login": "2024-05-04 14:33:01.413581",
+      "last_failed_login": "2024-05-04 14:33:01.413581",
+      "last_successful_login_ip": "[null]",
+      "last_failed_login_ip": "[null]",
+      "created_at": "[now]",
+      "blocked": false,
+      "verified": true,
+      "language": "EN",
+      "version": 0
+    },
+    {
+      "id": "f4c3d4e5-6f7a-8b9c-0d1e-2f3a4b5c6d7e",
+      "password": "$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.",
+      "login_attempts": 0,
+      "last_successful_login": "2024-05-04 14:33:01.413581",
+      "last_failed_login": "2024-05-04 14:33:01.413581",
+      "last_successful_login_ip": "[null]",
+      "last_failed_login_ip": "[null]",
+      "created_at": "[now]",
+      "blocked": false,
+      "verified": true,
+      "language": "EN",
+      "version": 0
+    }
+  ],
+  "personal_data": [
+    {
+      "first_name": "Adam",
+      "last_name": "Kowalski",
+      "email": "adamkowalski3@email.com",
+      "user_id": "ba537227-d54f-42b3-aa58-10492cddf8a6"
+    },
+    {
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "johndoe@email.com",
+      "user_id": "d2a1f1b2-3c4d-4e5f-8a6b-7c8d9e0f1a2b"
+    },
+    {
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "email": "janesmith@email.com",
+      "user_id": "e3b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d"
+    },
+    {
+      "first_name": "Alice",
+      "last_name": "Johnson",
+      "email": "alicejohnson@email.com",
+      "user_id": "f4c3d4e5-6f7a-8b9c-0d1e-2f3a4b5c6d7e"
+    }
+  ],
+  "access_level": [
+    {
+      "active": true,
+      "version": 0,
+      "id": "137880c5-31f5-473f-8ab8-f78417bcaee9",
+      "user_id": "ba537227-d54f-42b3-aa58-10492cddf8a6",
+      "level": "CLIENT"
+    },
+    {
+      "active": true,
+      "version": 0,
+      "id": "48d3a47f-290d-40f9-aa02-8822d532dab1",
+      "user_id": "d2a1f1b2-3c4d-4e5f-8a6b-7c8d9e0f1a2b",
+      "level": "CLIENT"
+    },
+    {
+      "active": true,
+      "version": 0,
+      "id": "b05b498f-4229-4435-8be6-a8214484e876",
+      "user_id": "e3b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+      "level": "CLIENT"
+    },
+    {
+      "active": true,
+      "version": 0,
+      "id": "df4e2dae-6032-4261-93cf-1f4eb52d690d",
+      "user_id": "f4c3d4e5-6f7a-8b9c-0d1e-2f3a4b5c6d7e",
+      "level": "ADMINISTRATOR"
+    }
+  ],
+  "client": [
+    {
+      "id": "137880c5-31f5-473f-8ab8-f78417bcaee9"
+    },
+    {
+      "id": "48d3a47f-290d-40f9-aa02-8822d532dab1"
+    },
+    {
+      "id": "b05b498f-4229-4435-8be6-a8214484e876"
+    }
+  ],
+  "administrator": [
+    {
+      "id": "df4e2dae-6032-4261-93cf-1f4eb52d690d"
+    }
+  ]
+}

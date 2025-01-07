@@ -4,13 +4,15 @@ import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 
 type AuthGuardProps = {
-    requiredRole: AccessLevel;
+    requiredRoles: AccessLevel[];
 };
 
-const AuthGuard = ({ requiredRole }: AuthGuardProps) => {
+const AuthGuard = ({ requiredRoles }: AuthGuardProps) => {
     const { token, accessLevels } = useSelector((state: RootState) => state.authSlice);
-    if (token && accessLevels.includes(requiredRole)) {
-        return <Outlet></Outlet>;
+    const hasAccess = requiredRoles.some((role) => accessLevels.includes(role));
+
+    if (token && hasAccess) {
+        return <Outlet />;
     } else {
         return <Navigate to="/login" replace={true} />;
     }

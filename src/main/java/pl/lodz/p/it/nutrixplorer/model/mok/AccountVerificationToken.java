@@ -9,7 +9,7 @@ import java.time.Instant;
 
 @DiscriminatorValue("ACCOUNT")
 @Entity
-@Table(name = "ACCOUNT_VERIFICATION_TOKENS")
+@Table(name = "ACCOUNT_VERIFICATION_TOKEN")
 @NoArgsConstructor
 public class AccountVerificationToken extends VerificationToken {
     public static int EXPIRATION_TIME = 24 * 60;

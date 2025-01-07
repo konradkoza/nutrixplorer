@@ -171,6 +171,11 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
         setFilters(filteredData);
     };
 
+    const handleClear = () => {
+        form.reset();
+        setSearchValue("");
+    };
+
     return (
         <div className="container w-full">
             <Accordion type="single" collapsible className="mb-5 w-full bg-muted/90 px-5">
@@ -256,7 +261,9 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                                                                 "NumpadSubtract" ||
                                                                             event.code ===
                                                                                 "Period" ||
-                                                                            event.code === "Comma"
+                                                                            event.code ===
+                                                                                "Comma" ||
+                                                                            event.code === "Decimal"
                                                                         ) {
                                                                             event.preventDefault();
                                                                         }
@@ -345,7 +352,8 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                                                         event.code ===
                                                                             "NumpadSubtract" ||
                                                                         event.code === "Period" ||
-                                                                        event.code === "Comma"
+                                                                        event.code === "Comma" ||
+                                                                        event.code === "Decimal"
                                                                     ) {
                                                                         event.preventDefault();
                                                                     }
@@ -519,7 +527,7 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
                                     <Button
                                         className="flex-1"
                                         variant="outline"
-                                        onClick={() => form.reset()}>
+                                        onClick={() => handleClear()}>
                                         {t("filters.reset")}
                                     </Button>
                                 </div>

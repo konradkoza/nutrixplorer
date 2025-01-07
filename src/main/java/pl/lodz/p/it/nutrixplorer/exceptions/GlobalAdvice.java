@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.JDBCConnectionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -82,5 +83,12 @@ public class GlobalAdvice {
                 .body(new ErrorResponseDTO(ExceptionMessages.INVALID_REQUEST_PARAMETER, ErrorCodes.INVALID_REQUEST_PARAMETER));
     }
 
+//    AuthorizationDeniedException
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAuthorizationDeniedException(AuthorizationDeniedException e) {
+        log.error("Authorization denied", e);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponseDTO(e.getMessage(), ErrorCodes.AUTHORIZATION_DENIED));
+    }
 
 }

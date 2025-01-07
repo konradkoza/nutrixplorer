@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.configuration.LoggingInterceptor;
@@ -34,8 +35,7 @@ import java.util.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor =
-        {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class, NotFoundException.class, TokenGenerationException.class})
+@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
 @LoggingInterceptor
 public class AuthenticationService {
 
@@ -182,6 +182,7 @@ public class AuthenticationService {
             newUser.setLastSuccessfulLoginIp(remoteAddr);
             Client client = new Client();
             client.setUser(newUser);
+            client.setActive(true);
             try {
                 user = clientRepository.saveAndFlush(client).getUser();
             } catch (Exception e) {

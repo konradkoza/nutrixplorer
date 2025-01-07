@@ -23,11 +23,12 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.is;
+import static pl.lodz.p.it.nutrixplorer.integration.AbstractContainerTests.baseUrl;
 
 @Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith({DBUnitExtension.class, AbstractContainerTests.class})
-public class BasketTests extends AbstractContainerTests implements AbstractDBRiderTests{
+public class BasketTests implements AbstractDBRiderTests{
 
     public static String token;
 

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +46,7 @@ public class AuthenticationController {
     private boolean proxyEnabled;
 
     @PostMapping("/login")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<AuthTokenDTO> login(@RequestBody @Valid AuthenticationDTO authenticationDTO, HttpServletRequest request ) throws UserNotVerifiedException, NotFoundException, UserBlockedException, AuthenctiactionFailedException, LoginAttemptsExceededException {
         String remoteAddr = request.getRemoteAddr();
         return ResponseEntity.ok(new AuthTokenDTO(authenticationService.login(authenticationDTO.email(), new PasswordHolder(authenticationDTO.password()), authenticationDTO.language(), remoteAddr)));
@@ -61,6 +63,7 @@ public class AuthenticationController {
 
 
     @PostMapping("/oauth2/token")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<AuthTokenDTO> getOAuth2Token(@RequestBody OauthDTO oauthDTO, HttpServletRequest request) throws JsonProcessingException, UserBlockedException, EmailAddressInUseException, Oauth2Exception {
         String url = UriComponentsBuilder
                 .fromUriString(tokenUrl)
@@ -89,18 +92,21 @@ public class AuthenticationController {
     }
 
     @PostMapping("/activate")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Void> activateAccount(@RequestBody @Valid VerificationTokenDTO activationDTO) throws VerificationTokenInvalidException, VerificationTokenExpiredException, NotFoundException {
         authenticationService.activateAccount(activationDTO.token());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/reset-password")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Void> resetPassword(@RequestBody @Valid ResetPasswordDTO resetPasswordDTO) throws UserNotVerifiedException, UserBlockedException, OauthUserException {
         authenticationService.resetPassword(resetPasswordDTO.email());
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/change-password")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Void> changePassword(@RequestBody @Valid ChangePasswordWithTokenDTO changePasswordDTO) throws VerificationTokenInvalidException, NotFoundException, VerificationTokenExpiredException {
         authenticationService.changePassword(changePasswordDTO.token(), new PasswordHolder(changePasswordDTO.newPassword()));
         return ResponseEntity.ok().build();

@@ -13,6 +13,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableScheduling
 @EnableTransactionManagement
+@EnableJpaRepositories(
+		basePackages = {"pl.lodz.p.it.nutrixplorer.mok.repositories", "pl.lodz.p.it.nutrixplorer.mow.repositories"},  // Repository package for user
+		entityManagerFactoryRef = "userEntityManagerFactory",
+		transactionManagerRef = "userTransactionManager"
+)
 public class NutrixplorerApplication {
 
 	public static void main(String[] args) {

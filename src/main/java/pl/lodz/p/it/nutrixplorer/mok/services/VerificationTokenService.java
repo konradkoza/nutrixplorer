@@ -2,6 +2,7 @@ package pl.lodz.p.it.nutrixplorer.mok.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.configuration.LoggingInterceptor;
@@ -22,7 +23,7 @@ import java.time.temporal.ChronoUnit;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.MANDATORY)
+@Transactional(propagation = Propagation.MANDATORY, isolation = Isolation.READ_COMMITTED)
 @LoggingInterceptor
 public class VerificationTokenService {
     private final AccountVerificationTokenRepository accountTokenRepository;

@@ -79,6 +79,11 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
         setFilters(filteredData);
     };
 
+    const handleClear = () => {
+        form.reset();
+        setSearchValue("");
+    };
+
     return (
         <div className="container w-full">
             <Accordion type="single" collapsible className="w-full bg-muted/90 px-5">
@@ -186,6 +191,7 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                                                                 "Period" ||
                                                                             event.code === "Comma"
                                                                         ) {
+                                                                            console.log(event.code);
                                                                             event.preventDefault();
                                                                         }
                                                                     }}
@@ -333,7 +339,7 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                     <Button
                                         className="flex-1"
                                         variant="outline"
-                                        onClick={() => form.reset()}>
+                                        onClick={() => handleClear()}>
                                         {t("clear")}
                                     </Button>
                                 </div>

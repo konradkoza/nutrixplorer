@@ -7,6 +7,7 @@ public class ErrorCodes {
     public static final String OPTIMISTIC_LOCK = "optimisticLock";
     public static final String DATABASE_CONNECTION_ERROR = "databaseConnectionError";
     public static final String INVALID_REQUEST_PARAMETER = "invalidRequestParam";
+    public static final String AUTHORIZATION_DENIED = "authorizationDenied";
 
     private ErrorCodes() {
     }

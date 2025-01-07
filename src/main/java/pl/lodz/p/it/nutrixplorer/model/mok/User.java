@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "USERS", schema = "PUBLIC")
+@Table(name = "USER", schema = "PUBLIC")
 @SecondaryTable(
         name = "PERSONAL_DATA",
         pkJoinColumns = @PrimaryKeyJoinColumn(name = "USER_ID"),

@@ -2,7 +2,6 @@ package pl.lodz.p.it.nutrixplorer.mok.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
 import pl.lodz.p.it.nutrixplorer.mok.dto.SimpleUserDTO;
@@ -27,5 +26,6 @@ public interface UserMapper {
 
     List<SimpleUserDTO> usersToSimpleUserDTOs(List<User> users);
 
+    @Mapping(source = "googleId", target = "oauth")
     UserDetailsDTO userToUserDetailsDTO(User user);
 }

@@ -9,7 +9,7 @@ import java.time.Instant;
 
 @DiscriminatorValue("PASSWORD")
 @Entity
-@Table(name = "PASSWORD_VERIFICATION_TOKENS")
+@Table(name = "PASSWORD_VERIFICATION_TOKEN")
 @NoArgsConstructor
 public class PasswordVerificationToken extends VerificationToken {
 

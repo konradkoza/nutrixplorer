@@ -20,7 +20,7 @@ import static pl.lodz.p.it.nutrixplorer.integration.AbstractContainerTests.baseU
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
 @ExtendWith({DBUnitExtension.class, AbstractContainerTests.class})
-@DataSet(value = "datasets/test-users.json", strategy = SeedStrategy.REFRESH)
+@DataSet(value = "datasets/test-favourites.json", strategy = SeedStrategy.REFRESH)
 public class FavouriteProductsTests implements AbstractDBRiderTests{
 
     public static String token;

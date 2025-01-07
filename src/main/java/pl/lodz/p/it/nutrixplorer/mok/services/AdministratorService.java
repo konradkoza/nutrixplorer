@@ -3,11 +3,12 @@ package pl.lodz.p.it.nutrixplorer.mok.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.configuration.LoggingInterceptor;
-import pl.lodz.p.it.nutrixplorer.exceptions.mok.AccessLevelAssignException;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.AccessLevelAssignException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.MokErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.MokExceptionMessages;
 import pl.lodz.p.it.nutrixplorer.mail.HtmlEmailEvent;
@@ -23,7 +24,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
 @LoggingInterceptor
 public class AdministratorService {
     private final AdministratorRepository administratorRepository;

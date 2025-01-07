@@ -1,8 +1,7 @@
 package pl.lodz.p.it.nutrixplorer.mok.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.lang.NonNull;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.data.jpa.repository.Query;
 import pl.lodz.p.it.nutrixplorer.model.mok.EmailVerificationToken;
 
 import java.util.Optional;
@@ -14,4 +13,7 @@ public interface EmailVerificationTokenRepository extends JpaRepository<EmailVer
     Optional<EmailVerificationToken> findByUserId(UUID id);
 
     void deleteEmailVerificationTokenByUserId(UUID id);
+
+    @Query("SELECT t FROM EmailVerificationToken t WHERE t.user.email = :email")
+    Optional<EmailVerificationToken> findByUserEmail(String email);
 }

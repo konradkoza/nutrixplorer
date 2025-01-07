@@ -65,17 +65,6 @@ const AutocompleteSelect = ({
                 !suggestionListRef.current.contains(event.target)
             ) {
                 setFocused(false);
-                if (selectedValue === "") {
-                    setSearchValue("");
-                } else if (
-                    suggestions.find((suggestion) => suggestion.value === selectedValue)?.label !==
-                    searchValue
-                ) {
-                    setSearchValue(
-                        suggestions.find((suggestion) => suggestion.value === selectedValue)
-                            ?.label || ""
-                    );
-                }
             }
         };
 
@@ -85,19 +74,19 @@ const AutocompleteSelect = ({
         };
     }, []);
 
-    // useEffect(() => {
-    //     if (!focused && selectedValue === "") {
-    //         setSearchValue("");
-    //     } else if (
-    //         !focused &&
-    //         suggestions.find((suggestion) => suggestion.value === selectedValue)?.label !==
-    //             searchValue
-    //     ) {
-    //         setSearchValue(
-    //             suggestions.find((suggestion) => suggestion.value === selectedValue)?.label || ""
-    //         );
-    //     }
-    // }, [focused, setSearchValue]);
+    useEffect(() => {
+        if (!focused && selectedValue === "") {
+            setSearchValue("");
+        } else if (
+            !focused &&
+            suggestions.find((suggestion) => suggestion.value === selectedValue)?.label !==
+                searchValue
+        ) {
+            setSearchValue(
+                suggestions.find((suggestion) => suggestion.value === selectedValue)?.label || ""
+            );
+        }
+    }, [focused]);
 
     return (
         <div className="w-full space-y-2">
@@ -120,13 +109,13 @@ const AutocompleteSelect = ({
                         if (e.key === "Enter") setFocused(false);
                     }}
                 />
-                {filteredSuggestions.length > 0 && focused ? (
+                {focused && (
                     <div
                         ref={suggestionListRef}
                         className="absolute left-0 z-10 mt-1 w-full rounded-lg border border-border">
                         <div className="overflow-y-auto rounded-lg">
                             <ul className="divide-y divide-none rounded-lg bg-popover p-1">
-                                {filteredSuggestions.length > 0 &&
+                                {filteredSuggestions.length > 0 ? (
                                     filteredSuggestions.map((suggestion, index) => (
                                         <li
                                             key={index}
@@ -141,28 +130,23 @@ const AutocompleteSelect = ({
                                                 <CheckIcon size={15} />
                                             )}
                                         </li>
-                                    ))}
+                                    ))
+                                ) : (
+                                    <li className="my-1 box-content flex h-5 cursor-pointer items-center gap-2 rounded px-4 py-2 hover:bg-accent">
+                                        {isLoading ? (
+                                            <div className="flex w-full flex-col gap-2.5">
+                                                <Skeleton className="h-6 w-full" />
+                                                <Skeleton className="h-6 w-full" />
+                                                <Skeleton className="h-6 w-full" />
+                                            </div>
+                                        ) : (
+                                            emptyMessage
+                                        )}
+                                    </li>
+                                )}
                             </ul>
                         </div>
                     </div>
-                ) : (
-                    focused && (
-                        <div className="absolute left-0 z-10 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900">
-                            <ul className="divide-y divide-gray-200 dark:divide-gray-800">
-                                <li className="cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800">
-                                    {isLoading ? (
-                                        <div className="flex w-full flex-col gap-2.5">
-                                            <Skeleton className="h-6 w-full" />
-                                            <Skeleton className="h-6 w-full" />
-                                            <Skeleton className="h-6 w-full" />
-                                        </div>
-                                    ) : (
-                                        emptyMessage
-                                    )}
-                                </li>
-                            </ul>
-                        </div>
-                    )
                 )}
             </div>
         </div>

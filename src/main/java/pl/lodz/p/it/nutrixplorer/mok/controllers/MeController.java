@@ -33,6 +33,7 @@ public class MeController {
         return ResponseEntity.status(HttpStatus.OK).body(UserMapper.INSTANCE.userToUserDTO(user));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/details")
     public ResponseEntity<UserDetailsDTO> getMeDetails() throws NotFoundException, InvalidHeaderException {
         User user = userService.getCurrentUser();
@@ -53,7 +54,7 @@ public class MeController {
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     @PatchMapping("/change-email")
     public ResponseEntity<Void> changeEmail(@RequestBody @Valid ConfirmEmailChangeDTO confirmEmailChangeDTO) throws EmailAddressInUseException, VerificationTokenInvalidException, VerificationTokenExpiredException {
         userService.changeOwnEmailFinish(confirmEmailChangeDTO.token());

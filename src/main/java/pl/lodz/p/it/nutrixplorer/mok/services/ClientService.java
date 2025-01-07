@@ -3,6 +3,7 @@ package pl.lodz.p.it.nutrixplorer.mok.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.configuration.LoggingInterceptor;
@@ -22,7 +23,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
 @LoggingInterceptor
 public class ClientService {
     private final ClientRepository clientRepository;

@@ -41,7 +41,7 @@ const RegisterPage = () => {
                 password: data.password,
                 firstName: data.firstName,
                 lastName: data.lastName,
-                language: i18n.language as "pl" | "en",
+                language: i18n.language.split("-")[0] as "pl" | "en",
             });
             navigate("/login", { replace: true });
         } catch (error) {

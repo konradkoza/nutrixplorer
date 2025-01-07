@@ -11,7 +11,7 @@ import pl.lodz.p.it.nutrixplorer.model.AbstractEntity;
 import java.io.Serializable;
 import java.time.Instant;
 
-@Table(name = "TOKENS",
+@Table(name = "TOKEN",
 uniqueConstraints = {
         @UniqueConstraint(columnNames = {"USER_ID", "PURPOSE"})
 },

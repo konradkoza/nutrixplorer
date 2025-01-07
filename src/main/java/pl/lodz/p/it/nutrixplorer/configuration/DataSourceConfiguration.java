@@ -7,18 +7,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 
 @Configuration
 //@Profile({"!test"})
-@EnableJpaRepositories(
-        basePackages = {"pl.lodz.p.it.nutrixplorer.mok.repositories", "pl.lodz.p.it.nutrixplorer.mow.repositories"},  // Repository package for user
-        entityManagerFactoryRef = "userEntityManagerFactory",
-        transactionManagerRef = "userTransactionManager"
-)
 public class DataSourceConfiguration {
 
 

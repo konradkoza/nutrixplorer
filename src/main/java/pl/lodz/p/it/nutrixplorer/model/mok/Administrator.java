@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @DiscriminatorValue("ADMINISTRATOR")
-@Table(name = "ADMINISTRATORS")
+@Table(name = "ADMINISTRATOR")
 @NoArgsConstructor
 public class Administrator extends AccessLevel{
 }

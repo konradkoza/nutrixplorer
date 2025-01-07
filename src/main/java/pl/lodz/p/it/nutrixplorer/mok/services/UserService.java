@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.configuration.LoggingInterceptor;
@@ -31,7 +32,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
 @LoggingInterceptor
 @Slf4j
 public class UserService {
