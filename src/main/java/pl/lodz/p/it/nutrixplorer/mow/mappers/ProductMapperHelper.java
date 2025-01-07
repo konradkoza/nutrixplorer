@@ -2,7 +2,6 @@ package pl.lodz.p.it.nutrixplorer.mow.mappers;
 
 import pl.lodz.p.it.nutrixplorer.model.mow.*;
 import pl.lodz.p.it.nutrixplorer.mow.dto.ProductIndexDTO;
-import pl.lodz.p.it.nutrixplorer.mow.dto.SellerAddressDTO;
 
 import java.util.List;
 

@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, UUID> , JpaSpecificationExecutor<Product> {
+public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpecificationExecutor<Product> {
 
     @Query("SELECT p.label.image FROM Product p WHERE p.id = :id")
     Optional<byte[]> findProductImageById(@Param("id") UUID id);
@@ -49,5 +49,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID> , JpaSpe
     @Query("SELECT DISTINCT p FROM Product p WHERE lower(p.productName) LIKE %:productName%")
     Page<Product> findProductByProductNameContaining(String productName, Pageable pageable);
 
-
+    @Query("SELECT COUNT(p) > 0 FROM Product p JOIN p.usersWhoFavourited u WHERE p.id = :productId AND u.user.id = :userId")
+    boolean isProductFavoritedByUser(@Param("productId") UUID productId, @Param("userId") UUID userId);
 }

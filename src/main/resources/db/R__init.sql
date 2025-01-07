@@ -1,4 +1,43 @@
 -- ${flyway:timestamp}
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.users TO nutriuser;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.personal_data TO nutriuser;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.administrators TO nutriuser;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.clients TO nutriuser;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.access_levels TO nutriuser;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.tokens TO nutriuser;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.email_verification_tokens TO nutriuser;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.account_verification_tokens TO nutriuser;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.password_verification_tokens TO nutriuser;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public. google_auth TO nutriuser;
+GRANT SELECT ON TABLE public.addition TO nutriuser;
+GRANT SELECT ON TABLE public.access_levels TO nutriuser;
+GRANT SELECT ON TABLE public.composition TO nutriuser;
+GRANT SELECT ON TABLE public.composition_addition TO nutriuser;
+GRANT SELECT ON TABLE public.composition_ingredient TO nutriuser;
+GRANT SELECT ON TABLE public.flavour TO nutriuser;
+GRANT SELECT ON TABLE public.ingredient TO nutriuser;
+GRANT SELECT ON TABLE public.label TO nutriuser;
+GRANT SELECT ON TABLE public.nutritional_index TO nutriuser;
+GRANT SELECT ON TABLE public.nutritional_value TO nutriuser;
+GRANT SELECT ON TABLE public.nutritional_value_group TO nutriuser;
+GRANT SELECT ON TABLE public.nutritional_value_name TO nutriuser;
+GRANT SELECT ON TABLE public.package_type TO nutriuser;
+GRANT SELECT ON TABLE public.personal_data TO nutriuser;
+GRANT SELECT ON TABLE public.portion TO nutriuser;
+GRANT SELECT ON TABLE public.producer TO nutriuser;
+GRANT SELECT ON TABLE public.product TO nutriuser;
+GRANT SELECT ON TABLE public.product_index TO nutriuser;
+GRANT SELECT ON TABLE public.product_nutritional_index TO nutriuser;
+GRANT SELECT ON TABLE public.product_nutritional_value TO nutriuser;
+GRANT SELECT ON TABLE public.product_product_index TO nutriuser;
+GRANT SELECT ON TABLE public.product_rating TO nutriuser;
+GRANT SELECT ON TABLE public.rating TO nutriuser;
+GRANT SELECT ON TABLE public.unit TO nutriuser;
+GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE public.basket TO nutriuser;
+GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE public.basket_entry TO nutriuser;
+GRANT SELECT ON TABLE public.allergen TO nutriuser;
+GRANT SELECT ON TABLE public.label_allergen TO nutriuser;
+GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE public.user_favourite_products TO nutriuser;
 
 INSERT INTO public.users (blocked, login_attempts, verified, last_failed_login, last_successful_login, version,
                           id, password, last_failed_login_ip, last_successful_login_ip, language, created_at)

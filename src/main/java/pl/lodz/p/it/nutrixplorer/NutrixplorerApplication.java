@@ -6,16 +6,13 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@EnableJpaRepositories(
-		basePackages = {"pl.lodz.p.it.nutrixplorer.mok.repositories", "pl.lodz.p.it.nutrixplorer.mow.repositories"},  // Repository package for user
-		entityManagerFactoryRef = "userEntityManagerFactory",
-		transactionManagerRef = "userTransactionManager"
-)
 @EnableAsync
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableScheduling
+@EnableTransactionManagement
 public class NutrixplorerApplication {
 
 	public static void main(String[] args) {

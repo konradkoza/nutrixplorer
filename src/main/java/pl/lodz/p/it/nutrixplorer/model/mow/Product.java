@@ -18,6 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 @Entity
+@Table(name = "PRODUCT")
 public class Product extends AbstractEntity {
 
     @Size(max = 13)
@@ -26,31 +27,34 @@ public class Product extends AbstractEntity {
     @ManyToOne
     private Producer producer;
 
-    @Column(name = "product_name", nullable = false)
+    @Column(name = "PRODUCT_NAME", nullable = false)
     private String productName;
 
-    @Column(name = "product_description")
+    @Column(name = "PRODUCT_DESCRIPTION")
     private String productDescription;
 
-    @Column(name = "product_quantity")
+    @Column(name = "PRODUCT_QUANTITY")
     private Integer productQuantity;
 
     @ManyToOne
     private Unit unit;
 
     @ManyToOne
+    @JoinColumn(name = "PACKAGETYPE_ID")
     private PackageType packageType;
 
-    @Column(name = "country", length = Integer.MAX_VALUE)
+    @Column(name = "COUNTRY", length = Integer.MAX_VALUE)
     private String country;
 
     @OneToOne
     private Composition composition;
 
     @ManyToMany
+    @JoinTable(name = "PRODUCT_NUTRITIONAL_INDEX", joinColumns = @JoinColumn(name = "PRODUCT_ID"),  inverseJoinColumns = @JoinColumn(name = "NUTRITIONALINDEXES_ID"))
     private Set<NutritionalIndex> nutritionalIndexes;
 
     @ManyToMany
+    @JoinTable(name = "PRODUCT_PRODUCT_INDEX",joinColumns = @JoinColumn(name = "PRODUCT_ID"),  inverseJoinColumns = @JoinColumn(name = "PRODUCTINDEXES_ID"))
     private Set<ProductIndex> productIndexes;
 
     @OneToOne
@@ -61,17 +65,17 @@ public class Product extends AbstractEntity {
 
     @ManyToMany
     @JoinTable(
-            name = "product_rating",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "ratings_id")
+            name = "PRODUCT_RATING",
+            joinColumns = @JoinColumn(name = "PRODUCT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "RATINGS_ID")
     )
     private Set<Rating> ratings;
 
     @ManyToMany
     @JoinTable(
-            name = "product_nutritional_value", // name of the join table
-            joinColumns = @JoinColumn(name = "product_id"), // column referencing Product
-            inverseJoinColumns = @JoinColumn(name = "nutritionalvalues_id") // column referencing NutritionalValue
+            name = "PRODUCT_NUTRITIONAL_VALUE", // name of the join table
+            joinColumns = @JoinColumn(name = "PRODUCT_ID"), // column referencing Product
+            inverseJoinColumns = @JoinColumn(name = "NUTRITIONALVALUES_ID") // column referencing NutritionalValue
     )
     private List<NutritionalValue> nutritionalValues;
 

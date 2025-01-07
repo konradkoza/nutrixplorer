@@ -15,7 +15,7 @@ import pl.lodz.p.it.nutrixplorer.model.AbstractEntity;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "nutritional_value_name")
+@Table(name = "NUTRITIONAL_VALUE_NAME")
 public class NutritionalValueName extends AbstractEntity {
 
     @ManyToOne

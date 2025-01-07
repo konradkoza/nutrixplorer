@@ -12,10 +12,10 @@ import pl.lodz.p.it.nutrixplorer.model.AbstractEntity;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "package_type")
+@Table(name = "PACKAGE_TYPE")
 public class PackageType extends AbstractEntity {
 
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
 
 }

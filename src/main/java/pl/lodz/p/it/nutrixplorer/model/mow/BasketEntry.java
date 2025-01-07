@@ -13,29 +13,45 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "basket_entry")
+@Table(name = "BASKET_ENTRY", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"PRODUCT_ID", "BASKET_ID"})
+})
 @AllArgsConstructor
 public class BasketEntry extends AbstractEntity {
 
     @ManyToOne
     @NotNull
-    @JoinColumn(name = "product_id", nullable = false, updatable = false)
+    @JoinColumn(name = "PRODUCT_ID", nullable = false, updatable = false)
     private Product product;
 
-    @Column(name = "quantity", precision = 10, scale = 2)
+    @Column(name = "QUANTITY", precision = 10, scale = 2)
     private BigDecimal units;
 
-    @Column(name = "created_at")
+    @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
+    @Column(name = "UPDATED_AT")
+    private LocalDateTime updatedAt;
+
     @ManyToOne
-    @JoinColumn(name = "basket_id", nullable = false, updatable = false)
+    @JoinColumn(name = "BASKET_ID", nullable = false, updatable = false)
     @ToString.Exclude
     private Basket basket;
 
     @PrePersist
     public void onPrePersist() {
         this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
+    @PreUpdate
+    public void onPreUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public BasketEntry(Product product, BigDecimal units, Basket basket) {
+        this.product = product;
+        this.units = units;
+        this.basket = basket;
+    }
 }

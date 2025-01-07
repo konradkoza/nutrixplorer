@@ -1,6 +1,7 @@
 package pl.lodz.p.it.nutrixplorer.configuration;
 
 import jakarta.persistence.EntityManagerFactory;
+import org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.hibernate.tool.schema.Action;
@@ -16,13 +17,12 @@ import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableTransactionManagement
+//@Profile({"!test"})
 public class JpaConfig {
 
     @Bean
@@ -74,6 +74,7 @@ public class JpaConfig {
         properties.put(AvailableSettings.SHOW_SQL, "true");
         properties.put(AvailableSettings.JAKARTA_TRANSACTION_TYPE, "RESOURCE_LOCAL");
         properties.put(AvailableSettings.HBM2DDL_AUTO, Action.CREATE);
+        properties.put(AvailableSettings.PHYSICAL_NAMING_STRATEGY, PhysicalNamingStrategyStandardImpl.class);
 //        properties.put(AvailableSettings.JAKARTA_HBM2DDL_LOAD_SCRIPT_SOURCE, "init.sql");
 //        properties.put(AvailableSettings.HBM2DDL_IMPORT_FILES_SQL_EXTRACTOR, MultiLineSqlScriptExtractor.class.getName());
         emf.setJpaProperties(properties);

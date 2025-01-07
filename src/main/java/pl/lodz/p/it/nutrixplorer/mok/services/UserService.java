@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.configuration.LoggingInterceptor;
-import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
+import pl.lodz.p.it.nutrixplorer.exceptions.*;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.*;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.MokErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.MokExceptionMessages;
@@ -20,6 +20,7 @@ import pl.lodz.p.it.nutrixplorer.mail.HtmlEmailEvent;
 import pl.lodz.p.it.nutrixplorer.model.mok.EmailVerificationToken;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.UserRepository;
+import pl.lodz.p.it.nutrixplorer.utils.ETagSigner;
 import pl.lodz.p.it.nutrixplorer.utils.PasswordHolder;
 import pl.lodz.p.it.nutrixplorer.utils.SecurityContextUtil;
 
@@ -38,6 +39,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher eventPublisher;
     private final VerificationTokenService verificationTokenService;
+    private final ETagSigner verifier;
 
     @Value("${nutrixplorer.frontend-url}")
     private String appUrl;
@@ -161,9 +163,13 @@ public class UserService {
         }
     }
 
-    public void changeOwnNameAndLastName(String firstName, String lastName) throws NotFoundException {
+    public void changeOwnNameAndLastName(String firstName, String lastName, String tagValue) throws NotFoundException, InvalidHeaderException, ApplicationOptimisticLockException {
         String id = SecurityContextUtil.getCurrentUser();
         User user = userRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
+        if(!verifier.verifySignature(user.getId(), user.getVersion(), tagValue)){
+            throw new ApplicationOptimisticLockException(ExceptionMessages.OPTIMISTIC_LOCK, ErrorCodes.OPTIMISTIC_LOCK);
+        }
+
         user.setFirstName(firstName);
         user.setLastName(lastName);
         userRepository.saveAndFlush(user);
@@ -180,8 +186,13 @@ public class UserService {
         return userRepository.findAll(specification, PageRequest.of(page, elements));
     }
 
-    public void changeNameAndLastName(UUID id, String firstName, String lastName) throws NotFoundException {
+    public void changeNameAndLastName(UUID id, String firstName, String lastName, String tagValue) throws NotFoundException, InvalidHeaderException, ApplicationOptimisticLockException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
+
+        if(!verifier.verifySignature(user.getId(), user.getVersion(), tagValue)){
+            throw new ApplicationOptimisticLockException(ExceptionMessages.OPTIMISTIC_LOCK, ErrorCodes.OPTIMISTIC_LOCK);
+        }
+
         user.setFirstName(firstName);
         user.setLastName(lastName);
         userRepository.saveAndFlush(user);

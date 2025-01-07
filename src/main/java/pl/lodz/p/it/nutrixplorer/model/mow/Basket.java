@@ -18,8 +18,9 @@ import java.util.List;
 @Entity
 @Table(
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"client_id", "name"})
-        }
+                @UniqueConstraint(columnNames = {"CLIENT_ID", "NAME"})
+        },
+        name = "BASKET"
 )
 public class Basket extends AbstractEntity {
 
@@ -28,19 +29,19 @@ public class Basket extends AbstractEntity {
     private List<BasketEntry> basketEntries;
 
     @ManyToOne
-    @JoinColumn(name = "client_id", nullable = false, updatable = false)
+    @JoinColumn(name = "CLIENT_ID", nullable = false, updatable = false)
     private Client client;
 
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
 
-    @Column(name = "description", length = 2000)
+    @Column(name = "DESCRIPTION", length = 2000)
     private String description;
 
-    @Column(name = "created_at")
+    @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
 
     @PrePersist

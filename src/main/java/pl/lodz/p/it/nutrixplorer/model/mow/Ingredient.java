@@ -1,5 +1,6 @@
 package pl.lodz.p.it.nutrixplorer.model.mow;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import pl.lodz.p.it.nutrixplorer.model.AbstractEntity;
 @NoArgsConstructor
 @ToString
 @Entity
+@Table(name = "INGREDIENT")
 public class Ingredient extends AbstractEntity {
 
     @NotNull

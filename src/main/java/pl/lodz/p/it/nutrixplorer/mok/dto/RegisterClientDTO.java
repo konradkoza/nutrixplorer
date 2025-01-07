@@ -20,7 +20,7 @@ public record RegisterClientDTO(
         @Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters long")
         String password,
         @NotBlank(message = "Language cannot be empty")
-        @Pattern(regexp = "^(en | pl)$", message = "Language must be either 'en' or 'pl'")
+        @Pattern(regexp = "^(en|pl)$", message = "Language must be either 'en' or 'pl'")
         String language
 ) {
 }

@@ -1,5 +1,6 @@
 package pl.lodz.p.it.nutrixplorer.model.mow;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -13,11 +14,13 @@ import java.util.Objects;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "product_index")
+@Table(name = "PRODUCT_INDEX")
 public class ProductIndex extends AbstractEntity {
 
+    @Column(name = "INDEXNAME")
     private String indexName;
 
+    @Column(name = "INDEXVALUE")
     private Integer indexValue;
 
     @Override

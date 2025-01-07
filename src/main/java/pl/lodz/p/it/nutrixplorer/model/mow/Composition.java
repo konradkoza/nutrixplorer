@@ -16,12 +16,15 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Entity
+@Table(name = "COMPOSITION")
 public class Composition extends AbstractEntity {
 
     @ManyToMany
+    @JoinTable(name = "COMPOSITION_INGREDIENT")
     private List<Ingredient> ingredients = new ArrayList<>();
 
     @ManyToMany
+    @JoinTable(name = "COMPOSITION_ADDITION")
     private List<Addition> additions = new ArrayList<>();
 
     @ManyToOne

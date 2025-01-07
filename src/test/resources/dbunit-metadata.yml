@@ -1,0 +1,26 @@
+tables:
+  users:
+    caseSensitive: false
+    columns:
+      login:
+        name: login
+      password:
+        name: password
+      login_attempts:
+        name: login_attempts
+      last_successful_login:
+        name: last_successful_login
+      last_failed_login:
+        name: last_failed_login
+      last_successful_login_ip:
+        name: last_successful_login_ip
+      last_failed_login_ip:
+        name: last_failed_login_ip
+      blocked:
+        name: blocked
+      verified:
+        name: verified
+      language:
+        name: language
+      version:
+        name: version

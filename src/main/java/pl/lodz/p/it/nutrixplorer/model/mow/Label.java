@@ -14,13 +14,14 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Entity
+@Table(name = "LABEL")
 public class Label extends AbstractEntity {
 
     private String storage;
 
     private String durability;
 
-    @Column(name = "instructions_after_opening")
+    @Column(name = "INSTRUCTIONS_AFTER_OPENING")
     private String instructionsAfterOpening;
 
     private String preparation;
@@ -29,9 +30,9 @@ public class Label extends AbstractEntity {
 
     @ManyToMany
     @JoinTable(
-            name = "label_allergen",
-            joinColumns = @JoinColumn(name = "label_id"),
-            inverseJoinColumns = @JoinColumn(name = "allergen_id")
+            name = "LABEL_ALLERGEN",
+            joinColumns = @JoinColumn(name = "LABEL_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ALLERGEN_ID")
     )
     private List<Allergen> allergenList;
 

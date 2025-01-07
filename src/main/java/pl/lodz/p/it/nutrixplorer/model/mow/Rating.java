@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,9 +20,10 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 @Entity
+@Table(name = "RATING")
 public class Rating extends AbstractEntity {
 
-    @Column(name = "group_name")
+    @Column(name = "GROUP_NAME")
     private String groupName;
 
     private String name;

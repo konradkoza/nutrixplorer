@@ -1,0 +1,46 @@
+{
+  "users": [
+    {
+      "id": "ba537227-d54f-42b3-aa58-10492cddf8a6",
+      "password": "$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.",
+      "login_attempts": 0,
+      "last_successful_login": "2024-05-04 14:33:01.413581",
+      "last_failed_login": "2024-05-04 14:33:01.413581",
+      "last_successful_login_ip": "[null]",
+      "last_failed_login_ip": "[null]",
+      "created_at": "[now]",
+      "blocked": false,
+      "verified": true,
+      "language": "EN",
+      "version": 0
+    }
+  ],
+  "personal_data": [
+    {
+      "first_name": "Adam",
+      "last_name": "Kowalski",
+      "email": "adamkowalski@email.com",
+      "user_id": "ba537227-d54f-42b3-aa58-10492cddf8a6"
+    }
+  ],
+  "access_levels": [
+    {
+      "active": true,
+      "version": 0,
+      "id": "137880c5-31f5-473f-8ab8-f78417bcaee9",
+      "user_id": "ba537227-d54f-42b3-aa58-10492cddf8a6",
+      "level": "CLIENT"
+    }
+  ],
+  "clients": [
+    {
+      "id": "137880c5-31f5-473f-8ab8-f78417bcaee9"
+    }
+  ],
+  "user_favourite_products": [
+    {
+      "client_id": "137880c5-31f5-473f-8ab8-f78417bcaee9",
+      "product_id": "562dc9a9-ca76-4d04-91d8-be69782d0338"
+    }
+  ]
+}

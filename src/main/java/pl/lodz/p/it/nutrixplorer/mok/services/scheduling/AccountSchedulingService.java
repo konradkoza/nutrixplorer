@@ -57,8 +57,7 @@ public class AccountSchedulingService {
     }
 
     public void sendEmailVerifyAccount() {
-//        LocalDateTime beforeTime = LocalDateTime.now().minusHours(hoursToRemoveUnverified / 2);
-        LocalDateTime beforeTime = LocalDateTime.now().minusMinutes(15);
+        LocalDateTime beforeTime = LocalDateTime.now().minusHours(hoursToRemoveUnverified / 2);
         LocalDateTime afterTime = beforeTime.plusMinutes(10);
         List<User> users = userRepository.getUsersToResendEmail(beforeTime, afterTime);
         users.forEach(user -> {

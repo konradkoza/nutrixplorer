@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Table(
         name = "ACCESS_LEVELS",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"user_id", "level"})
+                @UniqueConstraint(columnNames = {"USER_ID", "LEVEL"})
         })
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "level")
@@ -24,10 +24,10 @@ public abstract class AccessLevel extends AbstractEntity implements Serializable
     @Serial
     private static final long serialVersionUID = 1L; // TODO: check if this is needed
 
-    @Column(name = "active", nullable = false)
+    @Column(name = "ACTIVE", nullable = false)
     private boolean active;
 
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false, updatable = false)
     @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
     private User user;
 }

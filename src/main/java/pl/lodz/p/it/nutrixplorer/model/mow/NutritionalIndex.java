@@ -17,7 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "nutritional_index")
+@Table(name = "NUTRITIONAL_INDEX")
 public class NutritionalIndex extends AbstractEntity {
 
     @Column(name = "index_value")

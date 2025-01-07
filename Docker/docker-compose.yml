@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:16.2
+    image: postgres:16.6
     container_name: nutrixplorer-db
     restart: always
     environment:
@@ -28,6 +28,7 @@ services:
       pull: false
     container_name: nutrixplorer-tomcat
     restart: always
+    env_file: "spring.env"
     ports:
       - "8080:8080"
     networks:
@@ -45,9 +46,12 @@ services:
       - tomcat
     ports:
       - "9090:80"
+      - "443:443"
     networks:
       - my_network
     volumes:
-      - ./nginxdev.conf:/etc/nginx/nginx.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./dev-certs/localhost.pem:/etc/cert/nutrixplorer/localhost.pem
+      - ./dev-certs/localhost.key:/etc/cert/nutrixplorer/localhost.key
 networks:
   my_network:

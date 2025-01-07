@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "USERS", schema = "PUBLIC")
 @SecondaryTable(
         name = "PERSONAL_DATA",
-        pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"),
+        pkJoinColumns = @PrimaryKeyJoinColumn(name = "USER_ID"),
         schema = "PUBLIC")
 @SecondaryTable(name = "GOOGLE_AUTH", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 @ToString
@@ -24,17 +24,17 @@ import java.util.List;
 public class User extends AbstractEntity {
 
     @Setter
-    @Column(name = "first_name", table = "PERSONAL_DATA", nullable = false, length = 50)
+    @Column(name = "FIRST_NAME", table = "PERSONAL_DATA", nullable = false, length = 50)
     private String firstName;
     @Setter
-    @Column(name = "last_name", table = "PERSONAL_DATA", nullable = false, length = 50)
+    @Column(name = "LAST_NAME", table = "PERSONAL_DATA", nullable = false, length = 50)
     private String lastName;
     @Setter
-    @Column(name = "email", table = "PERSONAL_DATA", nullable = false, unique = true, length = 50)
+    @Column(name = "EMAIL", table = "PERSONAL_DATA", nullable = false, unique = true, length = 50)
     private String email;
 
     @Setter
-    @Column(name = "google_id", table = "GOOGLE_AUTH", unique = true, length = 30)
+    @Column(name = "GOOGLE_ID", table = "GOOGLE_AUTH", unique = true, length = 30)
     private String googleId;
 
 ////    @Setter
@@ -43,48 +43,51 @@ public class User extends AbstractEntity {
 
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "language", nullable = false)
+    @Column(name = "LANGUAGE", nullable = false)
     private Language language = Language.PL;
 
     @Setter
-    @Column(name = "password", length = 64)
+    @Column(name = "PASSWORD", length = 64)
     @ToString.Exclude
     private String password;
 
     @Setter
-    @Column(name = "login_attempts", nullable = false)
+    @Column(name = "LOGIN_ATTEMPTS", nullable = false)
     private int loginAttempts = 0;
 
     @Setter
-    @Column(name = "last_successful_login")
+    @Column(name = "LAST_SUCCESSFUL_LOGIN")
     private LocalDateTime lastSuccessfulLogin;
 
     @Setter
-    @Column(name = "last_failed_login")
+    @Column(name = "LAST_FAILED_LOGIN")
     private LocalDateTime lastFailedLogin;
 
     @Setter
-    @Column(name = "last_successful_login_ip")
+    @Column(name = "LAST_SUCCESSFUL_LOGIN_IP")
     private String lastSuccessfulLoginIp;
 
     @Setter
-    @Column(name = "last_failed_login_ip")
+    @Column(name = "LAST_FAILED_LOGIN_IP")
     private String lastFailedLoginIp;
 
     @Setter
-    @Column(name = "blocked", nullable = false)
+    @Column(name = "BLOCKED", nullable = false)
     private boolean blocked = false;
 
     @Setter
-    @Column(name = "verified", nullable = false)
+    @Column(name = "VERIFIED", nullable = false)
     private boolean verified = false;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "CREATED_AT", nullable = false, updatable = false)
     @ToString.Exclude
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AccessLevel> accessLevels = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<VerificationToken> tokens = new ArrayList<>();
 
     public void setLanguage(String language) {
         this.language = Language.valueOf(language.toUpperCase());

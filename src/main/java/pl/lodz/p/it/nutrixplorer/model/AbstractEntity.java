@@ -11,10 +11,10 @@ import java.util.UUID;
 @Setter
 @MappedSuperclass
 @ToString
-public class AbstractEntity {
+public abstract class AbstractEntity {
 
     @Id
-    @Column(name = "id", columnDefinition = "UUID", updatable = false)
+    @Column(name = "ID", columnDefinition = "UUID", updatable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 

@@ -17,7 +17,7 @@ public class TransactionListener implements TransactionExecutionListener {
     @Override
     public void afterBegin(TransactionExecution transaction, @Nullable Throwable beginFailure) {
         id.set(UUID.randomUUID().toString());
-        log.info("Transaction with id: {} started by user with id {}, called from method: {}, synchronization level: {}",
+        log.info("Transaction with id: {} started by user with id {}, called from method: {}, isolation level: {}",
                 id.get(), SecurityContextUtil.getCurrentUser(), transaction.getTransactionName(), TransactionSynchronizationManager.getCurrentTransactionIsolationLevel());
 //        log.info("Transaction isNested: {}", transaction.isNested());
     }
@@ -30,7 +30,7 @@ public class TransactionListener implements TransactionExecutionListener {
 
     @Override
     public void afterRollback(TransactionExecution transaction, @Nullable Throwable rollbackFailure) {
-        log.info("Transaction {} rolled back: {}, by user with id: {}, isolation level {}",
+        log.info("Transaction {} rolled back: {}, by user with id: {}, isolation level: {}",
                 id.get(), transaction.getTransactionName(), SecurityContextUtil.getCurrentUser(), TransactionSynchronizationManager.getCurrentTransactionIsolationLevel());
         log.error("Rollback cause: ", rollbackFailure);
     }

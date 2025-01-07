@@ -12,5 +12,7 @@ public class MowErrorCodes {
     public static final String DEAL_NOT_FOUND = "dealNotFound";
     public static final String BASKET_NAME_NOT_UNIQUE = "basketNameNotUnique";
     public static final String INVALID_QUANTITY = "invalidQuantity";
+    public static final String CLIENT_NOT_FOUND = "clientNotFound";
+    public static final String PRODUCT_ALREADY_IN_BASKET = "productAlreadyInBasket";
 }
 

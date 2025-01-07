@@ -57,7 +57,7 @@ public class AuthenticationService {
     private String appUrl;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String login(String email, PasswordHolder password, String language) throws NotFoundException, AuthenctiactionFailedException, UserBlockedException, UserNotVerifiedException, LoginAttemptsExceededException {
+    public String login(String email, PasswordHolder password, String language, String remoteAddr) throws NotFoundException, AuthenctiactionFailedException, UserBlockedException, UserNotVerifiedException, LoginAttemptsExceededException {
         log.info("Logging in");
         User user = userRepository.findByEmail(email).orElseThrow(() -> new AuthenctiactionFailedException(MokExceptionMessages.INVALID_CREDENTIALS, MokErrorCodes.INVALID_CREDENTIALS));
 
@@ -79,15 +79,14 @@ public class AuthenticationService {
             }
             user.setLastSuccessfulLogin(LocalDateTime.now());
             user.setLoginAttempts(0);
-//            TODO get IP
-            user.setLastSuccessfulLoginIp("ip");
+            user.setLastSuccessfulLoginIp(remoteAddr);
             user.setLanguage(language);
             userRepository.saveAndFlush(user);
+            log.info("Session started for user: {} - with id: {}, from address IP: {}", user.getEmail(), user.getId(), remoteAddr);
             return jwtService.generateToken(user.getId(), getUserRoles(user));
         } else {
             user.setLastFailedLogin(LocalDateTime.now());
-//            TODO get IP
-            user.setLastFailedLoginIp("ip");
+            user.setLastFailedLoginIp(remoteAddr);
             user.setLoginAttempts(user.getLoginAttempts() + 1);
             userRepository.saveAndFlush(user);
 
@@ -160,7 +159,7 @@ public class AuthenticationService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = EmailAddressInUseException.class)
-    public String signInOAuth(GoogleOauth2Response response) throws UserBlockedException, EmailAddressInUseException, Oauth2Exception, JsonProcessingException {
+    public String signInOAuth(GoogleOauth2Response response, String remoteAddr) throws UserBlockedException, EmailAddressInUseException, Oauth2Exception, JsonProcessingException {
 
         String token = response.getIdToken();
         String[] tokenChunks = token.split("\\.");
@@ -179,6 +178,8 @@ public class AuthenticationService {
             newUser.setVerified(true);
             newUser.setBlocked(false);
             newUser.setGoogleId(payload.getSub());
+            newUser.setLastSuccessfulLogin(LocalDateTime.now());
+            newUser.setLastSuccessfulLoginIp(remoteAddr);
             Client client = new Client();
             client.setUser(newUser);
             try {
@@ -188,11 +189,15 @@ public class AuthenticationService {
             }
         } else {
             user = userOptional.get();
+            user.setLastSuccessfulLogin(LocalDateTime.now());
+            user.setLastSuccessfulLoginIp(remoteAddr);
+            userRepository.saveAndFlush(user);
         }
 
         if (user.isBlocked()) {
             throw new UserBlockedException(MokExceptionMessages.ACCOUNT_BLOCKED, MokErrorCodes.ACCOUNT_BLOCKED);
         }
+        log.info("Session started for user: {} - with id: {}, from address IP: {}, user logged in with external provider", user.getEmail(), user.getId(), remoteAddr);
         return jwtService.generateToken(user.getId(), getUserRoles(user));
     }
 

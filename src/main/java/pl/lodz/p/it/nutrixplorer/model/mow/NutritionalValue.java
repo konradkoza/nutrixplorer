@@ -1,9 +1,6 @@
 package pl.lodz.p.it.nutrixplorer.model.mow;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,10 +15,11 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "nutritional_value")
+@Table(name = "NUTRITIONAL_VALUE")
 public class NutritionalValue extends AbstractEntity {
 
     @ManyToOne
+    @JoinColumn(name = "NUTRITIONALVALUENAME_ID")
     private NutritionalValueName nutritionalValueName;
 
     private Double quantity;

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import pl.lodz.p.it.nutrixplorer.exceptions.ApplicationOptimisticLockException;
+import pl.lodz.p.it.nutrixplorer.exceptions.InvalidHeaderException;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.BasketEntryException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.BasketNameNotUniqueException;
@@ -21,6 +24,7 @@ import pl.lodz.p.it.nutrixplorer.mow.mappers.BasketMapper;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.dto.NutritionalValueSummaryDTO;
 import pl.lodz.p.it.nutrixplorer.mow.services.BasketService;
 import pl.lodz.p.it.nutrixplorer.utils.BasketSpecificationUtil;
+import pl.lodz.p.it.nutrixplorer.utils.ETagSigner;
 
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +37,7 @@ import java.util.UUID;
 public class BasketController {
 
     private final BasketService basketService;
+    private final ETagSigner signer;
 
     @GetMapping("/user")
     @PreAuthorize("hasRole('CLIENT')")
@@ -54,8 +59,9 @@ public class BasketController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<BasketDTO> getBasket(@PathVariable UUID id) throws NotFoundException {
-        return ResponseEntity.ok(BasketMapper.INSTANCE.basketToBasketDTO(basketService.getBasket(id)));
+    public ResponseEntity<BasketDTO> getBasket(@PathVariable UUID id) throws NotFoundException, InvalidHeaderException {
+        Basket basket = basketService.getBasket(id);
+        return ResponseEntity.status(HttpStatus.OK).eTag(signer.generateSignature(basket.getId(), basket.getVersion())).body(BasketMapper.INSTANCE.basketToBasketDTO(basketService.getBasket(id)));
     }
 
     @PostMapping
@@ -88,15 +94,16 @@ public class BasketController {
 
     @PatchMapping("/entry/{entryId}")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<Void> updateBasketEntry(@RequestBody UpdateEntryDTO entryDTO, @PathVariable UUID entryId) throws NotFoundException {
+    public ResponseEntity<Void> updateBasketEntry(@RequestBody UpdateEntryDTO entryDTO, @PathVariable UUID entryId) throws NotFoundException, BasketEntryException {
         basketService.updateEntry(entryId, entryDTO.quantity());
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{basketId}")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<Void> updateBasket(@RequestBody @Valid CreateBasketDTO basketDTO, @PathVariable UUID basketId) throws NotFoundException {
-        basketService.updateBasket(basketId, basketDTO.name(), basketDTO.description());
+    public ResponseEntity<Void> updateBasket(@RequestBody @Valid CreateBasketDTO basketDTO, @PathVariable UUID basketId,  @RequestHeader(HttpHeaders.IF_MATCH) String tagValue) throws NotFoundException, InvalidHeaderException, ApplicationOptimisticLockException, BasketNameNotUniqueException {
+
+        basketService.updateBasket(basketId, basketDTO.name(), basketDTO.description(), tagValue);
         return ResponseEntity.ok().build();
     }
 
@@ -114,7 +121,7 @@ public class BasketController {
 
     @PostMapping("/{basketId}/clone")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<BasketDTO> cloneBasket(@PathVariable UUID basketId,@RequestBody @Valid CreateBasketDTO basketDTO) throws NotFoundException {
+    public ResponseEntity<BasketDTO> cloneBasket(@PathVariable UUID basketId,@RequestBody @Valid CreateBasketDTO basketDTO) throws NotFoundException, BasketNameNotUniqueException {
         Basket basket = basketService.cloneBasket(basketId, basketDTO.name(), basketDTO.description());
         return ResponseEntity.status(HttpStatus.CREATED).body(BasketMapper.INSTANCE.basketToBasketDTO(basket));
     }

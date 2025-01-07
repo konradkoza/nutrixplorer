@@ -16,7 +16,6 @@ import pl.lodz.p.it.nutrixplorer.mow.dto.ProductSimpleDTO;
 import pl.lodz.p.it.nutrixplorer.mow.dto.ProductsListDTO;
 import pl.lodz.p.it.nutrixplorer.mow.mappers.ProductMapper;
 import pl.lodz.p.it.nutrixplorer.mow.services.FavouriteProductsService;
-import pl.lodz.p.it.nutrixplorer.utils.SecurityContextUtil;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +33,6 @@ public class FavouritesController {
     @GetMapping()
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<List<ProductSimpleDTO>> getFavoriteProducts() throws NotFoundException {
-        UUID id = UUID.fromString(SecurityContextUtil.getCurrentUser());
         List<Product> products = favouriteProductsService.getCurrentUserFavoriteProducts();
         return ResponseEntity.ok(ProductMapper.INSTANCE.productsToProductSimpleDTOs(products));
     }
@@ -52,16 +50,15 @@ public class FavouritesController {
     @PostMapping("/product/{productId}/add")
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<Void> addProductToFavourites(@PathVariable UUID productId) throws NotFoundException, ProductAlreadyFavourite {
-        UUID id = UUID.fromString(SecurityContextUtil.getCurrentUser());
-        favouriteProductsService.addProductToFavourites(id, productId);
+
+        favouriteProductsService.addProductToFavourites(productId);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/product/{productId}/remove")
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<Void> removeProductFromFavourites(@PathVariable UUID productId) throws NotFoundException {
-        UUID id = UUID.fromString(SecurityContextUtil.getCurrentUser());
-        favouriteProductsService.removeProductFromFavourites(id, productId);
+        favouriteProductsService.removeProductFromFavourites(productId);
         return ResponseEntity.ok().build();
     }
 }

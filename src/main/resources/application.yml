@@ -48,8 +48,8 @@ logging:
           jpa: debug
 
     sql: debug
-
 nutrixplorer:
+  proxy: false
   remove-unverified: 24
   frontend-url: http://localhost:3000
   login:
@@ -59,6 +59,8 @@ nutrixplorer:
     public-key-path: classpath:public.pem
     private-key-path: classpath:private.pem
     expiration: 12
+  jws:
+    secret: ZhLR58MdJjGl6MAlEC9OWUkS34KTEsYd
   oauth:
     client_id: 848010620252-mmpisp9fchf67grpc5g03p0fdkenqrmu.apps.googleusercontent.com
     client_secret: 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

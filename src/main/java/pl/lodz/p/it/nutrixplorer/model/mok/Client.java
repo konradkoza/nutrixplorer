@@ -19,9 +19,9 @@ public class Client extends AccessLevel{
 
     @ManyToMany
     @JoinTable(
-            name = "user_favourite_products",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
+            name = "USER_FAVOURITE_PRODUCTS",
+            joinColumns = @JoinColumn(name = "CLIENT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "PRODUCT_ID")
     )
     private Set<Product> favouriteProducts = new HashSet<>();
 }

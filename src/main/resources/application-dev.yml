@@ -1,3 +1,7 @@
+server:
+  servlet:
+    context-path: /api
+
 spring:
   flyway:
     url: jdbc:postgresql://nutrixplorer-db:5432/nutrixplorer
@@ -17,4 +21,7 @@ datasource:
     password: mokP@ssw0rd
 
 nutrixplorer:
+  proxy: true
   frontend-url: http://localhost:3000
+  jws:
+    secret: ZhLR58MdJjGl6MAlEC9OWUkS34KTEsYd

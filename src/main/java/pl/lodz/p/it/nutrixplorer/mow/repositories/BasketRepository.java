@@ -1,7 +1,9 @@
 package pl.lodz.p.it.nutrixplorer.mow.repositories;
 
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -18,6 +20,12 @@ public interface BasketRepository extends JpaRepository<Basket, UUID>, JpaSpecif
     @Query("SELECT b FROM Basket b WHERE b.client.user.id = :userId")
     List<Basket> findAllByUserId(UUID userId);
 
+    @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
+    @Query("SELECT b FROM Basket b WHERE b.client.user.id = :userId AND b.id = :basketId")
+    Optional<Basket> findByIdAndUserIdForUpdate(UUID basketId, UUID userId);
+
+    @Query("SELECT b FROM Basket b WHERE b.client.user.id = :userId AND b.id = :basketId")
+    Optional<Basket> findByIdAndUserId(UUID basketId, UUID userId);
 
 //    @Query("SELECT new pl.lodz.p.it.nutrixplorer.mow.repositories.dto.NutritionalValuesDTO(nv.nutritionalValueName.name, nv.nutritionalValueName.group.groupName, SUM(nv.quantity))  FROM Basket b " +
 //            "JOIN b.basketEntries p " +

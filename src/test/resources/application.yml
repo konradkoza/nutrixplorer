@@ -1,0 +1,48 @@
+datasource:
+  admin:
+    username: nutriadmin
+    password: adminP@ssw0rd
+  user:
+    username: nutriuser
+    password: mokP@ssw0rd
+spring:
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    hikari:
+#      max-lifetime: 50
+  flyway:
+    locations: db/test
+    driver-class-name: org.postgresql.Driver
+    enabled: true
+    default-schema: public
+    baseline-on-migrate: true
+  profiles:
+    active: test
+  mail:
+    host: localhost
+    port: 25
+    properties:
+      auth: false
+      starttls:
+        enable: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+nutrixplorer:
+  proxy: false
+  remove-unverified: 24
+  frontend-url: http://localhost:3000
+  login:
+    max-attempts: 3
+    lock-duration: 300
+  jwt:
+    public-key-path: classpath:public.pem
+    private-key-path: classpath:private.pem
+    expiration: 12
+  jws:
+    secret: ZhLR58MdJjGl6MAlEC9OWUkS34KTEsYd
+  oauth:
+    client_id: 848010620252-mmpisp9fchf67grpc5g03p0fdkenqrmu.apps.googleusercontent.com
+    client_secret: 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
+    redirect_url: http://localhost:3000/auth/google/callback
+    token_url: https://oauth2.googleapis.com/token

@@ -11,7 +11,6 @@ public record AuthenticationDTO(
         @Size(min = 5, max = 50, message = "Email must be between 5 and 50 characters long")
         String email,
         @NotBlank(message = "Password cannot be empty")
-        @Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters long")
         String password,
         @NotBlank(message = "Language cannot be empty")
         @Pattern(regexp = "^(en|pl)$", message = "Language must be either 'en' or 'pl'")

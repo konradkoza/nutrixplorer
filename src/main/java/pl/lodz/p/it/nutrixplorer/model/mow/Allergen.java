@@ -10,9 +10,9 @@ import pl.lodz.p.it.nutrixplorer.model.AbstractEntity;
 @Getter
 @Setter
 @Entity
-@Table(name = "allergen")
+@Table(name = "ALLERGEN")
 public class Allergen extends AbstractEntity {
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
 
 }

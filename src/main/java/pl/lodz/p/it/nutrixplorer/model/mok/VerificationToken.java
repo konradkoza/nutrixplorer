@@ -29,13 +29,13 @@ uniqueConstraints = {
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "purpose")
 public abstract class VerificationToken extends AbstractEntity implements Serializable {
 
-    @Column(name = "token", nullable = false)
+    @Column(name = "TOKEN", nullable = false)
     private String token;
 
-    @Column(name = "expiration_date", nullable = false)
+    @Column(name = "EXPIRATION_DATE", nullable = false)
     private Instant expirationDate;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false, updatable = false)
     private User user;
 }

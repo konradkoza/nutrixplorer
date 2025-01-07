@@ -4,12 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import pl.lodz.p.it.nutrixplorer.exceptions.ApplicationOptimisticLockException;
+import pl.lodz.p.it.nutrixplorer.exceptions.InvalidHeaderException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.*;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
@@ -19,6 +23,7 @@ import pl.lodz.p.it.nutrixplorer.mok.dto.UsersFilteringDTO;
 import pl.lodz.p.it.nutrixplorer.mok.dto.UsersPageDTO;
 import pl.lodz.p.it.nutrixplorer.mok.mappers.UserMapper;
 import pl.lodz.p.it.nutrixplorer.mok.services.UserService;
+import pl.lodz.p.it.nutrixplorer.utils.ETagSigner;
 import pl.lodz.p.it.nutrixplorer.utils.UserSpecificationUtil;
 
 import java.util.UUID;
@@ -31,14 +36,15 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
-
+    private final ETagSigner signer;
 
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<UserDetailsDTO> getUser(@PathVariable UUID id) throws NotFoundException {
+    public ResponseEntity<UserDetailsDTO> getUser(@PathVariable UUID id) throws NotFoundException, InvalidHeaderException {
         log.info("Getting user with id: " + id);
-        return ResponseEntity.ok(UserMapper.INSTANCE.userToUserDetailsDTO(userService.findById(id)));
+        User user = userService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).eTag(signer.generateSignature(user.getId(), user.getVersion())).body(UserMapper.INSTANCE.userToUserDetailsDTO(userService.findById(id)));
     }
 
     @GetMapping
@@ -78,8 +84,8 @@ public class UserController {
 
     @PatchMapping("/{id}/name")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<Void> changeUserName(@PathVariable UUID id, @RequestBody UserDTO userDTO) throws NotFoundException {
-        userService.changeNameAndLastName(id, userDTO.firstName(), userDTO.lastName());
+    public ResponseEntity<Void> changeUserName(@PathVariable UUID id, @RequestBody UserDTO userDTO, @RequestHeader(HttpHeaders.IF_MATCH) String tagValue) throws NotFoundException, InvalidHeaderException, ApplicationOptimisticLockException {
+        userService.changeNameAndLastName(id, userDTO.firstName(), userDTO.lastName(), tagValue);
         return ResponseEntity.ok().build();
     }
 

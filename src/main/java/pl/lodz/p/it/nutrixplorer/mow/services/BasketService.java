@@ -9,21 +9,23 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.configuration.LoggingInterceptor;
-import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
+import pl.lodz.p.it.nutrixplorer.exceptions.*;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.BasketEntryException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.BasketNameNotUniqueException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.codes.MowErrorCodes;
-import pl.lodz.p.it.nutrixplorer.exceptions.mow.messages.ErrorMessages;
+import pl.lodz.p.it.nutrixplorer.exceptions.mow.messages.MowErrorMessages;
 import pl.lodz.p.it.nutrixplorer.model.mow.Basket;
 import pl.lodz.p.it.nutrixplorer.model.mow.BasketEntry;
-import pl.lodz.p.it.nutrixplorer.mok.repositories.ClientRepository;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.BasketEntryRepository;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.BasketRepository;
+import pl.lodz.p.it.nutrixplorer.mow.repositories.MowClientRepository;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.ProductRepository;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.dto.NutritionalValueSummaryDTO;
+import pl.lodz.p.it.nutrixplorer.utils.ETagSigner;
 import pl.lodz.p.it.nutrixplorer.utils.SecurityContextUtil;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,7 +37,8 @@ public class BasketService {
     private final BasketRepository basketRepository;
     private final BasketEntryRepository basketEntryRepository;
     private final ProductRepository productRepository;
-    private final ClientRepository clientRepository;
+    private final MowClientRepository clientRepository;
+    private final ETagSigner verifier;
 
     @Transactional(rollbackFor = {BasketNameNotUniqueException.class})
     public Basket createBasket(String name, String description) throws NotFoundException, BasketNameNotUniqueException {
@@ -43,36 +46,39 @@ public class BasketService {
         basket.setName(name);
         basket.setDescription(description);
         UUID userId = UUID.fromString(SecurityContextUtil.getCurrentUser());
-        basket.setClient(clientRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(ErrorMessages.USER_NOT_FOUND, MowErrorCodes.USER_NOT_FOUND)));
+        basket.setClient(clientRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(MowErrorMessages.USER_NOT_FOUND, MowErrorCodes.USER_NOT_FOUND)));
         try {
             basketRepository.saveAndFlush(basket);
         } catch (Exception e) {
-            throw new BasketNameNotUniqueException(ErrorMessages.BASKET_NAME_NOT_UNIQUE, MowErrorCodes.BASKET_NAME_NOT_UNIQUE, e);
+            throw new BasketNameNotUniqueException(MowErrorMessages.BASKET_NAME_NOT_UNIQUE, MowErrorCodes.BASKET_NAME_NOT_UNIQUE, e);
         }
         return basket;
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {BasketEntryException.class})
     public Basket addEntryToBasket(UUID basketId, UUID productId, BigDecimal quantity) throws NotFoundException, BasketEntryException {
         if (quantity.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BasketEntryException(ErrorMessages.INVALID_QUANTITY, MowErrorCodes.INVALID_QUANTITY);
+            throw new BasketEntryException(MowErrorMessages.INVALID_QUANTITY, MowErrorCodes.INVALID_QUANTITY);
         }
-        Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new NotFoundException(ErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
+        UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
+        Basket basket = basketRepository.findByIdAndUserId(basketId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
+
         BasketEntry entry = new BasketEntry();
-        entry.setProduct(productRepository.findById(productId).orElseThrow(() -> new NotFoundException(ErrorMessages.PRODUCT_NOT_FOUND, MowErrorCodes.PRODUCT_NOT_FOUND)));
+        entry.setProduct(productRepository.findById(productId).orElseThrow(() -> new NotFoundException(MowErrorMessages.PRODUCT_NOT_FOUND, MowErrorCodes.PRODUCT_NOT_FOUND)));
         entry.setUnits(quantity);
         entry.setBasket(basket);
-        basketEntryRepository.saveAndFlush(entry);
+        try {
+            basketEntryRepository.saveAndFlush(entry);
+        } catch (Exception e) {
+            throw new BasketEntryException(MowErrorMessages.PRODUCT_ALREADY_IN_BASKET, MowErrorCodes.PRODUCT_ALREADY_IN_BASKET, e);
+        }
         return basket;
     }
 
     public void removeEntryFromBasket(UUID entryId) throws NotFoundException {
-        BasketEntry basketEntry = getBasketEntry(entryId);
-        UUID userId = basketEntry.getBasket().getClient().getUser().getId();
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
-        if (!userId.equals(currentUserId)) {
-            throw new NotFoundException(ErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND);
-        }
-        basketEntryRepository.deleteById(entryId);
+        BasketEntry basketEntry = basketEntryRepository.findByIdAndUser(entryId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND));
+        basketEntryRepository.deleteById(basketEntry.getId());
     }
 
     public List<Basket> getUserBaskets() throws NotFoundException {
@@ -83,34 +89,34 @@ public class BasketService {
     public List<Basket> getUserBasketsByName(String name) throws NotFoundException {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         Specification<Basket> specification = Specification.where((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("client").get("user").get("id"), currentUserId));
-        specification = specification.and((root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%"    + name.toLowerCase() + "%"));
+        specification = specification.and((root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
         return basketRepository.findAll(specification, PageRequest.of(0, 5)).getContent();
     }
 
     public Basket getBasket(UUID basketId) throws NotFoundException {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
-
-        Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new NotFoundException(ErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
-        if (!basket.getClient().getUser().getId().equals(currentUserId)) {
-            throw new NotFoundException(ErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND);
-        }
-        return basket;
+        return basketRepository.findByIdAndUserId(basketId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
     }
 
     public void removeBasket(UUID basketId) throws NotFoundException {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
-        Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new NotFoundException(ErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
-        if (!basket.getClient().getUser().getId().equals(currentUserId)) {
-            throw new NotFoundException(ErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND);
-        } else {
-            basketRepository.deleteById(basketId);
-        }
+        Basket basket = basketRepository.findByIdAndUserId(basketId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
+        basketRepository.delete(basket);
     }
 
-    public void updateEntry(UUID id, BigDecimal quantity) throws NotFoundException {
-        BasketEntry basketEntry = getBasketEntry(id);
-        basketEntry.setUnits(quantity);
-        basketEntryRepository.saveAndFlush(basketEntry);
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {BasketEntryException.class})
+    public void updateEntry(UUID id, BigDecimal quantity) throws NotFoundException, BasketEntryException {
+        if (quantity.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BasketEntryException(MowErrorMessages.INVALID_QUANTITY, MowErrorCodes.INVALID_QUANTITY);
+        }
+        UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
+        BasketEntry basketEntry = basketEntryRepository.findByIdAndUser(id, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND));
+        Basket basket = basketRepository.findByIdAndUserIdForUpdate(basketEntry.getBasket().getId(), currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
+        BasketEntry entry = basket.getBasketEntries().stream().filter((entry1) -> entry1.getId().equals(basketEntry.getId())).findFirst().orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND));
+        basket.setUpdatedAt(LocalDateTime.now()); // TODO: check if it is necessary
+        entry.setUnits(quantity);
+        basketRepository.saveAndFlush(basket);
+
     }
 
     public List<NutritionalValueSummaryDTO> getNutritionalValues(UUID basketId) {
@@ -122,40 +128,40 @@ public class BasketService {
         return basketRepository.findDistinctAllergensByBasketId(basketId);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    protected BasketEntry getBasketEntry(UUID entryId) throws NotFoundException {
-        BasketEntry basketEntry = basketEntryRepository.findById(entryId).orElseThrow(() -> new NotFoundException(ErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND));
-        UUID userId = basketEntry.getBasket().getClient().getUser().getId();
+
+    public void updateBasket(UUID basketId, String name, String description, String tagValue) throws NotFoundException, ApplicationOptimisticLockException, InvalidHeaderException, BasketNameNotUniqueException {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
-        if (!userId.equals(currentUserId)) {
-            throw new NotFoundException(ErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND);
+        Basket basket = basketRepository.findByIdAndUserId(basketId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
+        if (!verifier.verifySignature(basket.getId(), basket.getVersion(), tagValue)) {
+            throw new ApplicationOptimisticLockException(ExceptionMessages.OPTIMISTIC_LOCK, ErrorCodes.OPTIMISTIC_LOCK);
         }
-        return basketEntry;
-    }
-
-    public void updateBasket(UUID basketId, String name, String description) throws NotFoundException {
-        UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
-        Basket basket = basketRepository.findByIdAndClient(currentUserId, basketId).orElseThrow(() -> new NotFoundException(ErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
-
         basket.setName(name);
         basket.setDescription(description);
-        basketRepository.save(basket);
+        try {
+            basketRepository.saveAndFlush(basket);
+        } catch (Exception e) {
+            throw new BasketNameNotUniqueException(MowErrorMessages.BASKET_NAME_NOT_UNIQUE, MowErrorCodes.BASKET_NAME_NOT_UNIQUE, e);
+        }
 
     }
 
-    public Basket cloneBasket(UUID basketId, String name, String description) throws NotFoundException {
+    public Basket cloneBasket(UUID basketId, String name, String description) throws NotFoundException, BasketNameNotUniqueException {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
-        Basket basket = basketRepository.findByIdAndClient(currentUserId, basketId).orElseThrow(() -> new NotFoundException(ErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
+        Basket basket = basketRepository.findByIdAndUserId(basketId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
         Basket newBasket = new Basket();
         newBasket.setClient(basket.getClient());
         newBasket.setName(name);
         newBasket.setDescription(description);
         List<BasketEntry> newEntries = basket.getBasketEntries().stream().map(
-                (entry) -> new BasketEntry(entry.getProduct(), entry.getUnits(), null, newBasket)
+                (entry) -> new BasketEntry(entry.getProduct(), entry.getUnits(), newBasket)
         ).toList();
         newBasket.setBasketEntries(newEntries);
 
-        return basketRepository.save(newBasket);
+        try {
+            return basketRepository.saveAndFlush(newBasket);
+        } catch (Exception e) {
+            throw new BasketNameNotUniqueException(MowErrorMessages.BASKET_NAME_NOT_UNIQUE, MowErrorCodes.BASKET_NAME_NOT_UNIQUE, e);
+        }
     }
 
     public Page<Basket> getFilteredBaskets(int elements, int page, Specification<Basket> specification) {
