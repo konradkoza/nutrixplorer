@@ -22,7 +22,7 @@ datasource:
 
 nutrixplorer:
   proxy: true
-  frontend-url: https://192.168.18.7
+  frontend-url: https://localhost
   jws:
     secret: ${JWS_SECRET_KEY}
   oauth:

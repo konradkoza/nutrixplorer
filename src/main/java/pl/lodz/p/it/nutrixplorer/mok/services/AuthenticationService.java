@@ -56,7 +56,7 @@ public class AuthenticationService {
     @Value("${nutrixplorer.frontend-url}")
     private String appUrl;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public String login(String email, PasswordHolder password, String language, String remoteAddr) throws NotFoundException, AuthenctiactionFailedException, UserBlockedException, UserNotVerifiedException, LoginAttemptsExceededException {
         log.info("Logging in");
         User user = userRepository.findByEmail(email).orElseThrow(() -> new AuthenctiactionFailedException(MokExceptionMessages.INVALID_CREDENTIALS, MokErrorCodes.INVALID_CREDENTIALS));
@@ -112,7 +112,7 @@ public class AuthenticationService {
         }
     }
 
-    @Transactional(propagation = Propagation.MANDATORY)
+    @Transactional(propagation = Propagation.MANDATORY, isolation = Isolation.READ_COMMITTED)
     public List<String> getUserRoles(User user) {
         List<String> roles = new ArrayList<>();
 
@@ -130,7 +130,7 @@ public class AuthenticationService {
         return roles;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {EmailAddressInUseException.class, UserRegisteringException.class})
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {EmailAddressInUseException.class, UserRegisteringException.class}, isolation = Isolation.READ_COMMITTED)
     public User registerClient(String email, PasswordHolder password, String firstName, String lastName, String language) throws EmailAddressInUseException, UserRegisteringException {
 
         User user = new User();
@@ -158,7 +158,7 @@ public class AuthenticationService {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = EmailAddressInUseException.class)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = EmailAddressInUseException.class, isolation = Isolation.READ_COMMITTED)
     public String signInOAuth(GoogleOauth2Response response, String remoteAddr) throws UserBlockedException, EmailAddressInUseException, Oauth2Exception, JsonProcessingException {
 
         String token = response.getIdToken();
@@ -202,7 +202,7 @@ public class AuthenticationService {
         return jwtService.generateToken(user.getId(), getUserRoles(user));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class, NotFoundException.class})
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class, NotFoundException.class}, isolation = Isolation.READ_COMMITTED)
     public void activateAccount(String token) throws VerificationTokenInvalidException, VerificationTokenExpiredException, NotFoundException {
         VerificationToken verificationToken = verificationTokenService.validateAccountVerificationToken(token);
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
@@ -219,7 +219,7 @@ public class AuthenticationService {
 
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class, UserBlockedException.class, UserNotVerifiedException.class})
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class, UserBlockedException.class, UserNotVerifiedException.class}, isolation = Isolation.READ_COMMITTED)
     public void resetPassword(String email) throws UserNotVerifiedException, UserBlockedException, OauthUserException {
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {

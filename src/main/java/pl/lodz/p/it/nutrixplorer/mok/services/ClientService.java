@@ -58,7 +58,7 @@ public class ClientService {
         );
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public void removeClientAccessLevel(UUID id) throws AccessLevelAssignException {
         Optional<Client> client = clientRepository.findByUserId(id);
 

@@ -38,7 +38,7 @@ public class VerificationTokenService {
         return accountTokenRepository.saveAndFlush(token).getToken();
     }
 
-    @Transactional(propagation = Propagation.MANDATORY, rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenInvalidException.class})
+    @Transactional(propagation = Propagation.MANDATORY, rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenInvalidException.class}, isolation = Isolation.READ_COMMITTED)
     public VerificationToken validateAccountVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenInvalidException {
         VerificationToken verificationToken = accountTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenInvalidException(MokExceptionMessages.VERIFICATION_TOKEN_INVALID, MokErrorCodes.VERIFICATION_TOKEN_INVALID));
         if (verificationToken.getExpirationDate().isBefore(Instant.now())) {
@@ -75,7 +75,7 @@ public class VerificationTokenService {
     }
 
 
-    @Transactional( rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenInvalidException.class})
+    @Transactional( rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenInvalidException.class}, isolation = Isolation.READ_COMMITTED)
     public VerificationToken validatePasswordVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenInvalidException {
         PasswordVerificationToken verificationToken = passwordTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenInvalidException(MokExceptionMessages.VERIFICATION_TOKEN_INVALID, MokErrorCodes.VERIFICATION_TOKEN_INVALID));
         if (verificationToken.getExpirationDate().isBefore(Instant.now())) {

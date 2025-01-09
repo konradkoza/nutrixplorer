@@ -40,7 +40,7 @@ public class BasketService {
     private final MowClientRepository clientRepository;
     private final ETagSigner verifier;
 
-    @Transactional(rollbackFor = {BasketNameNotUniqueException.class})
+    @Transactional(rollbackFor = {BasketNameNotUniqueException.class}, isolation = Isolation.READ_COMMITTED)
     public Basket createBasket(String name, String description) throws NotFoundException, BasketNameNotUniqueException {
         Basket basket = new Basket();
         basket.setName(name);
@@ -55,7 +55,7 @@ public class BasketService {
         return basket;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {BasketEntryException.class})
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {BasketEntryException.class}, isolation = Isolation.READ_COMMITTED)
     public Basket addEntryToBasket(UUID basketId, UUID productId, BigDecimal quantity) throws NotFoundException, BasketEntryException {
         if (quantity.compareTo(BigDecimal.ZERO) <= 0) {
             throw new BasketEntryException(MowErrorMessages.INVALID_QUANTITY, MowErrorCodes.INVALID_QUANTITY);
@@ -104,7 +104,7 @@ public class BasketService {
         basketRepository.delete(basket);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {BasketEntryException.class})
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {BasketEntryException.class}, isolation = Isolation.READ_COMMITTED)
     public void updateEntry(UUID id, BigDecimal quantity) throws NotFoundException, BasketEntryException {
         if (quantity.compareTo(BigDecimal.ZERO) <= 0) {
             throw new BasketEntryException(MowErrorMessages.INVALID_QUANTITY, MowErrorCodes.INVALID_QUANTITY);

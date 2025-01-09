@@ -96,7 +96,7 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class})
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class}, isolation = Isolation.READ_COMMITTED)
     public void changeOwnPassword(PasswordHolder newPassword, PasswordHolder oldPassword) throws NotFoundException, AuthenctiactionFailedException {
         String id = SecurityContextUtil.getCurrentUser();
         User user = userRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
@@ -108,7 +108,7 @@ public class UserService {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class, EmailAddressInUseException.class})
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class, EmailAddressInUseException.class}, isolation = Isolation.READ_COMMITTED)
     public void changeOwnEmailInit(String email) throws EmailAddressInUseException, NotFoundException, TokenGenerationException {
         String id = SecurityContextUtil.getCurrentUser();
         if (userRepository.existsByEmail(email)) {
@@ -152,7 +152,7 @@ public class UserService {
         ));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class, EmailAddressInUseException.class})
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class, EmailAddressInUseException.class}, isolation = Isolation.READ_COMMITTED)
     public void changeOwnEmailFinish(String token) throws VerificationTokenExpiredException, VerificationTokenInvalidException, EmailAddressInUseException {
         EmailVerificationToken verificationToken = (EmailVerificationToken) verificationTokenService.validateEmailVerificationToken(token);
         User user = verificationToken.getUser();

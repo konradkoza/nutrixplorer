@@ -32,6 +32,9 @@ public class TransactionListener implements TransactionExecutionListener {
     public void afterRollback(TransactionExecution transaction, @Nullable Throwable rollbackFailure) {
         log.info("Transaction {} rolled back: {}, by user with id: {}, isolation level: {}",
                 id.get(), transaction.getTransactionName(), SecurityContextUtil.getCurrentUser(), TransactionSynchronizationManager.getCurrentTransactionIsolationLevel());
+
+        log.error("Rollback cause: {}", rollbackFailure != null ? rollbackFailure.getCause() : "No cause");
+        log.error("Rollback cause: {}", rollbackFailure != null ? rollbackFailure.getMessage() : "No message");
         log.error("Rollback cause: ", rollbackFailure);
     }
 }
