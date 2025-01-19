@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -20,10 +21,11 @@ import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.MokExceptionMessages;
 import pl.lodz.p.it.nutrixplorer.mail.HtmlEmailEvent;
 import pl.lodz.p.it.nutrixplorer.model.mok.EmailVerificationToken;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
+import pl.lodz.p.it.nutrixplorer.mok.dto.*;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.UserRepository;
 import pl.lodz.p.it.nutrixplorer.utils.ETagSigner;
-import pl.lodz.p.it.nutrixplorer.utils.PasswordHolder;
 import pl.lodz.p.it.nutrixplorer.utils.SecurityContextUtil;
+import pl.lodz.p.it.nutrixplorer.utils.UserSpecificationUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +34,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED, rollbackFor = BaseWebException.class, transactionManager = "mokTransactionManager")
 @LoggingInterceptor
 @Slf4j
 public class UserService {
@@ -96,34 +98,32 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class}, isolation = Isolation.READ_COMMITTED)
-    public void changeOwnPassword(PasswordHolder newPassword, PasswordHolder oldPassword) throws NotFoundException, AuthenctiactionFailedException {
+    public void changeOwnPassword(ChangePasswordDTO changePasswordDTO) throws NotFoundException, AuthenctiactionFailedException {
         String id = SecurityContextUtil.getCurrentUser();
         User user = userRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
-        if (passwordEncoder.matches(oldPassword.getPassword(), user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(newPassword.getPassword()));
+        if (passwordEncoder.matches(changePasswordDTO.oldPassword(), user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(changePasswordDTO.newPassword()));
             userRepository.saveAndFlush(user);
         } else {
             throw new AuthenctiactionFailedException(MokExceptionMessages.INVALID_CREDENTIALS, MokErrorCodes.INVALID_CREDENTIALS);
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class, EmailAddressInUseException.class}, isolation = Isolation.READ_COMMITTED)
-    public void changeOwnEmailInit(String email) throws EmailAddressInUseException, NotFoundException, TokenGenerationException {
+    public void changeOwnEmailInit(ChangeEmailDTO changeEmailDTO) throws EmailAddressInUseException, NotFoundException, TokenGenerationException {
         String id = SecurityContextUtil.getCurrentUser();
-        if (userRepository.existsByEmail(email)) {
+        if (userRepository.existsByEmail(changeEmailDTO.newEmail())) {
             throw new EmailAddressInUseException(MokExceptionMessages.EMAIL_IN_USE, MokErrorCodes.EMAIL_IN_USE);
         }
         User user = userRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
-        if (user.getEmail().equals(email)) {
+        if (user.getEmail().equals(changeEmailDTO.newEmail())) {
             throw new EmailAddressInUseException(MokExceptionMessages.EMAIL_IN_USE, MokErrorCodes.EMAIL_IN_USE);
         }
-        String token = verificationTokenService.generateEmailVerificationToken(user, email);
+        String token = verificationTokenService.generateEmailVerificationToken(user, changeEmailDTO.newEmail()).getToken();
 
         String url = appUrl + "/verify/email?token=" + token;
         eventPublisher.publishEvent(new HtmlEmailEvent(
                 this,
-                email,
+                changeEmailDTO.newEmail(),
                 Map.of("url", url,
                         "name",user.getFirstName() + " " + user.getLastName()),
                 "emailChange",
@@ -131,20 +131,20 @@ public class UserService {
         ));
     }
 
-    public void changeEmailInit(String email, UUID id) throws EmailAddressInUseException, NotFoundException, TokenGenerationException {
-        if (userRepository.existsByEmail(email)) {
+    public void changeEmailInit(ChangeEmailDTO changeEmailDTO, UUID id) throws EmailAddressInUseException, NotFoundException, TokenGenerationException {
+        if (userRepository.existsByEmail(changeEmailDTO.newEmail())) {
             throw new EmailAddressInUseException(MokExceptionMessages.EMAIL_IN_USE, MokErrorCodes.EMAIL_IN_USE);
         }
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
-        if (user.getEmail().equals(email)) {
+        if (user.getEmail().equals(changeEmailDTO.newEmail())) {
             throw new EmailAddressInUseException(MokExceptionMessages.EMAIL_IN_USE, MokErrorCodes.EMAIL_IN_USE);
         }
-        String token = verificationTokenService.generateEmailVerificationToken(user, email);
+        String token = verificationTokenService.generateEmailVerificationToken(user, changeEmailDTO.newEmail()).getToken();
 
         String url = appUrl + "/verify/email?token=" + token;
         eventPublisher.publishEvent(new HtmlEmailEvent(
                 this,
-                email,
+                changeEmailDTO.newEmail(),
                 Map.of("url", url,
                         "name",user.getFirstName() + " " + user.getLastName()),
                 "emailChange",
@@ -152,50 +152,50 @@ public class UserService {
         ));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class, EmailAddressInUseException.class}, isolation = Isolation.READ_COMMITTED)
-    public void changeOwnEmailFinish(String token) throws VerificationTokenExpiredException, VerificationTokenInvalidException, EmailAddressInUseException {
-        EmailVerificationToken verificationToken = (EmailVerificationToken) verificationTokenService.validateEmailVerificationToken(token);
+    public void changeOwnEmailFinish(ConfirmEmailChangeDTO confirmEmailChangeDTO) throws VerificationTokenExpiredException, VerificationTokenInvalidException, EmailAddressInUseException {
+        EmailVerificationToken verificationToken = (EmailVerificationToken) verificationTokenService.validateEmailVerificationToken(confirmEmailChangeDTO.token());
         User user = verificationToken.getUser();
         user.setEmail(verificationToken.getNewEmail());
         try {
-            user = userRepository.saveAndFlush(user);
-        } catch (Exception e) {
+            userRepository.saveAndFlush(user);
+        } catch (JpaSystemException e) {
             throw new EmailAddressInUseException(MokExceptionMessages.EMAIL_IN_USE, MokErrorCodes.EMAIL_IN_USE);
         }
     }
 
-    public void changeOwnNameAndLastName(String firstName, String lastName, String tagValue) throws NotFoundException, InvalidHeaderException, ApplicationOptimisticLockException {
+    public void changeOwnNameAndLastName(UserDTO userDTO, String tagValue) throws NotFoundException, InvalidHeaderException, ApplicationOptimisticLockException {
         String id = SecurityContextUtil.getCurrentUser();
         User user = userRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
         if(!verifier.verifySignature(user.getId(), user.getVersion(), tagValue)){
             throw new ApplicationOptimisticLockException(ExceptionMessages.OPTIMISTIC_LOCK, ErrorCodes.OPTIMISTIC_LOCK);
         }
 
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
+        user.setFirstName(userDTO.firstName());
+        user.setLastName(userDTO.lastName());
         userRepository.saveAndFlush(user);
     }
 
-    public void changeOwnLanguage(String language) throws NotFoundException {
+    public void changeOwnLanguage(LanguageDTO languageDTO) throws NotFoundException {
         String id = SecurityContextUtil.getCurrentUser();
         User user = userRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
-        user.setLanguage(language);
+        user.setLanguage(languageDTO.language());
         userRepository.saveAndFlush(user);
     }
 
-    public Page<User> findAllUsers(int page, int elements, Specification<User> specification) {
+    public Page<User> findAllUsers(int page, int elements, UsersFilteringDTO filteringDTO) {
+        Specification<User> specification = UserSpecificationUtil.createSpecification(filteringDTO);
         return userRepository.findAll(specification, PageRequest.of(page, elements));
     }
 
-    public void changeNameAndLastName(UUID id, String firstName, String lastName, String tagValue) throws NotFoundException, InvalidHeaderException, ApplicationOptimisticLockException {
+    public void changeNameAndLastName(UUID id, UserDTO userDTO, String tagValue) throws NotFoundException, InvalidHeaderException, ApplicationOptimisticLockException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
 
         if(!verifier.verifySignature(user.getId(), user.getVersion(), tagValue)){
             throw new ApplicationOptimisticLockException(ExceptionMessages.OPTIMISTIC_LOCK, ErrorCodes.OPTIMISTIC_LOCK);
         }
 
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
+        user.setFirstName(userDTO.firstName());
+        user.setLastName(userDTO.lastName());
         userRepository.saveAndFlush(user);
     }
 
@@ -215,7 +215,7 @@ public class UserService {
             }
             String token = null;
             try {
-                token = verificationTokenService.generatePasswordVerificationToken(user);
+                token = verificationTokenService.generatePasswordVerificationToken(user).getToken();
             } catch (TokenGenerationException e) {
                 log.error("Token generation error", e);
             }

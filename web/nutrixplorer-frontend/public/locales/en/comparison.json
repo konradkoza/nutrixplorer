@@ -15,7 +15,7 @@
     "indexComparison": "Index Comparison",
     "fatComparison": "Fat Breakdown",
     "carbsComparison": "Carbohydrate Breakdown",
-    "nutritionalValuesInEnergy": "Nutritional Values in Energy Value",
+    "nutritionalValuesInEnergy": "Nutritional Value in Energy",
     "nutritionalValuesInProducts": "Nutritional Value of Individual Products",
     "numberOfElements": "Number of Elements",
     "allergens": "Allergens",
@@ -23,7 +23,7 @@
     "productsInBasket": "Products in Basket",
     "summaryFFIndex": "Summary FF Index",
     "summarySUMIndex": "Summary SUM Index",
-    "nutritionalValues": "Nutritional Values",
+    "nutritionalValues": "Nutritional Value",
     "carbsSummary": "Total Carbohydrates",
     "fatSummary": "Total Fat",
     "otherCarbs": "Other Carbohydrates",
@@ -35,5 +35,7 @@
     "protein": "Protein",
     "fiber": "Fiber",
     "index": "Index",
-    "salt": "Salt"
+    "salt": "Salt",
+    "comparisonRws": "Comparison of %RI",
+    "otherInformationComparison": "Comparison of other information"
 }

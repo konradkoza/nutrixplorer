@@ -9,13 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
@@ -25,12 +19,10 @@ import pl.lodz.p.it.nutrixplorer.exceptions.mow.messages.MowErrorMessages;
 import pl.lodz.p.it.nutrixplorer.mok.dto.*;
 import pl.lodz.p.it.nutrixplorer.mok.mappers.UserMapper;
 import pl.lodz.p.it.nutrixplorer.mok.services.AuthenticationService;
-import pl.lodz.p.it.nutrixplorer.utils.PasswordHolder;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping("/auth")
-@Transactional(propagation = Propagation.NEVER)
 @Slf4j
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
@@ -42,23 +34,19 @@ public class AuthenticationController {
     private String redirectUrl;
     @Value("${nutrixplorer.oauth.token_url}")
     private String tokenUrl;
-    @Value("${nutrixplorer.proxy}")
-    private boolean proxyEnabled;
 
     @PostMapping("/login")
     @PreAuthorize("permitAll()")
     public ResponseEntity<AuthTokenDTO> login(@RequestBody @Valid AuthenticationDTO authenticationDTO, HttpServletRequest request ) throws UserNotVerifiedException, NotFoundException, UserBlockedException, AuthenctiactionFailedException, LoginAttemptsExceededException {
         String remoteAddr = request.getRemoteAddr();
-        return ResponseEntity.ok(new AuthTokenDTO(authenticationService.login(authenticationDTO.email(), new PasswordHolder(authenticationDTO.password()), authenticationDTO.language(), remoteAddr)));
+        return ResponseEntity.ok(new AuthTokenDTO(authenticationService.login(authenticationDTO, remoteAddr)));
     }
 
     @PostMapping("/register-client")
     public ResponseEntity<UserDTO> registerClient(@RequestBody @Valid RegisterClientDTO registerClientDTO) throws EmailAddressInUseException, UserRegisteringException {
         return ResponseEntity.ok(
                 UserMapper.INSTANCE.userToUserDTO(
-                        authenticationService.registerClient(
-                                registerClientDTO.email(), new PasswordHolder(registerClientDTO.password()), registerClientDTO.firstName(), registerClientDTO.lastName(), registerClientDTO.language()
-                        )));
+                        authenticationService.registerClient(registerClientDTO)));
     }
 
 
@@ -94,21 +82,21 @@ public class AuthenticationController {
     @PostMapping("/activate")
     @PreAuthorize("permitAll()")
     public ResponseEntity<Void> activateAccount(@RequestBody @Valid VerificationTokenDTO activationDTO) throws VerificationTokenInvalidException, VerificationTokenExpiredException, NotFoundException {
-        authenticationService.activateAccount(activationDTO.token());
+        authenticationService.activateAccount(activationDTO);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/reset-password")
     @PreAuthorize("permitAll()")
     public ResponseEntity<Void> resetPassword(@RequestBody @Valid ResetPasswordDTO resetPasswordDTO) throws UserNotVerifiedException, UserBlockedException, OauthUserException {
-        authenticationService.resetPassword(resetPasswordDTO.email());
+        authenticationService.resetPassword(resetPasswordDTO);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/change-password")
     @PreAuthorize("permitAll()")
     public ResponseEntity<Void> changePassword(@RequestBody @Valid ChangePasswordWithTokenDTO changePasswordDTO) throws VerificationTokenInvalidException, NotFoundException, VerificationTokenExpiredException {
-        authenticationService.changePassword(changePasswordDTO.token(), new PasswordHolder(changePasswordDTO.newPassword()));
+        authenticationService.changePassword(changePasswordDTO);
         return ResponseEntity.ok().build();
     }
 

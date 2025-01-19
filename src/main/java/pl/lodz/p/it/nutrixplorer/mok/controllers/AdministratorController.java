@@ -4,25 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import pl.lodz.p.it.nutrixplorer.exceptions.mok.AccessLevelAssignException;
+import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.AccessLevelAssignException;
 import pl.lodz.p.it.nutrixplorer.mok.services.AdministratorService;
-import pl.lodz.p.it.nutrixplorer.utils.SecurityContextUtil;
 
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping("/administrator")
 @Slf4j
-@Transactional(propagation = Propagation.NEVER)
 public class AdministratorController {
     private final AdministratorService administratorService;
 
@@ -34,7 +26,7 @@ public class AdministratorController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(path = "/{id}/access-level")
+    @PatchMapping(path = "/{id}/access-level")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<Void> addAccessLevel(@PathVariable UUID id) throws AccessLevelAssignException, NotFoundException {
         administratorService.addAdministratorAccessLevel(id);

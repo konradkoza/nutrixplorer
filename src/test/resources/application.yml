@@ -1,10 +1,16 @@
 datasource:
   admin:
+    jdbc-url: "jdbc:postgresql://localhost:5432/nutrixplorer"
     username: nutriadmin
     password: adminP@ssw0rd
-  user:
-    username: nutriuser
+  mokuser:
+    jdbc-url: "jdbc:postgresql://localhost:5432/nutrixplorer"
+    username: nutrimokuser
     password: mokP@ssw0rd
+  mowuser:
+    jdbc-url: "jdbc:postgresql://localhost:5432/nutrixplorer"
+    username: nutrimowuser
+    password: mowP@ssw0rd
 spring:
 #  datasource:
 #    driver-class-name: org.postgresql.Driver
@@ -29,7 +35,8 @@ spring:
     hibernate:
       ddl-auto: create-drop
 nutrixplorer:
-  proxy: false
+  transaction:
+      timeout: 15
   remove-unverified: 24
   frontend-url: http://localhost:3000
   login:

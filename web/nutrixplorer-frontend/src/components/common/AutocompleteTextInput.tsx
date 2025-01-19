@@ -99,8 +99,8 @@ const AutocompleteTextInput = ({
                 ) : (
                     focused && (
                         <div className="absolute left-0 z-10 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900">
-                            <ul className="divide-y divide-gray-200 dark:divide-gray-800">
-                                <li className="box-content flex h-5 cursor-pointer items-center gap-2 rounded px-4 py-2 hover:bg-accent">
+                            <ul className="divide-y divide-none rounded-lg bg-popover p-1">
+                                <li className="min-hh-5 box-content flex cursor-pointer items-center gap-2 rounded px-4 py-2 hover:bg-accent">
                                     {isLoading ? (
                                         <div className="flex w-full flex-col gap-2.5">
                                             <Skeleton className="h-6 w-full" />

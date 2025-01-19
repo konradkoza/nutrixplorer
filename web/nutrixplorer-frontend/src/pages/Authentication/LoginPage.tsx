@@ -1,3 +1,4 @@
+import { PasswordInput } from "@/components/common/PasswordInput";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -82,6 +83,7 @@ const LoginPage = () => {
                                         <div className="flex items-center justify-between">
                                             <FormLabel>{t("login.password")}</FormLabel>
                                             <Button
+                                                tabIndex={-1}
                                                 asChild
                                                 variant="link"
                                                 type="button"
@@ -92,7 +94,7 @@ const LoginPage = () => {
                                             </Button>
                                         </div>
                                         <FormControl>
-                                            <Input placeholder="" type="password" {...field} />
+                                            <PasswordInput placeholder="" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

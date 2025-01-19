@@ -1,11 +1,12 @@
 services:
   db:
-    image: postgres:16.6
+    image: postgres:16
     container_name: nutrixplorer-db
     restart: always
+    env_file: "spring.env"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: nutriadmin
+      POSTGRES_PASSWORD: adminP@ssw0rd
     ports:
       - "5432:5432"
     networks:
@@ -13,7 +14,7 @@ services:
     volumes:
       - ./initDb.sql:/docker-entrypoint-initdb.d/init1.sql
   mail:
-    image: rnwood/smtp4dev
+    image: rnwood/smtp4dev:3.6.1
     container_name: nutrixplorer-mail
     restart: always
     ports:

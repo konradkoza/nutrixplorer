@@ -66,7 +66,6 @@ export type FilteringFormType = {
 };
 
 const indexFields = [
-    { min: "minIndexE", label: "EN" },
     { min: "minIndexV", label: "VIT" },
     { min: "minIndexM", label: "MIN" },
     { min: "minIndexO", label: "OM3" },

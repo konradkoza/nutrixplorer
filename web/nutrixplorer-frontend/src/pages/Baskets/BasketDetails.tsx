@@ -43,14 +43,23 @@ import RwsCard from "./RwsCard";
 import UpdateQuantityDialog from "./UpdateQuantityDialog";
 import { useTranslation } from "react-i18next";
 import { TranslationNS } from "@/utils/translationNamespaces";
+import { LuRefreshCw } from "react-icons/lu";
 
 const BasketDetails = () => {
     const { t, i18n } = useTranslation([TranslationNS.Baskets, TranslationNS.Allergens]);
     const { id } = useParams<{ id: string }>();
-    const { data: basket, isLoading: isLoadingDetails } = useGetBasketDetailsQuery(id!, {
+    const {
+        data: basket,
+        isLoading: isLoadingDetails,
+        refetch: refetchBasket,
+    } = useGetBasketDetailsQuery(id!, {
         skip: !id,
     });
-    const { data: nutritions, isLoading: isLoadingNutritions } = useGetBasketNutritionsQuery(id!, {
+    const {
+        data: nutritions,
+        isLoading: isLoadingNutritions,
+        refetch: refetchNutritions,
+    } = useGetBasketNutritionsQuery(id!, {
         skip: !id,
     });
     const { data: allergens, isLoading: isLoadingAllergens } = useGetBasketAllergensQuery(id!, {
@@ -89,6 +98,11 @@ const BasketDetails = () => {
         setUnit(unit);
     };
 
+    const refreshData = () => {
+        refetchBasket();
+        refetchNutritions();
+    };
+
     return (
         <div className="flex w-full justify-center">
             <div className="container flex flex-col gap-2">
@@ -119,6 +133,9 @@ const BasketDetails = () => {
                                 <PencilIcon />
                                 {t("editBasket")}
                             </Button>
+                            <Button variant="ghost" onClick={refreshData} className="">
+                                <LuRefreshCw size={24} />
+                            </Button>
                         </div>
                     )}
                 </div>
@@ -128,7 +145,7 @@ const BasketDetails = () => {
                 ) : (
                     basket && (
                         <>
-                            <Card>
+                            <Card className="relative">
                                 <div className="flex justify-between">
                                     <CardHeader className="w-full">
                                         <CardTitle className="flex w-full justify-between text-3xl">

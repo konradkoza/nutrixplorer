@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,22 +17,30 @@ import pl.lodz.p.it.nutrixplorer.exceptions.mow.codes.MowErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.messages.MowErrorMessages;
 import pl.lodz.p.it.nutrixplorer.model.mow.Basket;
 import pl.lodz.p.it.nutrixplorer.model.mow.BasketEntry;
+import pl.lodz.p.it.nutrixplorer.mow.dto.BasketEntryDTO;
+import pl.lodz.p.it.nutrixplorer.mow.dto.BasketFilteringDTO;
+import pl.lodz.p.it.nutrixplorer.mow.dto.CreateBasketDTO;
+import pl.lodz.p.it.nutrixplorer.mow.dto.UpdateEntryDTO;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.BasketEntryRepository;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.BasketRepository;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.MowClientRepository;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.ProductRepository;
 import pl.lodz.p.it.nutrixplorer.mow.repositories.dto.NutritionalValueSummaryDTO;
+import pl.lodz.p.it.nutrixplorer.utils.BasketSpecificationUtil;
 import pl.lodz.p.it.nutrixplorer.utils.ETagSigner;
 import pl.lodz.p.it.nutrixplorer.utils.SecurityContextUtil;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+@Transactional(
+        propagation = Propagation.REQUIRES_NEW,
+        isolation = Isolation.READ_COMMITTED,
+        rollbackFor = BaseWebException.class,
+        transactionManager = "mowTransactionManager")
 @LoggingInterceptor
 public class BasketService {
     private final BasketRepository basketRepository;
@@ -40,36 +49,34 @@ public class BasketService {
     private final MowClientRepository clientRepository;
     private final ETagSigner verifier;
 
-    @Transactional(rollbackFor = {BasketNameNotUniqueException.class}, isolation = Isolation.READ_COMMITTED)
-    public Basket createBasket(String name, String description) throws NotFoundException, BasketNameNotUniqueException {
+    public Basket createBasket(CreateBasketDTO createBasketDTO) throws NotFoundException, BasketNameNotUniqueException {
         Basket basket = new Basket();
-        basket.setName(name);
-        basket.setDescription(description);
+        basket.setName(createBasketDTO.name());
+        basket.setDescription(createBasketDTO.description());
         UUID userId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         basket.setClient(clientRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(MowErrorMessages.USER_NOT_FOUND, MowErrorCodes.USER_NOT_FOUND)));
         try {
             basketRepository.saveAndFlush(basket);
-        } catch (Exception e) {
+        } catch (JpaSystemException e) {
             throw new BasketNameNotUniqueException(MowErrorMessages.BASKET_NAME_NOT_UNIQUE, MowErrorCodes.BASKET_NAME_NOT_UNIQUE, e);
         }
         return basket;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {BasketEntryException.class}, isolation = Isolation.READ_COMMITTED)
-    public Basket addEntryToBasket(UUID basketId, UUID productId, BigDecimal quantity) throws NotFoundException, BasketEntryException {
-        if (quantity.compareTo(BigDecimal.ZERO) <= 0) {
+    public Basket addEntryToBasket(UUID basketId, BasketEntryDTO entryDTO) throws NotFoundException, BasketEntryException {
+        if (entryDTO.quantity().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BasketEntryException(MowErrorMessages.INVALID_QUANTITY, MowErrorCodes.INVALID_QUANTITY);
         }
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         Basket basket = basketRepository.findByIdAndUserId(basketId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
 
         BasketEntry entry = new BasketEntry();
-        entry.setProduct(productRepository.findById(productId).orElseThrow(() -> new NotFoundException(MowErrorMessages.PRODUCT_NOT_FOUND, MowErrorCodes.PRODUCT_NOT_FOUND)));
-        entry.setUnits(quantity);
+        entry.setProduct(productRepository.findById(entryDTO.productId()).orElseThrow(() -> new NotFoundException(MowErrorMessages.PRODUCT_NOT_FOUND, MowErrorCodes.PRODUCT_NOT_FOUND)));
+        entry.setUnits(entryDTO.quantity());
         entry.setBasket(basket);
         try {
             basketEntryRepository.saveAndFlush(entry);
-        } catch (Exception e) {
+        } catch (JpaSystemException e) {
             throw new BasketEntryException(MowErrorMessages.PRODUCT_ALREADY_IN_BASKET, MowErrorCodes.PRODUCT_ALREADY_IN_BASKET, e);
         }
         return basket;
@@ -81,12 +88,12 @@ public class BasketService {
         basketEntryRepository.deleteById(basketEntry.getId());
     }
 
-    public List<Basket> getUserBaskets() throws NotFoundException {
+    public List<Basket> getUserBaskets() {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         return basketRepository.findAllByUserId(currentUserId);
     }
 
-    public List<Basket> getUserBasketsByName(String name) throws NotFoundException {
+    public List<Basket> getUserBasketsByName(String name) {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         Specification<Basket> specification = Specification.where((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("client").get("user").get("id"), currentUserId));
         specification = specification.and((root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
@@ -104,18 +111,14 @@ public class BasketService {
         basketRepository.delete(basket);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {BasketEntryException.class}, isolation = Isolation.READ_COMMITTED)
-    public void updateEntry(UUID id, BigDecimal quantity) throws NotFoundException, BasketEntryException {
-        if (quantity.compareTo(BigDecimal.ZERO) <= 0) {
+    public void updateEntry(UUID id, UpdateEntryDTO entryDTO) throws NotFoundException, BasketEntryException {
+        if (entryDTO.quantity().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BasketEntryException(MowErrorMessages.INVALID_QUANTITY, MowErrorCodes.INVALID_QUANTITY);
         }
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         BasketEntry basketEntry = basketEntryRepository.findByIdAndUser(id, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND));
-        Basket basket = basketRepository.findByIdAndUserIdForUpdate(basketEntry.getBasket().getId(), currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
-        BasketEntry entry = basket.getBasketEntries().stream().filter((entry1) -> entry1.getId().equals(basketEntry.getId())).findFirst().orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND));
-        basket.setUpdatedAt(LocalDateTime.now()); // TODO: check if it is necessary
-        entry.setUnits(quantity);
-        basketRepository.saveAndFlush(basket);
+        basketEntry.setUnits(entryDTO.quantity());
+        basketEntryRepository.saveAndFlush(basketEntry);
 
     }
 
@@ -129,29 +132,29 @@ public class BasketService {
     }
 
 
-    public void updateBasket(UUID basketId, String name, String description, String tagValue) throws NotFoundException, ApplicationOptimisticLockException, InvalidHeaderException, BasketNameNotUniqueException {
+    public void updateBasket(UUID basketId, CreateBasketDTO basketDTO, String tagValue) throws NotFoundException, ApplicationOptimisticLockException, InvalidHeaderException, BasketNameNotUniqueException {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         Basket basket = basketRepository.findByIdAndUserId(basketId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
         if (!verifier.verifySignature(basket.getId(), basket.getVersion(), tagValue)) {
             throw new ApplicationOptimisticLockException(ExceptionMessages.OPTIMISTIC_LOCK, ErrorCodes.OPTIMISTIC_LOCK);
         }
-        basket.setName(name);
-        basket.setDescription(description);
+        basket.setName(basketDTO.name());
+        basket.setDescription(basketDTO.description());
         try {
             basketRepository.saveAndFlush(basket);
-        } catch (Exception e) {
+        } catch (JpaSystemException e) {
             throw new BasketNameNotUniqueException(MowErrorMessages.BASKET_NAME_NOT_UNIQUE, MowErrorCodes.BASKET_NAME_NOT_UNIQUE, e);
         }
 
     }
 
-    public Basket cloneBasket(UUID basketId, String name, String description) throws NotFoundException, BasketNameNotUniqueException {
+    public Basket cloneBasket(UUID basketId, CreateBasketDTO basketDTO) throws NotFoundException, BasketNameNotUniqueException {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         Basket basket = basketRepository.findByIdAndUserId(basketId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
         Basket newBasket = new Basket();
         newBasket.setClient(basket.getClient());
-        newBasket.setName(name);
-        newBasket.setDescription(description);
+        newBasket.setName(basketDTO.name());
+        newBasket.setDescription(basketDTO.description());
         List<BasketEntry> newEntries = basket.getBasketEntries().stream().map(
                 (entry) -> new BasketEntry(entry.getProduct(), entry.getUnits(), newBasket)
         ).toList();
@@ -159,12 +162,13 @@ public class BasketService {
 
         try {
             return basketRepository.saveAndFlush(newBasket);
-        } catch (Exception e) {
+        } catch (JpaSystemException e) {
             throw new BasketNameNotUniqueException(MowErrorMessages.BASKET_NAME_NOT_UNIQUE, MowErrorCodes.BASKET_NAME_NOT_UNIQUE, e);
         }
     }
 
-    public Page<Basket> getFilteredBaskets(int elements, int page, Specification<Basket> specification) {
+    public Page<Basket> getFilteredBaskets(int elements, int page, BasketFilteringDTO filters) {
+        Specification<Basket> specification = BasketSpecificationUtil.createSpecification(filters);
         PageRequest pageRequest = PageRequest.of(page, elements);
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         specification = specification.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("client").get("user").get("id"), currentUserId));

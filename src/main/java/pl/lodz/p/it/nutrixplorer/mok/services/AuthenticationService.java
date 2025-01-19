@@ -6,12 +6,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.configuration.LoggingInterceptor;
+import pl.lodz.p.it.nutrixplorer.exceptions.BaseWebException;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.*;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.MokErrorCodes;
@@ -20,22 +22,24 @@ import pl.lodz.p.it.nutrixplorer.mail.HtmlEmailEvent;
 import pl.lodz.p.it.nutrixplorer.model.mok.Client;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
 import pl.lodz.p.it.nutrixplorer.model.mok.VerificationToken;
-import pl.lodz.p.it.nutrixplorer.mok.dto.GoogleOauth2Payload;
-import pl.lodz.p.it.nutrixplorer.mok.dto.GoogleOauth2Response;
-import pl.lodz.p.it.nutrixplorer.mok.repositories.AdministratorRepository;
+import pl.lodz.p.it.nutrixplorer.mok.dto.*;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.ClientRepository;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.UserRepository;
-import pl.lodz.p.it.nutrixplorer.utils.PasswordHolder;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Base64;
+import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+@Transactional(
+        propagation = Propagation.REQUIRES_NEW,
+        isolation = Isolation.READ_COMMITTED,
+        transactionManager = "mokTransactionManager", rollbackFor = {BaseWebException.class})
 @LoggingInterceptor
 public class AuthenticationService {
 
@@ -43,10 +47,10 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final ClientRepository clientRepository;
-    private final AdministratorRepository administratorRepository;
+//    private final AdministratorRepository administratorRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final VerificationTokenService verificationTokenService;
-
+    private final UserRolesService userRolesService;
     @Value("${nutrixplorer.login.max-attempts:3}")
     private int maxLoginAttempts;
 
@@ -56,10 +60,8 @@ public class AuthenticationService {
     @Value("${nutrixplorer.frontend-url}")
     private String appUrl;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
-    public String login(String email, PasswordHolder password, String language, String remoteAddr) throws NotFoundException, AuthenctiactionFailedException, UserBlockedException, UserNotVerifiedException, LoginAttemptsExceededException {
-        log.info("Logging in");
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new AuthenctiactionFailedException(MokExceptionMessages.INVALID_CREDENTIALS, MokErrorCodes.INVALID_CREDENTIALS));
+    public String login(AuthenticationDTO authenticationDTO, String remoteAddr) throws NotFoundException, AuthenctiactionFailedException, UserBlockedException, UserNotVerifiedException, LoginAttemptsExceededException {
+        User user = userRepository.findByEmail(authenticationDTO.email()).orElseThrow(() -> new AuthenctiactionFailedException(MokExceptionMessages.INVALID_CREDENTIALS, MokErrorCodes.INVALID_CREDENTIALS));
 
         if (user.getLoginAttempts() >= maxLoginAttempts && Duration.between(user.getLastFailedLogin(), LocalDateTime.now()).toSeconds() <= loginTimeOut) {
             throw new LoginAttemptsExceededException(MokExceptionMessages.SIGN_IN_BLOCKED, MokErrorCodes.SIGN_IN_BLOCKED);
@@ -70,7 +72,7 @@ public class AuthenticationService {
         if (user.getPassword() == null) {
             throw new AuthenctiactionFailedException(MokExceptionMessages.OAUTH2_USER, MokErrorCodes.OAUTH2_USER);
         }
-        if (passwordEncoder.matches(password.getPassword(), user.getPassword())) {
+        if (passwordEncoder.matches(authenticationDTO.password(), user.getPassword())) {
             if (!user.isVerified()) {
                 throw new UserNotVerifiedException(MokExceptionMessages.UNVERIFIED_ACCOUNT, MokErrorCodes.UNVERIFIED_ACCOUNT);
             }
@@ -80,10 +82,10 @@ public class AuthenticationService {
             user.setLastSuccessfulLogin(LocalDateTime.now());
             user.setLoginAttempts(0);
             user.setLastSuccessfulLoginIp(remoteAddr);
-            user.setLanguage(language);
+            user.setLanguage(authenticationDTO.language());
             userRepository.saveAndFlush(user);
-            log.info("Session started for user: {} - with id: {}, from address IP: {}", user.getEmail(), user.getId(), remoteAddr);
-            return jwtService.generateToken(user.getId(), getUserRoles(user));
+            log.info("Session started for user with id: {}, from address IP: {}", user.getId(), remoteAddr);
+            return jwtService.generateToken(user.getId(), userRolesService.getUserRoles(user.getId())).getTokenValue();
         } else {
             user.setLastFailedLogin(LocalDateTime.now());
             user.setLastFailedLoginIp(remoteAddr);
@@ -112,54 +114,34 @@ public class AuthenticationService {
         }
     }
 
-    @Transactional(propagation = Propagation.MANDATORY, isolation = Isolation.READ_COMMITTED)
-    public List<String> getUserRoles(User user) {
-        List<String> roles = new ArrayList<>();
-
-        clientRepository.findByUserId(user.getId()).ifPresent(owner -> {
-            if (owner.isActive()) {
-                roles.add("CLIENT");
-            }
-        });
-        administratorRepository.findByUserId(user.getId()).ifPresent(admin -> {
-            if (admin.isActive()) {
-                roles.add("ADMINISTRATOR");
-            }
-        });
-
-        return roles;
-    }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {EmailAddressInUseException.class, UserRegisteringException.class}, isolation = Isolation.READ_COMMITTED)
-    public User registerClient(String email, PasswordHolder password, String firstName, String lastName, String language) throws EmailAddressInUseException, UserRegisteringException {
+    public User registerClient(RegisterClientDTO registerClientDTO) throws EmailAddressInUseException, UserRegisteringException {
 
         User user = new User();
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password.getPassword()));
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
+        user.setEmail(registerClientDTO.email());
+        user.setPassword(passwordEncoder.encode(registerClientDTO.password()));
+        user.setFirstName(registerClientDTO.firstName());
+        user.setLastName(registerClientDTO.lastName());
         user.setVerified(false);
         user.setBlocked(false);
-        user.setLanguage(language);
+        user.setLanguage(registerClientDTO.language());
         Client client = new Client();
         client.setUser(user);
         client.setActive(true);
         try {
             user = clientRepository.saveAndFlush(client).getUser();
-            String token = verificationTokenService.generateAccountVerificationToken(user);
+            String token = verificationTokenService.generateAccountVerificationToken(user).getToken();
             String verificationLink = appUrl + "/verify/activation?token=" + token;
-            eventPublisher.publishEvent(new HtmlEmailEvent(this, email,
-                    Map.of("name", firstName + " " + lastName, "url", verificationLink), "verifyAccount", user.getLanguage()));
+            eventPublisher.publishEvent(new HtmlEmailEvent(this, user.getEmail(),
+                    Map.of("name", user.getFirstName() + " " + user.getLastName(), "url", verificationLink), "verifyAccount", user.getLanguage()));
             return user;
         } catch (TokenGenerationException e) {
             throw new UserRegisteringException(MokExceptionMessages.UNEXPECTED_ERROR, MokErrorCodes.UNEXPECTED_ERROR, e);
-        } catch (Exception e) {
+        } catch (JpaSystemException e) {
             throw new EmailAddressInUseException(MokExceptionMessages.EMAIL_IN_USE, MokErrorCodes.EMAIL_IN_USE);
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = EmailAddressInUseException.class, isolation = Isolation.READ_COMMITTED)
-    public String signInOAuth(GoogleOauth2Response response, String remoteAddr) throws UserBlockedException, EmailAddressInUseException, Oauth2Exception, JsonProcessingException {
+    public String signInOAuth(GoogleOauth2Response response, String remoteAddr) throws UserBlockedException, EmailAddressInUseException, JsonProcessingException {
 
         String token = response.getIdToken();
         String[] tokenChunks = token.split("\\.");
@@ -185,7 +167,7 @@ public class AuthenticationService {
             client.setActive(true);
             try {
                 user = clientRepository.saveAndFlush(client).getUser();
-            } catch (Exception e) {
+            } catch (JpaSystemException e) {
                 throw new EmailAddressInUseException(MokExceptionMessages.OAUTH_EMAIL_IN_USE, MokErrorCodes.OAUTH_EMAIL_IN_USE);
             }
         } else {
@@ -199,12 +181,11 @@ public class AuthenticationService {
             throw new UserBlockedException(MokExceptionMessages.ACCOUNT_BLOCKED, MokErrorCodes.ACCOUNT_BLOCKED);
         }
         log.info("Session started for user: {} - with id: {}, from address IP: {}, user logged in with external provider", user.getEmail(), user.getId(), remoteAddr);
-        return jwtService.generateToken(user.getId(), getUserRoles(user));
+        return jwtService.generateToken(user.getId(), userRolesService.getUserRoles(user.getId())).getTokenValue();
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class, NotFoundException.class}, isolation = Isolation.READ_COMMITTED)
-    public void activateAccount(String token) throws VerificationTokenInvalidException, VerificationTokenExpiredException, NotFoundException {
-        VerificationToken verificationToken = verificationTokenService.validateAccountVerificationToken(token);
+    public void activateAccount(VerificationTokenDTO verificationTokenDTO) throws VerificationTokenInvalidException, VerificationTokenExpiredException, NotFoundException {
+        VerificationToken verificationToken = verificationTokenService.validateAccountVerificationToken(verificationTokenDTO.token());
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
         eventPublisher.publishEvent(new HtmlEmailEvent(
                 this,
@@ -219,9 +200,8 @@ public class AuthenticationService {
 
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {VerificationTokenInvalidException.class, VerificationTokenExpiredException.class, UserBlockedException.class, UserNotVerifiedException.class}, isolation = Isolation.READ_COMMITTED)
-    public void resetPassword(String email) throws UserNotVerifiedException, UserBlockedException, OauthUserException {
-        Optional<User> userOptional = userRepository.findByEmail(email);
+    public void resetPassword(ResetPasswordDTO resetPasswordDTO) throws UserNotVerifiedException, UserBlockedException, OauthUserException {
+        Optional<User> userOptional = userRepository.findByEmail(resetPasswordDTO.email());
         if (userOptional.isPresent()) {
 
             User user = userOptional.get();
@@ -236,7 +216,7 @@ public class AuthenticationService {
             }
             String token = null;
             try {
-                token = verificationTokenService.generatePasswordVerificationToken(user);
+                token = verificationTokenService.generatePasswordVerificationToken(user).getToken();
             } catch (TokenGenerationException e) {
                 log.error("Token generation error", e);
             }
@@ -245,7 +225,7 @@ public class AuthenticationService {
 
                 eventPublisher.publishEvent(new HtmlEmailEvent(
                         this,
-                        email,
+                        user.getEmail(),
                         Map.of("url", url,
                                 "name", user.getFirstName() + " " + user.getLastName()),
                         "passwordChange",
@@ -256,10 +236,10 @@ public class AuthenticationService {
 
     }
 
-    public void changePassword(String token, PasswordHolder password) throws VerificationTokenInvalidException, VerificationTokenExpiredException, NotFoundException {
-        VerificationToken verificationToken = verificationTokenService.validatePasswordVerificationToken(token);
+    public void changePassword(ChangePasswordWithTokenDTO passwordWithTokenDTO) throws VerificationTokenInvalidException, VerificationTokenExpiredException, NotFoundException {
+        VerificationToken verificationToken = verificationTokenService.validatePasswordVerificationToken(passwordWithTokenDTO.token());
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
-        user.setPassword(passwordEncoder.encode(password.getPassword()));
+        user.setPassword(passwordEncoder.encode(passwordWithTokenDTO.newPassword()));
         userRepository.saveAndFlush(user);
     }
 }

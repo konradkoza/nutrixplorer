@@ -133,7 +133,6 @@ const AddToBasketDialog = ({
                                         <FormLabel>{t("addToBasket.quantity")}</FormLabel>
                                         <FormControl>
                                             <UnitInput
-                                                autoFocus
                                                 className=""
                                                 unit={unit}
                                                 type="number"

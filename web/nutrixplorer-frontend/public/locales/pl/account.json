@@ -39,5 +39,6 @@
     "lastFailedLogin": "Ostatnie nieudane logowanie",
     "fromIP": "z adresem IP",
     "noFailedLogins": "Brak nieudanych logowań",
+    "noSuccessfulLogins": "Brak udanych logowań",
     "loginData": "Informacje o logowaniu"
 }

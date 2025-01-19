@@ -1,11 +1,9 @@
 package pl.lodz.p.it.nutrixplorer.mow.repositories.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 public class NutritionalValueSummaryDTO {
     private String name;

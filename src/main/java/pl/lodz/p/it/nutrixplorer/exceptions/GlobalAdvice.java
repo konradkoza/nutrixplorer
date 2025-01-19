@@ -7,6 +7,7 @@ import org.hibernate.exception.JDBCConnectionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -25,7 +26,7 @@ public class GlobalAdvice {
 
     @ExceptionHandler(BaseWebException.class)
     public ResponseEntity<ErrorResponseDTO> handleBaseWebException(BaseWebException e) {
-        log.error("Base web exception", e);
+        log.error("Base web exception caught", e);
         return ResponseEntity.status(e.getHttpStatus())
                 .body(new ErrorResponseDTO(e.getMessage(), e.getErrorCode()));
     }
@@ -83,6 +84,13 @@ public class GlobalAdvice {
                 .body(new ErrorResponseDTO(ExceptionMessages.INVALID_REQUEST_PARAMETER, ErrorCodes.INVALID_REQUEST_PARAMETER));
     }
 
+    @ExceptionHandler(CannotCreateTransactionException.class)
+    public ResponseEntity<ErrorResponseDTO> handleCannotCreateTransactionException(CannotCreateTransactionException e) {
+        log.error("Database connection lost", e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponseDTO(ExceptionMessages.DATABASE_CONNECTION_ERROR, ErrorCodes.DATABASE_CONNECTION_ERROR));
+    }
+
 //    AuthorizationDeniedException
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<ErrorResponseDTO> handleAuthorizationDeniedException(AuthorizationDeniedException e) {
@@ -90,5 +98,6 @@ public class GlobalAdvice {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(new ErrorResponseDTO(e.getMessage(), ErrorCodes.AUTHORIZATION_DENIED));
     }
+
 
 }

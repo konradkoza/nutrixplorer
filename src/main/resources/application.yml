@@ -27,29 +27,34 @@ datasource:
     jdbc-url: "jdbc:postgresql://localhost:5432/nutrixplorer"
     username: nutriadmin
     password: adminP@ssw0rd
-  user:
+  mokuser:
     jdbc-url: "jdbc:postgresql://localhost:5432/nutrixplorer"
-    username: nutriuser
+    username: nutrimokuser
     password: mokP@ssw0rd
-logging:
-  level:
-    web: debug
-    org:
-    hibernate:
-      type:
-        descriptor:
-          sql:
-            BasicBinder: trace
-      springframework:
-        transaction: debug
-        transaction.interceptor: trace
-        security: debug
-        orm:
-          jpa: debug
+  mowuser:
+    jdbc-url: "jdbc:postgresql://localhost:5432/nutrixplorer"
+    username: nutrimowuser
+    password: mowP@ssw0rd
+#logging:
+#  level:
+#    web: debug
+#    org:
+#    hibernate:
+#      type:
+#        descriptor:
+#          sql:
+#            BasicBinder: trace
+#      springframework:
+#        transaction: debug
+#        transaction.interceptor: trace
+#        security: debug
+#        orm:
+#          jpa: debug
 
     sql: debug
 nutrixplorer:
-  proxy: false
+  transaction:
+    timeout: 15
   remove-unverified: 24
   frontend-url: http://localhost:3000
   login:
@@ -58,7 +63,7 @@ nutrixplorer:
   jwt:
     public-key-path: classpath:public.pem
     private-key-path: classpath:private.pem
-    expiration: 12
+    expiration: 2
   jws:
     secret: ZhLR58MdJjGl6MAlEC9OWUkS34KTEsYd
   oauth:

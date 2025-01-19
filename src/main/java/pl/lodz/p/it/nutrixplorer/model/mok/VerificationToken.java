@@ -38,4 +38,9 @@ public abstract class VerificationToken extends AbstractEntity implements Serial
     @ManyToOne
     @JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false, updatable = false)
     private User user;
+
+    @Override
+    public String toString() {
+        return "VerificationToken(token=" + "************" + ", expirationDate=" + this.getExpirationDate() + ", user=" + this.getUser() + ")";
+    }
 }

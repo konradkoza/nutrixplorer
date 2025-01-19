@@ -12,7 +12,6 @@ import pl.lodz.p.it.nutrixplorer.model.AbstractEntity;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 @Entity
 @Table( name = "ADDITION")
 public class Addition extends AbstractEntity {

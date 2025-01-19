@@ -1,7 +1,7 @@
 {
     "products":"Products",
     "client": "Client",
-    "admin": "Admin",
+    "admin": "Administrator",
     "compare": "Compare",
     "favourites": "Favourites",
     "baskets": "Baskets",

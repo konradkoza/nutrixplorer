@@ -35,7 +35,6 @@ const ForgotPassword = () => {
         try {
             await forgotPassword(data.email);
             navigate("/login");
-            console.log("Email sent");
         } catch (error) {
             console.error(error);
         }

@@ -39,5 +39,6 @@
     "lastFailedLogin": "Last failed login",
     "fromIP": "from IP address",
     "noFailedLogins": "No failed logins",
+    "noSuccessfulLogins": "No successful logins",
     "loginData": "Information about logins"
 }

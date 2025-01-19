@@ -24,13 +24,13 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED, transactionManager = "mokTransactionManager")
 @LoggingInterceptor
 public class AdministratorService {
     private final AdministratorRepository administratorRepository;
     private final UserRepository userRepository;
     private final ApplicationEventPublisher eventPublisher;
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+
     public void addAdministratorAccessLevel(UUID id) throws NotFoundException, AccessLevelAssignException {
         Optional<Administrator> administratorOptional = administratorRepository.findByUserId(id);
 
@@ -58,7 +58,6 @@ public class AdministratorService {
                         administrator.getUser().getLanguage()));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public void removeAdministratorAccessLevel(UUID id) throws AccessLevelAssignException {
         Optional<Administrator> administrator = administratorRepository.findByUserId(id);
         UUID administratorId = UUID.fromString(SecurityContextUtil.getCurrentUser());

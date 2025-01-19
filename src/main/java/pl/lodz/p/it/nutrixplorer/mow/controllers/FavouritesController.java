@@ -5,9 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.ProductAlreadyFavourite;
@@ -21,10 +18,9 @@ import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping("/favourites")
 @Slf4j
-@Transactional(propagation = Propagation.NEVER)
 public class FavouritesController {
 
 
@@ -42,15 +38,12 @@ public class FavouritesController {
     public ResponseEntity<ProductsListDTO> getFavoriteProductsPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int elements) throws NotFoundException {
 
         Page<Product> products = favouriteProductsService.getCurrentUserFavoriteProducts(page, elements);
-        log.info("Total elements: {}", products.getTotalElements());
-        log.info("Total pages: {}", products.getTotalPages());
         return ResponseEntity.ok(new ProductsListDTO(ProductMapper.INSTANCE.productsToProductSimpleDTOs(products.getContent()), products.getTotalPages()));
     }
 
     @PostMapping("/product/{productId}/add")
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<Void> addProductToFavourites(@PathVariable UUID productId) throws NotFoundException, ProductAlreadyFavourite {
-
         favouriteProductsService.addProductToFavourites(productId);
         return ResponseEntity.ok().build();
     }

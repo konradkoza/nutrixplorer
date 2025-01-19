@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED, transactionManager = "mokTransactionManager")
 @RequiredArgsConstructor
 @Slf4j
 @LoggingInterceptor
@@ -66,7 +66,7 @@ public class AccountSchedulingService {
             String token = null;
             if (tokenOptional.isEmpty()) {
                 try {
-                    token = verificationTokenService.generateAccountVerificationToken(user);
+                    token = verificationTokenService.generateAccountVerificationToken(user).getToken();
                 } catch (TokenGenerationException e) {
                     log.error("Error while generating verification token", e);
                 }

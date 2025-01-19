@@ -12,21 +12,27 @@ import ChangeEmailDialog from "./ChangeEmailDialog";
 import ChangeNameDialog from "./ChangeNameDialog";
 import ChangePasswordDialog from "./ChangePasswordDialog";
 import { format } from "date-fns";
+import { Button } from "@/components/ui/button";
+import { LuRefreshCw } from "react-icons/lu";
 
 const AccountPage = () => {
     const [t, i18n] = useTranslation(TranslationNS.Account);
-    const { data: user } = useGetMeDetailsQuery();
+    const { data: user, refetch } = useGetMeDetailsQuery();
     const [changeEmail] = useChangeEmailMutation();
     const [changeName] = useChangeNameMutation();
     const breadcrumbs = useBreadcrumbs([
         { title: t("breadcrumbs.home"), path: "/" },
         { title: t("breadcrumbs.account"), path: "/account" },
     ]);
+
     return (
         <div className="flex w-full justify-center">
             <div className="container flex w-full flex-col gap-3">
                 {breadcrumbs}
-                <Card>
+                <Card className="relative">
+                    <Button variant="ghost" onClick={refetch} className="absolute right-2 top-2">
+                        <LuRefreshCw size={24} />
+                    </Button>
                     <CardHeader>
                         <CardTitle className="text-3xl">{t("account")}</CardTitle>
                     </CardHeader>

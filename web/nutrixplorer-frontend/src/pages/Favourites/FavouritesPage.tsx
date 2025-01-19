@@ -30,6 +30,7 @@ const FavouritesPage = () => {
                     <ProductsList
                         products={productPage.products}
                         favouriteProducts={productPage.products}
+                        addToBasket
                     />
                 )
             )}

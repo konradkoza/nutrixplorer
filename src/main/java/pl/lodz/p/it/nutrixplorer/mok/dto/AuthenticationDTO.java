@@ -22,6 +22,7 @@ public record AuthenticationDTO(
         return "AuthenticationDTO{" +
                 "email='" + email + '\'' +
                 ", password='********'" +
+                ", language='" + language + '\'' +
                 '}';
     }
 }

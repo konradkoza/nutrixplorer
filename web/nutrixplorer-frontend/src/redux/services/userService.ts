@@ -36,7 +36,7 @@ const UserService = api.injectEndpoints({
             query: ({ id, email }) => ({
                 url: `/users/${id}/email`,
                 method: "PATCH",
-                body: { email },
+                body: { newEmail: email },
             }),
             invalidatesTags: (_result, _error, { id }) => [{ type: "Users", id }],
         }),

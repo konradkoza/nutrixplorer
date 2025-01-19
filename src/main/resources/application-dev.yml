@@ -6,22 +6,37 @@ spring:
   flyway:
     url: jdbc:postgresql://nutrixplorer-db:5432/nutrixplorer
   mail:
-    host: nutrixplorer-mail
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USER}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 logging:
   file:
     name: /var/log/nutrixplorer.log
+
 datasource:
   admin:
     jdbc-url: "jdbc:postgresql://nutrixplorer-db:5432/nutrixplorer"
     username: ${ADMIN_DB_USER}
     password: ${ADMIN_DB_PASSWORD}
-  user:
+  mokuser:
     jdbc-url: "jdbc:postgresql://nutrixplorer-db:5432/nutrixplorer"
-    username: ${USER_DB_USER}
-    password: ${USER_DB_PASSWORD}
+    username: ${MOK_DB_USER}
+    password: ${MOK_DB_PASSWORD}
+  mowuser:
+    jdbc-url: "jdbc:postgresql://nutrixplorer-db:5432/nutrixplorer"
+    username: ${MOW_DB_USER}
+    password: ${MOW_DB_PASSWORD}
 
 nutrixplorer:
-  proxy: true
+  transaction:
+    timeout: 15
   frontend-url: https://localhost
   jws:
     secret: ${JWS_SECRET_KEY}

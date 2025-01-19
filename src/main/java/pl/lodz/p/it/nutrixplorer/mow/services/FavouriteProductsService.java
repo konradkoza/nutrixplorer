@@ -24,7 +24,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED, transactionManager = "mowTransactionManager")
 @Slf4j
 @LoggingInterceptor
 public class FavouriteProductsService {
@@ -34,7 +34,7 @@ public class FavouriteProductsService {
     private final ProductRepository productRepository;
 
 
-    public List<Product> getCurrentUserFavoriteProducts() throws NotFoundException {
+    public List<Product> getCurrentUserFavoriteProducts() {
         UUID id = UUID.fromString(SecurityContextUtil.getCurrentUser());
         return productRepository.findFavoriteProductsByUserId(id);
     }

@@ -10,7 +10,7 @@
     "favouriteProductAlreadyExists": "Favourite product already exists",
     "basketNameNotUnique": "Basket name is already taken",
     "clientNotFound": "Client not found",
-    "oauthEmailInUse": "Email address is used by an account with Google login",
+    "oauthEmailInUse": "Email address is used by an account with different login method",
     "oauth2AuthenticationError": "Google login error",
     "invalidCredentials": "Invalid login credentials",
     "unverifiedAccount": "Unverified account",
@@ -41,5 +41,7 @@
     "invalidIfMatch": "Invalid If-Match header",
     "databaseConnectionError": "Database connection error",
     "invalidRequestParam": "Invalid request parameter",
-    "productAlreadyInBasket": "Product is already in the basket, you can change the quantity in the basket"
+    "productAlreadyInBasket": "Product is already in the basket, you can change the quantity",
+    "sessionExpiredTitle": "Session expired",
+    "sessionExpired": "Log in again"
 }

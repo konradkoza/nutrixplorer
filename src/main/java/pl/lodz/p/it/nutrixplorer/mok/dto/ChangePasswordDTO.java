@@ -11,4 +11,11 @@ public record ChangePasswordDTO(
         @Size(min = 8, max = 100, message = "New password must be between 8 and 100 characters long")
         String newPassword
 ) {
+        @Override
+        public String toString() {
+                return "ChangePasswordDTO{" +
+                        "oldPassword='******', " +
+                        "newPassword='******'" +
+                        '}';
+        }
 }

@@ -10,23 +10,6 @@ import { api } from "./api";
 
 const ProductService = api.injectEndpoints({
     endpoints: (builder) => ({
-        getProductPage: builder.query<
-            SimpleProductPage,
-            {
-                elements: number;
-                page: number;
-            }
-        >({
-            query: ({ elements, page }) => ({
-                url: "/product",
-                method: "GET",
-                params: {
-                    elements: elements,
-                    page: page,
-                },
-            }),
-            providesTags: ["Products"],
-        }),
         getProductFilteredPage: builder.query<
             SimpleProductPage,
             {
@@ -35,7 +18,7 @@ const ProductService = api.injectEndpoints({
             } & FilteringFormType
         >({
             query: (data) => ({
-                url: "/product/filtered",
+                url: "/product",
                 method: "GET",
                 params: {
                     ...data,
@@ -45,7 +28,7 @@ const ProductService = api.injectEndpoints({
         }),
         getProductByName: builder.query<string[], string>({
             query: (data) => ({
-                url: "/product/name/filtered",
+                url: "/product/name",
                 method: "GET",
                 params: {
                     productName: data,
@@ -114,7 +97,6 @@ const ProductService = api.injectEndpoints({
 });
 
 export const {
-    useGetProductPageQuery,
     useGetProductFilteredPageQuery,
     useGetProductCompositionQuery,
     useGetProductDetailsQuery,

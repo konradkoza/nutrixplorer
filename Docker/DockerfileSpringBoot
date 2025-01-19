@@ -4,6 +4,6 @@ COPY ../pom.xml pom.xml
 COPY ../src src
 RUN mvn clean package -Dmaven.test.skip
 
-FROM openjdk:21-jdk
+FROM openjdk:21-jdk-slim
 COPY --from=build /app/target/*.jar /run/app/nutrixplorer.jar
 ENTRYPOINT ["java", "-jar", "/run/app/nutrixplorer.jar"]

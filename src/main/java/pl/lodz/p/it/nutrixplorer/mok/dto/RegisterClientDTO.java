@@ -18,9 +18,24 @@ public record RegisterClientDTO(
         String email,
         @NotBlank(message = "Password cannot be empty")
         @Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters long")
+        @Pattern(
+                regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+                message = "Password must contain at least one uppercase letter, one lowercase letter, one digit and one special character"
+        )
         String password,
         @NotBlank(message = "Language cannot be empty")
         @Pattern(regexp = "^(en|pl)$", message = "Language must be either 'en' or 'pl'")
         String language
 ) {
+
+    @Override
+    public String toString() {
+        return "RegisterClientDTO{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='********'" +
+                ", language='" + language + '\'' +
+                '}';
+    }
 }

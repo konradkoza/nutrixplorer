@@ -15,7 +15,7 @@
     "indexComparison": "Porównanie indeksów",
     "fatComparison": "Podział tłuszczy",
     "carbsComparison": "Podział węglowodanów",
-    "nutritionalValuesInEnergy": "Udział wartości odżywczych w wartości energetycznej",
+    "nutritionalValuesInEnergy": "Wartość odżywcza w wartości energetycznej",
     "nutritionalValuesInProducts": "Wartość odżywcza poszczególnych produktów",
     "numberOfElements": "Liczba elementów",
     "allergens": "Alergeny",
@@ -23,7 +23,7 @@
     "productsInBasket": "Produkty w koszyku",
     "summaryFFIndex": "Sumaryczny indeks FF",
     "summarySUMIndex": "Sumaryczny indeks SUM",
-    "nutritionalValues": "Wartości odżywcze",
+    "nutritionalValues": "Wartość odżywcza",
     "carbsSummary": "Węglowodany w sumie",
     "fatSummary": "Tłuszcz w sumie",
     "otherCarbs": "Inne węglowodany",
@@ -35,7 +35,9 @@
     "protein" : "Białko",
     "fiber": "Błonnik",
     "index": "Indeks",
-    "salt": "Sól"
+    "salt": "Sól",
+    "comparisonRws": "Porównanie %RWS",
+    "otherInformationComparison": "Porównanie pozostałych informacji"
 
 
 }

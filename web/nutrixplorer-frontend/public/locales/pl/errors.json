@@ -10,7 +10,7 @@
     "favouriteProductAlreadyExists": "Ulubiony produkt już istnieje",
     "basketNameNotUnique": "Nazwa koszyka jest już zajęta",
     "clientNotFound": "Nie znaleziono klienta",
-    "oauthEmailInUse": "Adres e-mail jest używany przez konto z logowaniem za pomocą Google",
+    "oauthEmailInUse": "Adres e-mail jest używany przez konto z inną metodą logowania",
     "oauth2AuthenticationError": "Błąd logowania za pomocą Google",
     "invalidCredentials": "Nieprawidłowe dane logowania",
     "unverifiedAccount": "Niezweryfikowane konto",
@@ -41,6 +41,8 @@
     "invalidIfMatch": "Nieprawidłowy nagłówek If-Match",
     "databaseConnectionError": "Błąd połączenia z bazą danych",
     "invalidRequestParam": "Nieprawidłowy parametr żądania",
-    "productAlreadyInBasket": "Produkt jest już w koszyku, możesz zmienić ilość w koszyku"
+    "productAlreadyInBasket": "Produkt jest już w koszyku, możesz zmienić jego ilość",
+    "sessionExpiredTitle": "Sesja wygasła",
+    "sessionExpired": "Zaloguj się ponownie"
 
 }

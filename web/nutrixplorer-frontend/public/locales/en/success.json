@@ -1,4 +1,5 @@
 {
     "success": "Success",
-    "successMessage": "Action completed successfully"
+    "successMessage": "Action completed successfully",
+    "registerSuccess": "Registration completed successfully, use the link in the email to activate the account"
 }

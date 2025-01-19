@@ -84,15 +84,17 @@ const ProductsList = ({ products, favouriteProducts, addToBasket }: ProductsList
                                     <FaHeart />
                                 </Button>
                             )}
-                            <Button
-                                variant="ghost"
-                                className="rounded-[0.5rem] bg-secondary/20"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleOpenDialog(product.id, product.unit);
-                                }}>
-                                <ShoppingBasketIcon />
-                            </Button>
+                            {addToBasket && (
+                                <Button
+                                    variant="ghost"
+                                    className="rounded-[0.5rem] bg-secondary/20"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleOpenDialog(product.id, product.unit);
+                                    }}>
+                                    <ShoppingBasketIcon />
+                                </Button>
+                            )}
                         </div>
                     )}
                     <div className="flex justify-center rounded-t-lg bg-white">

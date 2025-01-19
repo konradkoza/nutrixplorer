@@ -18,7 +18,7 @@ import java.util.List;
         pkJoinColumns = @PrimaryKeyJoinColumn(name = "USER_ID"),
         schema = "PUBLIC")
 @SecondaryTable(name = "GOOGLE_AUTH", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
-@ToString
+@ToString(callSuper = true)
 @Getter
 @NoArgsConstructor
 public class User extends AbstractEntity {
@@ -83,10 +83,11 @@ public class User extends AbstractEntity {
     @ToString.Exclude
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<AccessLevel> accessLevels = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<VerificationToken> tokens = new ArrayList<>();
 
     public void setLanguage(String language) {

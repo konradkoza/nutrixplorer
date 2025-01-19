@@ -1,26 +1,33 @@
+import loadable from "@loadable/component";
 import { RouteObject } from "react-router-dom";
-import LoginPage from "./pages/Authentication/LoginPage";
-import ProductsListPages from "./pages/Products/ProductsListPages";
-import MainLayout from "./layouts/MainLayout";
-import BasketsListPage from "./pages/Baskets/BasketsListPage";
-import ProductDetailsPage from "./pages/Products/ProductDetailsPage";
-import BasketDetails from "./pages/Baskets/BasketDetails";
-import FavouritesPage from "./pages/Favourites/FavouritesPage";
-import BasketComparisonPage from "./pages/Comparison/BasketComparisonPage";
-import AccountPage from "./pages/Account/AccountPage";
-import AuthGuard from "./layouts/AuthGuard";
+
+const LoginPage = loadable(() => import("./pages/Authentication/LoginPage"));
+const ProductsListPages = loadable(() => import("./pages/Products/ProductsListPages"));
+const MainLayout = loadable(() => import("./layouts/MainLayout"));
+const BasketsListPage = loadable(() => import("./pages/Baskets/BasketsListPage"));
+const ProductDetailsPage = loadable(() => import("./pages/Products/ProductDetailsPage"));
+const BasketDetails = loadable(() => import("./pages/Baskets/BasketDetails"));
+const FavouritesPage = loadable(() => import("./pages/Favourites/FavouritesPage"));
+const BasketComparisonPage = loadable(() => import("./pages/Comparison/BasketComparisonPage"));
+const AccountPage = loadable(() => import("./pages/Account/AccountPage"));
+const RegisterPage = loadable(() => import("./pages/Authentication/RegisterPage"));
+const OauthCallback = loadable(() => import("./pages/Authentication/OauthCallback"));
+const AccountActivationPage = loadable(
+    () => import("@/pages/Verification/AccountActivationPage.tsx")
+);
+const ForgotPassword = loadable(() => import("./pages/Authentication/ForgotPassword"));
+const PasswordResetPage = loadable(() => import("./pages/Verification/PasswordResetPage"));
+const AuthLayout = loadable(() => import("./layouts/AuthLayout"));
+const ConfirmEmailChangePage = loadable(
+    () => import("./pages/Verification/ConfirmEmailChangePage")
+);
+const UsersPage = loadable(() => import("./pages/Users/UsersPage"));
+const UserDetailsPage = loadable(() => import("./pages/Users/UserDetailsPage"));
+const NotFoundPage = loadable(() => import("./pages/NotFound/NotFoundPage"));
+
 import { AccessLevel } from "./types/UserTypes";
 import { Navigate } from "react-router-dom";
-import RegisterPage from "./pages/Authentication/RegisterPage";
-import OauthCallback from "./pages/Authentication/OauthCallback";
-import AccountActivationPage from "@/pages/Verification/AccountActivationPage.tsx";
-import ForgotPassword from "./pages/Authentication/ForgotPassword";
-import PasswordResetPage from "./pages/Verification/PasswordResetPage";
-import AuthLayout from "./layouts/AuthLayout";
-import ConfirmEmailChangePage from "./pages/Verification/ConfirmEmailChangePage";
-import UsersPage from "./pages/Users/UsersPage";
-import UserDetailsPage from "./pages/Users/UserDetailsPage";
-import NotFoundPage from "./pages/NotFound/NotFoundPage";
+import AuthGuard from "./layouts/AuthGuard";
 
 const clientRoutes: RouteObject[] = [
     {

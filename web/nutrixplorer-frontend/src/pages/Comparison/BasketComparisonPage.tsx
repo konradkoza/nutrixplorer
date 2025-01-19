@@ -40,6 +40,7 @@ import { TranslationNS } from "@/utils/translationNamespaces";
 import { simpleNutritionTable } from "@/constants/NutritionConstants";
 import { cn } from "@/lib/utils";
 import AutocompleteSelect from "@/components/common/AutocompleteSelect";
+import ComparisonRwsCard from "./ComparisonRwsCard";
 
 type NutritionSet = {
     name: string;
@@ -243,7 +244,8 @@ const BasketComparisonPage = () => {
                                             <TableHead className="w-2/12"></TableHead>
                                             <TableHead className="w-5/12">
                                                 <Button asChild variant="link">
-                                                    <Link to={`/baskets/${basket1}`}>
+                                                    <Link
+                                                        to={`/baskets/${basket1 || basketDetails[0].id}`}>
                                                         {t("basket1")} (
                                                         {basketDetails[0]
                                                             ? basketDetails[0].name
@@ -254,7 +256,8 @@ const BasketComparisonPage = () => {
                                             </TableHead>
                                             <TableHead className="w-5/12">
                                                 <Button asChild variant="link">
-                                                    <Link to={`/baskets/${basket2}`}>
+                                                    <Link
+                                                        to={`/baskets/${basket2 || basketDetails[1].id}`}>
                                                         {t("basket2")} (
                                                         {basketDetails[1]
                                                             ? basketDetails[1].name
@@ -389,6 +392,10 @@ const BasketComparisonPage = () => {
                                     ))}
                                 </div>
                             </div>
+                            <ComparisonRwsCard basketNutritions={basketNutritions} />
+                            <p className="my-2 text-center text-xl">
+                                {t("otherInformationComparison")}
+                            </p>
                             <CardContent>
                                 <Table>
                                     <TableBody>

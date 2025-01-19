@@ -1,3 +1,4 @@
+import { PasswordInput } from "@/components/common/PasswordInput";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -18,10 +19,11 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const RegisterPage = () => {
     const [register] = useRegisterMutation();
-    const [t, i18n] = useTranslation(TranslationNS.Authentication);
+    const [t, i18n] = useTranslation([TranslationNS.Authentication, TranslationNS.Success]);
     const form = useForm<RegisterFormType>({
         values: {
             email: "",
@@ -36,14 +38,19 @@ const RegisterPage = () => {
 
     const onSubmit = async (data: RegisterFormType) => {
         try {
-            await register({
+            const response = await register({
                 email: data.email,
                 password: data.password,
                 firstName: data.firstName,
                 lastName: data.lastName,
-                language: i18n.language.split("-")[0] as "pl" | "en",
+                language: i18n.language as "pl" | "en",
             });
-            navigate("/login", { replace: true });
+            if (!response.error) {
+                toast.success(t("success", { ns: TranslationNS.Success }), {
+                    description: t("registerSuccess", { ns: TranslationNS.Success }),
+                });
+                navigate("/login");
+            }
         } catch (error) {
             console.error(error);
         }
@@ -120,10 +127,9 @@ const RegisterPage = () => {
                                     <FormItem className="col-span-2">
                                         <FormLabel>{t("register.password")}</FormLabel>
                                         <FormControl>
-                                            <Input
+                                            <PasswordInput
                                                 autoComplete="new-password"
                                                 placeholder=""
-                                                type="password"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -138,10 +144,9 @@ const RegisterPage = () => {
                                     <FormItem className="col-span-2">
                                         <FormLabel>{t("register.confirmPassword")}</FormLabel>
                                         <FormControl>
-                                            <Input
+                                            <PasswordInput
                                                 autoComplete="new-password"
                                                 placeholder=""
-                                                type="password"
                                                 {...field}
                                             />
                                         </FormControl>

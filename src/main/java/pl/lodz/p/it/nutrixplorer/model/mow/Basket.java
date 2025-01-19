@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+@ToString(callSuper = true)
 @Entity
 @Table(
         uniqueConstraints = {
@@ -41,17 +41,8 @@ public class Basket extends AbstractEntity {
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
-    @Column(name = "UPDATED_AT")
-    private LocalDateTime updatedAt;
-
     @PrePersist
     public void onPrePersist() {
         this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void onPreUpdate() {
-        this.updatedAt = LocalDateTime.now();
     }
 }

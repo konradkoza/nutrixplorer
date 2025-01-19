@@ -5,10 +5,8 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -45,6 +43,7 @@ public class EmailService {
         thymeleafContext.setVariables(templateModel);
         String htmlBody = templateEngine.process(templateName, thymeleafContext);
         String subject = mailMessageSource.getMessage(templateName + ".subject", null, Locale.of(lang));
+        log.info("Sending email to: {} with template: {}, with subject: {}", to, templateName, subject);
         sendEmail(to, subject, htmlBody);
     }
 }

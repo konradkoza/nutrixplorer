@@ -286,7 +286,7 @@ const ProductDetailsPage = () => {
                                 <CardContent>{t("noProducerInfo")}</CardContent>
                             )}
                         </Card>
-                        {token && (
+                        {token && accessLevels.includes(AccessLevel.CLIENT) && (
                             <AddToBasketDialog
                                 open={dialogOpen}
                                 productId={id!}

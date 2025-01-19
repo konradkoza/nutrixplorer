@@ -20,10 +20,15 @@ import ChangeEmailDialog from "../Account/ChangeEmailDialog";
 import { Button } from "@/components/ui/button";
 import { AccessLevel } from "@/types/UserTypes";
 import { format } from "date-fns";
+import { LuRefreshCw } from "react-icons/lu";
 
 const UserDetailsPage = () => {
     const { id } = useParams<{ id: string }>();
-    const { data: user, isLoading } = useGetUserQuery(id!, {
+    const {
+        data: user,
+        isLoading,
+        refetch,
+    } = useGetUserQuery(id!, {
         skip: !id,
     });
     const [t, i18n] = useTranslation(TranslationNS.Users);
@@ -42,7 +47,13 @@ const UserDetailsPage = () => {
                     <Spinner />
                 ) : (
                     user && (
-                        <Card>
+                        <Card className="relative">
+                            <Button
+                                variant="ghost"
+                                onClick={refetch}
+                                className="absolute right-2 top-2">
+                                <LuRefreshCw size={24} />
+                            </Button>
                             <CardHeader>
                                 <CardTitle className="text-3xl">{t("userDetails")}</CardTitle>
                             </CardHeader>
