@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -44,7 +43,6 @@ public class MowDatasourceConfig {
 
 
     @Bean
-    @Primary
     public DataSource mowDatasource(DataSourceConfigProperties userDataSourceConfigProperties) {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(userDataSourceConfigProperties.getJdbcUrl());
@@ -61,7 +59,6 @@ public class MowDatasourceConfig {
     }
 
     @Bean(name = "mowEntityManagerFactory")
-    @Primary
     public LocalContainerEntityManagerFactoryBean userEntityManagerFactory(
             @Qualifier("mowDatasource") DataSource userDataSource, JpaVendorAdapter jpaVendorAdapter) {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();

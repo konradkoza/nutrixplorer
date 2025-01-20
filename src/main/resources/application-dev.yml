@@ -4,7 +4,9 @@ server:
 
 spring:
   flyway:
-    url: jdbc:postgresql://nutrixplorer-db:5432/nutrixplorer
+    url: ${DB_URL}
+    user: ${ADMIN_DB_USER}
+    password: ${ADMIN_DB_PASSWORD}
   mail:
     host: smtp.gmail.com
     port: 587
@@ -22,26 +24,26 @@ logging:
 
 datasource:
   admin:
-    jdbc-url: "jdbc:postgresql://nutrixplorer-db:5432/nutrixplorer"
+    jdbc-url: ${DB_URL}
     username: ${ADMIN_DB_USER}
     password: ${ADMIN_DB_PASSWORD}
   mokuser:
-    jdbc-url: "jdbc:postgresql://nutrixplorer-db:5432/nutrixplorer"
+    jdbc-url: ${DB_URL}
     username: ${MOK_DB_USER}
     password: ${MOK_DB_PASSWORD}
   mowuser:
-    jdbc-url: "jdbc:postgresql://nutrixplorer-db:5432/nutrixplorer"
+    jdbc-url: ${DB_URL}
     username: ${MOW_DB_USER}
     password: ${MOW_DB_PASSWORD}
 
 nutrixplorer:
   transaction:
     timeout: 15
-  frontend-url: https://localhost
+  frontend-url: ${FRONTEND_URL}
   jws:
     secret: ${JWS_SECRET_KEY}
   oauth:
     client_id: ${GOOGLE_CLIENT_ID}
     client_secret: ${GOOGLE_CLIENT_SECRET}
-    redirect_url: https://localhost/auth/google/callback
+    redirect_url: ${GOOGLE_REDIRECT_URL}
     token_url: https://oauth2.googleapis.com/token
