@@ -3,7 +3,6 @@ services:
     image: postgres:16
     container_name: nutrixplorer-db
     restart: always
-    env_file: "spring.env"
     environment:
       POSTGRES_USER: nutriadmin
       POSTGRES_PASSWORD: adminP@ssw0rd
