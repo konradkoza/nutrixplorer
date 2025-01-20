@@ -7,6 +7,6 @@ import com.github.database.rider.spring.api.DBRider;
 import org.dbunit.ext.postgresql.PostgresqlDataTypeFactory;
 
 @DBRider(dataSourceBeanName = "adminDatasource")
-@DBUnit(schema = "public", caseSensitiveTableNames = false, dataTypeFactoryClass = PostgresqlDataTypeFactory.class, caseInsensitiveStrategy = Orthography.LOWERCASE)
+@DBUnit(schema = "public", dataTypeFactoryClass = PostgresqlDataTypeFactory.class, caseInsensitiveStrategy = Orthography.LOWERCASE)
 public interface AbstractDBRiderTests {
 }

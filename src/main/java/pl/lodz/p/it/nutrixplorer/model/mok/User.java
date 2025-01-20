@@ -25,12 +25,15 @@ public class User extends AbstractEntity {
 
     @Setter
     @Column(name = "FIRST_NAME", table = "PERSONAL_DATA", nullable = false, length = 50)
+    @ToString.Exclude
     private String firstName;
     @Setter
     @Column(name = "LAST_NAME", table = "PERSONAL_DATA", nullable = false, length = 50)
+    @ToString.Exclude
     private String lastName;
     @Setter
     @Column(name = "EMAIL", table = "PERSONAL_DATA", nullable = false, unique = true, length = 50)
+    @ToString.Exclude
     private String email;
 
     @Setter
@@ -102,5 +105,7 @@ public class User extends AbstractEntity {
     public void onPrePersist() {
         this.createdAt = LocalDateTime.now();
     }
+
+
 
 }

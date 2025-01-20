@@ -257,6 +257,36 @@ VALUES ('f55f857e-a179-4231-9359-836a11928ca2', 0, '42e1f67f-7d00-4321-b2b8-ff15
 INSERT INTO public.basket_entry(id, version, basket_id, product_id, quantity)
 VALUES ('f0fe4831-5806-4fc1-acb8-b28ffa5ba445', 0, '42e1f67f-7d00-4321-b2b8-ff15b66b18be', '5376bd81-3acd-4966-b3fd-94f65f153d8b', 50);
 
+
+INSERT INTO public.basket (id, version, created_at, description, name, client_id)
+VALUES
+    ('67449cf6-4113-410f-b716-2f0fdf3f17b7', 0, '2025-01-20 19:57:20.662002', 'Zestaw z wysoką zawartością białka i małą ilością tłuszczu.', 'Wysokobiałkowy', '6f15b280-581f-423e-a0ff-c02cce1c3350'),
+    ('37681415-8409-4df2-a9c9-a268debbe972', 0, '2025-01-20 20:01:12.596141', 'Zestaw ze zrównoważoną zawartością składników odżywczych.', 'Zrównoważony', '6f15b280-581f-423e-a0ff-c02cce1c3350');
+
+INSERT INTO public.basket_entry (id, version, quantity, basket_id, product_id)
+VALUES
+    ('7348187c-ef94-4738-a07c-6302214511ad', 0, 30.00, '67449cf6-4113-410f-b716-2f0fdf3f17b7', '5376bd81-3acd-4966-b3fd-94f65f153d8b'),
+    ('f4f2181a-67ae-4462-b2ee-9aee9426529a', 0, 30.00, '67449cf6-4113-410f-b716-2f0fdf3f17b7', 'ee3d7b1b-4c24-4787-a4bd-6ac3777f7df3'),
+    ('15871fa8-bd0f-44b0-a895-7f14047a17d7', 0, 400.00, '67449cf6-4113-410f-b716-2f0fdf3f17b7', '36fa7e1c-ecf6-453f-bb35-d7446c9a8457'),
+    ('aa6c8be3-6327-453f-9d34-0ab76d5851d1', 0, 0.50, '67449cf6-4113-410f-b716-2f0fdf3f17b7', '53f75855-6149-4ec0-8174-35257c4a40bb'),
+    ('1695ba6e-f367-49fd-8168-3d6d5437f1c9', 0, 20.00, '67449cf6-4113-410f-b716-2f0fdf3f17b7', '5338e68e-089b-444d-8009-35592f84682f'),
+    ('634e87c5-efd1-4d9e-8529-a5b72be73212', 0, 50.00, '67449cf6-4113-410f-b716-2f0fdf3f17b7', '7edc5259-79b7-4526-8d2b-0924ec495df2'),
+    ('a9d0ee28-8d72-40f4-a748-98f89eea7e5d', 1, 20.00, '67449cf6-4113-410f-b716-2f0fdf3f17b7', 'bd19a5cc-a263-4909-b0be-73515f8d05c1'),
+    ('b7a14744-8316-4b81-84d4-008f2d4dcb1d', 0, 200.00, '67449cf6-4113-410f-b716-2f0fdf3f17b7', 'f8cfc3fb-56e6-49f3-9776-ae03e4f30072'),
+    ('7cf1fccb-a08b-414c-b442-833a4aada3f3', 0, 100.00, '67449cf6-4113-410f-b716-2f0fdf3f17b7', 'd75cda81-ea16-4652-825c-a65f891bd657'),
+    ('4a68559c-8c21-4a62-b788-beae43e163a3', 0, 30.00, '67449cf6-4113-410f-b716-2f0fdf3f17b7', '2eccba9e-5ae9-46f0-9760-58fd1cbf2b16'),
+    ('2b1f10eb-06b3-44dc-ae00-9fde842a9996', 0, 50.00, '37681415-8409-4df2-a9c9-a268debbe972', '03b16d62-aee4-41c1-83a7-6ceaf96d8da6'),
+    ('04276de8-c327-4024-8090-ec1918d125da', 1, 150.00, '37681415-8409-4df2-a9c9-a268debbe972', '1e2b4af5-5a6a-4239-80d5-22428cffab4a'),
+    ('2d9e369e-cb1e-4cd0-9052-65f0fae2168a', 0, 140.00, '37681415-8409-4df2-a9c9-a268debbe972', '7bad072d-5d3e-4275-b56f-ca0e1b7e8bc7'),
+    ('e05793fd-d619-4302-9f02-b1b04a095e0f', 0, 60.00, '37681415-8409-4df2-a9c9-a268debbe972', '557f23b6-cdb4-474a-9e05-eec6ffef9bf5'),
+    ('88906d8b-0912-47e6-82ea-1efe597099c6', 0, 140.00, '37681415-8409-4df2-a9c9-a268debbe972', 'd054c51c-46a2-48c3-94ef-56fd14d36b7c'),
+    ('ccb36384-792f-4cca-b115-dc033e3247d0', 0, 250.00, '37681415-8409-4df2-a9c9-a268debbe972', '3b1b0c48-b79f-4119-bbd4-19f37fc7d69f'),
+    ('3fdf1845-08e2-4555-acd5-c8d7cb502519', 0, 60.00, '37681415-8409-4df2-a9c9-a268debbe972', '2eccba9e-5ae9-46f0-9760-58fd1cbf2b16'),
+    ('31c12238-36bf-4cf0-86e4-4a5cf56572c5', 2, 25.00, '37681415-8409-4df2-a9c9-a268debbe972', 'ae0ba335-9472-4ef8-aeaf-dbd3293c7608'),
+    ('e3ac49c3-5957-4f05-a877-f644dfe86357', 0, 100.00, '37681415-8409-4df2-a9c9-a268debbe972', '147dac8c-3a18-4311-996d-189827d286aa'),
+    ('cdb80393-016e-4133-9516-4b1918ff31d0', 0, 200.00, '37681415-8409-4df2-a9c9-a268debbe972', '3626f037-61fb-495f-99b6-ab5127be9568'),
+    ('04b6cf78-52bf-4859-9005-7f896f119cb0', 0, 30.00, '37681415-8409-4df2-a9c9-a268debbe972', '3a1b9fb6-543f-4aa6-b28e-ec0a92526a90');
+
 INSERT INTO public.user_favourite_products (client_id, product_id)
 VALUES ('6f15b280-581f-423e-a0ff-c02cce1c3350', 'd75cda81-ea16-4652-825c-a65f891bd657');
 

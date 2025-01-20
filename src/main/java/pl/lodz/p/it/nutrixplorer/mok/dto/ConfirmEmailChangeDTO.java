@@ -6,4 +6,8 @@ public record ConfirmEmailChangeDTO(
         @NotBlank(message = "Token cannot be empty")
         String token
 ) {
+    @Override
+    public String toString() {
+            return "ConfirmEmailChangeDTO{" + "token='********" + '}';
+    }
 }

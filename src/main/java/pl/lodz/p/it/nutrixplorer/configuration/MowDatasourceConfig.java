@@ -43,7 +43,7 @@ public class MowDatasourceConfig {
 
 
     @Bean
-    public DataSource mowDatasource(DataSourceConfigProperties userDataSourceConfigProperties) {
+    public DataSource mowDatasource(@Qualifier("userDataSourceConfigProperties") DataSourceConfigProperties userDataSourceConfigProperties) {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(userDataSourceConfigProperties.getJdbcUrl());
         hikariConfig.setUsername(userDataSourceConfigProperties.getUsername());

@@ -1,5 +1,7 @@
 package pl.lodz.p.it.nutrixplorer.mow.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +23,9 @@ public interface BasketRepository extends JpaRepository<Basket, UUID>, JpaSpecif
 
     @Query("SELECT b FROM Basket b WHERE b.client.user.id = :userId")
     List<Basket> findAllByUserId(UUID userId);
+
+    @Query("SELECT b FROM Basket b WHERE b.client.user.id = :userId")
+    Page<Basket> findAllByUserId(UUID userId, Pageable pageable);
 
     @Query("SELECT b FROM Basket b WHERE b.client.user.id = :userId AND b.id = :basketId")
     Optional<Basket> findByIdAndUserId(UUID basketId, UUID userId);

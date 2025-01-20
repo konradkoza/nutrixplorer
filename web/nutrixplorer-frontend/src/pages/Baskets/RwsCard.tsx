@@ -24,7 +24,7 @@ const RwsCard = ({ nutritions }: RwsCardProps) => {
             const value =
                 nutritions.find((n) => n.groupName === rws.group && n.name === rws.name)
                     ?.quantity || 0;
-            if (value === 0) return null;
+            if (value === 0 || rws.name === "Błonnik") return null;
             return (
                 <div key={rws.group + rws.name + "rws"} className="items-center">
                     <GradientBarAdjusted

@@ -32,7 +32,7 @@ public class JwtService {
         JwtClaimsSet claims = JwtClaimsSet.builder()
 //                .issuer("nutrixplorer")
                 .issuedAt(now)
-                .expiresAt(now.plus(jwtExpiration, ChronoUnit.MINUTES))
+                .expiresAt(now.plus(jwtExpiration, ChronoUnit.HOURS))
                 .subject(id.toString())
                 .claim("authorities", roles)
                 .build();

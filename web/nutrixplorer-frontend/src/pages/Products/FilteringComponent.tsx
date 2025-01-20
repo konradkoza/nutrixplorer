@@ -77,9 +77,10 @@ const indexFields = [
 
 type FilteringComponentProps = {
     setFilters: (data: FilteringFormType) => void;
+    refetch: () => void;
 };
 
-const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
+const FilteringComponent = ({ setFilters, refetch }: FilteringComponentProps) => {
     const [searchValue, setSearchValue] = useState<string>("");
     const [value] = useDebounce(searchValue, 300);
     const { data: productsByName, isFetching } = useGetProductByNameQuery(value);
@@ -168,6 +169,8 @@ const FilteringComponent = ({ setFilters }: FilteringComponentProps) => {
             return acc;
         }, {} as FilteringFormType);
         setFilters(filteredData);
+        refetch();
+        console.log("refetch");
     };
 
     const handleClear = () => {

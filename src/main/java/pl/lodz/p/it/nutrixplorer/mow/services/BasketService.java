@@ -85,7 +85,8 @@ public class BasketService {
     public void removeEntryFromBasket(UUID entryId) throws NotFoundException {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         BasketEntry basketEntry = basketEntryRepository.findByIdAndUser(entryId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND));
-        basketEntryRepository.deleteById(basketEntry.getId());
+        basketEntryRepository.removeBasketEntryById(basketEntry.getId());
+
     }
 
     public List<Basket> getUserBaskets() {
@@ -171,6 +172,9 @@ public class BasketService {
         Specification<Basket> specification = BasketSpecificationUtil.createSpecification(filters);
         PageRequest pageRequest = PageRequest.of(page, elements);
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
+        if (specification == null) {
+            return basketRepository.findAllByUserId(currentUserId, pageRequest);
+        }
         specification = specification.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("client").get("user").get("id"), currentUserId));
         return basketRepository.findAll(specification, pageRequest);
     }

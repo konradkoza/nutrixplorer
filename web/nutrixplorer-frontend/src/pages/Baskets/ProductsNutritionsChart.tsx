@@ -76,7 +76,7 @@ const ProductsNutritionsChart = ({ basketEntries }: ProductsNutritionsChartProps
     const CustomXAxisTick = ({ x, y, payload }: any) => {
         if (payload && payload.value) {
             return (
-                <Text width={75} x={x} y={y} textAnchor="middle" verticalAnchor="start">
+                <Text width={65} x={x} y={y} textAnchor="middle" verticalAnchor="start">
                     {payload.value}
                 </Text>
             );
@@ -90,7 +90,7 @@ const ProductsNutritionsChart = ({ basketEntries }: ProductsNutritionsChartProps
                 <CardTitle>{t("productsNutrTitle")}</CardTitle>
             </CardHeader>
             <CardContent>
-                <ChartContainer className="aspect-square max-h-[500px] w-full" config={chartConfig}>
+                <ChartContainer className="aspect-square max-h-[550px] w-full" config={chartConfig}>
                     <BarChart accessibilityLayer data={chartData}>
                         <CartesianGrid vertical={false} />
                         <XAxis
@@ -104,7 +104,7 @@ const ProductsNutritionsChart = ({ basketEntries }: ProductsNutritionsChartProps
                         <ChartTooltip
                             content={<ChartTooltipContent className="w-44" hideLabel />}
                         />
-                        <ChartLegend content={<ChartLegendContent className="mt-16" />} />
+                        <ChartLegend content={<ChartLegendContent className="mt-24" />} />
                         <YAxis unit={"g"} />
                         {Object.keys(chartConfig).map((key) => (
                             <Bar

@@ -63,7 +63,7 @@ nutrixplorer:
   jwt:
     public-key-path: classpath:public.pem
     private-key-path: classpath:private.pem
-    expiration: 2
+    expiration: 12
   jws:
     secret: ZhLR58MdJjGl6MAlEC9OWUkS34KTEsYd
   oauth:

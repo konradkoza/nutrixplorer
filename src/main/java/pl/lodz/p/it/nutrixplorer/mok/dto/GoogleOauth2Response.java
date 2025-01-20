@@ -18,4 +18,15 @@ public class GoogleOauth2Response {
     String tokenType;
     @JsonProperty("id_token")
     String idToken;
+
+    @Override
+    public String toString() {
+        return "GoogleOauth2Response{" +
+                "accessToken='******** " +
+        "expiresIn=" + expiresIn +
+        ", scope='" + scope + '\'' +
+                ", tokenType='" + tokenType + '\'' +
+                ", idToken='******** " +
+        '}';
+    }
 }

@@ -21,7 +21,9 @@
         "actions": "Actions",
         "block": "Block",
         "details": "Details",
-        "unlock": "Unlock"
+        "unlock": "Unlock",
+        "verified": "Verified",
+        "blocked":  "Blocked"
     },
     "accessLevels": "Access Levels",
     "userDetails": "User Details",

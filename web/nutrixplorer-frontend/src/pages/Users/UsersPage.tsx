@@ -59,6 +59,8 @@ const UsersPage = () => {
                                     <TableHead>{t("table.lastName")}</TableHead>
                                     <TableHead>{t("table.email")}</TableHead>
                                     <TableHead>{t("table.oauth")}</TableHead>
+                                    <TableHead>{t("table.blocked")}</TableHead>
+                                    <TableHead>{t("table.verified")}</TableHead>
                                     <TableHead>{t("table.id")}</TableHead>
                                     <TableHead>{t("table.accessLevels")}</TableHead>
                                     <TableHead></TableHead>
@@ -72,6 +74,12 @@ const UsersPage = () => {
                                         <TableCell>{user.email}</TableCell>
                                         <TableCell>
                                             {user.oauth ? t("table.yes") : t("table.no")}
+                                        </TableCell>
+                                        <TableCell>
+                                            {user.blocked ? t("table.yes") : t("table.no")}
+                                        </TableCell>
+                                        <TableCell>
+                                            {user.verified ? t("table.yes") : t("table.no")}
                                         </TableCell>
                                         <TableCell>{user.id}</TableCell>
                                         <TableCell>{user.accessLevels.join(", ")}</TableCell>

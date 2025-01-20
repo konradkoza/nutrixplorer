@@ -1,5 +1,3 @@
-CREATE DATABASE nutrixplorertest;
-CREATE USER nutriadmin password 'adminP@ssw0rd';
-CREATE USER nutriuser password 'mokP@ssw0rd';
-\c nutrixplorertest;
-GRANT ALL ON SCHEMA public TO nutriadmin;
+CREATE DATABASE nutrixplorer;
+CREATE USER nutrimokuser password 'mokP@ssw0rd';
+CREATE USER nutrimowuser password 'mowP@ssw0rd';

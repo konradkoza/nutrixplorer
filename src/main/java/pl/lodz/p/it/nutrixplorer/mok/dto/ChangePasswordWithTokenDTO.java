@@ -13,7 +13,7 @@ public record ChangePasswordWithTokenDTO(
         @Override
         public String toString() {
                 return "ChangePasswordWithTokenDTO{" +
-                        "token='" + token + '\'' +
+                        "token='" + "********" + '\'' +
                         ", newPassword='******'" +
                         '}';
         }

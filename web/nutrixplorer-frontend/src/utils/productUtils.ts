@@ -1,4 +1,5 @@
 import { ProductIndex } from "@/types/ProductTypes";
+import { lightFormat } from "date-fns";
 
 export const getProductImage = async (id: string) => {
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/product/${id}/image`);
@@ -51,27 +52,38 @@ export const returnIndexValue = (indexName: IndexName, indexes: ProductIndex[]) 
     }
 };
 
+const colors = {
+    lightBlue: "rgb(0, 170, 235)",
+    blue: "rgb(0, 130, 150)",
+    darkGreen: "rgb(0, 100, 50)",
+    green: "rgb(0, 160, 50)",
+    lightGreen: "rgb(0, 230, 50)",
+    yellow: "rgb(250, 248, 0)",
+    orange: "rgb(255, 165, 0)",
+    red: "rgb(220, 38, 38)",
+    grey: "rgb(169, 169, 169)",
+};
+
 export const getIndexColor = (indexValue: number, indexName: IndexName) => {
     switch (indexName) {
-        //for energy index (EN) from green to yellow to orange to red
-        //for vitamin index (VIT) and mineral index (MIN) from red to yellow to green, values from 0 to 5
-        //for omega-3 index (OM3) from white to blue to green
-        //for protein index (PRT) from white to blue to green
-        //for fiber index (FIB) from white to blue to green
-        //for summary index (SUM) from white to blue to green , values from 0 to 8+
-        //for fat index (FF) from white to blue to green , values from 0 to 10+
         case "E":
             if (indexValue < 100) {
-                return "rgb(0, 150, 0)"; // darker green
+                return colors.blue;
             }
             if (indexValue >= 100 && indexValue <= 200) {
-                return "rgb(163 230 53)";
+                return colors.lightBlue;
             }
-            if (indexValue >= 201 && indexValue <= 500) {
-                return "rgb(204, 204, 0)";
+            if (indexValue >= 201 && indexValue <= 300) {
+                return colors.green;
             }
-            if (indexValue > 500) {
-                return "rgb(150, 0, 0)";
+            if (indexValue >= 301 && indexValue <= 500) {
+                return colors.yellow;
+            }
+            if (indexValue >= 501 && indexValue <= 700) {
+                return colors.orange;
+            }
+            if (indexValue > 700) {
+                return colors.red;
             }
             break;
         case "V":
@@ -80,72 +92,72 @@ export const getIndexColor = (indexValue: number, indexName: IndexName) => {
             //     return "rgb(220 38 38)"; // darker red
             // }
             if (indexValue === 0) {
-                return "rgb(169, 169, 169)";
+                return colors.grey;
             }
             if (indexValue >= 1 && indexValue <= 3) {
-                return "rgb(0, 160, 100)";
+                return colors.lightGreen;
             }
             if (indexValue >= 4 && indexValue <= 5) {
-                return "rgb(0, 160, 50)";
+                return colors.green;
             }
             if (indexValue >= 6) {
-                return "rgb(0, 140, 0)";
+                return colors.blue;
             }
             break;
         case "O":
         case "P":
         case "F":
             if (indexValue === 0) {
-                return "rgb(169, 169, 169)"; // grey
+                return colors.grey;
             }
             if (indexValue >= 1 && indexValue <= 2) {
-                return "rgb(0, 160, 100)"; // lighter blue
+                return colors.lightGreen;
             }
             if (indexValue >= 3 && indexValue <= 4) {
-                return "rgb(0, 160, 50)"; // even darker blue
+                return colors.green;
             }
             if (indexValue >= 5) {
-                return "rgb(0, 140, 0)"; // darker green
+                return colors.blue;
             }
             break;
         case "S":
             if (indexValue === 0) {
-                return "rgb(169, 169, 169)"; // grey
+                return colors.grey;
             }
             if (indexValue >= 1 && indexValue < 3) {
-                return "rgb(135, 206, 235)";
+                return colors.lightGreen;
             }
             if (indexValue >= 3 && indexValue < 5) {
-                return "rgb(0, 150, 150)";
+                return colors.green;
             }
             if (indexValue >= 5 && indexValue < 7) {
-                return "rgb(0, 175, 75)";
+                return colors.darkGreen;
             }
             if (indexValue >= 7 && indexValue <= 9) {
-                return "rgb(0, 175, 0)";
+                return colors.lightBlue;
             }
             if (indexValue > 10) {
-                return "rgb(0, 200, 0)";
+                return colors.blue;
             }
             break;
         case "T":
             if (indexValue === 0) {
-                return "rgb(169, 169, 169)"; // grey
+                return colors.grey;
             }
             if (indexValue >= 1 && indexValue < 3) {
-                return "rgb(135, 206, 235)";
+                return colors.lightGreen;
             }
             if (indexValue >= 3 && indexValue < 5) {
-                return "rgb(0, 150, 150)";
+                return colors.green;
             }
             if (indexValue >= 5 && indexValue < 7) {
-                return "rgb(0, 175, 75)";
+                return colors.darkGreen;
             }
-            if (indexValue >= 7 && indexValue < 9) {
-                return "rgb(0, 175, 0)";
+            if (indexValue >= 7 && indexValue <= 9) {
+                return colors.lightBlue;
             }
             if (indexValue > 10) {
-                return "rgb(0, 200, 0)";
+                return colors.blue;
             }
             break;
     }

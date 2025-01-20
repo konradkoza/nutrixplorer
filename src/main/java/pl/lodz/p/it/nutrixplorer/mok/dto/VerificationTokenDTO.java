@@ -6,4 +6,8 @@ public record VerificationTokenDTO(
         @NotBlank(message = "Token cannot be empty")
         String token
 ) {
+    @Override
+    public String toString() {
+            return "VerificationTokenDTO{" + "token='******** " + '}';
+    }
 }

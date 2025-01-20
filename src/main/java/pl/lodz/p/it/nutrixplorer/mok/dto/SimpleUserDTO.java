@@ -7,8 +7,14 @@ public record SimpleUserDTO(
         String firstName,
         String lastName,
         String email,
+        boolean verified,
         boolean oauth,
         List<String> accessLevels,
         boolean blocked
 ) {
+
+    @Override
+    public String toString() {
+        return "SimpleUserDTO{" + "id='" + id + '\'' + ", firstName='" + "******" + '\'' + ", lastName='" + "******" + '\'' + ", email='*****@***" + ", verified=" + verified + ", oauth=" + oauth + ", accessLevels=" + accessLevels + ", blocked=" + blocked + '}';
+    }
 }

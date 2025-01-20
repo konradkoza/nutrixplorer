@@ -43,7 +43,7 @@ public class MokDatasourceConfig {
 
 
     @Bean
-    public DataSource mokDatasource(DataSourceConfigProperties mokDataSourceConfigProperties) {
+    public DataSource mokDatasource(@Qualifier("mokDataSourceConfigProperties") DataSourceConfigProperties mokDataSourceConfigProperties) {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(mokDataSourceConfigProperties.getJdbcUrl());
         hikariConfig.setUsername(mokDataSourceConfigProperties.getUsername());

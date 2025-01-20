@@ -140,9 +140,7 @@ const AddToBasketDialog = ({
                                                 onKeyDown={(event) => {
                                                     if (
                                                         event.code === "Minus" ||
-                                                        event.code === "NumpadSubtract" ||
-                                                        event.code === "Period" ||
-                                                        event.code === "Comma"
+                                                        event.code === "NumpadSubtract"
                                                     ) {
                                                         event.preventDefault();
                                                     }

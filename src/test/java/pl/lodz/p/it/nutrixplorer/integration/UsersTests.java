@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.mok.dto.*;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.AccountVerificationTokenRepository;
 import pl.lodz.p.it.nutrixplorer.mok.repositories.EmailVerificationTokenRepository;
@@ -82,8 +83,9 @@ public class UsersTests implements AbstractDBRiderTests{
     }
 
     @Test
+    @Transactional(transactionManager = "mokTransactionManager")
     public void testRegisterClient() {
-        RegisterClientDTO registerClientDTO = new RegisterClientDTO("John", "Doe", "newuser@example.com", "password", "en");
+        RegisterClientDTO registerClientDTO = new RegisterClientDTO("John", "Doe", "newuser@example.com", "P@ssw0rd", "en");
 
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
@@ -102,7 +104,7 @@ public class UsersTests implements AbstractDBRiderTests{
         RestAssured.given()
                 .contentType(ContentType.JSON)
                 .when()
-                .body(new AuthenticationDTO("newuser@example.com", "password", "en"))
+                .body(new AuthenticationDTO("newuser@example.com", "P@ssw0rd", "en"))
                 .post(baseUrl + ":" + port + "/auth/login")
                 .then()
                 .assertThat()
@@ -121,7 +123,7 @@ public class UsersTests implements AbstractDBRiderTests{
         RestAssured.given()
                 .contentType(ContentType.JSON)
                 .when()
-                .body(new AuthenticationDTO("newuser@example.com", "password", "en"))
+                .body(new AuthenticationDTO("newuser@example.com", "P@ssw0rd", "en"))
                 .post(baseUrl + ":" + port + "/auth/login")
                 .then()
                 .assertThat()
@@ -238,6 +240,7 @@ public class UsersTests implements AbstractDBRiderTests{
     }
 
     @Test
+    @Transactional(transactionManager = "mokTransactionManager")
     public void testChangeEmail() {
         // Step 1: Initiate email change
         RestAssured.given()
@@ -281,6 +284,7 @@ public class UsersTests implements AbstractDBRiderTests{
     }
 
     @Test
+    @Transactional(transactionManager = "mokTransactionManager")
     public void testResetPassword() {
         // Step 1: Request password reset
         RestAssured.given()

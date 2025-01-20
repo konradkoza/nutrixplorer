@@ -20,7 +20,7 @@ public record AuthenticationDTO(
     @Override
     public String toString() {
         return "AuthenticationDTO{" +
-                "email='" + email + '\'' +
+                "email='" + "*******@***" + '\'' +
                 ", password='********'" +
                 ", language='" + language + '\'' +
                 '}';

@@ -19,4 +19,23 @@ public record UserDetailsDTO(
         String lastSuccessfulLoginIp,
         String lastFailedLoginIp
 ) {
+    @Override
+    public String toString() {
+        return "UserDetailsDTO{" +
+                "id='" + id + '\'' +
+                ", firstName='" + "******" + '\'' +
+                ", lastName='" + "******" + '\'' +
+                ", email='" + "****@***" + '\'' +
+                ", oauth=" + oauth +
+                ", accessLevels=" + accessLevels +
+                ", blocked=" + blocked +
+                ", verified=" + verified +
+                ", language='" + language + '\'' +
+                ", loginAttempts=" + loginAttempts +
+                ", lastSuccessfulLogin=" + lastSuccessfulLogin +
+                ", lastFailedLogin=" + lastFailedLogin +
+                ", lastSuccessfulLoginIp='" + lastSuccessfulLoginIp + '\'' +
+                ", lastFailedLoginIp='" + lastFailedLoginIp + '\'' +
+                '}';
+    }
 }

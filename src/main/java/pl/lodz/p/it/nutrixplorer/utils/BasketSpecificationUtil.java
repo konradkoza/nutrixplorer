@@ -81,27 +81,6 @@ public class BasketSpecificationUtil {
 
     }
 
-    public static Specification<Basket> hasAllNutritionalValues(List<String> values, String groupName, String namePrefix) {
-        return (root, query, criteriaBuilder) -> {
-            Join<Product, NutritionalValue> nutritionalValuesJoin = root.join("basketEntries").join("product").join("nutritionalValues", JoinType.INNER);
-
-            Join<NutritionalValue, NutritionalValueName> nameJoin = nutritionalValuesJoin.join("nutritionalValueName", JoinType.INNER);
-
-            Join<NutritionalValueName, NutritionalValueGroup> groupJoin = nameJoin.join("group", JoinType.INNER);
-
-            if (query != null) {
-                query.distinct(true); // Avoid duplicate products in result set
-
-            }
-
-            Predicate groupPredicate = criteriaBuilder.equal(groupJoin.get("groupName"), groupName);
-            Predicate[] valuePredicates = values.stream()
-                    .map(value -> criteriaBuilder.equal(nameJoin.get("name"), namePrefix + value))
-                    .toArray(Predicate[]::new);
-
-            return criteriaBuilder.and(groupPredicate, criteriaBuilder.or(valuePredicates));
-        };
-    }
 
     public static Specification<Basket> hasAllNutritionalValues2(List<String> values, String groupName, String namePrefix) {
         return (root, query, criteriaBuilder) -> {
@@ -144,59 +123,8 @@ public class BasketSpecificationUtil {
         };
     }
 
-    static Specification<Basket> minSpecification(String nutritionalValueName, String groupName, Double quantity) {
-        return (root, query, criteriaBuilder) -> {
-            query.distinct(true); // Ensure no duplicates
 
-            // Joins
-            Join<Product, NutritionalValue> nutritionalValuesJoin = root.join("basketEntries").join("product").join("nutritionalValues", JoinType.INNER);
-            Join<NutritionalValue, NutritionalValueName> nameJoin = nutritionalValuesJoin.join("nutritionalValueName", JoinType.INNER);
-            Join<NutritionalValueName, NutritionalValueGroup> groupJoin = nameJoin.join("group", JoinType.INNER);
 
-            // Predicates
-            Predicate lessThanPredicate = criteriaBuilder.greaterThanOrEqualTo(
-                    criteriaBuilder.coalesce(nutritionalValuesJoin.get("quantity"), 0.0), // Handle nulls
-                    quantity
-            );
-            Predicate groupNamePredicate = criteriaBuilder.equal(
-                    groupJoin.get("groupName"),
-                    groupName
-            );
-            Predicate namePredicate = criteriaBuilder.equal(
-                    nameJoin.get("name"),
-                    nutritionalValueName
-            );
-            // Combine Predicates
-            return criteriaBuilder.and(lessThanPredicate, groupNamePredicate, namePredicate);
-        };
-    }
-
-    static Specification<Basket> maxSpecification(String nutritionalValueName, String groupName, Double quantity) {
-        return (root, query, criteriaBuilder) -> {
-            query.distinct(true); // Ensure no duplicates
-
-            // Joins
-            Join<Product, NutritionalValue> nutritionalValuesJoin = root.join("basketEntries").join("product").join("nutritionalValues", JoinType.INNER);
-            Join<NutritionalValue, NutritionalValueName> nameJoin = nutritionalValuesJoin.join("nutritionalValueName", JoinType.INNER);
-            Join<NutritionalValueName, NutritionalValueGroup> groupJoin = nameJoin.join("group", JoinType.INNER);
-
-            // Predicates
-            Predicate lessThanPredicate = criteriaBuilder.lessThan(
-                    criteriaBuilder.coalesce(nutritionalValuesJoin.get("quantity"), 0.0), // Handle nulls
-                    quantity
-            );
-            Predicate groupNamePredicate = criteriaBuilder.equal(
-                    groupJoin.get("groupName"),
-                    groupName
-            );
-            Predicate namePredicate = criteriaBuilder.equal(
-                    nameJoin.get("name"),
-                    nutritionalValueName
-            );
-            // Combine Predicates
-            return criteriaBuilder.and(lessThanPredicate, groupNamePredicate, namePredicate);
-        };
-    }
 
     public static Specification<Basket> hasNutritionalValueSumLessThan(
             String name,

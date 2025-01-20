@@ -15,6 +15,7 @@ type ErrorPayload = {
 export const rtkQueryErrorHandler: Middleware = (api: MiddlewareAPI) => (next) => async (action) => {
         if (isRejected(action)) {
             const error = action.payload as ErrorPayload;
+            console.log("error", error);
             if (i18next.isInitialized) {
                 if(error && error.data && !error.data.errorCode) {
                     toast.error(i18next.t("error", { ns: TranslationNS.Error }), {

@@ -17,7 +17,11 @@ const ProductsListPages = () => {
     const [elements, setElements] = useState(8);
     const [filters, setFilters] = useState<FilteringFormType>();
     const [t] = useTranslation(TranslationNS.Products);
-    const { data: productPage, isFetching } = useGetProductFilteredPageQuery({
+    const {
+        data: productPage,
+        isFetching,
+        refetch,
+    } = useGetProductFilteredPageQuery({
         page: pageNumber,
         elements: elements,
         ...(filters || ({} as FilteringFormType)),
@@ -34,7 +38,7 @@ const ProductsListPages = () => {
     return (
         <div className="flex flex-col items-center justify-center gap-2">
             <div className="container">{breadcrumbs}</div>
-            <FilteringComponent setFilters={setFilters} />
+            <FilteringComponent setFilters={setFilters} refetch={refetch} />
             {isFetching ? (
                 <Spinner />
             ) : (

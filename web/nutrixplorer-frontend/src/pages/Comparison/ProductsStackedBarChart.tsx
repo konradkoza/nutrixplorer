@@ -79,7 +79,7 @@ const ProductsStackedBarChart = ({
     const CustomXAxisTick = ({ x, y, payload }: any) => {
         if (payload && payload.value) {
             return (
-                <Text width={75} x={x} y={y} textAnchor="middle" verticalAnchor="start">
+                <Text width={65} x={x} y={y} textAnchor="middle" verticalAnchor="start">
                     {payload.value}
                 </Text>
             );
@@ -87,7 +87,7 @@ const ProductsStackedBarChart = ({
         return null;
     };
     return (
-        <ChartContainer className="aspect-square max-h-[500px] min-w-[390px]" config={chartConfig}>
+        <ChartContainer className="aspect-square max-h-[550px] min-w-[390px]" config={chartConfig}>
             <BarChart accessibilityLayer data={chartData}>
                 <CartesianGrid vertical={false} />
                 <XAxis
@@ -99,7 +99,7 @@ const ProductsStackedBarChart = ({
                     tick={<CustomXAxisTick />}
                 />
                 <ChartTooltip content={<ChartTooltipContent className="w-44" hideLabel />} />
-                <ChartLegend content={<ChartLegendContent className="mt-16" />} />
+                <ChartLegend content={<ChartLegendContent className="mt-24" />} />
                 <YAxis unit={"g"} domain={[0, maxNutritionalValue]} />
                 {Object.keys(chartConfig).map((key) => (
                     <Bar

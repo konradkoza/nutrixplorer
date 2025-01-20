@@ -21,7 +21,9 @@
         "actions": "Akcje",
         "block": "Zablokuj",
         "details": "Szczegóły",
-        "unlock": "Odblokuj"
+        "unlock": "Odblokuj",
+        "verified": "Zweryfikowany",
+        "blocked":  "Zablokowany"
     },
     "accessLevels": "Poziomy dostępu",
     "userDetails": "Szczegóły użytkownika",

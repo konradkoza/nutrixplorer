@@ -72,7 +72,6 @@
       "name": "Test basket",
       "description": "description",
       "created_at": "2025-01-04 19:21:09.518282",
-      "updated_at": "2025-01-04 19:21:09.518282",
       "id": "258c1a98-6ac8-4e7a-b670-833433750bcc",
       "client_id": "2da078b9-6461-408c-bae6-27ddbede0a2b",
       "version": 0
@@ -81,7 +80,6 @@
       "name": "Test basket1",
       "description": "description",
       "created_at": "2025-01-04 19:21:09.518282",
-      "updated_at": "2025-01-04 19:21:09.518282",
       "id": "44ec59ba-4959-4b6b-90d8-4c903eff56c3",
       "client_id": "2da078b9-6461-408c-bae6-27ddbede0a2b",
       "version": 0
@@ -90,7 +88,6 @@
       "name": "Test basket2",
       "description": "description",
       "created_at": "2025-01-04 19:21:09.518282",
-      "updated_at": "2025-01-04 19:21:09.518282",
       "id": "6d70cd07-0e19-4f52-87a0-91c44d0f20b8",
       "client_id": "15f87fd9-5303-4b4d-a423-e76bf9509d9f",
       "version": 0
@@ -99,8 +96,6 @@
   "basket_entry": [
     {
       "quantity": "100",
-      "created_at": "2025-01-04 19:21:09.518282",
-      "updated_at": "2025-01-04 19:21:09.518282",
       "version": 0,
       "basket_id": "258c1a98-6ac8-4e7a-b670-833433750bcc",
       "id": "b287334b-235e-411d-95b6-a2d18d98f9af",
@@ -108,8 +103,6 @@
     },
     {
       "quantity": "150",
-      "created_at": "2025-01-04 19:21:09.518282",
-      "updated_at": "2025-01-04 19:21:09.518282",
       "version": 0,
       "basket_id": "258c1a98-6ac8-4e7a-b670-833433750bcc",
       "id": "7ae90678-c5bb-4e5e-94cd-30542622fb56",
@@ -117,8 +110,6 @@
     },
     {
       "quantity": "150",
-      "created_at": "2025-01-04 19:21:09.518282",
-      "updated_at": "2025-01-04 19:21:09.518282",
       "version": 0,
       "basket_id": "258c1a98-6ac8-4e7a-b670-833433750bcc",
       "id": "10518432-d732-43f2-a0b2-2da2153162f4",
@@ -126,8 +117,6 @@
     },
     {
       "quantity": "100",
-      "created_at": "2025-01-04 19:21:09.518282",
-      "updated_at": "2025-01-04 19:21:09.518282",
       "version": 0,
       "basket_id": "6d70cd07-0e19-4f52-87a0-91c44d0f20b8",
       "id": "5495e63c-9187-45dc-ba71-552d3d131410",

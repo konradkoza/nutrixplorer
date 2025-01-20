@@ -21,6 +21,7 @@ export type SimpleUser = {
     oauth: boolean;
     accessLevels: AccessLevel[];
     blocked: boolean;
+    verified: boolean;
 };
 
 export type UsersPage = {

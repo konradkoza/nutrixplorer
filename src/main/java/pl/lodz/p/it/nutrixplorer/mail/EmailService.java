@@ -22,7 +22,7 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
     private final ResourceBundleMessageSource mailMessageSource;
-//    @Async
+
     public void sendEmail(String recipient, String subject, String body) {
         MimeMessage message = mailSender.createMimeMessage();
 
@@ -43,7 +43,7 @@ public class EmailService {
         thymeleafContext.setVariables(templateModel);
         String htmlBody = templateEngine.process(templateName, thymeleafContext);
         String subject = mailMessageSource.getMessage(templateName + ".subject", null, Locale.of(lang));
-        log.info("Sending email to: {} with template: {}, with subject: {}", to, templateName, subject);
+        log.info("Sending email with template: {}, with subject: {}", templateName, subject);
         sendEmail(to, subject, htmlBody);
     }
 }

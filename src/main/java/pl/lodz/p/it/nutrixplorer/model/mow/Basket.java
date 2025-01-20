@@ -25,7 +25,7 @@ import java.util.List;
 public class Basket extends AbstractEntity {
 
 
-    @OneToMany(mappedBy = "basket", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "basket", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<BasketEntry> basketEntries;
 
     @ManyToOne

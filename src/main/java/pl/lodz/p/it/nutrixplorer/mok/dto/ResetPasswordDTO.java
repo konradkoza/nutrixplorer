@@ -11,4 +11,11 @@ public record ResetPasswordDTO(
         @Size(min = 5, max = 50, message = "Email must be between 5 and 50 characters long")
         String email
 ) {
+
+        @Override
+        public String toString() {
+            return "ResetPasswordDTO{" +
+                    "email='" + "*******@***" + '\'' +
+                    '}';
+        }
 }

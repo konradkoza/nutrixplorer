@@ -28,7 +28,7 @@ public class Label extends AbstractEntity {
 
     private String allergens;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "LABEL_ALLERGEN",
             joinColumns = @JoinColumn(name = "LABEL_ID"),

@@ -6,4 +6,13 @@ public record UserDTO(
         String email,
         boolean oauth
 ) {
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "firstName='" + "******" + '\'' +
+                ", lastName='" + "******" + '\'' +
+                ", email='" + "****@***" + '\'' +
+                ", oauth=" + oauth +
+                '}';
+    }
 }

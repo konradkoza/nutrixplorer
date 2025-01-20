@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -27,8 +28,9 @@ public class AdminDataSourceConfiguration {
         return new DataSourceConfigProperties();
     }
 
-    @Bean
-    public DataSource adminDatasource(DataSourceConfigProperties adminDataSourceConfigProperties) {
+    @Bean("adminDatasource")
+    @Primary
+    public DataSource adminDatasource(@Qualifier("adminDataSourceConfigProperties") DataSourceConfigProperties adminDataSourceConfigProperties) {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl (adminDataSourceConfigProperties.getJdbcUrl());
         hikariConfig.setUsername(adminDataSourceConfigProperties.getUsername());
@@ -51,6 +53,7 @@ public class AdminDataSourceConfiguration {
     }
 
     @Bean(name = "adminEntityManagerFactory")
+    @Primary
     public LocalContainerEntityManagerFactoryBean adminEntityManagerFactory(
             @Qualifier("adminDatasource") DataSource adminDatasource) {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();

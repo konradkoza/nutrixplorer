@@ -31,9 +31,9 @@ public record RegisterClientDTO(
     @Override
     public String toString() {
         return "RegisterClientDTO{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
+                "firstName='" + "******" + '\'' +
+                ", lastName='" + "******" + '\'' +
+                ", email='" + "******" + '\'' +
                 ", password='********'" +
                 ", language='" + language + '\'' +
                 '}';

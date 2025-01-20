@@ -6,4 +6,13 @@ public record UsersFilteringDTO(
         String email,
         String accessLevel
 ) {
+    @Override
+    public String toString() {
+        return "UsersFilteringDTO{" +
+                "firstName='" + "********" + '\'' +
+                ", lastName='" + "********" + '\'' +
+                ", email='" + "*******@***" + '\'' +
+                ", accessLevel='" + "********" + '\'' +
+                '}';
+    }
 }
