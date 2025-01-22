@@ -1,5 +1,4 @@
 import { ProductIndex } from "@/types/ProductTypes";
-import { lightFormat } from "date-fns";
 
 export const getProductImage = async (id: string) => {
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/product/${id}/image`);
