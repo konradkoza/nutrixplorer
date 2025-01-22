@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 import pl.lodz.p.it.nutrixplorer.model.AbstractEntity;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 @Setter
@@ -23,8 +22,8 @@ import java.io.Serializable;
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "level")
 @ToString(callSuper = true)
 public abstract class AccessLevel extends AbstractEntity implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+//    @Serial
+//    private static final long serialVersionUID = 1L;
 
     @Column(name = "ACTIVE", nullable = false)
     private boolean active;

@@ -79,7 +79,7 @@ public class Product extends AbstractEntity {
     )
     private List<NutritionalValue> nutritionalValues;
 
-    @ManyToMany(mappedBy = "favouriteProducts")
+    @ManyToMany(mappedBy = "favouriteProducts", fetch = FetchType.LAZY)
     @ToString.Exclude
     private Set<Client> usersWhoFavourited = new HashSet<>();
 }
