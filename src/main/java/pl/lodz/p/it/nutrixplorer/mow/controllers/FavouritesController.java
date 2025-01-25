@@ -26,17 +26,16 @@ public class FavouritesController {
 
     private final FavouriteProductsService favouriteProductsService;
 
-    @GetMapping()
+    @GetMapping
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<List<ProductSimpleDTO>> getFavoriteProducts() throws NotFoundException {
+    public ResponseEntity<List<ProductSimpleDTO>> getFavoriteProducts() {
         List<Product> products = favouriteProductsService.getCurrentUserFavoriteProducts();
         return ResponseEntity.ok(ProductMapper.INSTANCE.productsToProductSimpleDTOs(products));
     }
 
     @GetMapping("/page")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<ProductsListDTO> getFavoriteProductsPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int elements) throws NotFoundException {
-
+    public ResponseEntity<ProductsListDTO> getFavoriteProductsPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int elements) {
         Page<Product> products = favouriteProductsService.getCurrentUserFavoriteProducts(page, elements);
         return ResponseEntity.ok(new ProductsListDTO(ProductMapper.INSTANCE.productsToProductSimpleDTOs(products.getContent()), products.getTotalPages()));
     }

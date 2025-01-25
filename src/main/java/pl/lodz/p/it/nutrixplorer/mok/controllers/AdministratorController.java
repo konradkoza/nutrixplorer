@@ -21,7 +21,6 @@ public class AdministratorController {
     @DeleteMapping(path = "/{id}/access-level")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<Void> removeAccessLevel(@PathVariable UUID id) throws AccessLevelAssignException, NotFoundException {
-
         administratorService.removeAdministratorAccessLevel(id);
         return ResponseEntity.ok().build();
     }

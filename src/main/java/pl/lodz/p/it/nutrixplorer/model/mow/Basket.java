@@ -32,7 +32,7 @@ public class Basket extends AbstractEntity {
     @JoinColumn(name = "CLIENT_ID", nullable = false, updatable = false)
     private Client client;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", nullable = false)
     private String name;
 
     @Column(name = "DESCRIPTION", length = 2000)

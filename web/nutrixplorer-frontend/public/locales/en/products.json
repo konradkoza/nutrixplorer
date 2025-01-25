@@ -81,5 +81,6 @@
     "nutritionalValues": "Nutritional Values",
     "portion": "Portion",
     "nutritionalValue": "Nutritional Value",
-    "noProducts": "No products found"
+    "noProducts": "No products found",
+    "noBaskets": "No baskets found"
 }

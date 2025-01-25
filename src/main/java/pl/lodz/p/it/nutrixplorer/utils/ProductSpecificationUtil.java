@@ -35,10 +35,11 @@ public class ProductSpecificationUtil {
             specification = Specification.where(null);
         }
         if (filteringDTO.vitamins() != null && !filteringDTO.vitamins().isEmpty()) {
-            specification = specification.and(hasAllNutritionalValues2(filteringDTO.vitamins(), "Witaminy", "Witamina "));
+            specification = specification.and(
+                    hasAllNutritionalValues(filteringDTO.vitamins(), "Witaminy", "Witamina "));
         }
         if (filteringDTO.minerals() != null && !filteringDTO.minerals().isEmpty()) {
-            specification = specification.and(hasAllNutritionalValues2(filteringDTO.minerals(), "Minerały", ""));
+            specification = specification.and(hasAllNutritionalValues(filteringDTO.minerals(), "Minerały", ""));
         }
         if (filteringDTO.minCarbs() != null) {
             specification = specification.and(minSpecification("Total", "Węglowodany", Double.valueOf(filteringDTO.minCarbs())));
@@ -122,48 +123,35 @@ public class ProductSpecificationUtil {
         return specification;
     }
 
-    public static Specification<Product> hasAllNutritionalValues(List<String> values, String groupName, String namePrefix) {
+    public static Specification<Product> hasAllNutritionalValues(
+            List<String> values,
+            String groupName,
+            String namePrefix) {
         return (root, query, criteriaBuilder) -> {
-            Join<Product, NutritionalValue> nutritionalValuesJoin = root.join("nutritionalValues", JoinType.INNER);
-
-            Join<NutritionalValue, NutritionalValueName> nameJoin = nutritionalValuesJoin.join("nutritionalValueName", JoinType.INNER);
-
-            Join<NutritionalValueName, NutritionalValueGroup> groupJoin = nameJoin.join("group", JoinType.INNER);
-
-            if (query != null) {
-                query.distinct(true); // Avoid duplicate products in result set
-
-            }
-
-            Predicate groupPredicate = criteriaBuilder.equal(groupJoin.get("groupName"), groupName);
-            Predicate[] valuePredicates = values.stream()
-                    .map(value -> criteriaBuilder.equal(nameJoin.get("name"), namePrefix + value))
-                    .toArray(Predicate[]::new);
-
-            return criteriaBuilder.and(groupPredicate, criteriaBuilder.or(valuePredicates));
-        };
-    }
-
-    public static Specification<Product> hasAllNutritionalValues2(List<String> values, String groupName, String namePrefix) {
-        return (root, query, criteriaBuilder) -> {
-            query.distinct(true); // Avoid duplicate results
-
-            // Subquery to filter products by matching vitamin count
+            query.distinct(true);
             Subquery<Long> subquery = query.subquery(Long.class);
             Root<Product> subRoot = subquery.from(Product.class);
-            Join<Product, NutritionalValue> subNutritionalValues = subRoot.join("nutritionalValues", JoinType.INNER);
-            Join<NutritionalValue, NutritionalValueName> subNameJoin = subNutritionalValues.join("nutritionalValueName", JoinType.INNER);
-            Join<NutritionalValueName, NutritionalValueGroup> subGroupJoin = subNameJoin.join("group", JoinType.INNER);
+            Join<Product, NutritionalValue> subNutritionalValues =
+                    subRoot.join("nutritionalValues", JoinType.INNER);
+            Join<NutritionalValue, NutritionalValueName> subNameJoin =
+                    subNutritionalValues.join("nutritionalValueName", JoinType.INNER);
+            Join<NutritionalValueName, NutritionalValueGroup> subGroupJoin =
+                    subNameJoin.join("group", JoinType.INNER);
             subquery.select(criteriaBuilder.countDistinct(subNameJoin.get("name")))
                     .where(
                             criteriaBuilder.and(
-                                    criteriaBuilder.equal(subGroupJoin.get("groupName"), groupName),
-                                    subNameJoin.get("name").in(values.stream().map(value -> namePrefix + value).toArray()),
-                                    criteriaBuilder.equal(subRoot, root) // Link subquery to main query
+                                    criteriaBuilder.equal(
+                                            subGroupJoin
+                                                    .get("groupName"), groupName),
+                                    subNameJoin.get("name")
+                                            .in(values
+                                                    .stream()
+                                                    .map(value -> namePrefix + value)
+                                                    .toArray()),
+                                    criteriaBuilder
+                                            .equal(subRoot, root)
                             )
                     );
-
-            // Ensure the count matches the size of the vitamin list
             return criteriaBuilder.equal(subquery, values.size());
         };
     }
@@ -208,21 +196,6 @@ public class ProductSpecificationUtil {
             return criteriaBuilder.and(lessThanPredicate, namePredicate);
         };
     }
-
-    static Specification<Product> maxIndexSpecification(String indexName, Integer value) {
-        return (root, query, criteriaBuilder) -> {
-            Predicate lessThanPredicate = criteriaBuilder.lessThanOrEqualTo(
-                    root.join("productIndexes").get("indexValue"),
-                    value
-            );
-            Predicate namePredicate = criteriaBuilder.equal(
-                    root.join("productIndexes").get("indexName"),
-                    indexName
-            );
-            return criteriaBuilder.and(lessThanPredicate, namePredicate);
-        };
-    }
-
 
     static Specification<Product> minSpecification(String nutritionalValueName, String groupName, Double quantity) {
         return (root, query, criteriaBuilder) -> {

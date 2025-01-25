@@ -109,13 +109,6 @@ const BasketService = api.injectEndpoints({
             }),
             providesTags: ["Baskets"],
         }),
-        getUserBasketsList: builder.query<SimpleBasket[], void>({
-            query: () => ({
-                url: `/basket/user/list`,
-                method: "GET",
-            }),
-            providesTags: ["Baskets"],
-        }),
         getFilteredBaskets: builder.query<
             BasketsPage,
             {
@@ -134,7 +127,7 @@ const BasketService = api.injectEndpoints({
         }),
         getFilteredBasketsList: builder.query<SimpleBasket[], string>({
             query: (name) => ({
-                url: `/basket/user/list/filtered`,
+                url: `/basket/user/filtered`,
                 method: "GET",
                 params: {
                     name,
@@ -158,7 +151,6 @@ export const {
     useGetBasketNutritionsQuery,
     useLazyGetFilteredBasketsQuery,
     useGetBasketAllergensQuery,
-    useGetUserBasketsListQuery,
     useLazyGetBasketAllergensQuery,
     useLazyGetBasketNutritionsQuery,
     useLazyGetBasketDetailsQuery,

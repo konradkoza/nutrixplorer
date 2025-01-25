@@ -15,7 +15,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-@Transactional(propagation = Propagation.MANDATORY, transactionManager = "mokTransactionManager", isolation = Isolation.READ_COMMITTED)
+@Transactional(
+        propagation = Propagation.MANDATORY,
+        transactionManager = "mokTransactionManager",
+        isolation = Isolation.READ_COMMITTED)
 public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
 
     Optional<User> findByEmail(String email);
@@ -24,8 +27,12 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
 
     boolean existsByEmail(String email);
 
-    List<User> getUsersByCreatedAtBeforeAndVerifiedIsFalse(LocalDateTime beforeTime);
+    List<User> getUsersByCreatedAtBeforeAndVerifiedIsFalse(
+            LocalDateTime beforeTime);
 
-    @Query("SELECT u FROM User u WHERE :createdAt < u.createdAt AND u.createdAt < :createdAt2 AND u.verified = false")
+    @Query("SELECT u FROM User u " +
+            "WHERE :createdAt < u.createdAt " +
+            "AND u.createdAt < :createdAt2 " +
+            "AND u.verified = false")
     List<User> getUsersToResendEmail(LocalDateTime createdAt, LocalDateTime createdAt2);
 }

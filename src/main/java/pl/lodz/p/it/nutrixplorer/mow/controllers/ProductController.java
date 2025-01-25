@@ -24,14 +24,11 @@ import java.util.UUID;
 public class ProductController {
     private final ProductService productService;
 
-
-
     @GetMapping
     @PreAuthorize("permitAll()")
     public ResponseEntity<ProductsListDTO> getFilteredProducts(@RequestParam(defaultValue = "10") int elements,
                                                                @RequestParam(defaultValue = "0") int page,
                                                                ProductsFilteringDTO filters) {
-
         Page<Product> products = productService.getAllProductsFiltered(elements, page, filters);
         return ResponseEntity.ok(new ProductsListDTO(ProductMapper.INSTANCE.productsToProductSimpleDTOs(products.getContent()), products.getTotalPages()));
     }
@@ -44,11 +41,9 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
-
-
     @GetMapping("/{id}/image")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<byte[]> getProductImage(@PathVariable UUID id) throws NotFoundException {
+    public ResponseEntity<byte[]> getProductImage(@PathVariable UUID id) {
         return ResponseEntity.ok(productService.getProductImage(id));
     }
 

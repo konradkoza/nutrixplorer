@@ -1,17 +1,11 @@
 package pl.lodz.p.it.nutrixplorer.utils;
 
-import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Root;
-import jakarta.persistence.criteria.Subquery;
 import org.springframework.data.jpa.domain.Specification;
-import pl.lodz.p.it.nutrixplorer.model.mok.AccessLevel;
 import pl.lodz.p.it.nutrixplorer.model.mok.Administrator;
 import pl.lodz.p.it.nutrixplorer.model.mok.Client;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
-import pl.lodz.p.it.nutrixplorer.model.mow.Product;
 import pl.lodz.p.it.nutrixplorer.mok.dto.UsersFilteringDTO;
-import pl.lodz.p.it.nutrixplorer.mow.dto.ProductsFilteringDTO;
-import pl.lodz.p.it.nutrixplorer.mow.filtering.ProductSpecificationBuilder;
 import pl.lodz.p.it.nutrixplorer.mow.filtering.SearchOperation;
 import pl.lodz.p.it.nutrixplorer.mow.filtering.SpecificationBuilderImpl;
 
@@ -52,7 +46,6 @@ public class UserSpecificationUtil {
                 Root<Client> clientRoot = query.from(Client.class);
                 return criteriaBuilder.equal(clientRoot.get("user"), root);
             }
-
         });
     }
 }

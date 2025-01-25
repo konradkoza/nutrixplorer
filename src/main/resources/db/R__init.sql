@@ -8,6 +8,7 @@ GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.email_verification_token TO
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.account_verification_token TO nutrimokuser;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.password_verification_token TO nutrimokuser;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.google_auth TO nutrimokuser;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.user_favourite_products TO nutrimokuser;
 GRANT SELECT ON TABLE public.user TO nutrimowuser;
 GRANT SELECT, UPDATE ON TABLE public.access_level TO nutrimowuser;
 GRANT SELECT ON TABLE public.personal_data TO nutrimowuser;

@@ -35,19 +35,27 @@ public class BasketController {
 
     @GetMapping("/user")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<List<BasketDTO>> getUserBaskets() throws NotFoundException {
-        return ResponseEntity.ok(BasketMapper.INSTANCE.basketsToBasketDTOs(basketService.getUserBaskets()));
+    public ResponseEntity<List<BasketDTO>> getUserBaskets() {
+        return ResponseEntity.ok(
+                BasketMapper.INSTANCE
+                        .basketsToBasketDTOs(
+                                basketService.getUserBaskets()));
     }
 
-    @GetMapping("/user/list")
+    @PostMapping
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<List<BasketSimpleDTO>> getUserBasketsList() throws NotFoundException {
-        return ResponseEntity.ok(BasketMapper.INSTANCE.basketsToBasketSimpleDTOs(basketService.getUserBaskets()));
+    public ResponseEntity<BasketSimpleDTO> createBasket(
+            @RequestBody @Valid CreateBasketDTO createBasketDTO)
+            throws NotFoundException, BasketNameNotUniqueException {
+        Basket basket = basketService.createBasket(createBasketDTO);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(BasketMapper.INSTANCE.basketToBasketSimpleDTO(basket));
     }
 
-    @GetMapping("/user/list/filtered")
+    @GetMapping("/user/filtered")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<List<BasketSimpleDTO>> getUserBasketsList(@RequestParam(defaultValue = "") String name) throws NotFoundException {
+    public ResponseEntity<List<BasketSimpleDTO>> getUserBasketsList(@RequestParam(defaultValue = "") String name) {
         return ResponseEntity.ok(BasketMapper.INSTANCE.basketsToBasketSimpleDTOs(basketService.getUserBasketsByName(name)));
     }
 
@@ -58,12 +66,7 @@ public class BasketController {
         return ResponseEntity.status(HttpStatus.OK).eTag(signer.generateSignature(basket.getId(), basket.getVersion())).body(BasketMapper.INSTANCE.basketToBasketDTO(basketService.getBasket(id)));
     }
 
-    @PostMapping
-    @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<BasketSimpleDTO> createBasket(@RequestBody @Valid CreateBasketDTO createBasketDTO) throws NotFoundException, BasketNameNotUniqueException {
-        Basket basket = basketService.createBasket(createBasketDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(BasketMapper.INSTANCE.basketToBasketSimpleDTO(basket));
-    }
+
 
     @PostMapping("/{basketId}/entry")
     @PreAuthorize("hasRole('CLIENT')")

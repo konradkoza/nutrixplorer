@@ -22,7 +22,7 @@ public class BasketEntry extends AbstractEntity {
     @JoinColumn(name = "PRODUCT_ID", nullable = false, updatable = false)
     private Product product;
 
-    @Column(name = "QUANTITY", precision = 10, scale = 2)
+    @Column(name = "QUANTITY", precision = 10, scale = 2, nullable = false)
     private BigDecimal units;
 
 

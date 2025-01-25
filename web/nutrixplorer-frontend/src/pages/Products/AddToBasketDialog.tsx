@@ -113,7 +113,7 @@ const AddToBasketDialog = ({
                                                       })
                                                     : []
                                             }
-                                            emptyMessage={t("noProducts")}
+                                            emptyMessage={t("noBaskets")}
                                             label={t("addToBasket.basket")}
                                             placeholder={t("addToBasket.search")}
                                             isLoading={isLoading}

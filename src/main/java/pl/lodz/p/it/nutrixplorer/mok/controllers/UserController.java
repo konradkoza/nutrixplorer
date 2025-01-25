@@ -33,7 +33,6 @@ public class UserController {
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<UserDetailsDTO> getUser(@PathVariable UUID id) throws NotFoundException, InvalidHeaderException {
-        log.info("Getting user with id: " + id);
         User user = userService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).eTag(signer.generateSignature(user.getId(), user.getVersion())).body(UserMapper.INSTANCE.userToUserDetailsDTO(userService.findById(id)));
     }
@@ -42,8 +41,6 @@ public class UserController {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<UsersPageDTO> getAllUsers(@RequestParam(defaultValue = "10") int elements,
                                                     @RequestParam(defaultValue = "0") int page, UsersFilteringDTO filteringDTO) {
-
-        log.info("Getting all users");
         Page<User> users = userService.findAllUsers(page, elements, filteringDTO);
         return ResponseEntity.ok(new UsersPageDTO(UserMapper.INSTANCE.usersToSimpleUserDTOs(users.getContent()), users.getTotalPages()));
     }
@@ -51,7 +48,6 @@ public class UserController {
     @PatchMapping("/{id}/block")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<Void> blockUser(@PathVariable UUID id) throws NotFoundException, BlockUserException {
-        log.info("Blocking user with id: " + id);
         userService.blockUser(id);
         return ResponseEntity.ok().build();
     }
@@ -59,7 +55,6 @@ public class UserController {
     @DeleteMapping("/{id}/block")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<Void> unblockUser(@PathVariable UUID id) throws NotFoundException, BlockUserException {
-        log.info("Unblocking user with id: " + id);
         userService.unblockUser(id);
         return ResponseEntity.ok().build();
     }
@@ -67,7 +62,6 @@ public class UserController {
     @PatchMapping("/{id}/email")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<Void> changeEmail(@PathVariable UUID id, @RequestBody ChangeEmailDTO changeEmailDTO) throws NotFoundException, TokenGenerationException, EmailAddressInUseException {
-        log.info("Changing email for user with id: " + id);
         userService.changeEmailInit(changeEmailDTO, id);
         return ResponseEntity.ok().build();
     }
