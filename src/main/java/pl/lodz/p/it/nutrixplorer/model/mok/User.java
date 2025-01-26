@@ -17,7 +17,7 @@ import java.util.List;
         name = "PERSONAL_DATA",
         pkJoinColumns = @PrimaryKeyJoinColumn(name = "USER_ID"),
         schema = "PUBLIC")
-@SecondaryTable(name = "GOOGLE_AUTH", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
+@SecondaryTable(name = "GOOGLE_AUTH", pkJoinColumns = @PrimaryKeyJoinColumn(name = "USER_ID"))
 @ToString(callSuper = true)
 @Getter
 @NoArgsConstructor
@@ -39,11 +39,6 @@ public class User extends AbstractEntity {
     @Setter
     @Column(name = "GOOGLE_ID", table = "GOOGLE_AUTH", unique = true, length = 30)
     private String googleId;
-
-////    @Setter
-//    @Column(name = "login", nullable = false, updatable = false, unique = true, length = 50)
-//    private String login;
-
 
     @Enumerated(EnumType.STRING)
     @Column(name = "LANGUAGE", nullable = false)

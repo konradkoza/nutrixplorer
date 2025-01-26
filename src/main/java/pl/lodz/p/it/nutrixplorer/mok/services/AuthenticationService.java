@@ -47,14 +47,13 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final ClientRepository clientRepository;
-//    private final AdministratorRepository administratorRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final VerificationTokenService verificationTokenService;
     private final UserRolesService userRolesService;
     @Value("${nutrixplorer.login.max-attempts:3}")
     private int maxLoginAttempts;
 
-    @Value("${nutrixplorer.login.lock-duration:86400}")
+    @Value("${nutrixplorer.login.lock-duration:300}")
     private int loginTimeOut;
 
     @Value("${nutrixplorer.frontend-url}")

@@ -79,8 +79,8 @@ public class GlobalAdvice {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponseDTO> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
-        log.error("Database connection lost", e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        log.error("Method argument type missmatch", e);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponseDTO(ExceptionMessages.INVALID_REQUEST_PARAMETER, ErrorCodes.INVALID_REQUEST_PARAMETER));
     }
 
@@ -91,7 +91,6 @@ public class GlobalAdvice {
                 .body(new ErrorResponseDTO(ExceptionMessages.DATABASE_CONNECTION_ERROR, ErrorCodes.DATABASE_CONNECTION_ERROR));
     }
 
-//    AuthorizationDeniedException
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<ErrorResponseDTO> handleAuthorizationDeniedException(AuthorizationDeniedException e) {
         log.error("Authorization denied", e);

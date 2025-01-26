@@ -18,8 +18,6 @@ public interface UserMapper {
     @Mapping(source = "googleId", target = "oauth")
     UserDTO userToUserDTO(User user);
 
-    List<UserDTO> usersToUserDTOs(List<User> users);
-
     @Mapping(source = "googleId", target = "oauth")
     @Mapping(source = "accessLevels", target = "accessLevels")
     SimpleUserDTO userToSimpleUserDTO(User user);

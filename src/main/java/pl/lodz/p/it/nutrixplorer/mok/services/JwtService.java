@@ -30,17 +30,13 @@ public class JwtService {
     public Jwt generateToken(UUID id, List<String> roles) {
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()
-//                .issuer("nutrixplorer")
+                .issuer("NutriXplorer")
                 .issuedAt(now)
                 .expiresAt(now.plus(jwtExpiration, ChronoUnit.HOURS))
                 .subject(id.toString())
                 .claim("authorities", roles)
                 .build();
-
         var encoderParameters = JwtEncoderParameters.from(JwsHeader.with(SignatureAlgorithm.RS256).build(), claims);
         return jwtEncoder.encode(encoderParameters);
     }
-
-
-
 }

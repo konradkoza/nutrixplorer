@@ -10,11 +10,9 @@ import java.util.List;
 @Mapper(uses = ProductMapperHelper.class)
 public interface ProductMapper {
 
-    ProductMapper INSTANCE = Mappers.getMapper( ProductMapper.class );
+    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
     ProductSimpleDTO productToProductSimpleDTO(Product product);
-
-    UnitDTO unitToUnitDTO(Unit unit);
 
     List<ProductSimpleDTO> productsToProductSimpleDTOs(List<Product> products);
 
@@ -26,17 +24,12 @@ public interface ProductMapper {
 
     ProductRatingDTO ratingToRatingDTO(Rating rating);
 
-    List<ProductRatingDTO> ratingsToRatingDTOs(List<Rating> ratings);
-
     ProductLabelDTO labelToLabelDTO(Label label);
 
     ProductIndexDTO productIndexToProductIndexDTO(ProductIndex productIndex);
 
-    List<ProductIndexDTO> productIndexesToProductIndexDTOs(List<ProductIndex> productIndexes);
-
     NutritionalIndexDTO nutritionalIndexToNutritionalIndexDTO(NutritionalIndex nutritionalIndex);
 
-    List<NutritionalIndexDTO> nutritionalIndexesToNutritionalIndexDTOs(List<NutritionalIndex> nutritionalIndexes);
 
     NutritionalValueDTO nutritionalValueToNutritionalValueDTO(NutritionalValue nutritionalValue);
 
