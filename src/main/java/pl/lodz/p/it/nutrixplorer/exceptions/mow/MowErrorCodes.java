@@ -1,4 +1,4 @@
-package pl.lodz.p.it.nutrixplorer.exceptions.mow.codes;
+package pl.lodz.p.it.nutrixplorer.exceptions.mow;
 
 public class MowErrorCodes {
     public static final String PRODUCT_NOT_FOUND = "productNotFound";

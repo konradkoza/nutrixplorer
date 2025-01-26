@@ -1,4 +1,4 @@
-package pl.lodz.p.it.nutrixplorer.exceptions.mow.messages;
+package pl.lodz.p.it.nutrixplorer.exceptions.mow;
 
 public class MowErrorMessages {
     public static final String PRODUCT_IMAGE_NOT_FOUND = "Product image not found";

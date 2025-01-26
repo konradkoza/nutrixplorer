@@ -14,8 +14,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.MokErrorCodes;
-import pl.lodz.p.it.nutrixplorer.exceptions.mok.messages.MokExceptionMessages;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.MokErrorCodes;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.MokExceptionMessages;
 import pl.lodz.p.it.nutrixplorer.mok.dto.ErrorResponseDTO;
 
 import java.net.ConnectException;

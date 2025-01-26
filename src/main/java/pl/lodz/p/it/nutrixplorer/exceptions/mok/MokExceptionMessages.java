@@ -1,4 +1,4 @@
-package pl.lodz.p.it.nutrixplorer.exceptions.mok.messages;
+package pl.lodz.p.it.nutrixplorer.exceptions.mok;
 
 public class MokExceptionMessages {
 

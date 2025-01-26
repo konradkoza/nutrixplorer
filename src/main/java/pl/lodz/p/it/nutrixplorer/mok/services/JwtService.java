@@ -22,10 +22,8 @@ import java.util.UUID;
 public class JwtService {
     private final JwtEncoder jwtEncoder;
 
-
     @Value("${nutrixplorer.jwt.expiration}")
     private long jwtExpiration;
-
 
     public Jwt generateToken(UUID id, List<String> roles) {
         Instant now = Instant.now();
@@ -39,4 +37,5 @@ public class JwtService {
         var encoderParameters = JwtEncoderParameters.from(JwsHeader.with(SignatureAlgorithm.RS256).build(), claims);
         return jwtEncoder.encode(encoderParameters);
     }
+
 }

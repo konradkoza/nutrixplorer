@@ -14,8 +14,8 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.*;
-import pl.lodz.p.it.nutrixplorer.exceptions.mok.codes.MokErrorCodes;
-import pl.lodz.p.it.nutrixplorer.exceptions.mow.messages.MowErrorMessages;
+import pl.lodz.p.it.nutrixplorer.exceptions.mok.MokErrorCodes;
+import pl.lodz.p.it.nutrixplorer.exceptions.mow.MowErrorMessages;
 import pl.lodz.p.it.nutrixplorer.mok.dto.*;
 import pl.lodz.p.it.nutrixplorer.mok.mappers.UserMapper;
 import pl.lodz.p.it.nutrixplorer.mok.services.AuthenticationService;
@@ -43,6 +43,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register-client")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<UserDTO> registerClient(@RequestBody @Valid RegisterClientDTO registerClientDTO) throws EmailAddressInUseException, UserRegisteringException {
         return ResponseEntity.ok(
                 UserMapper.INSTANCE.userToUserDTO(
