@@ -8,16 +8,19 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Component
 public class EmailEventListener {
 
-    private final EmailService emailService;
+    private final EmailSender emailService;
 
-    public EmailEventListener(EmailService emailService) {
+    public EmailEventListener(EmailSender emailService) {
         this.emailService = emailService;
     }
 
-    @Async // Makes the email-sending process asynchronous
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handleEmailEvent(HtmlEmailEvent event) {
-
-        emailService.createHtmlEmail(event.getRecipient(), event.getTemplateName(), event.getModel(), event.getLang());
-    }
+        @Async
+        @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+        public void handleEmailEvent(HtmlEmailEvent event) {
+            emailService.createHtmlEmail(
+                    event.getRecipient(),
+                    event.getTemplateName(),
+                    event.getModel(),
+                    event.getLang());
+        }
 }

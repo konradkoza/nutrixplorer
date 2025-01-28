@@ -127,7 +127,10 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                             key={label}
                                             className="flex max-w-[480px] flex-grow flex-col gap-5">
                                             <p className="text-sm font-medium leading-none">
-                                                {t(label) + t("totalGrams")}
+                                                {t(label) +
+                                                    (label !== "energyValue"
+                                                        ? t("totalGrams")
+                                                        : t("totalKcal"))}
                                             </p>
                                             <div className="flex gap-2">
                                                 <FormField

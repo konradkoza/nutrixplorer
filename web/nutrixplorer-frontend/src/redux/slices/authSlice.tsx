@@ -22,7 +22,6 @@ export const authSlice = createSlice({
             const payload = jwtDecode<Payload>(action.payload.token);
             state.user = payload.sub || "";
             state.accessLevels = payload.authorities;
-
             localStorage.setItem("token", action.payload.token);
         },
         logout: (state) => {

@@ -15,14 +15,11 @@ import java.util.List;
 @Component
 @Slf4j
 public class ServiceLoggingAspect {
-
     @Pointcut("within(@pl.lodz.p.it.nutrixplorer.configuration.LoggingInterceptor *)")
     public void interceptedMethod() {
     }
-
     @Around(value = "interceptedMethod()", argNames = "jp")
     public Object logMethodCall(ProceedingJoinPoint jp) throws Throwable {
-
         String username = SecurityContextUtil.getCurrentUser();
         StringBuilder builder = new StringBuilder();
         builder.append("Method call intercepted: ").append(jp.getSignature().getDeclaringTypeName()).append(".").append(jp.getSignature().getName());
@@ -54,9 +51,7 @@ public class ServiceLoggingAspect {
             log.error("Method: {}.{} called by user: {} threw an exception: ", jp.getSignature().getDeclaringTypeName(), jp.getSignature().getName(), username, e);
             throw e;
         }
-
     }
-
     public String parseReturnValue(Object args) {
         if (args == null) {
             return null;
@@ -79,7 +74,6 @@ public class ServiceLoggingAspect {
             case Object object -> parseArgument(object);
         };
     }
-
     public String parseArgument(Object arg) {
         StringBuilder builder = new StringBuilder();
         if (arg == null) {
@@ -94,5 +88,4 @@ public class ServiceLoggingAspect {
         }
         return builder.toString();
     }
-
 }

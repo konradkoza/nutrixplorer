@@ -16,7 +16,7 @@
     "deleteConfirmationContent": "Are you sure you want to delete this basket?",
     "deleteConfirmationTitle": "Are you sure",
     "deleteConfirmationButton": "Delete",
-    "duplicateBasket": "Duplicate basket",
+    "duplicateBasket": "Copy basket",
     "deleteBasket": "Delete basket",
     "editBasket": "Edit basket",
     "creationDate": "Creation date: ",
@@ -79,7 +79,7 @@
     "nutrValue": "Nutritional Value",
     "totalValue": "Total Value",
     "productsNutrTitle": "Nutritional Value of Individual Products",
-    "rws": "%RI",
+    "rws": "%RI (Reference Intake)",
     "updateQuantityTitle": "Change product quantity in basket",
     "quantity": "Quantity*",
     "change": "Change",
@@ -91,5 +91,6 @@
     "addToComparison": "Add to comparison",
     "quantityHeader": "Quantity",
     "noDescription": "No description",
-    "totalGrams": " (total grams)"
+    "totalGrams": " (total grams)",
+    "totalKcal": " (total kcal)"
 }

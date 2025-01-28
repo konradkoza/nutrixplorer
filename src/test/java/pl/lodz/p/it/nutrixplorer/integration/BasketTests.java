@@ -325,7 +325,7 @@ public class BasketTests implements AbstractDBRiderTests{
 
 
     @Test
-    public void cloneBasket_shouldCloneBasket() {
+    public void copyBasket_shouldCopyBasket() {
         String basketId = "258c1a98-6ac8-4e7a-b670-833433750bcc";
         int initialBasketsCount = RestAssured.given()
                 .auth().oauth2(token)
@@ -341,7 +341,7 @@ public class BasketTests implements AbstractDBRiderTests{
                 .contentType(ContentType.JSON)
                 .body(new CreateBasketDTO("New basket1", "New basket description"))
                 .when()
-                .post(baseUrl + ":" + port + "/basket/" + basketId + "/clone")
+                .post(baseUrl + ":" + port + "/basket/" + basketId + "/copy")
                 .then()
                 .statusCode(HttpStatus.CREATED.value());
 
@@ -358,28 +358,27 @@ public class BasketTests implements AbstractDBRiderTests{
     }
 
     @Test
-    public void cloneBasket_shouldThrowNotFoundException() {
+    public void copyBasket_shouldThrowNotFoundException() {
         String basketId = "b287334b-ffff-411d-95b6-a2d18d98f9af";
         RestAssured.given()
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(new CreateBasketDTO("New basket2", "New basket description"))
                 .when()
-                .post(baseUrl + ":" + port + "/basket/" + basketId + "/clone")
+                .post(baseUrl + ":" + port + "/basket/" + basketId + "/copy")
                 .then()
                 .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
-//    clone basket name not unique
     @Test
-    public void cloneBasket_shouldThrowBasketNameNotUniqueException() {
+    public void copyBasket_shouldThrowBasketNameNotUniqueException() {
         String basketId = "258c1a98-6ac8-4e7a-b670-833433750bcc";
         RestAssured.given()
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(new CreateBasketDTO("Test basket", "Basket description"))
                 .when()
-                .post(baseUrl + ":" + port + "/basket/" + basketId + "/clone")
+                .post(baseUrl + ":" + port + "/basket/" + basketId + "/copy")
                 .then()
                 .statusCode(HttpStatus.CONFLICT.value());
     }

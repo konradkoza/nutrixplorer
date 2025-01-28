@@ -15,7 +15,7 @@ import Pagination from "../Products/Pagination";
 import AddBasketDialog from "./AddBasketDialog";
 import BasketCard from "./BasketCard";
 import BasketFilters from "./BasketsFilters";
-import CloneBasketDialog from "./CloneBasketDialog";
+import CopyBasketDialog from "./CloneBasketDialog";
 import ComparisonInfo from "./ComparisonInfo";
 import { useTranslation } from "react-i18next";
 import { TranslationNS } from "@/utils/translationNamespaces";
@@ -127,7 +127,7 @@ const BasketsListPage = () => {
                         </div>
                     </div>
                 )}
-                <CloneBasketDialog
+                <CopyBasketDialog
                     basketId={basketId}
                     currentName={currentName}
                     onClose={() => setCloneDialogOpen(false)}

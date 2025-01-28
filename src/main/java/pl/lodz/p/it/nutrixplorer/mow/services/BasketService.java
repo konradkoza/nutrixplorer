@@ -149,7 +149,7 @@ public class BasketService {
 
     }
 
-    public Basket cloneBasket(UUID basketId, CreateBasketDTO basketDTO) throws NotFoundException, BasketNameNotUniqueException {
+    public Basket copyBasket(UUID basketId, CreateBasketDTO basketDTO) throws NotFoundException, BasketNameNotUniqueException {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         Basket basket = basketRepository.findByIdAndUserId(basketId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
         Basket newBasket = new Basket();

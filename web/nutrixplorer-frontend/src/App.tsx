@@ -10,7 +10,6 @@ const router = createBrowserRouter([...publicRoutes, ...protectedRoutes]);
 
 function App() {
     const dispatch = useDispatch();
-
     if (
         localStorage.getItem("token") &&
         Date.now() < getExpDate(localStorage.getItem("token") || "")
@@ -19,7 +18,6 @@ function App() {
     } else {
         dispatch(logout());
     }
-
     return (
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
             <Toaster

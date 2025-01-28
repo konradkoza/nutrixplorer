@@ -87,9 +87,9 @@ const BasketService = api.injectEndpoints({
             }),
             invalidatesTags: ["Baskets"],
         }),
-        cloneBasket: builder.mutation<Basket, { basketId: string; basket: CreateBasket }>({
+        copyBasket: builder.mutation<Basket, { basketId: string; basket: CreateBasket }>({
             query: (data) => ({
-                url: `/basket/${data.basketId}/clone`,
+                url: `/basket/${data.basketId}/copy`,
                 method: "POST",
                 body: data.basket,
             }),
@@ -146,7 +146,7 @@ export const {
     useDeleteBasketMutation,
     useAddBasketEntryMutation,
     useUpdateBasketEntryMutation,
-    useCloneBasketMutation,
+    useCopyBasketMutation,
     useUpdateBasketMutation,
     useGetBasketNutritionsQuery,
     useLazyGetFilteredBasketsQuery,

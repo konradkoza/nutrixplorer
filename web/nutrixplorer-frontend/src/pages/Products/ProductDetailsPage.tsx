@@ -77,7 +77,7 @@ const ProductDetailsPage = () => {
                                 />
                             </Card>
                             <div className="relative flex flex-grow basis-0 flex-col sm:w-2/3">
-                                {favouriteProducts !== undefined && (
+                                {accessLevels.includes(AccessLevel.CLIENT) && (
                                     <div className="absolute right-0 m-1 flex h-auto flex-col space-y-1">
                                         {!isFavourite ? (
                                             <Button

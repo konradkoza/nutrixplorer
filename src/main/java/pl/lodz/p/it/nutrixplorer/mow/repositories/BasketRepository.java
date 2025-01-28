@@ -50,7 +50,4 @@ public interface BasketRepository extends JpaRepository<Basket, UUID>, JpaSpecif
             "JOIN p.label.allergenList a " +
             "WHERE b.id = :basketId")
     List<String> findDistinctAllergensByBasketId(@Param("basketId") UUID basketId);
-
-    @Query("SELECT b FROM Basket b WHERE b.client.user.id = :userId AND b.id = :basketId")
-    Optional<Basket> findByIdAndClient(UUID userId, UUID basketId);
 }

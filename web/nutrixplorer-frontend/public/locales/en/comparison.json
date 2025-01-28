@@ -36,6 +36,6 @@
     "fiber": "Fiber",
     "index": "Index",
     "salt": "Salt",
-    "comparisonRws": "Comparison of %RI",
+    "comparisonRws": "Comparison of %RI (Reference Intake)",
     "otherInformationComparison": "Comparison of other information"
 }

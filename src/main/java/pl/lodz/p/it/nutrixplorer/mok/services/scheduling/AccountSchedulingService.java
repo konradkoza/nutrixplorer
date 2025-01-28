@@ -42,7 +42,7 @@ public class AccountSchedulingService {
 
 
     public void deleteNonVerifiedUsers() {
-        LocalDateTime beforeTime = LocalDateTime.now().minusHours(hoursToRemoveUnverified);
+        LocalDateTime beforeTime = LocalDateTime.now().minusMinutes(hoursToRemoveUnverified);
         List<User> users = userRepository.getUsersByCreatedAtBeforeAndVerifiedIsFalse(beforeTime);
         users.forEach(user -> {
             eventPublisher.publishEvent(new HtmlEmailEvent(
@@ -58,7 +58,7 @@ public class AccountSchedulingService {
     }
 
     public void sendEmailVerifyAccount() {
-        LocalDateTime beforeTime = LocalDateTime.now().minusHours(hoursToRemoveUnverified / 2);
+        LocalDateTime beforeTime = LocalDateTime.now().minusMinutes(hoursToRemoveUnverified / 2);
         LocalDateTime afterTime = beforeTime.plusMinutes(10);
         List<User> users = userRepository.getUsersToResendEmail(beforeTime, afterTime);
         users.forEach(user -> {

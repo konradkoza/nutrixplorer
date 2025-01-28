@@ -16,7 +16,7 @@
     "deleteConfirmationContent": "Czy na pewno chcesz usunąć ten koszyk?",
     "deleteConfirmationTitle": "Czy jesteś pewny",
     "deleteConfirmationButton": "Usuń",
-    "duplicateBasket": "Duplikuj koszyk",
+    "duplicateBasket": "Kopiuj koszyk",
     "deleteBasket": "Usuń koszyk",
     "editBasket": "Edytuj koszyk",
     "creationDate": "Data utworzenia: ",
@@ -79,7 +79,7 @@
     "nutrValue": "Wartość odżywcza",
     "totalValue": "Sumaryczna wartość",
     "productsNutrTitle": "Wartość odżywcza poszczególnych produktów",
-    "rws": "%RWS",
+    "rws": "%RWS (Referencyjna Wartość Spożycia)",
     "updateQuantityTitle": "Zmień ilość produktu w koszyku",
     "quantity": "Ilość*",
     "change": "Zmień",
@@ -91,5 +91,6 @@
     "addToComparison": "Dodaj do porównania",
     "quantityHeader": "Ilość",
     "noDescription": "Brak opisu",
-    "totalGrams": " (gramów w sumie)"
+    "totalGrams": " (gramów w sumie)",
+    "totalKcal": " (kcal w sumie)"
 }

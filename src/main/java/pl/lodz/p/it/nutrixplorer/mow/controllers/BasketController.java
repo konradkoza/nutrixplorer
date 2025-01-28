@@ -116,10 +116,10 @@ public class BasketController {
         return ResponseEntity.ok(basketService.getBasketAllergens(basketId));
     }
 
-    @PostMapping("/{basketId}/clone")
+    @PostMapping("/{basketId}/copy")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<BasketDTO> cloneBasket(@PathVariable UUID basketId,@RequestBody @Valid CreateBasketDTO basketDTO) throws NotFoundException, BasketNameNotUniqueException {
-        Basket basket = basketService.cloneBasket(basketId, basketDTO);
+    public ResponseEntity<BasketDTO> copyBasket(@PathVariable UUID basketId, @RequestBody @Valid CreateBasketDTO basketDTO) throws NotFoundException, BasketNameNotUniqueException {
+        Basket basket = basketService.copyBasket(basketId, basketDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(BasketMapper.INSTANCE.basketToBasketDTO(basket));
     }
 

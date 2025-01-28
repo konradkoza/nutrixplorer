@@ -33,7 +33,7 @@ import { CopyIcon, MoreHorizontal, PencilIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CarbsChart from "./CarbsChart";
-import CloneBasketDialog from "./CloneBasketDialog";
+import CopyBasketDialog from "./CloneBasketDialog";
 import EditBasketDialog from "./EditBasketDialog";
 import FatChart from "./FatChart";
 import NutritionChart from "./NutritionChart";
@@ -214,7 +214,11 @@ const BasketDetails = () => {
                                                         {entry.product.unit}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {entry.units} {entry.product.unit}
+                                                        {entry.units.toLocaleString(i18n.language, {
+                                                            minimumFractionDigits: 0,
+                                                            maximumFractionDigits: 3,
+                                                        })}{" "}
+                                                        {entry.product.unit}
                                                     </TableCell>
                                                     <TableCell align="right">
                                                         <DropdownMenu modal={false}>
@@ -266,7 +270,7 @@ const BasketDetails = () => {
                                     </Table>
                                 </CardContent>
                             </Card>
-                            <CloneBasketDialog
+                            <CopyBasketDialog
                                 basketId={basket?.id}
                                 currentName={basket.name}
                                 onClose={() => setCloneDialogOpen(false)}

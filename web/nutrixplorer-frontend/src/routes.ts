@@ -78,7 +78,6 @@ export const publicRoutes: RouteObject[] = [
             { path: "forgot-password", Component: ForgotPassword },
         ],
     },
-
     { path: "/", Component: () => Navigate({ to: "/products", replace: true }) },
     {
         path: "/products",
@@ -94,7 +93,7 @@ export const publicRoutes: RouteObject[] = [
             },
         ],
     },
-
+    { path: "/", Component: MainLayout, children: [{ path: "*", Component: NotFoundPage }] },
     { path: "/auth/google/callback", Component: OauthCallback },
     {
         path: "/verify/",
@@ -123,7 +122,6 @@ export const protectedRoutes: RouteObject[] = [
                     AuthGuard({ requiredRoles: [AccessLevel.CLIENT, AccessLevel.ADMINISTRATOR] }),
                 children: [{ path: "/account", Component: AccountPage }],
             },
-            { path: "*", Component: NotFoundPage },
         ],
     },
 ];

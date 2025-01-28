@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useCloneBasketMutation } from "@/redux/services/basketService";
+import { useCopyBasketMutation } from "@/redux/services/basketService";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { TranslationNS } from "@/utils/translationNamespaces";
@@ -24,9 +24,9 @@ type AddBasketDialogProps = {
     onClose: () => void;
 };
 
-const CloneBasketDialog = ({ currentName, basketId, open, onClose }: AddBasketDialogProps) => {
+const CopyBasketDialog = ({ currentName, basketId, open, onClose }: AddBasketDialogProps) => {
     const { t } = useTranslation(TranslationNS.Baskets);
-    const [cloneBasket] = useCloneBasketMutation();
+    const [copyBasket] = useCopyBasketMutation();
 
     const form = useForm<AddBasketDialogFormType>({
         values: {
@@ -36,7 +36,7 @@ const CloneBasketDialog = ({ currentName, basketId, open, onClose }: AddBasketDi
         resolver: zodResolver(getAddBasketSchema(t)),
     });
     const handleChangeQuantity = (data: AddBasketDialogFormType) => {
-        cloneBasket({ basketId: basketId, basket: data });
+        copyBasket({ basketId: basketId, basket: data });
         onClose();
     };
 
@@ -87,4 +87,4 @@ const CloneBasketDialog = ({ currentName, basketId, open, onClose }: AddBasketDi
     );
 };
 
-export default CloneBasketDialog;
+export default CopyBasketDialog;
