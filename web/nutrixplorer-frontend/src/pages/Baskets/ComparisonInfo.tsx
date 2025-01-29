@@ -63,7 +63,11 @@ const ComparisonInfo = ({ baskets }: ComparisonInfoProps) => {
                     <Button onClick={handleClear} className="gap-2" variant="ghost">
                         <EraserIcon /> {t("clear")}
                     </Button>
-                    <Button onClick={handleComapare} className="gap-2" variant="ghost">
+                    <Button
+                        onClick={handleComapare}
+                        disabled={baskets.length !== 2}
+                        className="gap-2"
+                        variant="ghost">
                         <CheckCheckIcon /> {t("compare")}
                     </Button>
                 </div>

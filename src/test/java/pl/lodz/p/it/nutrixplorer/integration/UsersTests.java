@@ -50,8 +50,6 @@ public class UsersTests implements AbstractDBRiderTests{
     @BeforeEach
     @DataSet(value = "datasets/test-users.json", strategy = SeedStrategy.REFRESH)
     public void setUp() {
-        log.info("Application url: {}", baseUrl + ":" + port );
-
         Response responseAdmin = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .when()

@@ -27,7 +27,6 @@ public class ProductTests {
 
     @Test
     public void filterProductsByName_shouldReturnMatchingProducts() {
-
         RestAssured.given()
                 .contentType(ContentType.JSON)
                 .param("productName", "Mleko")

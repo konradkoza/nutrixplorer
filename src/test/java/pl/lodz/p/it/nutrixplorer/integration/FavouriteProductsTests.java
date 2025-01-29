@@ -20,7 +20,6 @@ import static pl.lodz.p.it.nutrixplorer.integration.AbstractContainerTests.baseU
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
 @ExtendWith({DBUnitExtension.class, AbstractContainerTests.class})
-@DataSet(value = "datasets/test-favourites.json", strategy = SeedStrategy.REFRESH)
 public class FavouriteProductsTests implements AbstractDBRiderTests{
 
     public static String token;
@@ -29,9 +28,8 @@ public class FavouriteProductsTests implements AbstractDBRiderTests{
     public int port;
 
     @BeforeEach
+    @DataSet(value = "datasets/test-favourites.json", strategy = SeedStrategy.REFRESH)
     public void setUp() {
-        log.info("Application url: {}", baseUrl + ":" + port );
-
         Response responseAdmin = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .when()
@@ -48,7 +46,6 @@ public class FavouriteProductsTests implements AbstractDBRiderTests{
     @Test
     public void addProductToFavourites_shouldThrowNotFoundException() {
         String productId = "3b1b0c48-b79f-4119-bbd4-19f37fc7d69a";
-
         RestAssured.given()
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
@@ -61,7 +58,6 @@ public class FavouriteProductsTests implements AbstractDBRiderTests{
     @Test
     public void addProductToFavourites_shouldAddProduct() {
         String productId = "3b1b0c48-b79f-4119-bbd4-19f37fc7d69f";
-
         RestAssured.given()
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)

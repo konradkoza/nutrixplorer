@@ -33,8 +33,6 @@ services:
       - "8080:8080"
     networks:
       - my_network
-    environment:
-      - SPRING_PROFILES_ACTIVE=dev
   nginx:
     build:
       context: ..
