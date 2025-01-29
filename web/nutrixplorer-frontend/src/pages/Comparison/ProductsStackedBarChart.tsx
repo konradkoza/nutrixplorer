@@ -98,7 +98,9 @@ const ProductsStackedBarChart = ({
                     interval={0}
                     tick={<CustomXAxisTick />}
                 />
-                <ChartTooltip content={<ChartTooltipContent className="w-44" hideLabel />} />
+                <ChartTooltip
+                    content={<ChartTooltipContent className="w-44" hideLabel unit="g" />}
+                />
                 <ChartLegend content={<ChartLegendContent className="mt-24" />} />
                 <YAxis unit={"g"} domain={[0, maxNutritionalValue]} />
                 {Object.keys(chartConfig).map((key) => (

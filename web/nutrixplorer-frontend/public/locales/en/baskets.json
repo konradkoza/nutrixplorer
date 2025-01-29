@@ -92,5 +92,6 @@
     "quantityHeader": "Quantity",
     "noDescription": "No description",
     "totalGrams": " (total grams)",
-    "totalKcal": " (total kcal)"
+    "totalKcal": " (total kcal)",
+    "comparisonBaskets": "Baskets to compare"
 }

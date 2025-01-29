@@ -102,7 +102,7 @@ const ProductsNutritionsChart = ({ basketEntries }: ProductsNutritionsChartProps
                             tick={<CustomXAxisTick />}
                         />
                         <ChartTooltip
-                            content={<ChartTooltipContent className="w-44" hideLabel />}
+                            content={<ChartTooltipContent className="w-44" hideLabel unit="g" />}
                         />
                         <ChartLegend content={<ChartLegendContent className="mt-24" />} />
                         <YAxis unit={"g"} />

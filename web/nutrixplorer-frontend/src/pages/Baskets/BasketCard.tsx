@@ -154,7 +154,6 @@ const BasketCard = ({
 
     const addToComparison = (basket: Basket): void => {
         if (baskets.some((bsk) => bsk.id === basket.id)) {
-            // TODO: show toast
             dispatch(
                 remove({
                     id: basket.id,
@@ -202,165 +201,49 @@ const BasketCard = ({
             <CardContent className="flex-grow">
                 {nutritions && !isLoadingNutritions && isFiltered() && !showProducts && (
                     <div>
-                        {filteredMinerals.size > 0 && (
-                            <div>
-                                {Array.from(filteredMinerals).map((nutrition) => (
-                                    <div
-                                        className="grid w-full grid-cols-3"
-                                        key={nutrition.name + nutrition.group}>
-                                        <p>
-                                            {t(
-                                                rwsM.find(
-                                                    (n) =>
-                                                        n.name === nutrition.name &&
-                                                        n.group === nutrition.group
-                                                )?.key || "",
-                                                { ns: TranslationNS.RWS }
-                                            )}{" "}
-                                        </p>
-                                        <p className="place-self-center">
-                                            {nutritions
-                                                .find(
-                                                    (n) =>
-                                                        n.name === nutrition.name &&
-                                                        n.groupName === nutrition.group
-                                                )
-                                                ?.quantity.toLocaleString(i18n.language, {
-                                                    minimumFractionDigits: 0,
-                                                    maximumFractionDigits: 3,
-                                                })}{" "}
-                                            {nutrition
-                                                ? nutrition.unit === "mcg"
-                                                    ? "μg"
-                                                    : nutrition.unit
-                                                : ""}
-                                        </p>
-                                        <div className="flex items-center justify-end">
-                                            <GradientBarSmallAdjusted
-                                                max={
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>{t("productName")}</TableHead>
+                                    <TableHead>{t("quantityHeader")}</TableHead>
+                                    <TableHead className="text-center">{t("rws")}</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {filteredMinerals.size > 0 &&
+                                    Array.from(filteredMinerals).map((nutrition) => (
+                                        <TableRow key={nutrition.name + nutrition.group}>
+                                            <TableCell>
+                                                {t(
                                                     rwsM.find(
                                                         (n) =>
                                                             n.name === nutrition.name &&
                                                             n.group === nutrition.group
-                                                    )?.value || 0
-                                                }
-                                                value={
-                                                    nutritions.find(
+                                                    )?.key || "",
+                                                    { ns: TranslationNS.RWS }
+                                                )}{" "}
+                                            </TableCell>
+                                            <TableCell className="text-nowrap">
+                                                {nutritions
+                                                    .find(
                                                         (n) =>
                                                             n.name === nutrition.name &&
                                                             n.groupName === nutrition.group
-                                                    )?.quantity || 0
-                                                }
-                                                variant="blueToGreen"
-                                                className="h-4 w-24"
-                                            />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-
-                        {filteredVitamins.size > 0 && (
-                            <div>
-                                {Array.from(filteredVitamins).map((nutrition) => (
-                                    <div
-                                        className="grid w-full grid-cols-3"
-                                        key={nutrition.name + nutrition.group}>
-                                        <p>
-                                            {t(
-                                                rwsV.find(
-                                                    (n) =>
-                                                        n.name === nutrition.name &&
-                                                        n.group === nutrition.group
-                                                )?.key || "",
-                                                { ns: TranslationNS.RWS }
-                                            )}
-                                        </p>
-                                        <p className="place-self-center">
-                                            {nutritions
-                                                .find(
-                                                    (n) =>
-                                                        n.name === nutrition.name &&
-                                                        n.groupName === nutrition.group
-                                                )
-                                                ?.quantity.toLocaleString(i18n.language, {
-                                                    minimumFractionDigits: 0,
-                                                    maximumFractionDigits: 3,
-                                                })}{" "}
-                                            {nutrition
-                                                ? nutrition.unit === "mcg"
-                                                    ? "μg"
-                                                    : nutrition.unit
-                                                : ""}
-                                        </p>
-                                        <div className="flex items-center justify-end">
-                                            <GradientBarSmallAdjusted
-                                                max={
-                                                    rwsV.find(
-                                                        (n) =>
-                                                            n.name === nutrition.name &&
-                                                            n.group === nutrition.group
-                                                    )?.value || 0
-                                                }
-                                                value={
-                                                    nutritions.find(
-                                                        (n) =>
-                                                            n.name === nutrition.name &&
-                                                            n.groupName === nutrition.group
-                                                    )?.quantity || 0
-                                                }
-                                                variant="blueToGreen"
-                                                className="h-4 w-24"
-                                            />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-
-                        {filteredNutritions.size > 0 && (
-                            <div>
-                                {Array.from(filteredNutritions).map((nutrition) => (
-                                    <div
-                                        className="grid w-full grid-cols-3"
-                                        key={nutrition.name + nutrition.group}>
-                                        <p>
-                                            {t(
-                                                nutrition.name === "Total"
-                                                    ? nutrition.group
-                                                    : nutrition.name,
-                                                { ns: TranslationNS.NutritionalValues }
-                                            )}
-                                            :{" "}
-                                        </p>
-                                        <p className="place-self-center">
-                                            {nutritions.find(
-                                                (n) =>
-                                                    n.name === nutrition.name &&
-                                                    n.groupName === nutrition.group
-                                            )
-                                                ? nutritions
-                                                      .find(
-                                                          (n) =>
-                                                              n.name === nutrition.name &&
-                                                              n.groupName === nutrition.group
-                                                      )!
-                                                      .quantity.toLocaleString(i18n.language, {
-                                                          minimumFractionDigits: 0,
-                                                          maximumFractionDigits: 3,
-                                                      })
-                                                : "0.00"}{" "}
-                                            {nutrition.unit}
-                                        </p>
-                                        <div className="flex items-center justify-end">
-                                            {rws.find(
-                                                (n) =>
-                                                    n.name === nutrition.name &&
-                                                    n.group === nutrition.group
-                                            )?.variant ? (
+                                                    )
+                                                    ?.quantity.toLocaleString(i18n.language, {
+                                                        minimumFractionDigits: 0,
+                                                        maximumFractionDigits: 3,
+                                                    })}{" "}
+                                                {nutrition
+                                                    ? nutrition.unit === "mcg"
+                                                        ? "μg"
+                                                        : nutrition.unit
+                                                    : ""}
+                                            </TableCell>
+                                            <TableCell align="center">
                                                 <GradientBarSmallAdjusted
                                                     max={
-                                                        rws.find(
+                                                        rwsM.find(
                                                             (n) =>
                                                                 n.name === nutrition.name &&
                                                                 n.group === nutrition.group
@@ -373,23 +256,155 @@ const BasketCard = ({
                                                                 n.groupName === nutrition.group
                                                         )?.quantity || 0
                                                     }
-                                                    variant={
-                                                        rws.find(
+                                                    variant="blueToGreen"
+                                                    className="h-4 w-24"
+                                                    unit={
+                                                        rwsM.find(
                                                             (n) =>
                                                                 n.name === nutrition.name &&
                                                                 n.group === nutrition.group
-                                                        )?.variant as GradientBarVariants
+                                                        )?.unit || ""
                                                     }
-                                                    className="h-4 w-24"
                                                 />
-                                            ) : (
-                                                <div className="w-24 text-center">-</div>
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+
+                                {filteredVitamins.size > 0 &&
+                                    Array.from(filteredVitamins).map((nutrition) => (
+                                        <TableRow key={nutrition.name + nutrition.group}>
+                                            <TableCell>
+                                                {t(
+                                                    rwsV.find(
+                                                        (n) =>
+                                                            n.name === nutrition.name &&
+                                                            n.group === nutrition.group
+                                                    )?.key || "",
+                                                    { ns: TranslationNS.RWS }
+                                                )}
+                                            </TableCell>
+                                            <TableCell className="text-nowrap">
+                                                {nutritions
+                                                    .find(
+                                                        (n) =>
+                                                            n.name === nutrition.name &&
+                                                            n.groupName === nutrition.group
+                                                    )
+                                                    ?.quantity.toLocaleString(i18n.language, {
+                                                        minimumFractionDigits: 0,
+                                                        maximumFractionDigits: 3,
+                                                    })}{" "}
+                                                {nutrition
+                                                    ? nutrition.unit === "mcg"
+                                                        ? "μg"
+                                                        : nutrition.unit
+                                                    : ""}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <GradientBarSmallAdjusted
+                                                    max={
+                                                        rwsV.find(
+                                                            (n) =>
+                                                                n.name === nutrition.name &&
+                                                                n.group === nutrition.group
+                                                        )?.value || 0
+                                                    }
+                                                    value={
+                                                        nutritions.find(
+                                                            (n) =>
+                                                                n.name === nutrition.name &&
+                                                                n.groupName === nutrition.group
+                                                        )?.quantity || 0
+                                                    }
+                                                    variant="blueToGreen"
+                                                    className="h-4 w-24"
+                                                    unit={
+                                                        rwsV.find(
+                                                            (n) =>
+                                                                n.name === nutrition.name &&
+                                                                n.group === nutrition.group
+                                                        )?.unit || ""
+                                                    }
+                                                />
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+
+                                {filteredNutritions.size > 0 &&
+                                    Array.from(filteredNutritions).map((nutrition) => (
+                                        <TableRow key={nutrition.name + nutrition.group}>
+                                            <TableCell>
+                                                {t(
+                                                    nutrition.name === "Total"
+                                                        ? nutrition.group
+                                                        : nutrition.name,
+                                                    { ns: TranslationNS.NutritionalValues }
+                                                )}
+                                                :{" "}
+                                            </TableCell>
+                                            <TableCell className="text-nowrap">
+                                                {nutritions.find(
+                                                    (n) =>
+                                                        n.name === nutrition.name &&
+                                                        n.groupName === nutrition.group
+                                                )
+                                                    ? nutritions
+                                                          .find(
+                                                              (n) =>
+                                                                  n.name === nutrition.name &&
+                                                                  n.groupName === nutrition.group
+                                                          )!
+                                                          .quantity.toLocaleString(i18n.language, {
+                                                              minimumFractionDigits: 0,
+                                                              maximumFractionDigits: 3,
+                                                          })
+                                                    : "0.00"}{" "}
+                                                {nutrition.unit}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {rws.find(
+                                                    (n) =>
+                                                        n.name === nutrition.name &&
+                                                        n.group === nutrition.group
+                                                )?.variant ? (
+                                                    <GradientBarSmallAdjusted
+                                                        max={
+                                                            rws.find(
+                                                                (n) =>
+                                                                    n.name === nutrition.name &&
+                                                                    n.group === nutrition.group
+                                                            )?.value || 0
+                                                        }
+                                                        value={
+                                                            nutritions.find(
+                                                                (n) =>
+                                                                    n.name === nutrition.name &&
+                                                                    n.groupName === nutrition.group
+                                                            )?.quantity || 0
+                                                        }
+                                                        variant={
+                                                            rws.find(
+                                                                (n) =>
+                                                                    n.name === nutrition.name &&
+                                                                    n.group === nutrition.group
+                                                            )?.variant as GradientBarVariants
+                                                        }
+                                                        className="h-4 w-24"
+                                                        unit={
+                                                            nutrition.name ===
+                                                            "Wartość Energetyczna"
+                                                                ? "kcal"
+                                                                : "g"
+                                                        }
+                                                    />
+                                                ) : (
+                                                    <div className="w-24 text-center">-</div>
+                                                )}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                            </TableBody>
+                        </Table>
                     </div>
                 )}
                 {basket.basketEntries.length > 0 ? (
@@ -438,6 +453,11 @@ const BasketCard = ({
                                                                 rw.variant as GradientBarVariants
                                                             }
                                                             className="h-4 w-24"
+                                                            unit={
+                                                                rw.name === "Wartość Energetyczna"
+                                                                    ? "kcal"
+                                                                    : "g"
+                                                            }
                                                         />
                                                     ) : (
                                                         "-"

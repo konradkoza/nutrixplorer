@@ -1,4 +1,3 @@
-import { BasketNutritions } from "@/types/BasketTypes";
 import {
     ChartConfig,
     ChartContainer,
@@ -7,9 +6,10 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart";
-import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart } from "recharts";
+import { BasketNutritions } from "@/types/BasketTypes";
 import { TranslationNS } from "@/utils/translationNamespaces";
 import { useTranslation } from "react-i18next";
+import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart } from "recharts";
 
 type ComparisonRadarChartProps = {
     nutritions: BasketNutritions[][];
@@ -76,7 +76,10 @@ const ComparisonRadarChart = ({ nutritions }: ComparisonRadarChartProps) => {
                     top: -40,
                     bottom: -10,
                 }}>
-                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
+                <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent className="w-44" indicator="line" unit="g" />}
+                />
                 <PolarAngleAxis dataKey="name" />
                 <PolarRadiusAxis angle={54} stroke="hsla(var(--foreground))" orientation="middle" />
                 <PolarGrid />

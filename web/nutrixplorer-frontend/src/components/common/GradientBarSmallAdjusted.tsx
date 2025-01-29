@@ -6,6 +6,7 @@ type GradientBarSmallProps = {
     max: number;
     className?: string;
     variant?: GradientBarVariants;
+    unit?: string;
 };
 
 const variants = {
@@ -33,7 +34,13 @@ function generateGradientBackground(max: number, value: number, variant: string)
 
 export type GradientBarVariants = keyof typeof variants;
 
-const GradientBarSmallAdjusted = ({ value, max, className, variant }: GradientBarSmallProps) => {
+const GradientBarSmallAdjusted = ({
+    value,
+    max,
+    className,
+    variant,
+    unit,
+}: GradientBarSmallProps) => {
     const total = value > 2 * max ? value : 2 * max;
     const percentage = (value / total) * 100;
 
@@ -82,7 +89,7 @@ const GradientBarSmallAdjusted = ({ value, max, className, variant }: GradientBa
                 </TooltipTrigger>
                 <TooltipContent side="top">
                     <p className="text-sm font-bold text-popover-foreground">
-                        {value.toFixed(2)} ({((value / max) * 100).toFixed(2)}%RWS)
+                        {value.toFixed(2)} {unit || ""} ({((value / max) * 100).toFixed(2)}%RWS)
                     </p>
                 </TooltipContent>
             </Tooltip>

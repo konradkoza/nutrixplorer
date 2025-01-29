@@ -5,6 +5,7 @@ export const rws = [
         value: 2000,
         variant: "greenToRed",
         key: "energyValue",
+        unit: "kcal",
     },
     {
         name: "Total",
@@ -13,6 +14,7 @@ export const rws = [
         value: 70,
         variant: "greenToRed",
         key: "totalFat",
+        unit: "g",
     },
     {
         name: "Kwasy nasycone",
@@ -21,6 +23,7 @@ export const rws = [
         value: 20,
         variant: "greenToRed",
         key: "saturatedFat",
+        unit: "g",
     },
     {
         name: "Total",
@@ -29,6 +32,7 @@ export const rws = [
         value: 260,
         variant: "greenToRed",
         key: "totalCarbohydrates",
+        unit: "g",
     },
     {
         name: "Cukry",
@@ -37,10 +41,18 @@ export const rws = [
         value: 90,
         variant: "greenToRed",
         key: "sugars",
+        unit: "g",
     },
-    { name: "Białko", group: "Białko", value: 50, variant: "greenToLightGreen", key: "protein" },
-    { name: "Sól", group: "Sól", value: 6, variant: "greenToRed", key: "salt" },
-    { name: "Błonnik", group: "Błonnik", key: "fiber" },
+    {
+        name: "Białko",
+        group: "Białko",
+        value: 50,
+        variant: "greenToLightGreen",
+        key: "protein",
+        unit: "g",
+    },
+    { name: "Sól", group: "Sól", value: 6, variant: "greenToRed", key: "salt", unit: "g" },
+    { name: "Błonnik", group: "Błonnik", key: "fiber", unit: "g" },
 ];
 
 export const rwsV = [

@@ -41,7 +41,7 @@ const ComparisonRwsCard = ({ basketNutritions }: ComparisonRwsCardProps) => {
                         value={value1}
                         barHeight="h-4"
                         height="h-8"
-                        unit={rws.name === "Wartość Energetyczna" ? "kcal" : "g"}
+                        unit={rws.unit}
                         max={rws.value!}
                         label={t(rws.key, { ns: TranslationNS.RWS })}
                         variant={rws.variant as GradientBarVariants}
