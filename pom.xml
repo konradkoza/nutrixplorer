@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>p.lodz.it</groupId>
 	<artifactId>nutrixplorer</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>nutrixplorer</name>
 	<description>nutrixplorer</description>
 	<url/>

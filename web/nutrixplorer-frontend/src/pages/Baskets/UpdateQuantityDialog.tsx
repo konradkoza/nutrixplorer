@@ -57,7 +57,6 @@ const UpdateQuantityDialog = ({
                                     </FormLabel>
                                     <FormControl className="col-span-3 mt-0">
                                         <UnitInput
-                                            className=""
                                             unit={unit}
                                             type="number"
                                             {...field}

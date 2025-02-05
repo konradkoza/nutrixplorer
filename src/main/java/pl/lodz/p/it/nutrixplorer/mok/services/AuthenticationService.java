@@ -39,7 +39,7 @@ import java.util.Optional;
 @Transactional(
         propagation = Propagation.REQUIRES_NEW,
         isolation = Isolation.READ_COMMITTED,
-        transactionManager = "mokTransactionManager", rollbackFor = {BaseWebException.class})
+        transactionManager = "mokTransactionManager", rollbackFor = {BaseWebException.class}, noRollbackFor = {AuthenctiactionFailedException.class})
 @LoggingInterceptor
 public class AuthenticationService {
 

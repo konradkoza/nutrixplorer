@@ -47,9 +47,9 @@ GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE public.user_favourite_products TO nut
 INSERT INTO public.user (blocked, login_attempts, verified, last_failed_login, last_successful_login, version,
                           id, password, last_failed_login_ip, last_successful_login_ip, language, created_at)
 VALUES ( false, 0, true, null, null, 0, '1d927459-9b65-4b6b-bff2-9f95fd227d9e',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', null, null, 'PL', now());
+        '$2a$10$sOZDhHRMk0TX26/DaljbhuJcU24AR7bxkTzsgXAP8ccCkFMpzzDaG', null, null, 'PL', now());
 INSERT INTO public.personal_data (user_id, email, first_name, last_name)
-VALUES ('1d927459-9b65-4b6b-bff2-9f95fd227d9e', 'email@admin.com', 'Tomasz', 'Nowak');
+VALUES ('1d927459-9b65-4b6b-bff2-9f95fd227d9e', 'nutrixplorer.adm@int.pl', 'Tomasz', 'Nowak');
 INSERT INTO public.access_level (version, id, user_id, level, active)
 VALUES (0, 'ea3f6fde-4e67-4b95-823c-6c0710552b22', '1d927459-9b65-4b6b-bff2-9f95fd227d9e', 'ADMINISTRATOR', true);
 INSERT INTO public.administrator (id)
@@ -58,9 +58,9 @@ VALUES ('ea3f6fde-4e67-4b95-823c-6c0710552b22');
 INSERT INTO public.user ( blocked, login_attempts, verified, last_failed_login, last_successful_login, version,
                           id, password, last_failed_login_ip, last_successful_login_ip, language, created_at)
 VALUES ( false, 0, true, null, null, 0, 'e646e3dc-9170-4abb-b0b7-82b507324271',
-        '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', null, null, 'PL', now());
+        '$2a$10$sOZDhHRMk0TX26/DaljbhuJcU24AR7bxkTzsgXAP8ccCkFMpzzDaG', null, null, 'PL', now());
 INSERT INTO public.personal_data (user_id, email, first_name, last_name)
-VALUES ('e646e3dc-9170-4abb-b0b7-82b507324271', 'email@client.com', 'Jan', 'Nowak');
+VALUES ('e646e3dc-9170-4abb-b0b7-82b507324271', 'nutrixplorer.client@int.pl', 'Jan', 'Nowak');
 INSERT INTO public.access_level (version, id, user_id, level, active)
 VALUES (0, '6f15b280-581f-423e-a0ff-c02cce1c3350', 'e646e3dc-9170-4abb-b0b7-82b507324271', 'CLIENT', true);
 INSERT INTO public.client (id)

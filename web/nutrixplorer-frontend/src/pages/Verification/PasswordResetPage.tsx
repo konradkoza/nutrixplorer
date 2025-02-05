@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { PasswordInput } from "@/components/common/PasswordInput";
 
 const PasswordResetPage = () => {
     const [changePassword] = useChangePasswordWithTokenMutation();
@@ -69,12 +70,7 @@ const PasswordResetPage = () => {
                                     <FormItem className="col-span-2">
                                         <FormLabel>{t("newPassword.password")}</FormLabel>
                                         <FormControl>
-                                            <Input
-                                                autoComplete="new-password"
-                                                placeholder=""
-                                                type="password"
-                                                {...field}
-                                            />
+                                            <PasswordInput autoComplete="new-password" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -87,12 +83,7 @@ const PasswordResetPage = () => {
                                     <FormItem className="col-span-2">
                                         <FormLabel>{t("newPassword.confirmPassword")}</FormLabel>
                                         <FormControl>
-                                            <Input
-                                                autoComplete="new-password"
-                                                placeholder=""
-                                                type="password"
-                                                {...field}
-                                            />
+                                            <PasswordInput autoComplete="new-password" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

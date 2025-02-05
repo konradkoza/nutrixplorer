@@ -25,6 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { PasswordInput } from "@/components/common/PasswordInput";
 
 const ChangePasswordDialog = () => {
     const [changePassword] = useChangePasswordMutation();
@@ -72,12 +73,7 @@ const ChangePasswordDialog = () => {
                                     <FormItem className="col-span-2">
                                         <FormLabel>{t("newPassword.oldPassword")}</FormLabel>
                                         <FormControl>
-                                            <Input
-                                                autoComplete="new-password"
-                                                placeholder=""
-                                                type="password"
-                                                {...field}
-                                            />
+                                            <PasswordInput autoComplete="new-password" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -90,12 +86,7 @@ const ChangePasswordDialog = () => {
                                     <FormItem className="col-span-2">
                                         <FormLabel>{t("newPassword.password")}</FormLabel>
                                         <FormControl>
-                                            <Input
-                                                autoComplete="new-password"
-                                                placeholder=""
-                                                type="password"
-                                                {...field}
-                                            />
+                                            <PasswordInput autoComplete="new-password" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -108,12 +99,7 @@ const ChangePasswordDialog = () => {
                                     <FormItem className="col-span-2">
                                         <FormLabel>{t("newPassword.confirmPassword")}</FormLabel>
                                         <FormControl>
-                                            <Input
-                                                autoComplete="new-password"
-                                                placeholder=""
-                                                type="password"
-                                                {...field}
-                                            />
+                                            <PasswordInput autoComplete="new-password" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
