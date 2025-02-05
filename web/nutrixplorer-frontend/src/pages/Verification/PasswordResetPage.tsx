@@ -1,13 +1,4 @@
-import { useChangePasswordWithTokenMutation } from "@/redux/services/authService";
-import {
-    ChangePasswordFormType,
-    getChangePasswordSchema,
-} from "@/types/schemas/AuthenticationSchema";
-import { TranslationNS } from "@/utils/translationNamespaces";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { PasswordInput } from "@/components/common/PasswordInput";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -18,9 +9,17 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { useChangePasswordWithTokenMutation } from "@/redux/services/authService";
+import {
+    ChangePasswordFormType,
+    getChangePasswordSchema,
+} from "@/types/schemas/AuthenticationSchema";
+import { TranslationNS } from "@/utils/translationNamespaces";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
-import { PasswordInput } from "@/components/common/PasswordInput";
 
 const PasswordResetPage = () => {
     const [changePassword] = useChangePasswordWithTokenMutation();

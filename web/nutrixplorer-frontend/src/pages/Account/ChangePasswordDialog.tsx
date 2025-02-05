@@ -1,4 +1,4 @@
-import { useChangePasswordMutation } from "@/redux/services/meService";
+import { PasswordInput } from "@/components/common/PasswordInput";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -15,7 +15,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { useChangePasswordMutation } from "@/redux/services/meService";
 import {
     ChangeOwnPasswordFormType,
     getChangeOwnPasswordSchema,
@@ -25,7 +25,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { PasswordInput } from "@/components/common/PasswordInput";
 
 const ChangePasswordDialog = () => {
     const [changePassword] = useChangePasswordMutation();
