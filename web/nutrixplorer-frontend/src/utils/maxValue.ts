@@ -1,7 +1,6 @@
 import { BasketEntry } from "@/types/BasketTypes";
 
 export const calculateMax = (entries: BasketEntry[][]): number => {
-    // max sum of fat carbs salt protein fibre of all entries
     let max = 0;
     entries.forEach((basket) => {
         basket.forEach((entry) => {

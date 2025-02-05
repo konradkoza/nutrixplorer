@@ -44,7 +44,6 @@ const AddToBasketDialog = ({
     const [searchValue, setSearchValue] = useState<string>("");
     const [value] = useDebounce(searchValue, 100);
     const { data: basketList, isLoading } = useGetFilteredBasketsListQuery(value);
-    // const { data: basketList, isLoading } = useGetUserBasketsListQuery();
     const [createBasket] = useCreateBasketMutation();
     const [addEntry] = useAddBasketEntryMutation();
     const form = useForm<AddToBasketForm>({

@@ -17,7 +17,6 @@ const OauthCallback = () => {
             called.current = true;
             if (urlParams.get("code")) {
                 const response = await oAuthLogin(urlParams.get("code")!);
-                console.log(response);
 
                 if (response.error) {
                     navigate("/login");

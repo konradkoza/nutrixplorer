@@ -87,9 +87,6 @@ export const getIndexColor = (indexValue: number, indexName: IndexName) => {
             break;
         case "V":
         case "M":
-            // if (indexValue === 0) {
-            //     return "rgb(220 38 38)"; // darker red
-            // }
             if (indexValue === 0) {
                 return colors.grey;
             }
@@ -160,6 +157,5 @@ export const getIndexColor = (indexValue: number, indexName: IndexName) => {
             }
             break;
     }
-    // grey
     return "rgb(169, 169, 169)";
 };

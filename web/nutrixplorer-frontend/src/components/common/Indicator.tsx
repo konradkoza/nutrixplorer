@@ -5,7 +5,6 @@ type IndicatorProps = {
 };
 
 const Indicator = ({ variant }: IndicatorProps) => {
-    // dot in color of variant
     return (
         <div
             className={cn(

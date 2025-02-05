@@ -120,18 +120,6 @@ const BasketCard = ({
                     key === "name"
                 )
                     return;
-                // if (
-                //     filterToNutritionalValue[key as keyof typeof filterToNutritionalValue].group ===
-                //         nutrition.nutritionalValueName.group &&
-                //     filterToNutritionalValue[key as keyof typeof filterToNutritionalValue].name ===
-                //         nutrition.nutritionalValueName.name
-                // ) {
-                //     filteredNutritions.add({
-                //         group: nutrition.nutritionalValueName.group,
-                //         name: nutrition.nutritionalValueName.name,
-                //         unit: nutrition.unit,
-                //     });
-                // }
                 if (
                     filterToNutritionalValue[key as keyof typeof filterToNutritionalValue] ===
                     undefined

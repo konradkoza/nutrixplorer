@@ -7,9 +7,9 @@ type GradientBarProps = {
     value: number;
     max: number;
     unit?: string;
-    width?: string; // Optional className prop
-    barHeight?: string; // Optional className prop
-    height?: string; // Optional className prop
+    width?: string;
+    barHeight?: string;
+    height?: string;
     variant?: keyof typeof variants;
     label?: string;
 };
@@ -25,8 +25,8 @@ const variants = {
 
 function generateGradientBackground(max: number, value: number, variant: string) {
     const gradientVariants = {
-        greenToRed: ["#047857", "#F59E0B", "#DC2626"], // from-green-700 via-yellow-600 to-red-600
-        greenToLightGreen: ["#047857", "#10B981", "#86EFAC"], // from-green-700 via-green-500 to-green-300
+        greenToRed: ["#047857", "#F59E0B", "#DC2626"],
+        greenToLightGreen: ["#047857", "#10B981", "#86EFAC"],
         blueToGreen: ["#059669", "#93C5FD", "#3B82F6"],
     };
 
@@ -50,50 +50,40 @@ const GradientBar = ({
     const [t] = useTranslation(TranslationNS.RWS);
     const total = value > 2 * max ? value : 2 * max;
     const percentage = (value / total) * 100;
-    // console.log("label", label);
-    // console.log("percentage", ((max / total) * 100).toFixed(0));
+
     return (
         <TooltipProvider>
             <Tooltip>
                 <p className="mt-3 justify-self-start font-bold">{label}</p>
                 <TooltipTrigger className={cn(width || "w-full", height || "")}>
                     <div className={cn(`relative my-3 space-y-2`)}>
-                        {/* Bar Container */}
                         <div
                             style={{
                                 left: `${((max / total) * 100).toFixed(0)}%`,
                             }}
-                            className={cn(`absolute z-[5] w-1 bg-black`, barHeight || "h-8")}>
-                            {/*<p className="absolute -left-3.5 bottom-6">100%</p>*/}
-                        </div>
+                            className={cn(`absolute z-[5] w-1 bg-black`, barHeight || "h-8")}></div>
                         <div
                             className={cn(
                                 "relative w-full overflow-hidden rounded bg-white",
                                 barHeight || "h-8"
                             )}>
-                            {/* Grey part */}
                             <div
                                 className="absolute h-full bg-gray-300"
                                 style={{
                                     width: `${100 - percentage}%`,
                                     right: 0,
-                                    borderRadius: percentage === 100 ? "0" : "0px 5px 5px 0px", // Rounded corners only on the right if not full
+                                    borderRadius: percentage === 100 ? "0" : "0px 5px 5px 0px",
                                 }}></div>
-                            {/* Gradient-filled part */}
 
                             <div
-                                className={cn(
-                                    "absolute h-full w-full bg-gradient-to-r"
-                                    // variants[variant || "greenToRed"],
-                                    // ` to-[${((max / total) * 100).toFixed(0)}%] `
-                                )}
+                                className={cn("absolute h-full w-full bg-gradient-to-r")}
                                 style={{
                                     backgroundImage: generateGradientBackground(
                                         total,
                                         max,
                                         variant || "greenToRed"
                                     ),
-                                    clipPath: `inset(0 ${100 - percentage}% 0 0)`, // Clip gradient to filled portion
+                                    clipPath: `inset(0 ${100 - percentage}% 0 0)`,
                                 }}></div>
                         </div>
 

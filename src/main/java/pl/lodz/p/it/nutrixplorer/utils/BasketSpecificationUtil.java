@@ -84,9 +84,9 @@ public class BasketSpecificationUtil {
 
     public static Specification<Basket> hasAllNutritionalValues2(List<String> values, String groupName, String namePrefix) {
         return (root, query, criteriaBuilder) -> {
-            query.distinct(true); // Avoid duplicate results
+            query.distinct(true);
 
-            // Subquery to filter products by matching vitamin count
+
             Subquery<Long> subquery = query.subquery(Long.class);
             Root<Basket> subRoot = subquery.from(Basket.class);
             Join<Product, NutritionalValue> subNutritionalValues = subRoot.join("basketEntries").join("product").join("nutritionalValues", JoinType.INNER);
@@ -97,11 +97,11 @@ public class BasketSpecificationUtil {
                             criteriaBuilder.and(
                                     criteriaBuilder.equal(subGroupJoin.get("groupName"), groupName),
                                     subNameJoin.get("name").in(values.stream().map(value -> namePrefix + value).toArray()),
-                                    criteriaBuilder.equal(subRoot, root) // Link subquery to main query
+                                    criteriaBuilder.equal(subRoot, root)
                             )
                     );
 
-            // Ensure the count matches the size of the vitamin list
+
             return criteriaBuilder.equal(subquery, values.size());
         };
     }
@@ -112,7 +112,7 @@ public class BasketSpecificationUtil {
             Join<Label, Allergen> nameJoin = labelJoin.join("allergenList", JoinType.INNER);
 
             if (query != null) {
-                query.distinct(true); // Avoid duplicate products in result set
+                query.distinct(true);
             }
 
             Predicate[] valuePredicates = allergens.stream()
@@ -133,51 +133,45 @@ public class BasketSpecificationUtil {
             Boolean isLessThan
     ) {
         return (root, query, criteriaBuilder) -> {
-            // Subquery to calculate sum for each basket
             Subquery<Double> subquery = query.subquery(Double.class);
             Root<BasketEntry> basketEntryRoot = subquery.from(BasketEntry.class);
 
-            // Joins
             Join<BasketEntry, Product> productJoin = basketEntryRoot.join("product", JoinType.INNER);
             Join<Product, NutritionalValue> nutritionalValueJoin = productJoin.join("nutritionalValues", JoinType.INNER);
             Join<NutritionalValue, NutritionalValueName> nameJoin = nutritionalValueJoin.join("nutritionalValueName", JoinType.INNER);
             Join<NutritionalValueName, NutritionalValueGroup> groupJoin = nameJoin.join("group", JoinType.INNER);
 
-            // Link subquery to Basket
             Predicate basketPredicate = criteriaBuilder.equal(basketEntryRoot.get("basket"), root);
             Predicate namePredicate = criteriaBuilder.equal(nameJoin.get("name"), name);
             Predicate groupPredicate = criteriaBuilder.equal(groupJoin.get("groupName"), groupName);
 
-            // Case-based calculation for quantity
             Expression<Object> quantityExpression = criteriaBuilder.selectCase()
                     .when(
                             criteriaBuilder.equal(productJoin.get("unit").get("name"), "l"),
                             criteriaBuilder.prod(
                                     criteriaBuilder.prod(
-                                            criteriaBuilder.toDouble(basketEntryRoot.get("units")), // Convert to Double
-                                            criteriaBuilder.literal(1000.0) // Literal as Double
+                                            criteriaBuilder.toDouble(basketEntryRoot.get("units")),
+                                            criteriaBuilder.literal(1000.0)
                                     ),
                                     criteriaBuilder.quot(
-                                            criteriaBuilder.toDouble(nutritionalValueJoin.get("quantity")), // Convert to Double
-                                            criteriaBuilder.literal(100.0) // Literal as Double
+                                            criteriaBuilder.toDouble(nutritionalValueJoin.get("quantity")),
+                                            criteriaBuilder.literal(100.0)
                                     )
                             )
                     )
                     .otherwise(
                             criteriaBuilder.prod(
-                                    criteriaBuilder.toDouble(basketEntryRoot.get("units")), // Convert to Double
+                                    criteriaBuilder.toDouble(basketEntryRoot.get("units")),
                                     criteriaBuilder.quot(
-                                            criteriaBuilder.toDouble(nutritionalValueJoin.get("quantity")), // Convert to Double
-                                            criteriaBuilder.literal(100.0) // Literal as Double
+                                            criteriaBuilder.toDouble(nutritionalValueJoin.get("quantity")),
+                                            criteriaBuilder.literal(100.0)
                                     )
                             )
                     );
 
-            // Select sum in the subquery
             subquery.select(criteriaBuilder.coalesce(criteriaBuilder.sum(quantityExpression.as(Double.class)), 0.0))
                     .where(criteriaBuilder.and(basketPredicate, namePredicate, groupPredicate));
 
-            // Main query: ensure sum is less than maxValue
             if (isLessThan) {
                 return criteriaBuilder.lessThanOrEqualTo(subquery.as(Double.class), maxValue);
             } else {

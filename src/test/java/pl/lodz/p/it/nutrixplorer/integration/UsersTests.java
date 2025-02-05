@@ -240,7 +240,6 @@ public class UsersTests implements AbstractDBRiderTests{
     @Test
     @Transactional(transactionManager = "mokTransactionManager")
     public void testChangeEmail() {
-        // Step 1: Initiate email change
         RestAssured.given()
                 .contentType(ContentType.JSON)
                 .auth().oauth2(token)
@@ -251,10 +250,8 @@ public class UsersTests implements AbstractDBRiderTests{
                 .assertThat()
                 .statusCode(HttpStatus.OK.value());
 
-        // Step 2: Retrieve the token from the repository
         String verificationToken  = emailVerificationTokenRepository.findByUserId(UUID.fromString("f4c3d4e5-6f7a-8b9c-0d1e-2f3a4b5c6d7e")).get().getToken();
 
-        // Step 3: Confirm email change using the token
         RestAssured.given()
                 .contentType(ContentType.JSON)
                 .auth().oauth2(token)
@@ -265,7 +262,6 @@ public class UsersTests implements AbstractDBRiderTests{
                 .assertThat()
                 .statusCode(HttpStatus.OK.value());
 
-        // Step 4: Verify the new email works
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .when()
@@ -284,7 +280,6 @@ public class UsersTests implements AbstractDBRiderTests{
     @Test
     @Transactional(transactionManager = "mokTransactionManager")
     public void testResetPassword() {
-        // Step 1: Request password reset
         RestAssured.given()
                 .contentType(ContentType.JSON)
                 .when()
@@ -294,10 +289,8 @@ public class UsersTests implements AbstractDBRiderTests{
                 .assertThat()
                 .statusCode(HttpStatus.OK.value());
 
-        // Step 2: Retrieve the token from the repository
         String verificationToken = passwordVerificationTokenRepository.findByUserEmail("janesmith@email.com").get().getToken();
 
-        // Step 3: Change password using the token
         RestAssured.given()
                 .contentType(ContentType.JSON)
                 .when()
@@ -307,7 +300,6 @@ public class UsersTests implements AbstractDBRiderTests{
                 .assertThat()
                 .statusCode(HttpStatus.OK.value());
 
-        // Step 4: Verify the new password works
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .when()

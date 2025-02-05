@@ -13,10 +13,10 @@ public class EmailConfig {
     public ClassLoaderTemplateResolver templateResolver() {
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
 
-        resolver.setPrefix("templates/"); // Location of thymeleaf template
-        resolver.setCacheable(false); // Turning of cache to facilitate template changes
-        resolver.setSuffix(".html"); // Template file extension
-        resolver.setTemplateMode("HTML"); // Template Type
+        resolver.setPrefix("templates/");
+        resolver.setCacheable(false);
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode("HTML");
         resolver.setCharacterEncoding("UTF-8");
 
         return resolver;

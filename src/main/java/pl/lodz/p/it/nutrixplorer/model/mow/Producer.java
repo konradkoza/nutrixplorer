@@ -18,14 +18,14 @@ import pl.lodz.p.it.nutrixplorer.model.AbstractEntity;
 @Table(name = "PRODUCER")
 public class Producer extends AbstractEntity {
 
-//    @NotNull
+
     private String name;
 
 
     private String address;
 
 
-//    @NotNull
+
     @Column(name = "COUNTRY_CODE")
     private Integer countryCode;
 

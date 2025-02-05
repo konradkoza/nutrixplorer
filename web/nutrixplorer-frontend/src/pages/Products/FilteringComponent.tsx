@@ -170,7 +170,6 @@ const FilteringComponent = ({ setFilters, refetch }: FilteringComponentProps) =>
         }, {} as FilteringFormType);
         setFilters(filteredData);
         refetch();
-        console.log("refetch");
     };
 
     const handleClear = () => {

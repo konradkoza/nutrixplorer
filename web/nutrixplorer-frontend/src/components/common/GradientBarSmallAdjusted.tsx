@@ -20,8 +20,8 @@ const variants = {
 
 function generateGradientBackground(max: number, value: number, variant: string) {
     const gradientVariants = {
-        greenToRed: ["#047857", "#F59E0B", "#DC2626"], // from-green-700 via-yellow-600 to-red-600
-        greenToLightGreen: ["#047857", "#10B981", "#86EFAC"], // from-green-700 via-green-500 to-green-300
+        greenToRed: ["#047857", "#F59E0B", "#DC2626"],
+        greenToLightGreen: ["#047857", "#10B981", "#86EFAC"],
         blueToGreen: ["#059669", "#93C5FD", "#3B82F6"],
     };
 
@@ -54,35 +54,29 @@ const GradientBarSmallAdjusted = ({
                             "relative overflow-hidden rounded bg-white",
                             className || ""
                         )}>
-                        {/* Red line indicator */}
                         <div
                             style={{
                                 left: `${((max / total) * 100).toFixed(0)}%`,
                             }}
                             className="absolute z-[5] h-full w-[3px] bg-black"
                         />
-                        {/* Grey part */}
                         <div
                             className="absolute h-full bg-gray-300"
                             style={{
                                 width: `${100 - percentage}%`,
                                 right: 0,
-                                borderRadius: percentage === 100 ? "0" : "0px 4px 4px 0px", // Rounded corners only on the right if not full
+                                borderRadius: percentage === 100 ? "0" : "0px 4px 4px 0px",
                             }}
                         />
-                        {/* Gradient-filled part */}
                         <div
-                            className={cn(
-                                "absolute h-full w-full"
-                                // variants[variant || "greenToRed"]
-                            )}
+                            className={cn("absolute h-full w-full")}
                             style={{
                                 background: generateGradientBackground(
                                     total,
                                     max,
                                     variant || "greenToRed"
                                 ),
-                                clipPath: `inset(0 ${100 - percentage}% 0 0)`, // Clip gradient to filled portion
+                                clipPath: `inset(0 ${100 - percentage}% 0 0)`,
                             }}
                         />
                     </div>

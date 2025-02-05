@@ -73,9 +73,9 @@ public class Product extends AbstractEntity {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "PRODUCT_NUTRITIONAL_VALUE", // name of the join table
-            joinColumns = @JoinColumn(name = "PRODUCT_ID"), // column referencing Product
-            inverseJoinColumns = @JoinColumn(name = "NUTRITIONALVALUES_ID") // column referencing NutritionalValue
+            name = "PRODUCT_NUTRITIONAL_VALUE",
+            joinColumns = @JoinColumn(name = "PRODUCT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "NUTRITIONALVALUES_ID")
     )
     private List<NutritionalValue> nutritionalValues;
 

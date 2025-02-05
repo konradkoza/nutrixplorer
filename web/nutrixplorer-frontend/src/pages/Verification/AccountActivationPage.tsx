@@ -10,12 +10,10 @@ const AccountActivationPage = () => {
     useEffect(() => {
         if (token && !ref.current) {
             ref.current = true;
-            console.log("Account activation token: ", token);
             verifyAccount(token);
             setParams({});
         } else {
             ref.current = true;
-            console.log("No account activation token provided");
         }
     }, [token]);
 

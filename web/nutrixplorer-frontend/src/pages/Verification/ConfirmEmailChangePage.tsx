@@ -10,12 +10,10 @@ const ConfirmEmailChangePage = () => {
     useEffect(() => {
         if (token && !ref.current) {
             ref.current = true;
-            console.log("Email change token: ", token);
             changeEmail(token);
             setParams({});
         } else {
             ref.current = true;
-            console.log("No email change token provided");
         }
     }, []);
 

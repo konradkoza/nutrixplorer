@@ -194,7 +194,6 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
                                                                                 "Period" ||
                                                                             event.code === "Comma"
                                                                         ) {
-                                                                            console.log(event.code);
                                                                             event.preventDefault();
                                                                         }
                                                                     }}

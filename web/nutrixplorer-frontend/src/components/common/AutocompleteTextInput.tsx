@@ -67,7 +67,6 @@ const AutocompleteTextInput = ({
                     placeholder={placeholder}
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
-                    // className="pr-12"
                     onFocus={() => setFocused(true)}
                     onKeyDown={(e) => {
                         if (e.key === "Escape") setFocused(false);

@@ -6,8 +6,7 @@ import { toggleOpen } from "@/redux/slices/sideBarSlice";
 import { RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-// import { PanelsTopLeft } from "lucide-react";
-// import { Link } from "react-router-dom";
+
 export function Sidebar() {
     const isOpen = useSelector((state: RootState) => state.sideBarSlice.isOpen);
     const dispatch = useDispatch();
@@ -20,10 +19,7 @@ export function Sidebar() {
             )}>
             <div className="relative flex h-full flex-col overflow-y-auto px-3 py-3 shadow-md dark:shadow-zinc-800">
                 <div className="flex items-start gap-5 pb-2">
-                    <SidebarToggle
-                        isOpen={isOpen}
-                        setIsOpen={() => dispatch(toggleOpen())}
-                    />
+                    <SidebarToggle isOpen={isOpen} setIsOpen={() => dispatch(toggleOpen())} />
                     <Button
                         className={cn(
                             "mb-1 transition-transform duration-300 ease-in-out",
@@ -31,9 +27,7 @@ export function Sidebar() {
                         )}
                         variant="link"
                         asChild>
-                        <Link
-                            to="/"
-                            className="flex items-center gap-2 self-center">
+                        <Link to="/" className="flex items-center gap-2 self-center">
                             {/* <PanelsTopLeft className="mr-1 h-6 w-6" /> */}
                             <h1
                                 className={cn(

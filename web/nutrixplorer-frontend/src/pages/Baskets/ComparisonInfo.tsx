@@ -18,8 +18,6 @@ const ComparisonInfo = ({ baskets }: ComparisonInfoProps) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleRemoveBasket = (basket: SimpleBasket) => {
-        // remove(basket);
-        console.log("basket removed");
         dispatch(remove({ id: basket.id, name: basket.name }));
     };
 

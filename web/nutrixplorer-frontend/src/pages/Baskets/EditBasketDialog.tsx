@@ -33,7 +33,6 @@ const EditBasketDialog = ({
     editBasket,
 }: AddBasketDialogProps) => {
     const { t } = useTranslation(TranslationNS.Baskets);
-    // const [editBasket] = useUpdateBasketMutation();
 
     const form = useForm<AddBasketDialogFormType>({
         values: {

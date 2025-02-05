@@ -163,7 +163,7 @@ public class ProductSpecificationUtil {
             Join<Label, Allergen> nameJoin = labelJoin.join("allergenList", JoinType.INNER);
 
             if (query != null) {
-                query.distinct(true); // Avoid duplicate products in result set
+                query.distinct(true);
 
             }
 
@@ -199,18 +199,18 @@ public class ProductSpecificationUtil {
 
     static Specification<Product> minSpecification(String nutritionalValueName, String groupName, Double quantity) {
         return (root, query, criteriaBuilder) -> {
-            query.distinct(true); // Ensure no duplicates
+            query.distinct(true);
             if (quantity == 0.0) {
                 return criteriaBuilder.and();
             }
-            // Joins
+
             Join<Product, NutritionalValue> nutritionalValuesJoin = root.join("nutritionalValues", JoinType.INNER);
             Join<NutritionalValue, NutritionalValueName> nameJoin = nutritionalValuesJoin.join("nutritionalValueName", JoinType.INNER);
             Join<NutritionalValueName, NutritionalValueGroup> groupJoin = nameJoin.join("group", JoinType.INNER);
 
-            // Predicates
+
             Predicate lessThanPredicate = criteriaBuilder.greaterThanOrEqualTo(
-                    criteriaBuilder.coalesce(nutritionalValuesJoin.get("quantity"), 0.0), // Handle nulls
+                    criteriaBuilder.coalesce(nutritionalValuesJoin.get("quantity"), 0.0),
                     quantity
             );
             Predicate groupNamePredicate = criteriaBuilder.equal(
@@ -221,7 +221,7 @@ public class ProductSpecificationUtil {
                     nameJoin.get("name"),
                     nutritionalValueName
             );
-            // Combine Predicates
+
 
             return criteriaBuilder.and(lessThanPredicate, groupNamePredicate, namePredicate);
         };
@@ -230,33 +230,33 @@ public class ProductSpecificationUtil {
 
     static Specification<Product> maxSpecification(String nutritionalValueName, String groupName, Double quantity) {
         return (root, query, criteriaBuilder) -> {
-            query.distinct(true); // Avoid duplicates
+            query.distinct(true);
 
-            // Left Joins to include products without the specified NutritionalValue
+
             Join<Product, NutritionalValue> nutritionalValuesJoin = root.join("nutritionalValues", JoinType.LEFT);
             Join<NutritionalValue, NutritionalValueName> nameJoin = nutritionalValuesJoin.join("nutritionalValueName", JoinType.LEFT);
             Join<NutritionalValueName, NutritionalValueGroup> groupJoin = nameJoin.join("group", JoinType.LEFT);
 
-            // Predicates for matching the group and name
+
             Predicate groupNamePredicate = criteriaBuilder.equal(groupJoin.get("groupName"), groupName);
             Predicate namePredicate = criteriaBuilder.equal(nameJoin.get("name"), nutritionalValueName);
 
-            // Predicate for quantity comparison
+
             Predicate quantityPredicate = criteriaBuilder.lessThanOrEqualTo(
-                    criteriaBuilder.coalesce(nutritionalValuesJoin.get("quantity"), 0.0), // Treat null as 0
+                    criteriaBuilder.coalesce(nutritionalValuesJoin.get("quantity"), 0.0),
                     quantity
             );
 
-            // Subquery to check if the product has the specified NutritionalValue
+
             Subquery<Long> subquery = query.subquery(Long.class);
             Root<NutritionalValue> subqueryRoot = subquery.from(NutritionalValue.class);
 
-            // Check if the Product has a matching NutritionalValue
+
             Join<NutritionalValue, NutritionalValueName> subNameJoin = subqueryRoot.join("nutritionalValueName", JoinType.INNER);
             Join<NutritionalValueName, NutritionalValueGroup> subGroupJoin = subNameJoin.join("group", JoinType.INNER);
             Join<Product, NutritionalValue> subProductJoin = subqueryRoot.join("products", JoinType.INNER);
 
-            subquery.select(criteriaBuilder.literal(1L)) // Return 1 if the product has the specified NutritionalValue
+            subquery.select(criteriaBuilder.literal(1L))
                     .where(
                             criteriaBuilder.and(
                                     criteriaBuilder.equal(subProductJoin.get("id"), root.get("id")),
@@ -265,12 +265,10 @@ public class ProductSpecificationUtil {
                             )
                     );
 
-            // Logic: For quantity == 0, include products with no matching NutritionalValue
+
             if (quantity == 0) {
-                // Include products that either have no matching NutritionalValue (subquery is 0)
-                // or products with a matching NutritionalValue and quantity <= 0
                 return criteriaBuilder.or(
-                        criteriaBuilder.not(criteriaBuilder.exists(subquery)), // No matching NutritionalValue
+                        criteriaBuilder.not(criteriaBuilder.exists(subquery)),
                         criteriaBuilder.and(
                                 groupNamePredicate,
                                 namePredicate,
@@ -281,7 +279,6 @@ public class ProductSpecificationUtil {
                         )
                 );
             } else {
-                // Normal case: Combine Predicates for products that have matching NutritionalValue
                 return criteriaBuilder.and(namePredicate, groupNamePredicate, quantityPredicate);
             }
         };
