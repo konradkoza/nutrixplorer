@@ -50,7 +50,7 @@ nutrixplorer:
   jws:
     secret: ZhLR58MdJjGl6MAlEC9OWUkS34KTEsYd
   oauth:
-    client_id: 848010620252-mmpisp9fchf67grpc5g03p0fdkenqrmu.apps.googleusercontent.com
-    client_secret: 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
+    client_id: client_id
+    client_secret: client_secret
     redirect_url: http://localhost:3000/auth/google/callback
     token_url: https://oauth2.googleapis.com/token
