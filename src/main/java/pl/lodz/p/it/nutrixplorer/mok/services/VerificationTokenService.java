@@ -1,6 +1,7 @@
 package pl.lodz.p.it.nutrixplorer.mok.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -31,6 +32,7 @@ public class VerificationTokenService {
     private final EmailVerificationTokenRepository emailTokenRepository;
     private final PasswordVerificationTokenRepository passwordTokenRepository;
 
+    @PreAuthorize("permitAll()")
     public VerificationToken generateAccountVerificationToken(User user) throws TokenGenerationException {
         String tokenVal = generateSafeToken();
         accountTokenRepository.deleteByUserId(user.getId());
@@ -39,6 +41,7 @@ public class VerificationTokenService {
         return accountTokenRepository.saveAndFlush(token);
     }
 
+    @PreAuthorize("permitAll()")
     public VerificationToken validateAccountVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenInvalidException {
         VerificationToken verificationToken = accountTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenInvalidException(MokExceptionMessages.VERIFICATION_TOKEN_INVALID, MokErrorCodes.VERIFICATION_TOKEN_INVALID));
         if (verificationToken.getExpirationDate().isBefore(Instant.now())) {
@@ -48,6 +51,7 @@ public class VerificationTokenService {
         return verificationToken;
     }
 
+    @PreAuthorize("isAuthenticated()")
     public VerificationToken generateEmailVerificationToken(User user, String newEmail) throws TokenGenerationException {
         String tokenVal = generateSafeToken();
         emailTokenRepository.deleteEmailVerificationTokenByUserId(user.getId());
@@ -56,6 +60,7 @@ public class VerificationTokenService {
         return emailTokenRepository.saveAndFlush(token);
     }
 
+    @PreAuthorize("permitAll()")
     public VerificationToken validateEmailVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenInvalidException {
         EmailVerificationToken verificationToken = emailTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenInvalidException(MokExceptionMessages.VERIFICATION_TOKEN_INVALID, MokErrorCodes.VERIFICATION_TOKEN_INVALID));
         if (verificationToken.getExpirationDate().isBefore(Instant.now())) {
@@ -65,6 +70,7 @@ public class VerificationTokenService {
         return verificationToken;
     }
 
+    @PreAuthorize("permitAll()")
     public VerificationToken generatePasswordVerificationToken(User user) throws TokenGenerationException {
         String tokenVal = generateSafeToken();
         passwordTokenRepository.deleteByUserId(user.getId());
@@ -73,7 +79,7 @@ public class VerificationTokenService {
         return passwordTokenRepository.saveAndFlush(token);
     }
 
-
+    @PreAuthorize("permitAll()")
     public VerificationToken validatePasswordVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenInvalidException {
         PasswordVerificationToken verificationToken = passwordTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenInvalidException(MokExceptionMessages.VERIFICATION_TOKEN_INVALID, MokErrorCodes.VERIFICATION_TOKEN_INVALID));
         if (verificationToken.getExpirationDate().isBefore(Instant.now())) {

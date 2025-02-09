@@ -30,6 +30,7 @@
     "personalData": "Personal Data",
     "fullName": "Full Name",
     "unblock": "Unblock",
+    "block": "Block",
     "takeAdmin": "Take administrator",
     "giveAdmin": "Give administrator",
     "takeClient": "Take client",

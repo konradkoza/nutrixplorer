@@ -14,6 +14,7 @@ public class MokExceptionMessages {
     public static final String SIGN_IN_BLOCKED = "Too many sign in attempts, account blocked";
     public static final String CANNOT_BLOCK_YOURSELF = "Cannot block yourself";
     public static final String OAUTH2_USER_PASSWORD = "Action not allowed for user registered with Google";
+    public static final String CANNOT_UNLOCK_YOURSELF = "Cannot unblock yourself";
 
     private MokExceptionMessages() {
     }

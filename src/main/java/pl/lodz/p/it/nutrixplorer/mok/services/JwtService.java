@@ -2,6 +2,7 @@ package pl.lodz.p.it.nutrixplorer.mok.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,7 @@ public class JwtService {
     @Value("${nutrixplorer.jwt.expiration}")
     private long jwtExpiration;
 
+    @PreAuthorize("permitAll()")
     public Jwt generateToken(UUID id, List<String> roles) {
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()

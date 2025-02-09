@@ -43,6 +43,7 @@
     "invalidRequestParam": "Nieprawidłowy parametr żądania",
     "productAlreadyInBasket": "Produkt jest już w koszyku, możesz zmienić jego ilość",
     "sessionExpiredTitle": "Sesja wygasła",
-    "sessionExpired": "Zaloguj się ponownie"
+    "sessionExpired": "Zaloguj się ponownie",
+    "cannotUnblockYourself": "Nie można odblokować samego siebie"
 
 }

@@ -2,6 +2,7 @@ package pl.lodz.p.it.nutrixplorer.mok.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,6 +25,7 @@ public class UserRolesService {
     private final ClientRepository clientRepository;
     private final AdministratorRepository administratorRepository;
 
+    @PreAuthorize("permitAll()")
     public List<String> getUserRoles(UUID userId) {
         List<String> roles = new ArrayList<>();
 

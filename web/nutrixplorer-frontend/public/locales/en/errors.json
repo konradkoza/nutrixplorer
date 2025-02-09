@@ -43,5 +43,6 @@
     "invalidRequestParam": "Invalid request parameter",
     "productAlreadyInBasket": "Product is already in the basket, you can change the quantity",
     "sessionExpiredTitle": "Session expired",
-    "sessionExpired": "Log in again"
+    "sessionExpired": "Log in again",
+    "cannotUnblockYourself": "You cannot unblock yourself"
 }

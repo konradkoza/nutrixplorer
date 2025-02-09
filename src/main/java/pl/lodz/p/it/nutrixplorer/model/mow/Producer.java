@@ -18,9 +18,7 @@ import pl.lodz.p.it.nutrixplorer.model.AbstractEntity;
 @Table(name = "PRODUCER")
 public class Producer extends AbstractEntity {
 
-
     private String name;
-
 
     private String address;
 

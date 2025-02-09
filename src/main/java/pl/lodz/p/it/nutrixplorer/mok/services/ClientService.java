@@ -2,6 +2,7 @@ package pl.lodz.p.it.nutrixplorer.mok.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -30,6 +31,7 @@ public class ClientService {
     private final UserRepository userRepository;
     private final ApplicationEventPublisher eventPublisher;
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void addClientAccessLevel(UUID id) throws NotFoundException, AccessLevelAssignException {
         Optional<Client> clientOptional = clientRepository.findByUserId(id);
 
@@ -58,6 +60,7 @@ public class ClientService {
         );
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void removeClientAccessLevel(UUID id) throws AccessLevelAssignException {
         Optional<Client> client = clientRepository.findByUserId(id);
 

@@ -4,17 +4,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.lodz.p.it.nutrixplorer.exceptions.NotFoundException;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.*;
-import pl.lodz.p.it.nutrixplorer.exceptions.mok.MokErrorCodes;
 import pl.lodz.p.it.nutrixplorer.exceptions.mow.MowErrorMessages;
 import pl.lodz.p.it.nutrixplorer.mok.dto.*;
 import pl.lodz.p.it.nutrixplorer.mok.mappers.UserMapper;
@@ -23,7 +23,7 @@ import pl.lodz.p.it.nutrixplorer.mok.services.AuthenticationService;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/auth")
-@Slf4j
+@Transactional(propagation = Propagation.NEVER, transactionManager = "mokTransactionManager")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
     @Value("${nutrixplorer.oauth.client_id}")

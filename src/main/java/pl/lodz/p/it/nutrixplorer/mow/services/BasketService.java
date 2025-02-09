@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.orm.jpa.JpaSystemException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -49,6 +50,7 @@ public class BasketService {
     private final MowClientRepository clientRepository;
     private final ETagSigner verifier;
 
+    @PreAuthorize("hasRole('CLIENT')")
     public Basket createBasket(CreateBasketDTO createBasketDTO) throws NotFoundException, BasketNameNotUniqueException {
         Basket basket = new Basket();
         basket.setName(createBasketDTO.name());
@@ -63,6 +65,7 @@ public class BasketService {
         return basket;
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     public Basket addEntryToBasket(UUID basketId, BasketEntryDTO entryDTO) throws NotFoundException, BasketEntryException {
         if (entryDTO.quantity().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BasketEntryException(MowErrorMessages.INVALID_QUANTITY, MowErrorCodes.INVALID_QUANTITY);
@@ -82,6 +85,7 @@ public class BasketService {
         return basket;
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     public void removeEntryFromBasket(UUID entryId) throws NotFoundException {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         BasketEntry basketEntry = basketEntryRepository.findByIdAndUser(entryId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_ENTRY_NOT_FOUND, MowErrorCodes.BASKET_ENTRY_NOT_FOUND));
@@ -89,11 +93,13 @@ public class BasketService {
 
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     public List<Basket> getUserBaskets() {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         return basketRepository.findAllByUserId(currentUserId);
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     public List<Basket> getUserBasketsByName(String name) {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         Specification<Basket> specification = Specification.where((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("client").get("user").get("id"), currentUserId));
@@ -101,17 +107,20 @@ public class BasketService {
         return basketRepository.findAll(specification, PageRequest.of(0, 5)).getContent();
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     public Basket getBasket(UUID basketId) throws NotFoundException {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         return basketRepository.findByIdAndUserId(basketId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     public void removeBasket(UUID basketId) throws NotFoundException {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         Basket basket = basketRepository.findByIdAndUserId(basketId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
         basketRepository.delete(basket);
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     public void updateEntry(UUID id, UpdateEntryDTO entryDTO) throws NotFoundException, BasketEntryException {
         if (entryDTO.quantity().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BasketEntryException(MowErrorMessages.INVALID_QUANTITY, MowErrorCodes.INVALID_QUANTITY);
@@ -123,16 +132,18 @@ public class BasketService {
 
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     public List<NutritionalValueSummaryDTO> getNutritionalValues(UUID basketId) {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         return basketRepository.findSumOfNutritionalValuesByBasketIdAndUserId(basketId, currentUserId);
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     public List<String> getBasketAllergens(UUID basketId) {
         return basketRepository.findDistinctAllergensByBasketId(basketId);
     }
 
-
+    @PreAuthorize("hasRole('CLIENT')")
     public void updateBasket(UUID basketId, CreateBasketDTO basketDTO, String tagValue) throws NotFoundException, ApplicationOptimisticLockException, InvalidHeaderException, BasketNameNotUniqueException {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         Basket basket = basketRepository.findByIdAndUserId(basketId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
@@ -149,6 +160,7 @@ public class BasketService {
 
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     public Basket copyBasket(UUID basketId, CreateBasketDTO basketDTO) throws NotFoundException, BasketNameNotUniqueException {
         UUID currentUserId = UUID.fromString(SecurityContextUtil.getCurrentUser());
         Basket basket = basketRepository.findByIdAndUserId(basketId, currentUserId).orElseThrow(() -> new NotFoundException(MowErrorMessages.BASKET_NOT_FOUND, MowErrorCodes.BASKET_NOT_FOUND));
@@ -168,6 +180,7 @@ public class BasketService {
         }
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     public Page<Basket> getFilteredBaskets(int elements, int page, BasketFilteringDTO filters) {
         Specification<Basket> specification = BasketSpecificationUtil.createSpecification(filters);
         PageRequest pageRequest = PageRequest.of(page, elements);

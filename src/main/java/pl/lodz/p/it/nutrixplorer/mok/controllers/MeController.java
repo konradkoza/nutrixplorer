@@ -6,6 +6,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.nutrixplorer.exceptions.ApplicationOptimisticLockException;
 import pl.lodz.p.it.nutrixplorer.exceptions.InvalidHeaderException;
@@ -20,6 +22,7 @@ import pl.lodz.p.it.nutrixplorer.utils.ETagSigner;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/me")
+@Transactional(propagation = Propagation.NEVER, transactionManager = "mokTransactionManager")
 public class MeController {
     private final UserService userService;
     private final ETagSigner signer;

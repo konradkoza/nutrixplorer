@@ -2,6 +2,7 @@ package pl.lodz.p.it.nutrixplorer.mok.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -31,6 +32,7 @@ public class AdministratorService {
     private final UserRepository userRepository;
     private final ApplicationEventPublisher eventPublisher;
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void addAdministratorAccessLevel(UUID id) throws NotFoundException, AccessLevelAssignException {
         Optional<Administrator> administratorOptional = administratorRepository.findByUserId(id);
 
@@ -58,6 +60,7 @@ public class AdministratorService {
                         administrator.getUser().getLanguage()));
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void removeAdministratorAccessLevel(UUID id) throws AccessLevelAssignException {
         Optional<Administrator> administrator = administratorRepository.findByUserId(id);
         UUID administratorId = UUID.fromString(SecurityContextUtil.getCurrentUser());

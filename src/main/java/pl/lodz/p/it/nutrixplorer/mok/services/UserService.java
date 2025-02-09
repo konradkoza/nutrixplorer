@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.orm.jpa.JpaSystemException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -51,11 +52,13 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    @PreAuthorize("isAuthenticated()")
     public User getCurrentUser() throws NotFoundException {
         String currentUser = SecurityContextUtil.getCurrentUser();
         return userRepository.findById(UUID.fromString(currentUser)).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void blockUser(UUID id) throws NotFoundException, BlockUserException {
         String currentUser = SecurityContextUtil.getCurrentUser();
         if (currentUser.equals(id.toString())) {
@@ -77,7 +80,12 @@ public class UserService {
         ));
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void unblockUser(UUID id) throws NotFoundException, BlockUserException {
+        String currentUser = SecurityContextUtil.getCurrentUser();
+        if (currentUser.equals(id.toString())) {
+            throw new BlockUserException(MokExceptionMessages.CANNOT_UNLOCK_YOURSELF, MokErrorCodes.CANNOT_UNLOCK_YOURSELF);
+        }
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
         if (!user.isBlocked()) {
             throw new BlockUserException(MokExceptionMessages.USER_UNBLOCKED, MokErrorCodes.USER_UNBLOCKED);
@@ -93,11 +101,12 @@ public class UserService {
         ));
     }
 
-
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public User findById(UUID id) throws NotFoundException {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
     }
 
+    @PreAuthorize("isAuthenticated()")
     public void changeOwnPassword(ChangePasswordDTO changePasswordDTO) throws NotFoundException, AuthenctiactionFailedException {
         String id = SecurityContextUtil.getCurrentUser();
         User user = userRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
@@ -109,6 +118,7 @@ public class UserService {
         }
     }
 
+    @PreAuthorize("isAuthenticated()")
     public void changeOwnEmailInit(ChangeEmailDTO changeEmailDTO) throws EmailAddressInUseException, NotFoundException, TokenGenerationException {
         String id = SecurityContextUtil.getCurrentUser();
         if (userRepository.existsByEmail(changeEmailDTO.newEmail())) {
@@ -131,6 +141,7 @@ public class UserService {
         ));
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void changeEmailInit(ChangeEmailDTO changeEmailDTO, UUID id) throws EmailAddressInUseException, NotFoundException, TokenGenerationException {
         if (userRepository.existsByEmail(changeEmailDTO.newEmail())) {
             throw new EmailAddressInUseException(MokExceptionMessages.EMAIL_IN_USE, MokErrorCodes.EMAIL_IN_USE);
@@ -152,6 +163,7 @@ public class UserService {
         ));
     }
 
+    @PreAuthorize("permitAll()")
     public void changeOwnEmailFinish(ConfirmEmailChangeDTO confirmEmailChangeDTO) throws VerificationTokenExpiredException, VerificationTokenInvalidException, EmailAddressInUseException {
         EmailVerificationToken verificationToken = (EmailVerificationToken) verificationTokenService.validateEmailVerificationToken(confirmEmailChangeDTO.token());
         User user = verificationToken.getUser();
@@ -163,6 +175,7 @@ public class UserService {
         }
     }
 
+    @PreAuthorize("isAuthenticated()")
     public void changeOwnNameAndLastName(UserDTO userDTO, String tagValue) throws NotFoundException, InvalidHeaderException, ApplicationOptimisticLockException {
         String id = SecurityContextUtil.getCurrentUser();
         User user = userRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
@@ -175,6 +188,7 @@ public class UserService {
         userRepository.saveAndFlush(user);
     }
 
+    @PreAuthorize("isAuthenticated()")
     public void changeOwnLanguage(LanguageDTO languageDTO) throws NotFoundException {
         String id = SecurityContextUtil.getCurrentUser();
         User user = userRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
@@ -182,11 +196,13 @@ public class UserService {
         userRepository.saveAndFlush(user);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Page<User> findAllUsers(int page, int elements, UsersFilteringDTO filteringDTO) {
         Specification<User> specification = UserSpecificationUtil.createSpecification(filteringDTO);
         return userRepository.findAll(specification, PageRequest.of(page, elements));
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void changeNameAndLastName(UUID id, UserDTO userDTO, String tagValue) throws NotFoundException, InvalidHeaderException, ApplicationOptimisticLockException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
 
@@ -199,6 +215,7 @@ public class UserService {
         userRepository.saveAndFlush(user);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void changeUserPassword(UUID id) throws UserNotVerifiedException, UserBlockedException, OauthUserException {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()){

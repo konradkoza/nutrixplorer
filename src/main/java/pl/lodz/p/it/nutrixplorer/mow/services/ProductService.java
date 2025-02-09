@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -28,32 +29,39 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
+    @PreAuthorize("permitAll()")
     public Page<Product> getAllProductsFiltered(int elements, int page, ProductsFilteringDTO filters) {
         Specification<Product> specification = ProductSpecificationUtil.createSpecification(filters);
         PageRequest pageRequest = PageRequest.of(page, elements);
         return productRepository.findAll(specification, pageRequest);
     }
 
+    @PreAuthorize("permitAll()")
     public byte[] getProductImage(UUID id) {
         return productRepository.findProductImageById(id).orElse(null);
     }
 
+    @PreAuthorize("permitAll()")
     public Product getProduct(UUID id) throws NotFoundException {
         return productRepository.findById(id).orElseThrow(() -> new NotFoundException(MowErrorMessages.PRODUCT_NOT_FOUND, MowErrorCodes.PRODUCT_NOT_FOUND));
     }
 
+    @PreAuthorize("permitAll()")
     public List<PackageType> getPackageTypes() {
         return productRepository.findDistinctPackageTypes();
     }
 
+    @PreAuthorize("permitAll()")
     public List<Allergen> getAllAllergens() {
         return productRepository.findAllAllergens();
     }
 
+    @PreAuthorize("permitAll()")
     public List<String> getCountries() {
         return productRepository.findAllCountries();
     }
 
+    @PreAuthorize("permitAll()")
     public List<String> getProductMatchingProductNames(int elements, String productName) {
         return productRepository.findProductByProductNameContaining(productName.toLowerCase(), PageRequest.of(0, elements)).getContent().stream().map(Product::getProductName).toList();
     }

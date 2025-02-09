@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.orm.jpa.JpaSystemException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -59,6 +60,7 @@ public class AuthenticationService {
     @Value("${nutrixplorer.frontend-url}")
     private String appUrl;
 
+    @PreAuthorize("permitAll()")
     public String login(AuthenticationDTO authenticationDTO, String remoteAddr) throws NotFoundException, AuthenctiactionFailedException, UserBlockedException, UserNotVerifiedException, LoginAttemptsExceededException {
         User user = userRepository.findByEmail(authenticationDTO.email()).orElseThrow(() -> new AuthenctiactionFailedException(MokExceptionMessages.INVALID_CREDENTIALS, MokErrorCodes.INVALID_CREDENTIALS));
 
@@ -113,6 +115,7 @@ public class AuthenticationService {
         }
     }
 
+    @PreAuthorize("permitAll()")
     public User registerClient(RegisterClientDTO registerClientDTO) throws EmailAddressInUseException, UserRegisteringException {
 
         User user = new User();
@@ -140,6 +143,7 @@ public class AuthenticationService {
         }
     }
 
+    @PreAuthorize("permitAll()")
     public String signInOAuth(GoogleOauth2Response response, String remoteAddr) throws UserBlockedException, EmailAddressInUseException, JsonProcessingException {
 
         String token = response.getIdToken();
@@ -183,6 +187,7 @@ public class AuthenticationService {
         return jwtService.generateToken(user.getId(), userRolesService.getUserRoles(user.getId())).getTokenValue();
     }
 
+    @PreAuthorize("permitAll()")
     public void activateAccount(VerificationTokenDTO verificationTokenDTO) throws VerificationTokenInvalidException, VerificationTokenExpiredException, NotFoundException {
         VerificationToken verificationToken = verificationTokenService.validateAccountVerificationToken(verificationTokenDTO.token());
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));
@@ -199,6 +204,7 @@ public class AuthenticationService {
 
     }
 
+    @PreAuthorize("permitAll()")
     public void resetPassword(ResetPasswordDTO resetPasswordDTO) throws UserNotVerifiedException, UserBlockedException, OauthUserException {
         Optional<User> userOptional = userRepository.findByEmail(resetPasswordDTO.email());
         if (userOptional.isPresent()) {
@@ -235,6 +241,7 @@ public class AuthenticationService {
 
     }
 
+    @PreAuthorize("permitAll()")
     public void changePassword(ChangePasswordWithTokenDTO passwordWithTokenDTO) throws VerificationTokenInvalidException, VerificationTokenExpiredException, NotFoundException {
         VerificationToken verificationToken = verificationTokenService.validatePasswordVerificationToken(passwordWithTokenDTO.token());
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(MokExceptionMessages.NOT_FOUND, MokErrorCodes.USER_NOT_FOUND));

@@ -22,6 +22,7 @@ import java.util.Set;
 public class Product extends AbstractEntity {
 
     @Size(max = 13)
+    @Column(name = "EAN", nullable = false)
     private String ean;
 
     @ManyToOne

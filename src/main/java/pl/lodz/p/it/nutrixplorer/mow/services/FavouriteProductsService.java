@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -34,11 +35,13 @@ public class FavouriteProductsService {
     private final ProductRepository productRepository;
 
 
+    @PreAuthorize("hasRole('CLIENT')")
     public List<Product> getCurrentUserFavoriteProducts() {
         UUID id = UUID.fromString(SecurityContextUtil.getCurrentUser());
         return productRepository.findFavoriteProductsByUserId(id);
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     public void addProductToFavourites(UUID productId) throws NotFoundException, ProductAlreadyFavourite {
         UUID id = UUID.fromString(SecurityContextUtil.getCurrentUser());
         Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException(MowErrorMessages.PRODUCT_NOT_FOUND, MowErrorCodes.PRODUCT_NOT_FOUND));
@@ -50,6 +53,7 @@ public class FavouriteProductsService {
         clientRepository.save(client);
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     public void removeProductFromFavourites(UUID productId) throws NotFoundException {
         UUID id = UUID.fromString(SecurityContextUtil.getCurrentUser());
         Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException(MowErrorMessages.PRODUCT_NOT_FOUND, MowErrorCodes.PRODUCT_NOT_FOUND));
@@ -61,6 +65,7 @@ public class FavouriteProductsService {
         clientRepository.save(client);
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     public Page<Product> getCurrentUserFavoriteProducts(int page, int elements) {
         UUID id = UUID.fromString(SecurityContextUtil.getCurrentUser());
         return productRepository.findFavoriteProductsByUserId(id, PageRequest.of(page, elements));
