@@ -3,12 +3,12 @@ GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.personal_data TO nutrimokus
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.administrator TO nutrimokuser;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.client TO nutrimokuser;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.access_level TO nutrimokuser;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.token TO nutrimokuser;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.email_verification_token TO nutrimokuser;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.account_verification_token TO nutrimokuser;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.password_verification_token TO nutrimokuser;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.google_auth TO nutrimokuser;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.user_favourite_products TO nutrimokuser;
+GRANT SELECT, INSERT, DELETE ON TABLE public.token TO nutrimokuser;
+GRANT SELECT, INSERT, DELETE ON TABLE public.email_verification_token TO nutrimokuser;
+GRANT SELECT, INSERT, DELETE ON TABLE public.account_verification_token TO nutrimokuser;
+GRANT SELECT, INSERT, DELETE ON TABLE public.password_verification_token TO nutrimokuser;
+GRANT SELECT, INSERT, DELETE ON TABLE public.google_auth TO nutrimokuser;
+GRANT SELECT, INSERT, DELETE ON TABLE public.user_favourite_products TO nutrimokuser;
 GRANT SELECT ON TABLE public.user TO nutrimowuser;
 GRANT SELECT, UPDATE ON TABLE public.access_level TO nutrimowuser;
 GRANT SELECT ON TABLE public.personal_data TO nutrimowuser;
@@ -42,7 +42,7 @@ GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE public.basket TO nutrimowuser;
 GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE public.basket_entry TO nutrimowuser;
 GRANT SELECT ON TABLE public.allergen TO nutrimowuser;
 GRANT SELECT ON TABLE public.label_allergen TO nutrimowuser;
-GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE public.user_favourite_products TO nutrimowuser;
+GRANT SELECT,DELETE,INSERT ON TABLE public.user_favourite_products TO nutrimowuser;
 
 INSERT INTO public.user (blocked, login_attempts, verified, last_failed_login, last_successful_login, version,
                           id, password, last_failed_login_ip, last_successful_login_ip, language, created_at)
