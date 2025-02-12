@@ -28,7 +28,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/basket")
-@Transactional(propagation = Propagation.NEVER, transactionManager = "mowTransactionManager")
+@Transactional(
+        propagation = Propagation.NEVER,
+        transactionManager = "mowTransactionManager")
 public class BasketController {
 
     private final BasketService basketService;

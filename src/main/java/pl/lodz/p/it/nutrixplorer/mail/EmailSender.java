@@ -35,10 +35,8 @@ public class EmailSender {
             log.error("Failed to send email.", e);
         }
     }
-    public void createHtmlEmail(String to,
-                                String templateName,
-                                Map<String, Object> templateModel,
-                                String lang) {
+    public void createHtmlEmail(String to, String templateName,
+                                Map<String, Object> templateModel, String lang) {
         Context thymeleafContext = new Context(Locale.of(lang));
         thymeleafContext.setVariables(templateModel);
         String htmlBody = templateEngine.process(templateName, thymeleafContext);
