@@ -29,6 +29,7 @@ import { TranslationNS } from "@/utils/translationNamespaces";
 import Pagination from "../Products/Pagination";
 import Spinner from "@/components/common/Spinner";
 import { useNavigate } from "react-router-dom";
+import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
 
 const UsersPage = () => {
     const [pageNumber, setPageNumber] = useState(0);
@@ -43,8 +44,13 @@ const UsersPage = () => {
         ...(filters || ({} as UserFilters)),
     });
     const navigate = useNavigate();
+    const breadcrumbs = useBreadcrumbs([
+        { title: t("breadcrumbs.home"), path: "/" },
+        { title: t("breadcrumbs.users"), path: "/products" },
+    ]);
     return (
         <div className="relative flex flex-col items-center gap-2">
+            <div className="container">{breadcrumbs}</div>
             <div className="container flex flex-col items-center justify-between">
                 <UsersFilters setFilters={setFilters} />
 

@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { AccessLevel } from "@/types/UserTypes";
 import { format } from "date-fns";
 import { LuRefreshCw } from "react-icons/lu";
+import { useBreadcrumbs } from "@/hooks/useBreadCrumbs";
 
 const UserDetailsPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -40,9 +41,15 @@ const UserDetailsPage = () => {
     const [giveClient] = useAssignClientAccessLevelMutation();
     const [block] = useBlockUserMutation();
     const [unblock] = useUnblockUserMutation();
+    const breadcrumbs = useBreadcrumbs([
+        { title: t("breadcrumbs.home"), path: "/" },
+        { title: t("breadcrumbs.users"), path: "/products" },
+        { title: user?.firstName + " " + user?.lastName, path: "/products" },
+    ]);
     return (
         <div className="flex w-full justify-center">
             <div className="container flex w-full flex-col gap-3">
+                <div className="container">{breadcrumbs}</div>
                 {isLoading ? (
                     <Spinner />
                 ) : (

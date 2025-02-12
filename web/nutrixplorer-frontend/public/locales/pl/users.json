@@ -25,6 +25,10 @@
         "verified": "Zweryfikowany",
         "blocked":  "Zablokowany"
     },
+    "breadcrumbs": {
+        "home": "NutriXplorer",
+        "users": "Użytkownicy"
+    },
     "accessLevels": "Poziomy dostępu",
     "userDetails": "Szczegóły użytkownika",
     "personalData": "Dane osobowe",
