@@ -32,9 +32,10 @@ const minMaxFields = [
 
 type BasketFiltersProps = {
     setFilters: (data: BasketFiltersFormType) => void;
+    resetPage: () => void;
 };
 
-const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
+const BasketFilters = ({ setFilters, resetPage }: BasketFiltersProps) => {
     const [searchValue, setSearchValue] = useState<string>("");
     const [value] = useDebounce(searchValue, 100);
     const { data: basketList, isLoading } = useGetFilteredBasketsListQuery(value);
@@ -77,11 +78,13 @@ const BasketFilters = ({ setFilters }: BasketFiltersProps) => {
             return acc;
         }, {} as BasketFiltersFormType);
         setFilters(filteredData);
+        resetPage();
     };
 
     const handleClear = () => {
         form.reset();
         setSearchValue("");
+        resetPage();
     };
 
     return (

@@ -35,10 +35,15 @@ const ProductsListPages = () => {
         { title: t("breadcrumbs.home"), path: "/" },
         { title: t("breadcrumbs.products"), path: "/products" },
     ]);
+
     return (
         <div className="flex flex-col items-center justify-center gap-2">
             <div className="container">{breadcrumbs}</div>
-            <FilteringComponent setFilters={setFilters} refetch={refetch} />
+            <FilteringComponent
+                resetPage={() => setPageNumber(0)}
+                setFilters={setFilters}
+                refetch={refetch}
+            />
             {isFetching ? (
                 <Spinner />
             ) : (

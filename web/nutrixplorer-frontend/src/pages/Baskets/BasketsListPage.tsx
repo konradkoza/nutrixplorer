@@ -82,7 +82,7 @@ const BasketsListPage = () => {
                     <Spinner />
                 ) : (
                     <div className="container flex h-full w-full flex-col items-stretch gap-5 md:flex-row md:flex-wrap xl:flex-row xl:flex-wrap">
-                        <BasketFilters setFilters={setFilters} />
+                        <BasketFilters resetPage={() => setPageNumber(0)} setFilters={setFilters} />
                         <div className="flex w-full justify-end">
                             <div className="flex items-center space-x-2">
                                 <Switch
