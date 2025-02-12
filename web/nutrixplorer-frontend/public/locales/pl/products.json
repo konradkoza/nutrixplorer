@@ -53,7 +53,8 @@
     },
     "errors": {
         "basketId": "Koszyk jest wymagany",
-        "quantity": "Ilość musi być większa niż 0"
+        "quantity": "Ilość musi być większa niż 0",
+        "quantityMax": "Ilość musi być mniejsza niż 10000"
     },
     "imageAlt": "Brak zdjęcia",
     "producer": "Producent",
