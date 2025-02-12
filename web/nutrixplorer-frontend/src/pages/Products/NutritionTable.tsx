@@ -39,7 +39,9 @@ const NutritionTable = ({ nutritions, portion }: NutritionTableProps) => {
                     return (
                         <TableRow key={element.name + element.group}>
                             <TableCell>
-                                {element.displayName ? element.displayName : element.name}
+                                {t(element.displayName ? element.displayName : element.name, {
+                                    ns: TranslationNS.NutritionalValues,
+                                })}
                             </TableCell>
                             <TableCell>
                                 {nutrition
