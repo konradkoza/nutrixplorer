@@ -17,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.nutrixplorer.configuration.LoggingInterceptor;
 import pl.lodz.p.it.nutrixplorer.exceptions.*;
 import pl.lodz.p.it.nutrixplorer.exceptions.mok.*;
-import pl.lodz.p.it.nutrixplorer.exceptions.mok.MokErrorCodes;
-import pl.lodz.p.it.nutrixplorer.exceptions.mok.MokExceptionMessages;
 import pl.lodz.p.it.nutrixplorer.mail.HtmlEmailEvent;
 import pl.lodz.p.it.nutrixplorer.model.mok.EmailVerificationToken;
 import pl.lodz.p.it.nutrixplorer.model.mok.User;
@@ -30,7 +28,6 @@ import pl.lodz.p.it.nutrixplorer.utils.UserSpecificationUtil;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -215,39 +212,4 @@ public class UserService {
         userRepository.saveAndFlush(user);
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public void changeUserPassword(UUID id) throws UserNotVerifiedException, UserBlockedException, OauthUserException {
-        Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()){
-
-            User user = userOptional.get();
-            if (!user.isVerified()) {
-                throw new UserNotVerifiedException(MokExceptionMessages.UNVERIFIED_ACCOUNT, MokErrorCodes.ACCOUNT_BLOCKED);
-            }
-            if (user.isBlocked()) {
-                throw new UserBlockedException(MokExceptionMessages.ACCOUNT_BLOCKED, MokErrorCodes.ACCOUNT_BLOCKED);
-            }
-            if (user.getPassword() == null) {
-                throw new OauthUserException(MokExceptionMessages.OAUTH2_USER_PASSWORD, MokErrorCodes.OAUTH2_USER_PASSWORD);
-            }
-            String token = null;
-            try {
-                token = verificationTokenService.generatePasswordVerificationToken(user).getToken();
-            } catch (TokenGenerationException e) {
-                log.error("Token generation error", e);
-            }
-            if (token != null) {
-                String url = appUrl + "/verify/forgot-password?token=" + token;
-                eventPublisher.publishEvent(new HtmlEmailEvent(
-                        this,
-                        user.getEmail(),
-                        Map.of("url", url,
-                                "name",user.getFirstName() + " " + user.getLastName()),
-                        "passwordChange",
-                        user.getLanguage()
-                ));
-            }
-        }
-
-    }
 }
