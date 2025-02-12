@@ -211,7 +211,7 @@ public class AuthenticationService {
 
             User user = userOptional.get();
             if (!user.isVerified()) {
-                throw new UserNotVerifiedException(MokExceptionMessages.UNVERIFIED_ACCOUNT, MokErrorCodes.ACCOUNT_BLOCKED);
+                throw new UserNotVerifiedException(MokExceptionMessages.UNVERIFIED_ACCOUNT, MokErrorCodes.UNVERIFIED_ACCOUNT);
             }
             if (user.isBlocked()) {
                 throw new UserBlockedException(MokExceptionMessages.ACCOUNT_BLOCKED, MokErrorCodes.ACCOUNT_BLOCKED);
